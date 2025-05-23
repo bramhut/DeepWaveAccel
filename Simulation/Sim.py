@@ -1,3 +1,0 @@
-# DeepWave simulation
-
-A Change
