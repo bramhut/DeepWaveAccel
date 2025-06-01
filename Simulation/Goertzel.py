@@ -1,7 +1,8 @@
 import numpy as np
 
 # Goertzel algorithm for computing the DFT at a specific frequency
-def goertzel(x, k, N, normalize=True):
+# bin efficiently. 
+def goertzel_single(x, k, hann=True, normalize=True):
     """
     Compute the DFT at frequency bin k using the Goertzel algorithm.
 
@@ -13,6 +14,10 @@ def goertzel(x, k, N, normalize=True):
         Frequency bin to compute.
     N : int
         Length of the input signal.
+    hann: bool, optional
+        If True, apply a Hann window to the input signal (default is True).
+    normalize : bool, optional
+        If True, normalize the result by the length of the signal (default is True).
 
     Returns
     -------
@@ -20,11 +25,17 @@ def goertzel(x, k, N, normalize=True):
         DFT value at frequency k.
     """
     # Initialize variables
+    N = x.shape[0]
     s_prev = 0
     s_prev2 = 0
     omega_0 = 2 * np.pi * k / N
+      
+    if hann:
+        # Apply a Hann window to the input signal (verified to be correct)
+        window = 0.5 * (1 - np.cos(2 * np.pi * np.arange(N) / (N - 1)))
+        x = x * window[:, np.newaxis]
 
-    # Compute the Goertzel algorithm
+    # Compute the Goertzel algorithm by dividing the input signal into frames
     for n in range(N):
         s = x[n] + 2 * np.cos(omega_0) * s_prev - s_prev2
         s_prev2 = s_prev
@@ -35,26 +46,44 @@ def goertzel(x, k, N, normalize=True):
         res /= N  # Normalize the result by the length of the signal
     return res
 
-# # Parameters
-# omega_0 = np.pi / 4  # example frequency
-# N = 100              # length of signal
-# x = np.random.randn(N)  # example input signal
 
-# # Initialize s[n] with zeros
-# s = np.zeros(N)
+# Goertzel algorithm for computing the DFT at a specific frequency
+# bin efficiently. Divides the input signal into frames with the specified
+# overlap and applies a Hann window (optional). Returns the DFT values for each frame.
+def goertzel(x, k, Nf, overlap=0.5, hann=True, normalize=True):
+    """
+    Compute the DFT at frequency bin k using the Goertzel algorithm with overlapping frames.
 
-# # Compute s[n] using equation (2.17)
-# for n in range(2, N):
-#     s[n] = x[n] + 2 * np.cos(omega_0) * s[n - 1] - s[n - 2]
+    Parameters
+    ----------
+    x : array_like
+        Input signal (2D array): (samples, channels).
+    k : int
+        Frequency bin to compute.
+    Nf : int
+        Length of each frame.
+    overlap : float, optional
+        Overlap between frames (default is 0.5).
+    
+    Returns
+    -------
+    X_k : array_like
+        DFT values at frequency k for each frame and channel.
+    step : int
+        Step size between frames.
+    """
+    
+    if not (0 <= overlap < 1):
+        raise ValueError("Overlap must be between 0 and 1.")
 
-# # Define s1 and s2 (example values)
-# s1 = s[1]
-# s2 = s[2]
+    step = int(Nf * (1 - overlap))
+    num_frames = (len(x) - Nf) // step + 1
+    X_k = np.zeros((num_frames, x.shape[1]), dtype=complex)
 
-# # Compute X[k] using equation (2.18)
-# X_k = np.exp(1j * omega_0) * s1 - s2
-# # or equivalently using the expanded form
-# X_k_alt = np.cos(omega_0) * s1 + 1j * np.sin(omega_0) * s1 - s2
+    for i in range(num_frames):
+        start = i * step
+        end = start + Nf
+        frame = x[start:end]
+        X_k[i] = goertzel_single(frame, k, hann, normalize)
 
-# print(f"X[k] = {X_k}")
-# print(f"Alternative expression of X[k] = {X_k_alt}")
+    return X_k, step
