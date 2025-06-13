@@ -1,12 +1,13 @@
 import numpy as np
 from fxpmath import Fxp
 import Preprocess as pp
-import Goertzel as g
+from Goertzel import goertzel, goertzel_multi_bin_with_logging
 import CrossCor as cc
 import Backproj as bp
 import Laplacian as lap
 import Deblur as deblur
 import Plotting as pl
+from Logger import SignalLogger
 
 # Setup Inputs: 
 # N_ch: number of channels
@@ -53,7 +54,7 @@ class DeepWaveAccel:
         self.laplacian = self.laplacian.todia()
         self.laplacian_banded = lap.sparsify_band_symmetric(self.laplacian, threshold=1e-4)
 
-    def run_inference(self, wav_file, num_iter_power=10):
+    def run_inference(self, wav_file, num_iter_power=10, logger=None):
         """
         Run inference on a wave file.
 
@@ -65,6 +66,10 @@ class DeepWaveAccel:
             deblurred_images (np.ndarray): Deblurred intensity maps [frames, pixels]
             psnr (np.ndarray): PSNR values per frame (if reference available)
         """
+        
+        
+        
+        
         fs, Draw = wav.read(os.path.expanduser(wav_file))
         
         # Time-frequency conversion
@@ -73,9 +78,12 @@ class DeepWaveAccel:
         fr = fs / nf
         bin = round(self.ff / fr)
         factual = bin * fr
-
-        dft, step = g.goertzel(Draw, bin, nf, 0.0, True, False)
-        dft += g.goertzel(Draw, bin-1, nf, 0.0, True, False)[0]
+        
+        bins = [bin, bin - 1] # DeepWave reference bins
+        dft_per_bin, _ = goertzel_multi_bin_with_logging(Draw, bins, nf, 0.0, True, False, logger=logger)
+        dft = np.sum(dft_per_bin, axis=2)
+        # dft, step = goertzel(Draw, bin, nf, 0.0, True, False)
+        # dft += goertzel(Draw, bin-1, nf, 0.0, True, False)[0]
 
         # Cross-correlation
         R_all = cc.cross_correlation_deepwave_ref(dft, num_iter_power)
@@ -93,20 +101,32 @@ class DeepWaveAccel:
                 y = deblur.chebyshev_conv(self.laplacian, x, self.theta)
                 deblurred_images[i] = deblur.retanh_activation(y + bpp[i])
                 x = deblurred_images[i]
+                
+        # Save signal logger data
+        if logger is not None:
+            logger.log('Draw', Draw)
+            logger.log('dft', dft)
+            logger.log('R_all', R_all)
+            logger.log('bpp', bpp)
+            logger.log('deblurred_images', deblurred_images)
 
         return deblurred_images
 
-    def compare_to_reference(self, deblurred_images, reference_images):
+    def compare_to_reference(self, deblurred_images, reference_images, normalize=True):
         """
         Compare deblurred images to DeepWave reference and compute PSNR.
 
         Args:
             deblurred_images (np.ndarray): Output from run_inference
             reference_images (np.ndarray): Reference images from DeepWave (shape: [frames, pixels])
+            normalize (bool): Whether to normalize images before comparison
 
         Returns:
             psnr (np.ndarray): PSNR values per frame
         """
+        if normalize:
+            deblurred_images = deblurred_images / np.max(deblurred_images)
+            reference_images = reference_images / np.max(reference_images)
         mse = np.mean((deblurred_images - reference_images) ** 2, axis=1)
         psnr = 10 * np.log10((np.max(reference_images) ** 2) / mse)
         return psnr
@@ -122,9 +142,6 @@ class DeepWaveAccel:
         fig = pl.draw_spherical_mesh(deblurred_images[frame_idx], self.R)
         fig.show()
         
-    def plot_PSNR(self, psnr):
-        pl.plot_PSNR(psnr)
-        
     def save_images(self, output_file, images, psnr):
         """
         Save deblurred images to a file.
@@ -135,3 +152,11 @@ class DeepWaveAccel:
             output_file (str): Path to save the images
         """
         np.savez(output_file, intensity=images, psnr=psnr)
+        
+    def analyse_signal_range(self):
+        """ 
+        Analyze the range of all signals and parameters, and return a summary.
+        Returns:
+            summary (dict): Summary of signal ranges and parameters.
+        """
+        

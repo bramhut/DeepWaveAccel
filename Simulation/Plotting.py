@@ -155,17 +155,19 @@ def draw_spherical_mesh(I, R, cmap='Inferno', bgcolor='rgb(70,70,70)'):
 
     return fig
 
-def plot_PSNR(psnr):
+def plot_PSNR(psnr, title, save_path=None):
     N_frames = len(psnr)
     
     # Plot the PSNR values per frame, with x-axis starting at 0 and ending at the last frame
     plt.figure(figsize=(6, 3))
     plt.plot(np.arange(0, N_frames), psnr, 'o-')
-    plt.title('PSNR compared to DeepWave reference (FP)')
+    plt.title(title)
     plt.xlabel('Frame number')
     plt.ylabel('PSNR (dB)')
     plt.xlim(0, N_frames - 1)
     plt.grid()
     plt.tight_layout()
-    plt.savefig("PSNR_float.png", dpi=300)
+    # If required, save the plot to a file
+    if save_path:
+        plt.savefig(save_path, dpi=300)
     plt.show()

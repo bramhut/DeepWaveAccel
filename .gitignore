@@ -1,5 +1,8 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,haskell,xilinxvivado
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,haskell,xilinxvivado
+## CUSTOM
+Simulation/output/
+
+
+## GENERATED
 
 ### Haskell ###
 dist
