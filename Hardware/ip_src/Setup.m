@@ -14,6 +14,8 @@ model_file = "../../Simulation/model_parameters_D1-5_freq0.mat";
 % Wave file
 wav_file = "../../Simulation/FRIDA/FRIDA/recordings/20160908/data_pyramic/segmented/two_speakers/1-5.wav";
 
+load(model_file)
+
 % Frequency of interest
 ff = 1666.66;
 
@@ -24,9 +26,11 @@ group_size = 9;
 % Num of power iterations
 power_iters = 10;
 
-% Read these files
-[data_in, fs_in] = audioread(wav_file, 'native');
-load(model_file)
+
+% Deblurring
+image_seed = zeros(1,n_px);
+
+
 
 %% FGPA setup
 
@@ -36,17 +40,26 @@ fs_bus=double(fpga_clock);
 % WordLengths (Note to self: DSP's are 18 bit)
 wl_sample = 24;
 
-%% Simulink tools
-pltObj = simulink.sampletimecolors.Palette("SampleTimeColors");
-pltObj.DiscreteSampleTimeColors = parula(6);
-simulink.sampletimecolors.applyPalette(pltObj, 'UserDefault',true')
+%% Simulink settings
+h = simulink.sampletimecolors.Palette("myColors");
+h.DiscreteSampleTimeColors = parula(7);
+simulink.sampletimecolors.applyPalette(h);
 
 %% Preprocessing
+
+% Read the input files
+[data_in, fs_in] = audioread(wav_file, 'native');
 
 % Convert parameter ints to doubles
 n_ch = double(n_ch);
 n_px = double(n_px);
 n_layer = double(n_layer);
+k = double(k);
+
+% Split laplacian
+laplacian_diags_offsets = int16(laplacian(:,1));
+laplacian_diags = laplacian(:, 2:end);
+n_laplacian_diags = size(laplacian_diags,1);
 
 
 % Goertzel
@@ -61,6 +74,9 @@ bin_cnt = size(bins,2);
 omega_0 = 2 * pi * bins / nf;
 cos_omega = 2 * cos(omega_0);
 exp_omega = exp(1j * omega_0);
+
+% Activation function
+beta_retanh = 1 / tanh(1.0);
 
 %% Input plotting
 
