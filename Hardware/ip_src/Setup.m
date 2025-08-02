@@ -118,3 +118,90 @@ grid on;
 % for ii=1:length(multiplyadds)
 %     hdlset_param(multiplyadds{ii},'PipelineDepth','0');
 % end
+
+%%
+
+cheb_in = out.image_in.Data;
+cheb_out = out.image_out.Data;
+
+function y = chebyshev_conv(L, x, theta)
+%CHEBYSHEV_CONV Compute y = sum_{k=0}^K theta_k * z_k
+%   where z_0 = x,
+%         z_1 = L * x,
+%         z_k = 2 * L * z_{k-1} - z_{k-2} for k >= 2
+%
+% Parameters:
+%   L     - Sparse normalized Laplacian matrix (sparse matrix)
+%   x     - Input vector/image
+%   theta - Chebyshev coefficients [theta_0, theta_1, ..., theta_K]
+%
+% Returns:
+%   y     - Output vector/image
+
+    K = length(theta) - 1;
+
+    z_k_minus_two = x;
+    y = theta(1) * z_k_minus_two;  % MATLAB is 1-based indexing
+
+    if K == 0
+        return;
+    end
+
+    z_k_minus_one = L * x;
+    y = y + theta(2) * z_k_minus_one;
+
+    for k = 3:(K + 1)
+        z_k = 2 * L * z_k_minus_one - z_k_minus_two;
+        y = y + theta(k) * z_k;
+        z_k_minus_two = z_k_minus_one;
+        z_k_minus_one = z_k;
+    end
+end
+
+function L_full = banded_to_full(L_banded)
+%BANDED_TO_FULL Converts a symmetric banded matrix to full square matrix
+% L_banded: [offsets, bands], size = (num_diags x N+1)
+% Returns:
+%   L_full: N x N full symmetric matrix
+
+    [num_diags, N_plus_1] = size(L_banded);
+    N = N_plus_1 - 1;
+    L_full = zeros(N, N);
+    
+    offsets = L_banded(:, 1);
+    bands = L_banded(:, 2:end);
+    
+    for i = 1:num_diags
+        offset = offsets(i);
+        band = bands(i, :).';  % Make column vector
+        
+        valid_len = N - offset;
+        if valid_len <= 0
+            continue;
+        end
+        
+        idx_row = (1:valid_len).';
+        idx_col = (1+offset:N).';
+        
+        % Upper triangular
+        L_full(sub2ind([N, N], idx_row, idx_col)) = band(idx_col);
+        
+        % Symmetric lower part
+        if offset > 0
+            L_full(sub2ind([N, N], idx_col, idx_row)) = band(idx_col);
+        else
+            % Main diagonal
+            L_full(sub2ind([N, N], idx_row, idx_row)) = band(idx_row);
+        end
+    end
+end
+
+lap_full = banded_to_full(laplacian);
+
+cheb_out_mat = chebyshev_conv(lap_full, cheb_in',theta)';
+cheb_out_mat = cheb_out_mat(1:end-1,:);
+
+cheb_out = cheb_out(2:end,:);
+max(abs(cheb_out - cheb_out_mat)./cheb_out_mat,[],"All")
+
+writematrix(cheb_in, 'cheb_in.csv');
