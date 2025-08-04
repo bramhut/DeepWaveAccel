@@ -205,3 +205,10 @@ cheb_out = cheb_out(2:end,:);
 max(abs(cheb_out - cheb_out_mat)./cheb_out_mat,[],"All")
 
 writematrix(cheb_in, 'cheb_in.csv');
+
+%% Export model output to python 
+
+deblurred_simulink = out.deblurred.Data;
+deblurred_valid = out.valid.Data;
+deblurred_simulink = deblurred_simulink(deblurred_valid==1,:);
+save("deblurred_simulink.mat", "deblurred_simulink")
