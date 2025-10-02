@@ -208,7 +208,7 @@ writematrix(cheb_in, 'cheb_in.csv');
 
 %% Export model output to python 
 
-deblurred_simulink = out.deblurred.Data;
+deblurred = out.deblurred.Data;
 deblurred_valid = out.valid.Data;
-deblurred_simulink = deblurred_simulink(deblurred_valid==1,:);
-save("deblurred_simulink.mat", "deblurred_simulink")
+deblurred = deblurred(deblurred_valid==1,:);
+save("deblurred.mat", "deblurred")
