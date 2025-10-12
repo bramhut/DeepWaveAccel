@@ -22,6 +22,7 @@ ff = 1666.66;
 % Cross correlation
 % Group size
 group_size = 9;
+eig_value_gain_floor = 1;
 
 % Num of power iterations
 power_iters = 10;
@@ -30,15 +31,32 @@ power_iters = 10;
 % Deblurring
 image_seed = zeros(1,n_px);
 
+% Fixed point types
+fixp_input_ws = 12;
+fixp_dsp_ws = 18;
+fixp_goertzel_int_bits = 4; % max 16. Goertzel IIR filter requires additional integer bits
+fixp_eig_ws = 24;
+fixp_eig_frac = fixp_input_ws+1;
+fixp_eig_rec_ws = 24;
+fixp_eig_rec_frac = fixp_eig_rec_ws - 1;
+
+fixp_bpp_ws = 22;
+fixp_bpp_frac = 24;
+
+fixp_dbl_ws = fixp_dsp_ws;
+fixp_dbl_frac = fixp_dsp_ws - 2;
+
+fixp_lapmult_ws = fixp_dbl_ws;
+fixp_lapmult_frac = fixp_dbl_frac;
+
+fixp_chebacc_ws = fixp_dsp_ws + 4;
+fixp_chebacc_frac = fixp_dbl_frac + 4;
 
 
 %% FGPA setup
 
 fpga_clock = uint64(100e6); % Clock frequency of the FPGA (in Hz)
 fs_bus=double(fpga_clock);
-
-% WordLengths (Note to self: DSP's are 18 bit)
-wl_sample = 24;
 
 %% Simulink settings
 h = simulink.sampletimecolors.Palette("myColors");
@@ -53,14 +71,9 @@ simulink.sampletimecolors.applyPalette(h);
 % Convert parameter ints to doubles
 n_ch = double(n_ch);
 n_px = double(n_px);
+n_px_fi = fi(n_px,0,ceil(log2(n_px)));
 n_layer = double(n_layer);
 k = double(k);
-
-% Split laplacian
-laplacian_diags_offsets = int16(laplacian(:,1));
-laplacian_diags = laplacian(:, 2:end);
-n_laplacian_diags = size(laplacian_diags,1);
-
 
 % Goertzel
 nffloat = 10 * fs_in / ff;
@@ -75,22 +88,70 @@ omega_0 = 2 * pi * bins / nf;
 cos_omega = 2 * cos(omega_0);
 exp_omega = exp(1j * omega_0);
 
+hann_fixp = fixdt(0,fixp_input_ws,fixp_input_ws);
+hann_table = 0.5*(1-cos(2*pi*(0:(nf/2-1))/(nf-1)));
+hann_table_fixp = fi(hann_table, hann_fixp);
+
+goertzel_fixp = fixdt(1,fixp_input_ws+fixp_goertzel_int_bits+2,fixp_input_ws+2-1);
+cos_omega_fixp = fi(cos_omega, goertzel_fixp);
+exp_omega_fixp = fi(exp_omega, goertzel_fixp);
+
+% Backprojection
+bpp_scaling_bits = 11;
+b_fixp = fi(b.*sqrt(2^bpp_scaling_bits), 1, 14);
+tau_fixp = fi(tau.*2^bpp_scaling_bits, 1, 13);
+
+% For optimized method - not in use currently
+[J, K] = find(triu(ones(n_ch), 1));  % upper triangle indices, j<k
+J_ROM = J(:);  % row vector
+K_ROM = K(:);
+
+% Deblurring
+image_seed_fixp = fi(image_seed,0,fixp_dbl_ws,fixp_dbl_frac);
+theta_cor = beta_retanh * theta; % Correct for the removal of the activation gain
+theta_fixp = fi(theta_cor,1,fixp_dbl_ws, fixp_dbl_frac);
+
 % Activation function
 beta_retanh = 1 / tanh(1.0);
+beta_retanh_fixp = fi(beta_retanh,0,fixp_dbl_ws,fixp_dbl_frac);
 
-%% Input plotting
+% Laplacian
+lap_offsets = laplacian(2:end,1);
+lap_main = laplacian(1, 2); % Lap main diag is constant
+lap_rest = laplacian(2:end, 2:end);
+
+lap_offsets_fi = fi(lap_offsets, 0, ceil(log2(max(lap_offsets))));
+lap_main_fi = fi(lap_main,0,fixp_lapmult_frac+ceil(log2(lap_main)),fixp_lapmult_frac);
+lap_rest_fi = fi(-lap_rest,0,fixp_lapmult_frac+ceil(log2(max(-lap_rest(:)))),fixp_lapmult_frac); % lap_rest is non-positive, so invert and make unsigned
 
 
-% Create time vector
-time = (0:size(data_in, 1)-1) / fs_in;
+%% Normalization divider LUT replacement - needs further investigation 
+% if it's actually a noticeable improvement in speed-area-power
 
-% Plot the first column of d_raw
-figure;
-plot(time, data_in(:, 1));
-xlabel('Time (s)');
-ylabel('d_{raw} Column 1');
-title('Plot of d_{raw} Column 1 vs Time');
-grid on;
+% Parameters
+N_lut = 128;  % Number of LUT points
+
+% Define fixed-point types
+T_in  = fixdt(0,24,13);  % UFix24 Q13 input
+T_out = fixdt(0,24,23);  % UFix24 Q23 output
+
+% Input range (as double for computation)
+x_min = 0.5;
+x_max = double(fi(2^24-1, T_in));  % Max UFix24 with 13 fraction bits
+
+% Logarithmic spacing for breakpoints
+x_points_double = x_min * (x_max/x_min).^((0:N_lut-1)/(N_lut-1));
+
+% Create fixed-point input breakpoints
+lut_norm_x = fi(x_points_double, T_in);
+
+% Preallocate LUT
+lut_norm_y = fi(zeros(1,N_lut), T_out);
+
+% Compute 1/x in native fixed-point
+for i = 1:N_lut
+    lut_norm_y(i) = fi(1 / double(lut_norm_x(i)), T_out);  % MATLAB handles Q23
+end
 
 %% HDL coder block setup
 % These only need to be performed once, but I keep them here in case
@@ -208,7 +269,120 @@ writematrix(cheb_in, 'cheb_in.csv');
 
 %% Export model output to python 
 
-deblurred = out.deblurred.Data;
-deblurred_valid = out.valid.Data;
+% Extract signals from the Simulink output
+deblurred       = out.deblurred_fixp.Data;   % or out.deblurred.Data
+deblurred_valid = out.status_fixp.valid.Data;
+eig_value       = squeeze(out.status_fixp.eig_value.Data);
+eig_floor_hit   = squeeze(out.status_fixp.eig_floor_hit.Data);
+
+% Keep only valid samples
 deblurred = deblurred(deblurred_valid==1,:);
-save("deblurred.mat", "deblurred")
+eig_value = eig_value(deblurred_valid==1,:);
+eig_floor_hit = eig_floor_hit(deblurred_valid==1,:);
+
+% Cast to double
+eig_value = double(eig_value);
+deblurred = double(deblurred);
+
+% Scale deblurred from fixedpoint to reference scaling
+deblurred = deblurred * 2^-11 * beta_retanh;
+
+% Save all to the same MAT file
+save("deblurred.mat", "deblurred", "eig_value", "eig_floor_hit");
+
+%% Calculate BPP error - FixP vs FP
+% Assuming 'new' and 'ref' are both 2234x1 vectors
+new = double(out.bpp_1.Data(:,:));
+ref = double(out.bpp_w.Data(:,:));
+
+% Flatten
+new = new(:);
+ref = ref(:);
+
+% Compute errors
+err = new - ref;              
+abs_err = abs(err);           
+
+% Sort by descending absolute error
+[abs_err_sorted, idx] = sort(abs_err, 'descend');
+ref_sorted = ref(idx);
+new_sorted = new(idx);
+rel_err_sorted = abs_err_sorted ./ abs(ref_sorted + eps);
+
+% Basic statistics
+fprintf('Mean absolute error: %g\n', mean(abs_err));
+fprintf('Max absolute error: %g\n', max(abs_err));
+fprintf('Mean relative error: %g\n', mean(rel_err_sorted));
+
+% Plot results
+figure;
+
+% 1️⃣ Actual values
+ax1 = subplot(3,1,1);
+plot(new_sorted, 'LineWidth', 1.2);
+hold on;
+plot(ref_sorted, 'LineWidth', 1.2);
+hold off;
+title('Actual Values (sorted by error)');
+xlabel('Sample index (sorted)');
+ylabel('Value');
+legend('new', 'ref');
+grid on;
+
+% 2️⃣ Absolute error
+ax2 = subplot(3,1,2);
+plot(abs_err_sorted, 'LineWidth', 1.2);
+title('Absolute Error (sorted descending)');
+xlabel('Sample index (sorted)');
+ylabel('|new - ref|');
+grid on;
+
+% 3️⃣ Relative error
+ax3 = subplot(3,1,3);
+plot(rel_err_sorted, 'LineWidth', 1.2);
+title('Relative Error (sorted descending)');
+xlabel('Sample index (sorted)');
+ylabel('|new - ref| / |ref|');
+grid on;
+
+% 🔗 Link horizontal zooming/panning
+linkaxes([ax1, ax2, ax3], 'x');
+
+%%
+bpp_unscaled = out.bpp_unscaled.Data;
+
+% Get fi type properties
+WL = bpp_unscaled.WordLength;
+FL = bpp_unscaled.FractionLength;
+Signed = bpp_unscaled.Signed;
+
+% Calculate theoretical min and max
+if Signed
+    minVal = -2^(WL-FL-1);
+    maxVal = 2^(WL-FL-1) - 2^-FL;
+else
+    minVal = 0;
+    maxVal = 2^(WL-FL) - 2^-FL;
+end
+
+% Convert fi matrix to double for calculations
+numericData = double(bpp_unscaled);
+
+% Find actual min and max in numeric form
+actualMin = min(numericData(:));
+actualMax = max(numericData(:));
+
+% Calculate percentage usage
+percentMaxUsed = (actualMax / maxVal) * 100;
+
+if Signed
+    percentMinUsed = (abs(actualMin) / abs(minVal)) * 100;
+else
+    percentMinUsed = 0; % no negative numbers for unsigned
+end
+
+% Display results
+fprintf('Upper end usage: %.2f%%\n', percentMaxUsed);
+if Signed
+    fprintf('Lower end usage: %.2f%%\n', percentMinUsed);
+end
