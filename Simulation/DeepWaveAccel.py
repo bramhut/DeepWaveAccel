@@ -54,23 +54,23 @@ class DeepWaveAccel:
         self.laplacian = self.laplacian.todia()
         self.laplacian_banded = lap.sparsify_band_symmetric(self.laplacian, threshold=1e-4)
 
-    def run_inference(self, wav_file, num_iter_power=10, logger=None):
+    def run_inference(self, wav_file, num_iter_power=10, eig_value_floor=1, logger=None):
         """
         Run inference on a wave file.
 
         Args:
             wav_file (str): Path to the wave file.
             num_iter_power (int): Number of iterations for power iteration in cross-correlation.
+            logger (SignalLogger or None): Logger to collect min/max/mean/std info.
 
         Returns:
             deblurred_images (np.ndarray): Deblurred intensity maps [frames, pixels]
             psnr (np.ndarray): PSNR values per frame (if reference available)
         """
-        
-        
-        
+             
         
         fs, Draw = wav.read(os.path.expanduser(wav_file))
+        Draw = Draw / 2048.0  # Normalize 16-bit PCM
         
         # Time-frequency conversion
         nffloat = 10 * fs / self.ff
@@ -86,7 +86,8 @@ class DeepWaveAccel:
         # dft += goertzel(Draw, bin-1, nf, 0.0, True, False)[0]
 
         # Cross-correlation
-        R_all = cc.cross_correlation_deepwave_ref(dft, num_iter_power)
+        R_all = cc.cross_correlation_deepwave_ref(dft, eig_value_floor, num_iter_power)
+        
         N_frames = R_all.shape[0]
 
         # Backprojection
@@ -110,9 +111,9 @@ class DeepWaveAccel:
             logger.log('bpp', bpp)
             logger.log('deblurred_images', deblurred_images)
 
-        return deblurred_images
+        return deblurred_images, bpp
 
-    def compare_to_reference(self, deblurred_images, reference_images, normalize=True):
+    def compare_to_reference_global_norm(self, deblurred_images, reference_images, normalize=True):
         """
         Compare deblurred images to DeepWave reference and compute PSNR.
 
@@ -125,13 +126,52 @@ class DeepWaveAccel:
             psnr (np.ndarray): PSNR values per frame
         """
         if normalize:
-            deblurred_images = deblurred_images / np.max(deblurred_images)
-            reference_images = reference_images / np.max(reference_images)
+            global_max = np.max(reference_images)
+            deblurred_images = deblurred_images / global_max
+            reference_images = reference_images / global_max
+            peak = 1.0
+        else:
+            peak = np.max(reference_images)        
         mse = np.mean((deblurred_images - reference_images) ** 2, axis=1)
-        psnr = 10 * np.log10((np.max(reference_images) ** 2) / mse)
+        psnr = 10 * np.log10((peak ** 2) / mse)
+        return psnr
+    
+    def compare_to_reference_indep_norm(self, deblurred_images, reference_images, normalize=True):
+        """
+        Compare deblurred images to DeepWave reference and compute PSNR.
+
+        Args:
+            deblurred_images (np.ndarray): Output from run_inference (shape: [frames, pixels])
+            reference_images (np.ndarray): Reference images from DeepWave (shape: [frames, pixels])
+            normalize (bool): Whether to normalize each frame to have max=1
+
+        Returns:
+            psnr (np.ndarray): PSNR values per frame (NaN for invalid/zero frames)
+        """
+        deblurred_max = np.max(deblurred_images, axis=1, keepdims=True)
+        reference_max = np.max(reference_images, axis=1, keepdims=True)
+        nonzero_mask = (deblurred_max.squeeze() > 0) & (reference_max.squeeze() > 0)
+
+        deblurred_norm = np.copy(deblurred_images)
+        reference_norm = np.copy(reference_images)
+
+        if normalize:
+            # Only normalize nonzero frames
+            deblurred_norm[nonzero_mask] = deblurred_images[nonzero_mask] / deblurred_max[nonzero_mask]
+            reference_norm[nonzero_mask] = reference_images[nonzero_mask] / reference_max[nonzero_mask]
+            peak = 1.0
+        else:
+            peak = np.max(reference_images)
+
+        mse = np.mean((deblurred_norm - reference_norm) ** 2, axis=1)
+        psnr = np.full_like(mse, np.nan)
+        # Only compute PSNR for nonzero frames
+        psnr[nonzero_mask] = 10 * np.log10((peak ** 2) / mse[nonzero_mask])
+        # For zero frames, PSNR is NaN
         return psnr
 
-    def plot_image_3D(self, deblurred_images, frame_idx=0):
+
+    def plot_image_3D(self, deblurred_images, frame_idx=0, source_lons=None, source_labels=None):
         """
         Plot a single frame using the spherical mesh.
 
@@ -139,7 +179,8 @@ class DeepWaveAccel:
             deblurred_images (np.ndarray): Output from run_inference
             frame_idx (int): Frame index to plot
         """
-        fig = pl.draw_spherical_mesh(deblurred_images[frame_idx], self.R)
+        source_lats = [0] * len(source_lons) if source_lons is not None else None
+        fig = pl.draw_spherical_mesh(deblurred_images[frame_idx], self.R, source_lons, source_lats, source_labels)
         fig.show()
         
     def save_images(self, output_file, images, psnr):

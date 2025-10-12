@@ -36,7 +36,7 @@ def eq2cart(r, lat, lon):
     return np.vstack((x, y, z))
 
 
-def draw_spherical_mesh(I, R, cmap='Inferno', bgcolor='rgb(70,70,70)'):
+def draw_spherical_mesh(I, R, source_lons=None, source_lats=None, source_labels=None, cmap='Inferno', bgcolor='rgb(70,70,70)'):
     """
     Interactive 3D spherical sky map using intensity values and visual caps.
 
@@ -86,6 +86,8 @@ def draw_spherical_mesh(I, R, cmap='Inferno', bgcolor='rgb(70,70,70)'):
         k=triang.triangles[:, 2],
         intensity=I_norm,
         colorscale=cmap,
+        cmin=0,
+        cmax=1,
         showscale=True,
         opacity=1.0,
         lighting=dict(ambient=0.7, diffuse=1.0, specular=0.05, roughness=0.9),
@@ -137,6 +139,48 @@ def draw_spherical_mesh(I, R, cmap='Inferno', bgcolor='rgb(70,70,70)'):
 
     add_cap(z_min, normal_up=False)
     add_cap(z_max, normal_up=True)
+    
+    ## TEST ##
+    # --- Add sound source markers ---
+    if source_lats is not None and source_lons is not None:
+        source_lats = np.atleast_1d(source_lats)
+        source_lons = np.atleast_1d(source_lons)
+
+        # Convert to radians
+        lat_rad = np.deg2rad(source_lats)
+        lon_rad = np.deg2rad(source_lons)
+
+        # Convert to Cartesian (unit sphere)
+        radius = 1.4
+        sx = radius * np.cos(lat_rad) * np.cos(lon_rad)
+        sy = radius * np.cos(lat_rad) * np.sin(lon_rad)
+        sz = radius * np.sin(lat_rad)
+
+        fig.add_trace(go.Scatter3d(
+            x=sx, y=sy, z=sz,
+            mode='markers+text',
+            marker=dict(size=6, color='red', symbol='circle'),
+            text=source_labels,
+            textposition='top center',
+            name='Sound Sources'
+        ))
+        
+    # --- Compute camera orientation (optional) ---
+    camera = dict(eye=dict(x=-1.5, y=0, z=0))  # default
+    if source_lons is not None and len(source_lons) > 0:
+        # Compute mean longitude (in radians)
+        mean_lon = np.deg2rad(np.mean(source_lons))
+        # Define camera distance and position around the sphere
+        cam_r = 1.8
+        camera = dict(
+            eye=dict(
+                x=cam_r * np.cos(mean_lon),
+                y=cam_r * np.sin(mean_lon),
+                z=0.3  # small upward tilt
+            )
+        )
+        
+    ## END TEST ##
 
     # Final layout
     fig.update_layout(
@@ -146,7 +190,7 @@ def draw_spherical_mesh(I, R, cmap='Inferno', bgcolor='rgb(70,70,70)'):
             yaxis=dict(showbackground=False, visible=False),
             zaxis=dict(showbackground=False, visible=False),
             aspectmode='data',
-            camera=dict(eye=dict(x=-1.5, y=0, z=0)),
+            camera=camera,
             bgcolor=bgcolor
         ),
         template='plotly_dark',
@@ -168,6 +212,27 @@ def plot_PSNR(psnr, title, save_path=None):
     plt.grid()
     plt.tight_layout()
     # If required, save the plot to a file
+    if save_path:
+        plt.savefig(save_path, dpi=300)
+    plt.show()
+    
+def plot_PSNR_with_eigs(psnr, eig_floor_hit, title, save_path=None):
+    N_frames = len(psnr)
+    x = np.arange(N_frames)
+    test = np.invert(eig_floor_hit)
+    
+    plt.figure(figsize=(6, 3))
+    plt.plot(x[np.invert(eig_floor_hit)], psnr[np.invert(eig_floor_hit)], 'o-', label="Valid eig ≥ 1")
+    plt.plot(x[eig_floor_hit], psnr[eig_floor_hit], 'rx', label="eig < 1 (too quiet)")
+    
+    plt.title(title)
+    plt.xlabel('Frame number')
+    plt.ylabel('PSNR (dB)')
+    plt.xlim(0, N_frames - 1)
+    plt.grid()
+    plt.legend()
+    plt.tight_layout()
+    
     if save_path:
         plt.savefig(save_path, dpi=300)
     plt.show()
