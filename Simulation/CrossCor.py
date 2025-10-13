@@ -9,25 +9,28 @@ def estimate_max_eigenvalue(S, num_iter):
     v = np.ones(n, dtype=np.complex128) / np.sqrt(n)
     for _ in range(num_iter):
         v = S @ v
-        L2_norm = np.linalg.norm(v)
-        v /= L2_norm
-    return np.real(v.conj().T @ S @ v)
+        norm = np.sum(np.square(np.abs(v)))
+        if norm == 0:
+            norm = 1
+        v /= norm
+    return np.real(v.conj().T @ S @ v * norm)
 
 
 # Normalize the correlation matrix S by its maximum eigenvalue
-def normalize_correlation_matrix(S, num_iter=10):
+def normalize_correlation_matrix(S, eig_value_floor, num_iter=10):
     max_eigenvalue = estimate_max_eigenvalue(S, num_iter)
     if max_eigenvalue == 0:
         return S  # Avoid division by zero
-    return S / max_eigenvalue
+    norm_factor = np.max([max_eigenvalue, eig_value_floor])
+    return S / norm_factor
 
 
 # Cross-correlation identical to the deepwave reference implementation
-def cross_correlation_deepwave_ref(dft, num_iter_power=10):
-    return cross_correlation(dft, alpha=0, group_size=9, num_iter_power=num_iter_power)
+def cross_correlation_deepwave_ref(dft, eig_value_floor=1, num_iter_power=10):
+    return cross_correlation(dft, eig_value_floor=eig_value_floor, alpha=0, group_size=9, num_iter_power=num_iter_power)
 
 # Cross-correlation with optional exponential moving average (EMA) smoothing and grouping
-def cross_correlation(dft, alpha=0.95, group_size=1, num_iter_power=10):
+def cross_correlation(dft, alpha=0.95, group_size=1, eig_value_floor=1, num_iter_power=10):
     """
     Compute and store cross-correlation matrices (optionally using exponential moving average) for each frame of DFT data.
     This function calculates the cross-correlation matrices for each frame in the input DFT data. Optionally, it applies exponential moving average (EMA) smoothing to the correlation matrices. When EMA is not used (alpha=0), the resulting matrices can be grouped and summed over a specified group size. Each resulting correlation matrix is normalized before being returned.
@@ -57,5 +60,5 @@ def cross_correlation(dft, alpha=0.95, group_size=1, num_iter_power=10):
         R_all = R_all[:(R_all.shape[0] // group_size) * group_size].reshape(-1, group_size, N_ch, N_ch).sum(axis=1)
 
     # Normalize each correlation matrix in R_all
-    R_all = np.array([normalize_correlation_matrix(S, num_iter=num_iter_power) for S in R_all])
+    R_all = np.array([normalize_correlation_matrix(S, eig_value_floor=eig_value_floor, num_iter=num_iter_power) for S in R_all])
     return R_all
