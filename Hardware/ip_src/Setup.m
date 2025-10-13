@@ -55,8 +55,15 @@ fixp_chebacc_frac = fixp_dbl_frac + 4;
 
 %% FGPA setup
 
+% Top level entity
+model_name = 'Model';
+
 fpga_clock = uint64(100e6); % Clock frequency of the FPGA (in Hz)
 fs_bus=double(fpga_clock);
+
+% Tool config
+hdlset_param(model_name,'SynthesisTool','Xilinx Vivado')
+
 
 %% Simulink settings
 h = simulink.sampletimecolors.Palette("myColors");
@@ -107,23 +114,22 @@ J_ROM = J(:);  % row vector
 K_ROM = K(:);
 
 % Deblurring
+beta_retanh = 1 / tanh(1.0);
+beta_retanh_fixp = fi(beta_retanh,0,fixp_dbl_ws,fixp_dbl_frac);
 image_seed_fixp = fi(image_seed,0,fixp_dbl_ws,fixp_dbl_frac);
 theta_cor = beta_retanh * theta; % Correct for the removal of the activation gain
 theta_fixp = fi(theta_cor,1,fixp_dbl_ws, fixp_dbl_frac);
-
-% Activation function
-beta_retanh = 1 / tanh(1.0);
-beta_retanh_fixp = fi(beta_retanh,0,fixp_dbl_ws,fixp_dbl_frac);
 
 % Laplacian
 lap_offsets = laplacian(2:end,1);
 lap_main = laplacian(1, 2); % Lap main diag is constant
 lap_rest = laplacian(2:end, 2:end);
+diag_count = size(lap_offsets,1);
 
 lap_offsets_fi = fi(lap_offsets, 0, ceil(log2(max(lap_offsets))));
 lap_main_fi = fi(lap_main,0,fixp_lapmult_frac+ceil(log2(lap_main)),fixp_lapmult_frac);
 lap_rest_fi = fi(-lap_rest,0,fixp_lapmult_frac+ceil(log2(max(-lap_rest(:)))),fixp_lapmult_frac); % lap_rest is non-positive, so invert and make unsigned
-
+diag_count_fi = fi(diag_count, 0, ceil(log2(diag_count)));
 
 %% Normalization divider LUT replacement - needs further investigation 
 % if it's actually a noticeable improvement in speed-area-power
