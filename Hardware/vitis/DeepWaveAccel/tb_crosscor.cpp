@@ -10,6 +10,7 @@
 int tb_crosscor() {
     hls::stream<AxisWordDFTc> in_stream;
     hls::stream<AxisWordDFTc> out_stream;
+    hls::stream<norm_sum_t> norm_stream;
 
     // -------------------------------------------------------------------------
     // Load Goertzel results (input to crosscor)
@@ -32,10 +33,10 @@ int tb_crosscor() {
     int max_ch = -1, max_batch = -1;
     std::vector<std::tuple<int, int, double, double>> rows;
 
-    while (csv_in >> channel) {
+    while (csv_in >> batch) {
         char comma;
-        csv_in >> comma >> batch >> comma >> re >> comma >> im;
-        rows.push_back({channel, batch, re, im});
+        csv_in >> comma >> channel >> comma >> re >> comma >> im;
+        rows.push_back({batch, channel, re, im});
         if (channel > max_ch) max_ch = channel;
         if (batch > max_batch) max_batch = batch;
     }
@@ -46,15 +47,14 @@ int tb_crosscor() {
     goertzel_out.resize(N_CH, std::vector<DFTc_t>(N_BATCH));
 
     for (auto &r : rows) {
-        int ch = std::get<0>(r);
-        int b  = std::get<1>(r);
+        int b  = std::get<0>(r);
+        int ch = std::get<1>(r);
         re = std::get<2>(r);
         im = std::get<3>(r);
         goertzel_out[ch][b] = DFTc_t((DFT_t)re, (DFT_t)im);
     }
 
-    std::cout << "Loaded " << N_CH << " channels and " << N_BATCH
-              << " batches from " << file_in << "\n";
+    std::cout << "Loaded " << N_BATCH << " batches from " << file_in << "\n";
 
     // -------------------------------------------------------------------------
     // Stream input to crosscor
@@ -80,7 +80,7 @@ int tb_crosscor() {
     const int total_cycles = N_BATCH * cycles_per_frame;
 
     for (int i = 0; i < total_cycles; ++i) {
-        crosscor(in_stream, out_stream);
+        crosscor(in_stream, out_stream, norm_stream);
     }
 
     // -------------------------------------------------------------------------
@@ -91,6 +91,7 @@ int tb_crosscor() {
     std::vector<std::vector<std::vector<DFTc_t>>> corr_out(
         matrices, std::vector<std::vector<DFTc_t>>(N_ELEM, std::vector<DFTc_t>(N_ELEM))
     );
+    std::vector<norm_sum_t> norms(matrices); // Vector of norms
 
     for (int m = 0; m < matrices; ++m) {
         for (int i = 0; i < N_ELEM; ++i) {
@@ -100,9 +101,14 @@ int tb_crosscor() {
                     corr_out[m][i][j] = DFTc_t(w.re, w.im);
                 }
                 else {
-                    std::cerr << "This should not happen! No data to read from output...\n";  
+                    std::cerr << "This should not happen! No data to read from out_stream...\n";  
                 }
             }
+        }
+        if (!norm_stream.empty()){
+            norms[m] = norm_stream.read();
+        } else {
+            std::cerr << "This should not happen! No data to read from norm_stream...\n";  
         }
     }
 
@@ -123,8 +129,8 @@ int tb_crosscor() {
             for (int j = 0; j < N_ELEM; ++j) {
                 auto &v = corr_out[m][i][j];
                 csv_out << m << "," << i << "," << j << ","
-                        << v.real().to_double() << ","
-                        << v.imag().to_double() << "\n";
+                        << v.real() << ","
+                        << v.imag() << "\n";
             }
         }
     }
@@ -132,6 +138,21 @@ int tb_crosscor() {
     csv_out.close();
     std::cout << "Wrote " << matrices << " correlation matrices (" << N_ELEM << "x" << N_ELEM
               << ") to \"" << file_out << "\"\n";
+
+    // Norms
+    std::string norm_file = std::string(OUTPUT_DIR) + "/crosscor_norm_sim.csv";
+    std::ofstream csv_norm(norm_file);
+    if (!csv_norm.is_open()) {
+        std::cerr << "Failed to open " << norm_file << "\n";
+    } else {
+        csv_norm << "matrix,norm\n";
+        for (int i = 0; i < matrices; ++i)
+            csv_norm << i << "," << norms[i] << "\n";
+        csv_norm.close();
+        std::cout << "Wrote " << matrices
+                << " norm values to \"" << norm_file << "\"\n";
+    }
+
     std::cout << "Done.\n";
 
     return 0;

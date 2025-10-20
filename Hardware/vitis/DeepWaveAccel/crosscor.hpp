@@ -11,4 +11,5 @@ using corr_accum_t = complex<ap_fixed<36,10>>;
 
 // Top-level synthesizable kernel (AXI-Lite + AXI-Stream)
 void crosscor(hls::stream<AxisWordDFTc> &in_stream,
-              hls::stream<AxisWordDFTc> &out_stream);
+              hls::stream<AxisWordDFTc> &out_stream,
+              hls::stream<norm_sum_t> &norm_stream);

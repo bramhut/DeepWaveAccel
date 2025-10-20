@@ -3,10 +3,12 @@
 #include <iostream>
 
 void crosscor(hls::stream<AxisWordDFTc> &in_stream,
-              hls::stream<AxisWordDFTc> &out_stream)
+              hls::stream<AxisWordDFTc> &out_stream,
+              hls::stream<norm_sum_t> &norm_stream)
 {
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
+    AXIS_IN_OUT(norm_stream);
     AP_CTRL_NONE;
 #pragma HLS PIPELINE II=1
 
@@ -47,18 +49,9 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
     case CORRELATE:
         {
             // Perform R += u^H * u
-            // For each (i,j): R[i][j] += conj(u[i]) * u[j]
-            corr_accum_t prod = std::conj((corr_accum_t)u[i]) * (corr_accum_t)u[j];
-            corr_accum_t prod2 = std::conj(u[i]) * u[j];
+            // For each (i,j): R[i][j] += conj(u[j]) * u[i]
+            corr_accum_t prod = std::conj((corr_accum_t)u[j]) * (corr_accum_t)u[i]; // Casting before calculating is neccesary
             R[i][j] += prod;
-
-            if (i == 0 && j == 0){
-                std::cout << "prod=" 
-                        << prod << "prod2="
-                        << prod2 << "u[0]=" 
-                        << u[i] << "frame="
-                        << frames_acc << "\n";
-            }
 
             // Step through matrix
             j++;
@@ -88,12 +81,14 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
                 const norm_sum_t gain = (norm_sum_t)0.70710678118;
                 norm_sum_t corrected = power_acc * gain;
 
+                norm_stream.write(corrected);
+
                 // Lower limit (≥1)
                 if (corrected < (norm_sum_t)1.0)
                     corrected = (norm_sum_t)1.0;
 
                 // Reciprocal (→ ufix24_En23)
-                scale = (norm_inv_t)(1.0 / corrected.to_double());
+                scale = (norm_inv_t)1.0 / corrected;
 
                 // Next: normalize and output
                 i = 0; j = 0;

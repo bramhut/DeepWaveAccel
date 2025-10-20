@@ -11,24 +11,16 @@ int tb_crosscor();
 int tb_top();
 
 int main() {
-    tb_goertzel();
+    // tb_goertzel();
     // tb_crosscor();
     // tb_top();
-
-    // using test_t = ap_fixed<3,1>;
-    // using testc_t = complex<test_t>;
-    // test_t re_in = 0.25, im_in = -0.5;
-    // testc_t c_in = testc_t(re_in, im_in);
-    // corr_accum_t test = std::conj((corr_accum_t)c_in) * (corr_accum_t)c_in;
-    // auto test2 = std::conj(c_in) * c_in;
-    // auto test3 = std::conj(c_in);
-    // std::cout << "test: " << test << " test2: " << test2 << " test3: " << test3 << std::endl;
 
 }
 
 int tb_top() {
     hls::stream<AxisWordSampleIn> in_stream;
     hls::stream<AxisWordDFTc> out_stream;
+    hls::stream<norm_sum_t> norm_stream;
     goertzel_config cfg;
 
     // Read WAV file
@@ -72,42 +64,23 @@ int tb_top() {
     // Run Goertzel kernel
     int total_samples = n_batches * N_WIN * N_ELEM;
     for(int i = 0; i < total_samples; ++i) {
-        deepwaveaccel(in_stream, out_stream, cfg);
+        deepwaveaccel(in_stream, out_stream, norm_stream, cfg);
     }
 
-    // Collect outputs into array [N_ELEM][n_batches]
-    std::vector<std::vector<DFTc_t>> deepwave_out(N_ELEM, std::vector<DFTc_t>(n_batches));
+    // // Collect outputs into array [N_ELEM][n_batches]
+    // std::vector<std::vector<DFTc_t>> deepwave_out(N_ELEM, std::vector<DFTc_t>(n_batches));
 
-    for(int b = 0; b < n_batches; ++b) {
-        for(int ch = 0; ch < N_ELEM; ++ch) {
-            if(!out_stream.empty()) {
-                AxisWordDFTc in = out_stream.read();
-                deepwave_out[ch][b] = std::complex<DFT_t>(in.re, in.im);
-            }
-        }
-    }
+    // for(int b = 0; b < n_batches; ++b) {
+    //     for(int ch = 0; ch < N_ELEM; ++ch) {
+    //         if(!out_stream.empty()) {
+    //             AxisWordDFTc in = out_stream.read();
+    //             deepwave_out[ch][b] = std::complex<DFT_t>(in.re, in.im);
+    //         }
+    //     }
+    // }
 
-    // Write results to CSV file
-    std::string file_sim_out =  "/goertzel_sim.csv";
-    std::ofstream csv(std::string(OUTPUT_DIR) + file_sim_out);
-    if (!csv.is_open()) {
-        std::cerr << "Failed to open output CSV file\n";
-        return 1;
-    }
 
-    // Optional header
-    csv << "channel,batch,real,imag\n";
-
-    for (int ch = 0; ch < N_ELEM; ++ch) {
-        for (int b = 0; b < n_batches; ++b) {
-            auto& out = deepwave_out[ch][b];
-            csv << ch << "," << b << ","
-                << out.real().to_double() << ","
-                << out.imag().to_double() << "\n";
-        }
-    }
-
-    csv.close();
+    // csv.close();
     std::cout << "Wrote " << N_ELEM * n_batches << " results to \"output" << file_sim_out << "\"\n";
 
     std::cout << "Done.\n";
