@@ -1,0 +1,573 @@
+<profile>
+    <ReportVersion>
+        <Version>2025.1</Version>
+    </ReportVersion>
+    <UserAssignments>
+        <unit>ns</unit>
+        <ProductFamily>zynquplus</ProductFamily>
+        <Part>xck26-sfvc784-2LV-c</Part>
+        <TopModelName>goertzel</TopModelName>
+        <TargetClockPeriod>10.00</TargetClockPeriod>
+        <ClockUncertainty>2.70</ClockUncertainty>
+        <TargetInitiationInterval>1</TargetInitiationInterval>
+        <FlowTarget>vivado</FlowTarget>
+    </UserAssignments>
+    <PerformanceEstimates>
+        <PipelineType>yes</PipelineType>
+        <SummaryOfTimingAnalysis>
+            <unit>ns</unit>
+            <EstimatedClockPeriod>4.055</EstimatedClockPeriod>
+        </SummaryOfTimingAnalysis>
+        <SummaryOfOverallLatency>
+            <unit>clock cycles</unit>
+            <Best-caseLatency>9</Best-caseLatency>
+            <Average-caseLatency>9</Average-caseLatency>
+            <Worst-caseLatency>9</Worst-caseLatency>
+            <Best-caseRealTimeLatency>90.000 ns</Best-caseRealTimeLatency>
+            <Average-caseRealTimeLatency>90.000 ns</Average-caseRealTimeLatency>
+            <Worst-caseRealTimeLatency>90.000 ns</Worst-caseRealTimeLatency>
+            <PipelineInitiationInterval>3</PipelineInitiationInterval>
+            <PipelineDepth>10</PipelineDepth>
+            <Interval-min>3</Interval-min>
+            <Interval-max>3</Interval-max>
+            <PerformancePragma>-</PerformancePragma>
+        </SummaryOfOverallLatency>
+        <SummaryOfViolations>
+            <IssueType>-</IssueType>
+            <ViolationType>-</ViolationType>
+            <SourceLocation>goertzel.cpp:40</SourceLocation>
+        </SummaryOfViolations>
+    </PerformanceEstimates>
+    <AreaEstimates>
+        <Resources>
+            <BRAM_18K>4</BRAM_18K>
+            <DSP>7</DSP>
+            <FF>678</FF>
+            <LUT>821</LUT>
+            <URAM>0</URAM>
+        </Resources>
+        <AvailableResources>
+            <BRAM_18K>288</BRAM_18K>
+            <DSP>1248</DSP>
+            <FF>234240</FF>
+            <LUT>117120</LUT>
+            <URAM>64</URAM>
+        </AvailableResources>
+    </AreaEstimates>
+    <InterfaceSummary>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_AWVALID</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_AWREADY</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_AWADDR</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>10</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_WVALID</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_WREADY</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_WDATA</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>32</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_WSTRB</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>4</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_ARVALID</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_ARREADY</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_ARADDR</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>10</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_RVALID</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_RREADY</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_RDATA</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>32</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_RRESP</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>2</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_BVALID</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_BREADY</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>s_axi_CTRL_BUS_BRESP</name>
+            <Object>CTRL_BUS</Object>
+            <Type>array</Type>
+            <IOProtocol>s_axi</IOProtocol>
+            <Dir>out</Dir>
+            <Bits>2</Bits>
+            <Attribute>unknown</Attribute>
+            <CType>int</CType>
+            <HasCtrl>0</HasCtrl>
+        </RtlPorts>
+        <RtlPorts>
+            <name>ap_clk</name>
+            <Object>goertzel</Object>
+            <Type>return value</Type>
+            <Scope/>
+            <IOProtocol>ap_ctrl_none</IOProtocol>
+            <IOConfig/>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>control</Attribute>
+        </RtlPorts>
+        <RtlPorts>
+            <name>ap_rst_n</name>
+            <Object>goertzel</Object>
+            <Type>return value</Type>
+            <Scope/>
+            <IOProtocol>ap_ctrl_none</IOProtocol>
+            <IOConfig/>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>control</Attribute>
+        </RtlPorts>
+        <RtlPorts>
+            <name>in_stream_TDATA</name>
+            <Object>in_stream</Object>
+            <Type>pointer</Type>
+            <Scope/>
+            <IOProtocol>axis</IOProtocol>
+            <IOConfig>register, both mode</IOConfig>
+            <Dir>in</Dir>
+            <Bits>32</Bits>
+            <Attribute>data</Attribute>
+            <CType>int</CType>
+        </RtlPorts>
+        <RtlPorts>
+            <name>in_stream_TVALID</name>
+            <Object>in_stream</Object>
+            <Type>pointer</Type>
+            <Scope/>
+            <IOProtocol>axis</IOProtocol>
+            <IOConfig>register, both mode</IOConfig>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>control</Attribute>
+            <CType>int</CType>
+        </RtlPorts>
+        <RtlPorts>
+            <name>in_stream_TREADY</name>
+            <Object>in_stream</Object>
+            <Type>pointer</Type>
+            <Scope/>
+            <IOProtocol>axis</IOProtocol>
+            <IOConfig>register, both mode</IOConfig>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>control</Attribute>
+            <CType>int</CType>
+        </RtlPorts>
+        <RtlPorts>
+            <name>out_stream_TDATA</name>
+            <Object>out_stream</Object>
+            <Type>pointer</Type>
+            <Scope/>
+            <IOProtocol>axis</IOProtocol>
+            <IOConfig>register, both mode</IOConfig>
+            <Dir>out</Dir>
+            <Bits>64</Bits>
+            <Attribute>data</Attribute>
+            <CType>int</CType>
+        </RtlPorts>
+        <RtlPorts>
+            <name>out_stream_TVALID</name>
+            <Object>out_stream</Object>
+            <Type>pointer</Type>
+            <Scope/>
+            <IOProtocol>axis</IOProtocol>
+            <IOConfig>register, both mode</IOConfig>
+            <Dir>out</Dir>
+            <Bits>1</Bits>
+            <Attribute>control</Attribute>
+            <CType>int</CType>
+        </RtlPorts>
+        <RtlPorts>
+            <name>out_stream_TREADY</name>
+            <Object>out_stream</Object>
+            <Type>pointer</Type>
+            <Scope/>
+            <IOProtocol>axis</IOProtocol>
+            <IOConfig>register, both mode</IOConfig>
+            <Dir>in</Dir>
+            <Bits>1</Bits>
+            <Attribute>control</Attribute>
+            <CType>int</CType>
+        </RtlPorts>
+    </InterfaceSummary>
+    <RTLDesignHierarchy>
+        <TopModule MAX_DEPTH="2">
+            <ModuleName>goertzel</ModuleName>
+            <BindInstances>add_ln59_fu_263_p2 lshr_ln59_fu_299_p2 mul_13ns_14s_27_1_1_U1 mac_muladd_18s_18s_30s_34_2_1_U2 mac_muladd_18s_18s_30s_34_2_1_U2 sub_ln71_fu_480_p2 mac_muladd_18s_18s_30s_34_2_1_U3 mac_muladd_18s_18s_30s_34_2_1_U3 sub_ln71_1_fu_508_p2 add_ln76_fu_309_p2 icmp_ln79_fu_314_p2 mac_mulsub_18s_18s_34ns_34_4_1_U4 mac_mulsub_18s_18s_34ns_34_4_1_U4 mac_mulsub_18s_18s_1ns_34_4_1_U5 mac_mulsub_18s_18s_1ns_34_4_1_U5 mac_mulsub_18s_18s_34ns_34_4_1_U6 mac_mulsub_18s_18s_34ns_34_4_1_U6 add_ln85_fu_618_p2 mac_mulsub_18s_18s_34ns_34_4_1_U7 mac_mulsub_18s_18s_34ns_34_4_1_U7 add_ln93_fu_324_p2 icmp_ln94_fu_330_p2 select_ln94_fu_336_p3 CTRL_BUS_s_axi_U</BindInstances>
+        </TopModule>
+    </RTLDesignHierarchy>
+    <ModuleInformation>
+        <Module>
+            <Name>goertzel</Name>
+            <PerformanceEstimates>
+                <SummaryOfTimingAnalysis>
+                    <TargetClockPeriod>10.00</TargetClockPeriod>
+                    <ClockUncertainty>2.70</ClockUncertainty>
+                    <TargetInitiationInterval>1</TargetInitiationInterval>
+                    <EstimatedClockPeriod>4.055</EstimatedClockPeriod>
+                </SummaryOfTimingAnalysis>
+                <SummaryOfOverallLatency>
+                    <Best-caseLatency>9</Best-caseLatency>
+                    <Average-caseLatency>9</Average-caseLatency>
+                    <Worst-caseLatency>9</Worst-caseLatency>
+                    <Best-caseRealTimeLatency>90.000 ns</Best-caseRealTimeLatency>
+                    <Average-caseRealTimeLatency>90.000 ns</Average-caseRealTimeLatency>
+                    <Worst-caseRealTimeLatency>90.000 ns</Worst-caseRealTimeLatency>
+                    <PipelineInitiationInterval>3</PipelineInitiationInterval>
+                    <PipelineDepth>10</PipelineDepth>
+                    <PipelineType>yes</PipelineType>
+                    <PerformancePragma>-</PerformancePragma>
+                </SummaryOfOverallLatency>
+                <SummaryOfViolations>
+                    <IssueType>-</IssueType>
+                    <ViolationType>-</ViolationType>
+                    <SourceLocation>goertzel.cpp:40</SourceLocation>
+                </SummaryOfViolations>
+            </PerformanceEstimates>
+            <AreaEstimates>
+                <Resources>
+                    <BRAM_18K>4</BRAM_18K>
+                    <AVAIL_BRAM>288</AVAIL_BRAM>
+                    <UTIL_BRAM>1</UTIL_BRAM>
+                    <DSP>7</DSP>
+                    <AVAIL_DSP>1248</AVAIL_DSP>
+                    <UTIL_DSP>~0</UTIL_DSP>
+                    <FF>678</FF>
+                    <AVAIL_FF>234240</AVAIL_FF>
+                    <UTIL_FF>~0</UTIL_FF>
+                    <LUT>821</LUT>
+                    <AVAIL_LUT>117120</AVAIL_LUT>
+                    <UTIL_LUT>~0</UTIL_LUT>
+                    <URAM>0</URAM>
+                    <AVAIL_URAM>64</AVAIL_URAM>
+                    <UTIL_URAM>0</UTIL_URAM>
+                </Resources>
+            </AreaEstimates>
+            <BindNodes>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln59_fu_263_p2" SOURCE="goertzel.cpp:59" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln59" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op lshr" DSP="0" ID="" IMPL="auto_pipe" LATENCY="0" LOOP="" OPTYPE="lshr" PRAGMA="" RTLNAME="lshr_ln59_fu_299_p2" SOURCE="goertzel.cpp:59" STORAGESUBTYPE="" URAM="0" VARIABLE="lshr_ln59" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_13ns_14s_27_1_1_U1" SOURCE="goertzel.cpp:60" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln60" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mac_muladd_18s_18s_30s_34_2_1_U2" SOURCE="goertzel.cpp:71" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln71" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="mac_muladd_18s_18s_30s_34_2_1_U2" SOURCE="goertzel.cpp:71" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln71" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op sub" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="sub" PRAGMA="" RTLNAME="sub_ln71_fu_480_p2" SOURCE="goertzel.cpp:71" STORAGESUBTYPE="" URAM="0" VARIABLE="sub_ln71" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mac_muladd_18s_18s_30s_34_2_1_U3" SOURCE="goertzel.cpp:71" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln71_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="mac_muladd_18s_18s_30s_34_2_1_U3" SOURCE="goertzel.cpp:71" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln71_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op sub" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="sub" PRAGMA="" RTLNAME="sub_ln71_1_fu_508_p2" SOURCE="goertzel.cpp:71" STORAGESUBTYPE="" URAM="0" VARIABLE="sub_ln71_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln76_fu_309_p2" SOURCE="goertzel.cpp:76" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln76" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln79_fu_314_p2" SOURCE="goertzel.cpp:79" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln79" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_34ns_34_4_1_U4" SOURCE="goertzel.cpp:85" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln85" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op sub" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="sub" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_34ns_34_4_1_U4" SOURCE="goertzel.cpp:85" STORAGESUBTYPE="" URAM="0" VARIABLE="sub_ln85" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_1ns_34_4_1_U5" SOURCE="goertzel.cpp:86" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln86" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op sub" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="sub" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_1ns_34_4_1_U5" SOURCE="goertzel.cpp:86" STORAGESUBTYPE="" URAM="0" VARIABLE="sub_ln86" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_34ns_34_4_1_U6" SOURCE="goertzel.cpp:85" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln85_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op sub" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="sub" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_34ns_34_4_1_U6" SOURCE="goertzel.cpp:85" STORAGESUBTYPE="" URAM="0" VARIABLE="sub_ln85_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln85_fu_618_p2" SOURCE="goertzel.cpp:85" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln85" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_34ns_34_4_1_U7" SOURCE="goertzel.cpp:86" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln86_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op sub" DSP="1" ID="" IMPL="dsp_slice" LATENCY="1" LOOP="" OPTYPE="sub" PRAGMA="" RTLNAME="mac_mulsub_18s_18s_34ns_34_4_1_U7" SOURCE="goertzel.cpp:86" STORAGESUBTYPE="" URAM="0" VARIABLE="sub_ln86_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln93_fu_324_p2" SOURCE="goertzel.cpp:93" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln93" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln94_fu_330_p2" SOURCE="goertzel.cpp:94" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln94" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln94_fu_336_p3" SOURCE="goertzel.cpp:94" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln94" VISIBLE="false"/>
+                <BindNode BINDTYPE="adapter" BRAM="4" BUNDLEDNAME="CTRL_BUS" DISPNAME="bind_adapter " DSP="0" ID="" IMPL="" LATENCY="" LOOP="" OPTYPE="" PRAGMA="" RTLNAME="CTRL_BUS_s_axi_U" SOURCE="" STORAGESIZE="" STORAGESUBTYPE="s_axilite" STORAGEUSAGE="interface" URAM="0" VARIABLE=""/>
+            </BindNodes>
+        </Module>
+    </ModuleInformation>
+    <FIFOInformation/>
+    <UserConfigCommands>
+        <config_sim O="1"/>
+    </UserConfigCommands>
+    <Args>
+        <Arg ArgName="in_stream" index="0" direction="in" srcType="stream&lt;axis_t, 0&gt;&amp;" srcSize="32">
+            <hwRefs>
+                <hwRef type="interface" interface="in_stream" name="" usage="data" direction="in"/>
+            </hwRefs>
+        </Arg>
+        <Arg ArgName="out_stream" index="1" direction="out" srcType="stream&lt;std::complex&lt;ap_fixed&lt;18, 5, AP_TRN, AP_WRAP, 0&gt; &gt;, 0&gt;&amp;" srcSize="64">
+            <hwRefs>
+                <hwRef type="interface" interface="out_stream" name="" usage="data" direction="out"/>
+            </hwRefs>
+        </Arg>
+        <Arg ArgName="cfg" index="2" direction="in" srcType="goertzel_config&amp;" srcSize="3456">
+            <hwRefs>
+                <hwRef type="memory" interface="s_axi_CTRL_BUS" name="cfg" usage="data" direction="in"/>
+            </hwRefs>
+        </Arg>
+    </Args>
+    <Interfaces>
+        <Interface InterfaceName="s_axi_CTRL_BUS" type="axi4lite" busTypeName="aximm" mode="slave" dataWidth="32" addrWidth="10" portPrefix="s_axi_CTRL_BUS_" paramPrefix="C_S_AXI_CTRL_BUS_">
+            <ports>
+                <port>s_axi_CTRL_BUS_ARADDR</port>
+                <port>s_axi_CTRL_BUS_ARREADY</port>
+                <port>s_axi_CTRL_BUS_ARVALID</port>
+                <port>s_axi_CTRL_BUS_AWADDR</port>
+                <port>s_axi_CTRL_BUS_AWREADY</port>
+                <port>s_axi_CTRL_BUS_AWVALID</port>
+                <port>s_axi_CTRL_BUS_BREADY</port>
+                <port>s_axi_CTRL_BUS_BRESP</port>
+                <port>s_axi_CTRL_BUS_BVALID</port>
+                <port>s_axi_CTRL_BUS_RDATA</port>
+                <port>s_axi_CTRL_BUS_RREADY</port>
+                <port>s_axi_CTRL_BUS_RRESP</port>
+                <port>s_axi_CTRL_BUS_RVALID</port>
+                <port>s_axi_CTRL_BUS_WDATA</port>
+                <port>s_axi_CTRL_BUS_WREADY</port>
+                <port>s_axi_CTRL_BUS_WSTRB</port>
+                <port>s_axi_CTRL_BUS_WVALID</port>
+            </ports>
+            <memories>
+                <memorie memorieName="cfg" offset="512" range="512"/>
+            </memories>
+            <constraints>
+                <constraint constraint_type="pragma interface" mode="s_axilite" register_option="0" offset="16" argName="cfg"/>
+            </constraints>
+        </Interface>
+        <Interface InterfaceName="ap_clk" type="clock" busTypeName="clock" mode="slave">
+            <busParams>
+                <busParam busParamName="ASSOCIATED_BUSIF">s_axi_CTRL_BUS:in_stream:out_stream</busParam>
+                <busParam busParamName="ASSOCIATED_RESET">ap_rst_n</busParam>
+            </busParams>
+            <portMaps>
+                <portMap portMapName="ap_clk">CLK</portMap>
+            </portMaps>
+            <ports>
+                <port>ap_clk</port>
+            </ports>
+        </Interface>
+        <Interface InterfaceName="ap_rst_n" type="reset" busTypeName="reset" mode="slave">
+            <busParams>
+                <busParam busParamName="POLARITY">ACTIVE_LOW</busParam>
+            </busParams>
+            <portMaps>
+                <portMap portMapName="ap_rst_n">RST</portMap>
+            </portMaps>
+            <ports>
+                <port>ap_rst_n</port>
+            </ports>
+        </Interface>
+        <Interface InterfaceName="in_stream" type="axi4stream" busTypeName="axis" mode="slave" direction="in" dataWidth="32" portPrefix="in_stream_">
+            <ports>
+                <port>in_stream_TDATA</port>
+                <port>in_stream_TREADY</port>
+                <port>in_stream_TVALID</port>
+            </ports>
+            <constraints>
+                <constraint constraint_type="pragma interface" mode="axis" register_option="1" register_mode="both" argName="in_stream"/>
+            </constraints>
+        </Interface>
+        <Interface InterfaceName="out_stream" type="axi4stream" busTypeName="axis" mode="master" direction="out" dataWidth="64" portPrefix="out_stream_">
+            <ports>
+                <port>out_stream_TDATA</port>
+                <port>out_stream_TREADY</port>
+                <port>out_stream_TVALID</port>
+            </ports>
+            <constraints>
+                <constraint constraint_type="pragma interface" mode="axis" register_option="1" register_mode="both" argName="out_stream"/>
+            </constraints>
+        </Interface>
+    </Interfaces>
+    <ReportHWInterface>
+        <section name="HW Interfaces" level="0">
+            <item name="S_AXILITE Interfaces">
+                <table>
+                    <keys size="6">Interface, Data Width, Address Width, Offset, Register, Resource Estimate</keys>
+                    <column name="s_axi_CTRL_BUS">32, 10, 16, 0, BRAM=4</column>
+                </table>
+            </item>
+            <item name="AXIS">
+                <table>
+                    <keys size="6">Interface, Direction, Register Mode, TDATA, TREADY, TVALID</keys>
+                    <column name="in_stream">in, both, 32, 1, 1</column>
+                    <column name="out_stream">out, both, 64, 1, 1</column>
+                </table>
+            </item>
+            <item name="TOP LEVEL CONTROL">
+                <table>
+                    <keys size="3">Interface, Type, Ports</keys>
+                    <column name="ap_clk">clock, ap_clk</column>
+                    <column name="ap_rst_n">reset, ap_rst_n</column>
+                    <column name="ap_ctrl">ap_ctrl_none, </column>
+                </table>
+            </item>
+        </section>
+    </ReportHWInterface>
+    <ReportSWInterface>
+        <section name="SW I/O Information" level="0">
+            <item name="Top Function Arguments">
+                <table>
+                    <keys size="3">Argument, Direction, Datatype</keys>
+                    <column name="in_stream">in, stream&lt;axis_t 0&gt;&amp;</column>
+                    <column name="out_stream">out, stream&lt;std::complex&lt;ap_fixed&lt;18 5 AP_TRN AP_WRAP 0&gt; &gt; 0&gt;&amp;</column>
+                    <column name="cfg">in, goertzel_config&amp;</column>
+                </table>
+            </item>
+            <item name="SW-to-HW Mapping">
+                <table>
+                    <keys size="4">Argument, HW Interface, HW Type, HW Info</keys>
+                    <column name="in_stream">in_stream, interface, </column>
+                    <column name="out_stream">out_stream, interface, </column>
+                    <column name="cfg">s_axi_CTRL_BUS, memory, name=cfg offset=512 range=512</column>
+                </table>
+            </item>
+        </section>
+    </ReportSWInterface>
+    <ResolutionUrl key="ZZZ">docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&amp;url=ug1448-hls-guidance&amp;resourceid=ZZZ.html</ResolutionUrl>
+    <PragmaReport>
+        <Pragma type="interface" location="goertzel.cpp:36" status="valid" parentFunction="goertzel" variable="in_stream" isDirective="0" options="axis port=in_stream"/>
+        <Pragma type="interface" location="goertzel.cpp:37" status="valid" parentFunction="goertzel" variable="out_stream" isDirective="0" options="axis port=out_stream"/>
+        <Pragma type="interface" location="goertzel.cpp:38" status="valid" parentFunction="goertzel" variable="cfg" isDirective="0" options="s_axilite port=cfg bundle=CTRL_BUS"/>
+        <Pragma type="interface" location="goertzel.cpp:39" status="valid" parentFunction="goertzel" variable="return" isDirective="0" options="ap_ctrl_none port=return"/>
+        <Pragma type="pipeline" location="goertzel.cpp:40" status="valid" parentFunction="goertzel" variable="" isDirective="0" options="ii=1"/>
+        <Pragma type="array_partition" location="goertzel.cpp:44" status="valid" parentFunction="goertzel" variable="s_prev" isDirective="0" options="variable=s_prev complete"/>
+        <Pragma type="array_partition" location="goertzel.cpp:45" status="valid" parentFunction="goertzel" variable="s_prev2" isDirective="0" options="variable=s_prev2 complete"/>
+        <Pragma type="array_partition" location="goertzel.cpp:65" status="valid" parentFunction="goertzel" variable="s_curr" isDirective="0" options="variable=s_curr complete"/>
+        <Pragma type="unroll" location="goertzel.cpp:69" status="valid" parentFunction="goertzel" variable="" isDirective="0" options=""/>
+        <Pragma type="unroll" location="goertzel.cpp:82" status="valid" parentFunction="goertzel" variable="" isDirective="0" options=""/>
+    </PragmaReport>
+</profile>
+

@@ -22,7 +22,7 @@ ff = 1666.66;
 % Cross correlation
 % Group size
 group_size = 9;
-eig_value_gain_floor = 1;
+norm_gain_floor = 1;
 
 % Num of power iterations
 power_iters = 10;
@@ -64,6 +64,13 @@ fs_bus=double(fpga_clock);
 % Tool config
 hdlset_param(model_name,'SynthesisTool','Xilinx Vivado')
 
+% Configure delay blocks
+delays = find_system(strcat(model_name,'/DUT_Test'), 'BlockType', 'Delay');
+
+for i = 1:numel(delays)
+    hdlset_param(delays{i}, 'UseRAM', 'on');
+end
+
 
 %% Simulink settings
 h = simulink.sampletimecolors.Palette("myColors");
@@ -95,13 +102,17 @@ omega_0 = 2 * pi * bins / nf;
 cos_omega = 2 * cos(omega_0);
 exp_omega = exp(1j * omega_0);
 
+goertzel_fixp = fixdt(1,fixp_input_ws+fixp_goertzel_int_bits+2,fixp_input_ws+2-1);
+cos_omega_fixp = fi(cos_omega, goertzel_fixp);
+exp_omega_fixp = fi(exp_omega, goertzel_fixp);
+
 hann_fixp = fixdt(0,fixp_input_ws,fixp_input_ws);
 hann_table = 0.5*(1-cos(2*pi*(0:(nf/2-1))/(nf-1)));
 hann_table_fixp = fi(hann_table, hann_fixp);
 
-goertzel_fixp = fixdt(1,fixp_input_ws+fixp_goertzel_int_bits+2,fixp_input_ws+2-1);
-cos_omega_fixp = fi(cos_omega, goertzel_fixp);
-exp_omega_fixp = fi(exp_omega, goertzel_fixp);
+% Cross-cor
+power_norm_scaling_factor = 1/sqrt(2);
+power_norm_scaling_factor_fixp = fi(power_norm_scaling_factor, 0, 18);
 
 % Backprojection
 bpp_scaling_bits = 11;
@@ -121,6 +132,7 @@ theta_cor = beta_retanh * theta; % Correct for the removal of the activation gai
 theta_fixp = fi(theta_cor,1,fixp_dbl_ws, fixp_dbl_frac);
 
 % Laplacian
+lap_diags = laplacian(:,2:end);
 lap_offsets = laplacian(2:end,1);
 lap_main = laplacian(1, 2); % Lap main diag is constant
 lap_rest = laplacian(2:end, 2:end);
@@ -278,23 +290,23 @@ writematrix(cheb_in, 'cheb_in.csv');
 % Extract signals from the Simulink output
 deblurred       = out.deblurred_fixp.Data;   % or out.deblurred.Data
 deblurred_valid = out.status_fixp.valid.Data;
-eig_value       = squeeze(out.status_fixp.eig_value.Data);
-eig_floor_hit   = squeeze(out.status_fixp.eig_floor_hit.Data);
+norm_value       = squeeze(out.status_fixp.norm.Data);
+norm_floor_hit   = squeeze(out.status_fixp.norm_floor_hit.Data);
 
 % Keep only valid samples
 deblurred = deblurred(deblurred_valid==1,:);
-eig_value = eig_value(deblurred_valid==1,:);
-eig_floor_hit = eig_floor_hit(deblurred_valid==1,:);
+norm_value = norm_value(deblurred_valid==1,:);
+norm_floor_hit = norm_floor_hit(deblurred_valid==1,:);
 
 % Cast to double
-eig_value = double(eig_value);
+norm_value = double(norm_value);
 deblurred = double(deblurred);
 
 % Scale deblurred from fixedpoint to reference scaling
 deblurred = deblurred * 2^-11 * beta_retanh;
 
 % Save all to the same MAT file
-save("deblurred.mat", "deblurred", "eig_value", "eig_floor_hit");
+save("deblurred.mat", "deblurred", "norm_value", "norm_floor_hit");
 
 %% Calculate BPP error - FixP vs FP
 % Assuming 'new' and 'ref' are both 2234x1 vectors
@@ -354,41 +366,33 @@ grid on;
 % 🔗 Link horizontal zooming/panning
 linkaxes([ax1, ax2, ax3], 'x');
 
+%% Ref outputs
+
+goertzel_ref = squeeze(out.goertzel_ref.Data(1,:,out.goertzel_ref_valid.Data))';
+crosscor_ref = permute(squeeze(out.crosscor_ref.Data(:,:,out.crosscor_ref_valid.Data)),[3 1 2]);
+bpp_ref = squeeze(out.bpp_ref.Data(out.bpp_ref_valid.Data,:));
+deblurred_ref = squeeze(out.deblurred_ref.Data(out.deblurred_ref_valid.Data,:));
+
+save("refs.mat", "goertzel_ref", "crosscor_ref", "bpp_ref", "deblurred_ref");
+
+%% FixP to binary
+idx=2;
+var=cos_omega_fixp; 
+rawstr = var(idx);
+rawstr = rawstr.bin;
+pointIndex = var.WordLength - var.FractionLength;
+str1 = rawstr(1:pointIndex);
+str2 = '.';
+str3 = rawstr(pointIndex+1:end);
+outstr = ['0b' str1 str2 str3];
+disp(outstr)
+
 %%
-bpp_unscaled = out.bpp_unscaled.Data;
+plot(goertzel_vitis)
+hold on;
+plot(goertzel_first_abs)
 
-% Get fi type properties
-WL = bpp_unscaled.WordLength;
-FL = bpp_unscaled.FractionLength;
-Signed = bpp_unscaled.Signed;
-
-% Calculate theoretical min and max
-if Signed
-    minVal = -2^(WL-FL-1);
-    maxVal = 2^(WL-FL-1) - 2^-FL;
-else
-    minVal = 0;
-    maxVal = 2^(WL-FL) - 2^-FL;
-end
-
-% Convert fi matrix to double for calculations
-numericData = double(bpp_unscaled);
-
-% Find actual min and max in numeric form
-actualMin = min(numericData(:));
-actualMax = max(numericData(:));
-
-% Calculate percentage usage
-percentMaxUsed = (actualMax / maxVal) * 100;
-
-if Signed
-    percentMinUsed = (abs(actualMin) / abs(minVal)) * 100;
-else
-    percentMinUsed = 0; % no negative numbers for unsigned
-end
-
-% Display results
-fprintf('Upper end usage: %.2f%%\n', percentMaxUsed);
-if Signed
-    fprintf('Lower end usage: %.2f%%\n', percentMinUsed);
-end
+%% 
+goertzel = squeeze(out.goertzel.Data);
+goertzel = goertzel(:,out.goertzel_valid.Data)';
+goertzel_b0 = goertzel(1,:)';

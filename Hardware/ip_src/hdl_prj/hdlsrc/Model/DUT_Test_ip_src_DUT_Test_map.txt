@@ -1,0 +1,9 @@
+ --> DUT_Test_ip_src_DUT_Test_pkg
+DUT_Test_tc --> DUT_Test_ip_src_DUT_Test_tc
+Reciprocal --> DUT_Test_ip_src_Reciprocal
+Model/DUT_Test/CrossCor/SimpleDualPortRAM_generic --> DUT_Test_ip_src_SimpleDualPortRAM_generic
+Model/DUT_Test/CrossCor/SimpleDualPortRAM_singlebit --> DUT_Test_ip_src_SimpleDualPortRAM_singlebit
+Model/DUT_Test/CrossCor/SimpleDualPortRAM_generic --> DUT_Test_ip_src_SimpleDualPortRAM_generic_block
+Model/DUT_Test/CrossCor --> DUT_Test_ip_src_CrossCor
+Model/DUT_Test/Goertzel --> DUT_Test_ip_src_Goertzel
+Model/DUT_Test --> DUT_Test_ip_src_DUT_Test

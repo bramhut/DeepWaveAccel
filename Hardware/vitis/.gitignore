@@ -1,0 +1,24 @@
+# Ignore build output directory
+/build
+/export
+output/
+
+# Ignore object files and dependent files
+.o
+.d
+
+#Ignore logs folder and log files
+/logs
+.log
+.autopilot/
+
+#Ignore lock files
+.lock
+
+.bin
+.pdi
+.vitisWorkspace.json
+
+_ide/logs
+_ide/.wsdata
+_ide/workspace_journal*

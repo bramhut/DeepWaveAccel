@@ -1,0 +1,10 @@
+open_system('Model');
+open_system('gm_Model');
+cs.HiliteType = 'user1';
+cs.ForegroundColor = 'black';
+cs.BackgroundColor = 'cyan';
+set_param(0, 'HiliteAncestorsData', cs);
+hilite_system('gm_Model/DUT_Test/Goertzel/EnabledGoertzel/Hann/Hann', 'user1');
+annotate_port('gm_Model/DUT_Test/Goertzel/EnabledGoertzel/Hann/Hann', 0, 1, 'Lookup Table mapped to RAM');
+hilite_system('Model/DUT_Test/Goertzel/EnabledGoertzel/Hann', 'user1');
+annotate_port('Model/DUT_Test/Goertzel/EnabledGoertzel/Hann', 0, 1, 'Lookup Table mapped to RAM');
