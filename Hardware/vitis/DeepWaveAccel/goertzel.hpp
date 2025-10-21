@@ -12,9 +12,6 @@ using win_t     = ap_ufixed<12, 0>;  // ufix12_En12
 
 // AXI-Lite config interface structure
 struct goertzel_config {
-    double fs_in;
-    double ff;
-    win_t  hann[N_WIN];
     coef_t COS_OMEGA[NBINS];
     coef_t COS_OMEGA2[NBINS];
     coef_t SIN_OMEGA[NBINS];

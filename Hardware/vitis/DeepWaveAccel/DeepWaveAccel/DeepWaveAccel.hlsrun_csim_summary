@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "10/20/25 19:19:17",
- "timestampMillis": "1760980757419",
+ "dateTimestamp": "10/21/25 20:24:02",
+ "timestampMillis": "1761071042725",
  "buildStep": {
-  "cmdId": "115e7cb0-4b62-410a-9e6f-8acb7f9563d4",
+  "cmdId": "b54c2418-e98c-4018-8460-2f523bd5dc6c",
   "name": "vitis-run",
   "logFile": "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\DeepWaveAccel\\logs\\DeepWaveAccel.steps.log",
   "commandLine": "C:/Xilinx/2025.1/Vitis/bin/unwrapped/win64.o/vitis-run.exe  --mode hls --csim --config C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\hls_config.cfg --work_dir DeepWaveAccel ",
@@ -33,10 +33,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "10/20/25 19:19:17",
- "timestampMillis": "1760980757420",
+ "dateTimestamp": "10/21/25 20:24:02",
+ "timestampMillis": "1761071042726",
  "status": {
-  "cmdId": "115e7cb0-4b62-410a-9e6f-8acb7f9563d4",
+  "cmdId": "b54c2418-e98c-4018-8460-2f523bd5dc6c",
   "state": "CS_RUNNING"
  }
 }
@@ -44,8 +44,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "10/20/25 19:19:25",
- "timestampMillis": "1760980765178",
+ "dateTimestamp": "10/21/25 20:24:11",
+ "timestampMillis": "1761071051465",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -66,7 +66,8 @@
     "sources": [
      "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\goertzel.cpp",
      "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\top.cpp",
-     "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\crosscor.cpp"
+     "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\crosscor.cpp",
+     "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\backproj.cpp"
     ],
     "psSources": [],
     "cuNames": [],
@@ -82,10 +83,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "10/20/25 19:19:25",
- "timestampMillis": "1760980765181",
+ "dateTimestamp": "10/21/25 20:24:11",
+ "timestampMillis": "1761071051469",
  "buildStep": {
-  "cmdId": "8d3c81b5-15b7-4e2b-b46d-0b2fb8e33a15",
+  "cmdId": "91b537fc-3866-415d-aa27-bc8c564974ec",
   "name": "",
   "logFile": "C:/Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\DeepWaveAccel\\hls\\hls.log",
   "commandLine": "",
@@ -98,10 +99,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "10/20/25 19:19:25",
- "timestampMillis": "1760980765183",
+ "dateTimestamp": "10/21/25 20:24:11",
+ "timestampMillis": "1761071051470",
  "status": {
-  "cmdId": "8d3c81b5-15b7-4e2b-b46d-0b2fb8e33a15",
+  "cmdId": "91b537fc-3866-415d-aa27-bc8c564974ec",
   "state": "CS_RUNNING"
  }
 }
@@ -109,10 +110,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "10/20/25 19:19:39",
- "timestampMillis": "1760980779251",
+ "dateTimestamp": "10/21/25 20:28:38",
+ "timestampMillis": "1761071318407",
  "status": {
-  "cmdId": "8d3c81b5-15b7-4e2b-b46d-0b2fb8e33a15",
+  "cmdId": "91b537fc-3866-415d-aa27-bc8c564974ec",
   "state": "CS_PASSED"
  }
 }
@@ -120,10 +121,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "10/20/25 19:19:39",
- "timestampMillis": "1760980779373",
+ "dateTimestamp": "10/21/25 20:28:38",
+ "timestampMillis": "1761071318533",
  "status": {
-  "cmdId": "115e7cb0-4b62-410a-9e6f-8acb7f9563d4",
+  "cmdId": "b54c2418-e98c-4018-8460-2f523bd5dc6c",
   "state": "CS_PASSED"
  }
 }
@@ -131,8 +132,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "10/20/25 19:19:39",
- "timestampMillis": "1760980779374",
+ "dateTimestamp": "10/21/25 20:28:38",
+ "timestampMillis": "1761071318534",
  "report": {
   "path": "",
   "name": "",
@@ -145,8 +146,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "10/20/25 19:19:39",
- "timestampMillis": "1760980779374",
+ "dateTimestamp": "10/21/25 20:28:38",
+ "timestampMillis": "1761071318534",
  "report": {
   "path": "",
   "name": "",

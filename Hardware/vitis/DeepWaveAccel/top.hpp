@@ -3,13 +3,13 @@
 #include "types.hpp"
 #include "goertzel.hpp"
 #include "crosscor.hpp"
-// #include "backproj.hpp"
+#include "backproj.hpp"
 // #include "deblur.hpp"
 
-void deepwaveaccel( // top kernel
-    hls::stream<AxisWordSampleIn>   &in,
-    hls::stream<AxisWordDFTc>       &out,
-    hls::stream<norm_sum_t>         &norm,
-    goertzel_config                 &goer_cfg);
-    // backproj_config       &bpp_cfg,
-    // deblur_config         &db_cfg)
+void deepwaveaccel(
+    hls::stream<AxisWordSampleIn> &in,     // raw input samples
+    hls::stream<b_t>              &b_in,   // steering vectors (streamed once)
+    hls::stream<tau_t>            &tau_in, // tau compensation values (streamed once)
+    hls::stream<AxisWordImg>      &out,    // final image output
+    hls::stream<norm_sum_t>       &norm,   // crosscor normalization info
+    goertzel_config               &goer_cfg);

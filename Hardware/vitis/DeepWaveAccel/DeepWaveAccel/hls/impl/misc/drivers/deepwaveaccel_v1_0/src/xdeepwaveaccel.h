@@ -93,15 +93,18 @@ int XDeepwaveaccel_Release(XDeepwaveaccel *InstancePtr);
 #endif
 
 
-u32 XDeepwaveaccel_Get_goer_cfg_BaseAddress(XDeepwaveaccel *InstancePtr);
-u32 XDeepwaveaccel_Get_goer_cfg_HighAddress(XDeepwaveaccel *InstancePtr);
-u32 XDeepwaveaccel_Get_goer_cfg_TotalBytes(XDeepwaveaccel *InstancePtr);
-u32 XDeepwaveaccel_Get_goer_cfg_BitWidth(XDeepwaveaccel *InstancePtr);
-u32 XDeepwaveaccel_Get_goer_cfg_Depth(XDeepwaveaccel *InstancePtr);
-u32 XDeepwaveaccel_Write_goer_cfg_Words(XDeepwaveaccel *InstancePtr, int offset, word_type *data, int length);
-u32 XDeepwaveaccel_Read_goer_cfg_Words(XDeepwaveaccel *InstancePtr, int offset, word_type *data, int length);
-u32 XDeepwaveaccel_Write_goer_cfg_Bytes(XDeepwaveaccel *InstancePtr, int offset, char *data, int length);
-u32 XDeepwaveaccel_Read_goer_cfg_Bytes(XDeepwaveaccel *InstancePtr, int offset, char *data, int length);
+void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA_0(XDeepwaveaccel *InstancePtr, u32 Data);
+u32 XDeepwaveaccel_Get_goer_cfg_COS_OMEGA_0(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA_1(XDeepwaveaccel *InstancePtr, u32 Data);
+u32 XDeepwaveaccel_Get_goer_cfg_COS_OMEGA_1(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA2_0(XDeepwaveaccel *InstancePtr, u32 Data);
+u32 XDeepwaveaccel_Get_goer_cfg_COS_OMEGA2_0(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA2_1(XDeepwaveaccel *InstancePtr, u32 Data);
+u32 XDeepwaveaccel_Get_goer_cfg_COS_OMEGA2_1(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_goer_cfg_SIN_OMEGA_0(XDeepwaveaccel *InstancePtr, u32 Data);
+u32 XDeepwaveaccel_Get_goer_cfg_SIN_OMEGA_0(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_goer_cfg_SIN_OMEGA_1(XDeepwaveaccel *InstancePtr, u32 Data);
+u32 XDeepwaveaccel_Get_goer_cfg_SIN_OMEGA_1(XDeepwaveaccel *InstancePtr);
 
 #ifdef __cplusplus
 }

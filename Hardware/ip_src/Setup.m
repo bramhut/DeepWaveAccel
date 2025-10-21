@@ -116,8 +116,10 @@ power_norm_scaling_factor_fixp = fi(power_norm_scaling_factor, 0, 18);
 
 % Backprojection
 bpp_scaling_bits = 11;
-b_fixp = fi(b.*sqrt(2^bpp_scaling_bits), 1, 14);
-tau_fixp = fi(tau.*2^bpp_scaling_bits, 1, 13);
+b_scaled = b.*sqrt(2^bpp_scaling_bits);
+b_fixp = fi(b_scaled, 1, 14);
+tau_scaled = tau.*2^bpp_scaling_bits;
+tau_fixp = fi(tau_scaled, 1, 13);
 
 % For optimized method - not in use currently
 [J, K] = find(triu(ones(n_ch), 1));  % upper triangle indices, j<k
@@ -308,63 +310,37 @@ deblurred = deblurred * 2^-11 * beta_retanh;
 % Save all to the same MAT file
 save("deblurred.mat", "deblurred", "norm_value", "norm_floor_hit");
 
-%% Calculate BPP error - FixP vs FP
-% Assuming 'new' and 'ref' are both 2234x1 vectors
-new = double(out.bpp_1.Data(:,:));
-ref = double(out.bpp_w.Data(:,:));
+%% Export model parameters to VitisHLS
 
-% Flatten
-new = new(:);
-ref = ref(:);
+% ------------------------------------------------
+% Export b (steering vectors)
+% ------------------------------------------------
 
-% Compute errors
-err = new - ref;              
-abs_err = abs(err);           
+fid_b = fopen('b_vectors.csv', 'w');
+fprintf(fid_b, 'pixel,elem,real,imag\n');
 
-% Sort by descending absolute error
-[abs_err_sorted, idx] = sort(abs_err, 'descend');
-ref_sorted = ref(idx);
-new_sorted = new(idx);
-rel_err_sorted = abs_err_sorted ./ abs(ref_sorted + eps);
+for pix = 1:n_px
+    for elem = 1:n_ch
+        val = b_scaled(elem, pix);
+        fprintf(fid_b, '%d,%d,%.10f,%.10f\n', pix-1, elem-1, real(val), imag(val));
+    end
+end
 
-% Basic statistics
-fprintf('Mean absolute error: %g\n', mean(abs_err));
-fprintf('Max absolute error: %g\n', max(abs_err));
-fprintf('Mean relative error: %g\n', mean(rel_err_sorted));
+fclose(fid_b);
 
-% Plot results
-figure;
+% ------------------------------------------------
+% Export tau (per-pixel correction)
+% ------------------------------------------------
+y_diag = mean(abs(b_scaled(:)).^2)*sqrt(2);
+tau_adj = tau_scaled - y_diag;
+fid_tau = fopen('tau.csv', 'w');
+fprintf(fid_tau, 'tau\n');
 
-% 1️⃣ Actual values
-ax1 = subplot(3,1,1);
-plot(new_sorted, 'LineWidth', 1.2);
-hold on;
-plot(ref_sorted, 'LineWidth', 1.2);
-hold off;
-title('Actual Values (sorted by error)');
-xlabel('Sample index (sorted)');
-ylabel('Value');
-legend('new', 'ref');
-grid on;
+for i = 1:n_px
+    fprintf(fid_tau, '%.10f\n', tau_adj(i));
+end
 
-% 2️⃣ Absolute error
-ax2 = subplot(3,1,2);
-plot(abs_err_sorted, 'LineWidth', 1.2);
-title('Absolute Error (sorted descending)');
-xlabel('Sample index (sorted)');
-ylabel('|new - ref|');
-grid on;
-
-% 3️⃣ Relative error
-ax3 = subplot(3,1,3);
-plot(rel_err_sorted, 'LineWidth', 1.2);
-title('Relative Error (sorted descending)');
-xlabel('Sample index (sorted)');
-ylabel('|new - ref| / |ref|');
-grid on;
-
-% 🔗 Link horizontal zooming/panning
-linkaxes([ax1, ax2, ax3], 'x');
+fclose(fid_tau);
 
 %% Ref outputs
 
@@ -386,13 +362,3 @@ str2 = '.';
 str3 = rawstr(pointIndex+1:end);
 outstr = ['0b' str1 str2 str3];
 disp(outstr)
-
-%%
-plot(goertzel_vitis)
-hold on;
-plot(goertzel_first_abs)
-
-%% 
-goertzel = squeeze(out.goertzel.Data);
-goertzel = goertzel(:,out.goertzel_valid.Data)';
-goertzel_b0 = goertzel(1,:)';

@@ -16,24 +16,24 @@ int tb_goertzel() {
     std::vector<int16_t> wav_samples;
     int channels, samplerate, frames;
     if(!read_wav_16bit(filename, wav_samples, channels, samplerate, frames)) {
-        std::cerr << "Failed to read WAV file or unsupported format\n";
+        std::cerr << "Failed to read WAV file or unsupported format" << std::endl;
         return 1;
     }
 
     if (channels != N_ELEM){
-        std::cerr << "Number of channels in input wave file does not match DeepWaveAccel setup\n";
+        std::cerr << "Number of channels in input wave file does not match DeepWaveAccel setup" << std::endl;
         return 1;
     }
 
     // Prepare configuration
-    std::cout << "sample rate: " << samplerate << "\n";
+    std::cout << "sample rate: " << samplerate <<std::endl;
     goertzel_prepare_config(cfg, (double)samplerate, FF);
 
-    std::cout << "Calculated Goertzel coefficients:\n";
+    std::cout << "Calculated Goertzel coefficients:" << std::endl;
     for (int b = 0; b < NBINS; b++) {
         std::cout << "  cos_omega["  << b << "] = " << cfg.COS_OMEGA[b].to_double()
                   << ", cos_omega2[" << b << "] = " << cfg.COS_OMEGA2[b].to_double()
-                  << ", sin_omega["  << b << "] = " << cfg.SIN_OMEGA[b].to_double() << "\n";
+                  << ", sin_omega["  << b << "] = " << cfg.SIN_OMEGA[b].to_double() <<std::endl;
     }
 
     int n_batches = frames / N_WIN;
@@ -66,7 +66,7 @@ int tb_goertzel() {
                 AxisWordDFTc in = out_stream.read();
                 goertzel_out[ch][b] = std::complex<DFT_t>(in.re, in.im);
             } else {
-                std::cerr << "Trying to read non-existing AXIS output value, THIS SHOULDN'T HAPPEN\n";
+                std::cerr << "Trying to read non-existing AXIS output value, THIS SHOULDN'T HAPPEN" << std::endl;
             }
         }
     }
@@ -75,7 +75,7 @@ int tb_goertzel() {
     std::string file_sim_out =  "/goertzel_sim.csv";
     std::ofstream csv(std::string(OUTPUT_DIR) + file_sim_out);
     if (!csv.is_open()) {
-        std::cerr << "Failed to open output CSV file\n";
+        std::cerr << "Failed to open output CSV file" << std::endl;
         return 1;
     }
 
@@ -93,8 +93,8 @@ int tb_goertzel() {
 
 
     csv.close();
-    std::cout << "Wrote " << N_ELEM * n_batches << " results to \"output" << file_sim_out << "\"\n";
+    std::cout << "Wrote " << N_ELEM * n_batches << " results to \"output" << file_sim_out << "\"" << std::endl;
 
-    std::cout << "Done.\n";
+    std::cout << "Done." << std::endl;
     return 0;
 }

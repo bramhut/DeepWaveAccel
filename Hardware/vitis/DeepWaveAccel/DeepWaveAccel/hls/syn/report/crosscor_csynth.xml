@@ -11,26 +11,26 @@
 <TopModelName>crosscor</TopModelName>
 <TargetClockPeriod>10.00</TargetClockPeriod>
 <ClockUncertainty>2.70</ClockUncertainty>
-<TargetInitiationInterval>1</TargetInitiationInterval>
+<TargetInitiationInterval>2</TargetInitiationInterval>
 <FlowTarget>vivado</FlowTarget>
 </UserAssignments>
 
 <PerformanceEstimates>
-<PipelineType>yes(flp)</PipelineType>
+<PipelineType>yes</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>6.549</EstimatedClockPeriod>
+<EstimatedClockPeriod>6.751</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
-<Best-caseLatency>46</Best-caseLatency>
-<Average-caseLatency>46</Average-caseLatency>
-<Worst-caseLatency>46</Worst-caseLatency>
-<Best-caseRealTimeLatency>0.460 us</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>0.460 us</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>0.460 us</Worst-caseRealTimeLatency>
+<Best-caseLatency>42</Best-caseLatency>
+<Average-caseLatency>42</Average-caseLatency>
+<Worst-caseLatency>42</Worst-caseLatency>
+<Best-caseRealTimeLatency>0.420 us</Best-caseRealTimeLatency>
+<Average-caseRealTimeLatency>0.420 us</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>0.420 us</Worst-caseRealTimeLatency>
 <PipelineInitiationInterval>2</PipelineInitiationInterval>
-<PipelineDepth>47</PipelineDepth>
+<PipelineDepth>43</PipelineDepth>
 <Interval-min>2</Interval-min>
 <Interval-max>2</Interval-max>
 <PerformancePragma>-</PerformancePragma>
@@ -38,16 +38,16 @@
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>crosscor.cpp:5</SourceLocation>
+<SourceLocation>crosscor.cpp:9</SourceLocation>
 </SummaryOfViolations>
 </PerformanceEstimates>
 
 <AreaEstimates>
 <Resources>
-<BRAM_18K>12</BRAM_18K>
-<DSP>20</DSP>
-<FF>7684</FF>
-<LUT>5169</LUT>
+<BRAM_18K>14</BRAM_18K>
+<DSP>22</DSP>
+<FF>4226</FF>
+<LUT>9583</LUT>
 <URAM>0</URAM>
 </Resources>
 <AvailableResources>
@@ -94,6 +94,17 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
+<name>start_full_n</name>
+<Object>crosscor</Object>
+<Type>return value</Type>
+<Scope></Scope>
+<IOProtocol>ap_ctrl_none</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>in</Dir>
+<Bits>1</Bits>
+<Attribute>unknown</Attribute>
+</RtlPorts>
+<RtlPorts>
 <name>ap_done</name>
 <Object>crosscor</Object>
 <Type>return value</Type>
@@ -136,6 +147,116 @@
 <Dir>out</Dir>
 <Bits>1</Bits>
 <Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>start_out</name>
+<Object>crosscor</Object>
+<Type>return value</Type>
+<Scope></Scope>
+<IOProtocol>ap_ctrl_none</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>unknown</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>start_write</name>
+<Object>crosscor</Object>
+<Type>return value</Type>
+<Scope></Scope>
+<IOProtocol>ap_ctrl_none</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>unknown</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>norm_TREADY</name>
+<Object>norm</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>in</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>norm_TDATA</name>
+<Object>norm</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>24</Bits>
+<Attribute>data</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>norm_TVALID</name>
+<Object>norm</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>s_xcor_din</name>
+<Object>s_xcor</Object>
+<Type>pointer</Type>
+<Scope>global</Scope>
+<IOProtocol>ap_fifo</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>out</Dir>
+<Bits>96</Bits>
+<Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>s_xcor_full_n</name>
+<Object>s_xcor</Object>
+<Type>pointer</Type>
+<Scope>global</Scope>
+<IOProtocol>ap_fifo</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>in</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>s_xcor_write</name>
+<Object>s_xcor</Object>
+<Type>pointer</Type>
+<Scope>global</Scope>
+<IOProtocol>ap_fifo</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>s_xcor_num_data_valid</name>
+<Object>s_xcor</Object>
+<Type>pointer</Type>
+<Scope>global</Scope>
+<IOProtocol>ap_fifo</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>in</Dir>
+<Bits>9</Bits>
+<Attribute>control</Attribute>
+</RtlPorts>
+<RtlPorts>
+<name>s_xcor_fifo_cap</name>
+<Object>s_xcor</Object>
+<Type>pointer</Type>
+<Scope>global</Scope>
+<IOProtocol>ap_fifo</IOProtocol>
+<IOConfig></IOConfig>
+<Dir>in</Dir>
+<Bits>9</Bits>
+<Attribute>unknown</Attribute>
 </RtlPorts>
 <RtlPorts>
 <name>s_goertzel_dout</name>
@@ -191,72 +312,6 @@
 <Dir>in</Dir>
 <Bits>7</Bits>
 <Attribute>unknown</Attribute>
-</RtlPorts>
-<RtlPorts>
-<name>norm_TREADY</name>
-<Object>norm</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>in</Dir>
-<Bits>1</Bits>
-<Attribute>control</Attribute>
-</RtlPorts>
-<RtlPorts>
-<name>norm_TDATA</name>
-<Object>norm</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>24</Bits>
-<Attribute>data</Attribute>
-</RtlPorts>
-<RtlPorts>
-<name>norm_TVALID</name>
-<Object>norm</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>1</Bits>
-<Attribute>control</Attribute>
-</RtlPorts>
-<RtlPorts>
-<name>out_r_TREADY</name>
-<Object>out_r</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>in</Dir>
-<Bits>1</Bits>
-<Attribute>control</Attribute>
-</RtlPorts>
-<RtlPorts>
-<name>out_r_TDATA</name>
-<Object>out_r</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>96</Bits>
-<Attribute>data</Attribute>
-</RtlPorts>
-<RtlPorts>
-<name>out_r_TVALID</name>
-<Object>out_r</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>1</Bits>
-<Attribute>control</Attribute>
 </RtlPorts>
 </InterfaceSummary>
 

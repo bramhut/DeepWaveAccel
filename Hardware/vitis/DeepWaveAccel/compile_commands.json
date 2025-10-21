@@ -59,6 +59,18 @@
       "-fhls-tb",
       "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
+      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_backproj.cpp"
+    ],
+    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_backproj.cpp"
+  },
+  {
+    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "arguments": [
+      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "-fhls-tb",
+      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-c",
       "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_base.cpp"
     ],
     "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_base.cpp"

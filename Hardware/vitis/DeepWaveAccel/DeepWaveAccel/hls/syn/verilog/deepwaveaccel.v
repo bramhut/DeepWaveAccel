@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.549457,HLS_SYN_LAT=58,HLS_SYN_TPT=4,HLS_SYN_MEM=22,HLS_SYN_DSP=0,HLS_SYN_FF=8595,HLS_SYN_LUT=6053,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.876000,HLS_SYN_LAT=90,HLS_SYN_TPT=4,HLS_SYN_MEM=37,HLS_SYN_DSP=0,HLS_SYN_FF=11252,HLS_SYN_LUT=17204,HLS_VERSION=2025_1}" *)
 
 module deepwaveaccel (
         s_axi_CTRL_BUS_AWVALID,
@@ -29,18 +29,24 @@ module deepwaveaccel (
         ap_clk,
         ap_rst_n,
         in_r_TDATA,
+        b_in_TDATA,
+        tau_in_TDATA,
         out_r_TDATA,
         norm_TDATA,
         in_r_TVALID,
         in_r_TREADY,
-        out_r_TVALID,
-        out_r_TREADY,
         norm_TVALID,
-        norm_TREADY
+        norm_TREADY,
+        b_in_TVALID,
+        b_in_TREADY,
+        tau_in_TVALID,
+        tau_in_TREADY,
+        out_r_TVALID,
+        out_r_TREADY
 );
 
 parameter    C_S_AXI_CTRL_BUS_DATA_WIDTH = 32;
-parameter    C_S_AXI_CTRL_BUS_ADDR_WIDTH = 10;
+parameter    C_S_AXI_CTRL_BUS_ADDR_WIDTH = 6;
 parameter    C_S_AXI_DATA_WIDTH = 32;
 
 parameter C_S_AXI_CTRL_BUS_WSTRB_WIDTH = (32 / 8);
@@ -66,48 +72,78 @@ output  [1:0] s_axi_CTRL_BUS_BRESP;
 input   ap_clk;
 input   ap_rst_n;
 input  [31:0] in_r_TDATA;
-output  [95:0] out_r_TDATA;
+input  [31:0] b_in_TDATA;
+input  [15:0] tau_in_TDATA;
+output  [63:0] out_r_TDATA;
 output  [23:0] norm_TDATA;
 input   in_r_TVALID;
 output   in_r_TREADY;
-output   out_r_TVALID;
-input   out_r_TREADY;
 output   norm_TVALID;
 input   norm_TREADY;
+input   b_in_TVALID;
+output   b_in_TREADY;
+input   tau_in_TVALID;
+output   tau_in_TREADY;
+output   out_r_TVALID;
+input   out_r_TREADY;
 
  reg    ap_rst_n_inv;
-wire   [63:0] goer_cfg_q0;
+wire   [17:0] goer_cfg_COS_OMEGA_0;
+wire   [17:0] goer_cfg_COS_OMEGA_1;
+wire   [17:0] goer_cfg_COS_OMEGA2_0;
+wire   [17:0] goer_cfg_COS_OMEGA2_1;
+wire   [17:0] goer_cfg_SIN_OMEGA_0;
+wire   [17:0] goer_cfg_SIN_OMEGA_1;
 wire    goertzel_U0_ap_start;
 wire    goertzel_U0_ap_done;
 wire    goertzel_U0_ap_continue;
 wire    goertzel_U0_ap_idle;
 wire    goertzel_U0_ap_ready;
-wire   [95:0] goertzel_U0_s_goertzel_din;
-wire    goertzel_U0_s_goertzel_write;
 wire    goertzel_U0_start_out;
 wire    goertzel_U0_start_write;
-wire    goertzel_U0_in_stream_TREADY;
-wire   [5:0] goertzel_U0_goer_cfg_address0;
-wire    goertzel_U0_goer_cfg_ce0;
+wire    goertzel_U0_in_r_TREADY;
+wire   [95:0] goertzel_U0_s_goertzel_din;
+wire    goertzel_U0_s_goertzel_write;
 wire    crosscor_U0_ap_start;
 wire    crosscor_U0_ap_done;
 wire    crosscor_U0_ap_continue;
 wire    crosscor_U0_ap_idle;
 wire    crosscor_U0_ap_ready;
+wire   [95:0] crosscor_U0_s_xcor_din;
+wire    crosscor_U0_s_xcor_write;
 wire    crosscor_U0_s_goertzel_read;
-wire   [95:0] crosscor_U0_out_r_TDATA;
-wire    crosscor_U0_out_r_TVALID;
+wire    crosscor_U0_start_out;
+wire    crosscor_U0_start_write;
 wire   [23:0] crosscor_U0_norm_TDATA;
 wire    crosscor_U0_norm_TVALID;
+wire    backprojection_U0_ap_start;
+wire    backprojection_U0_ap_done;
+wire    backprojection_U0_ap_continue;
+wire    backprojection_U0_ap_idle;
+wire    backprojection_U0_ap_ready;
+wire    backprojection_U0_s_xcor_read;
+wire    backprojection_U0_b_in_TREADY;
+wire    backprojection_U0_tau_in_TREADY;
+wire   [63:0] backprojection_U0_out_r_TDATA;
+wire    backprojection_U0_out_r_TVALID;
 wire    s_goertzel_full_n;
 wire   [95:0] s_goertzel_dout;
 wire    s_goertzel_empty_n;
 wire   [6:0] s_goertzel_num_data_valid;
 wire   [6:0] s_goertzel_fifo_cap;
+wire    s_xcor_full_n;
+wire   [95:0] s_xcor_dout;
+wire    s_xcor_empty_n;
+wire   [8:0] s_xcor_num_data_valid;
+wire   [8:0] s_xcor_fifo_cap;
 wire   [0:0] start_for_crosscor_U0_din;
 wire    start_for_crosscor_U0_full_n;
 wire   [0:0] start_for_crosscor_U0_dout;
 wire    start_for_crosscor_U0_empty_n;
+wire   [0:0] start_for_backprojection_U0_din;
+wire    start_for_backprojection_U0_full_n;
+wire   [0:0] start_for_backprojection_U0_dout;
+wire    start_for_backprojection_U0_empty_n;
 
 deepwaveaccel_CTRL_BUS_s_axi #(
     .C_S_AXI_ADDR_WIDTH( C_S_AXI_CTRL_BUS_ADDR_WIDTH ),
@@ -133,9 +169,12 @@ CTRL_BUS_s_axi_U(
     .ACLK(ap_clk),
     .ARESET(ap_rst_n_inv),
     .ACLK_EN(1'b1),
-    .goer_cfg_address0(goertzel_U0_goer_cfg_address0),
-    .goer_cfg_ce0(goertzel_U0_goer_cfg_ce0),
-    .goer_cfg_q0(goer_cfg_q0)
+    .goer_cfg_COS_OMEGA_0(goer_cfg_COS_OMEGA_0),
+    .goer_cfg_COS_OMEGA_1(goer_cfg_COS_OMEGA_1),
+    .goer_cfg_COS_OMEGA2_0(goer_cfg_COS_OMEGA2_0),
+    .goer_cfg_COS_OMEGA2_1(goer_cfg_COS_OMEGA2_1),
+    .goer_cfg_SIN_OMEGA_0(goer_cfg_SIN_OMEGA_0),
+    .goer_cfg_SIN_OMEGA_1(goer_cfg_SIN_OMEGA_1)
 );
 
 deepwaveaccel_goertzel goertzel_U0(
@@ -147,40 +186,72 @@ deepwaveaccel_goertzel goertzel_U0(
     .ap_continue(goertzel_U0_ap_continue),
     .ap_idle(goertzel_U0_ap_idle),
     .ap_ready(goertzel_U0_ap_ready),
+    .start_out(goertzel_U0_start_out),
+    .start_write(goertzel_U0_start_write),
+    .goer_cfg_COS_OMEGA_0(goer_cfg_COS_OMEGA_0),
+    .goer_cfg_COS_OMEGA_1(goer_cfg_COS_OMEGA_1),
+    .goer_cfg_COS_OMEGA2_0(goer_cfg_COS_OMEGA2_0),
+    .goer_cfg_COS_OMEGA2_1(goer_cfg_COS_OMEGA2_1),
+    .goer_cfg_SIN_OMEGA_0(goer_cfg_SIN_OMEGA_0),
+    .goer_cfg_SIN_OMEGA_1(goer_cfg_SIN_OMEGA_1),
+    .in_r_TDATA(in_r_TDATA),
+    .in_r_TVALID(in_r_TVALID),
+    .in_r_TREADY(goertzel_U0_in_r_TREADY),
     .s_goertzel_din(goertzel_U0_s_goertzel_din),
     .s_goertzel_full_n(s_goertzel_full_n),
     .s_goertzel_write(goertzel_U0_s_goertzel_write),
     .s_goertzel_num_data_valid(s_goertzel_num_data_valid),
-    .s_goertzel_fifo_cap(s_goertzel_fifo_cap),
-    .start_out(goertzel_U0_start_out),
-    .start_write(goertzel_U0_start_write),
-    .in_stream_TDATA(in_r_TDATA),
-    .in_stream_TVALID(in_r_TVALID),
-    .in_stream_TREADY(goertzel_U0_in_stream_TREADY),
-    .goer_cfg_address0(goertzel_U0_goer_cfg_address0),
-    .goer_cfg_ce0(goertzel_U0_goer_cfg_ce0),
-    .goer_cfg_q0(goer_cfg_q0)
+    .s_goertzel_fifo_cap(s_goertzel_fifo_cap)
 );
 
 deepwaveaccel_crosscor crosscor_U0(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst_n_inv),
     .ap_start(crosscor_U0_ap_start),
+    .start_full_n(start_for_backprojection_U0_full_n),
     .ap_done(crosscor_U0_ap_done),
     .ap_continue(crosscor_U0_ap_continue),
     .ap_idle(crosscor_U0_ap_idle),
     .ap_ready(crosscor_U0_ap_ready),
+    .norm_TREADY(norm_TREADY),
+    .s_xcor_din(crosscor_U0_s_xcor_din),
+    .s_xcor_full_n(s_xcor_full_n),
+    .s_xcor_write(crosscor_U0_s_xcor_write),
+    .s_xcor_num_data_valid(s_xcor_num_data_valid),
+    .s_xcor_fifo_cap(s_xcor_fifo_cap),
     .s_goertzel_dout(s_goertzel_dout),
     .s_goertzel_empty_n(s_goertzel_empty_n),
     .s_goertzel_read(crosscor_U0_s_goertzel_read),
     .s_goertzel_num_data_valid(s_goertzel_num_data_valid),
     .s_goertzel_fifo_cap(s_goertzel_fifo_cap),
-    .norm_TREADY(norm_TREADY),
-    .out_r_TREADY(out_r_TREADY),
-    .out_r_TDATA(crosscor_U0_out_r_TDATA),
-    .out_r_TVALID(crosscor_U0_out_r_TVALID),
+    .start_out(crosscor_U0_start_out),
+    .start_write(crosscor_U0_start_write),
     .norm_TDATA(crosscor_U0_norm_TDATA),
     .norm_TVALID(crosscor_U0_norm_TVALID)
+);
+
+deepwaveaccel_backprojection backprojection_U0(
+    .ap_clk(ap_clk),
+    .ap_rst(ap_rst_n_inv),
+    .ap_start(backprojection_U0_ap_start),
+    .ap_done(backprojection_U0_ap_done),
+    .ap_continue(backprojection_U0_ap_continue),
+    .ap_idle(backprojection_U0_ap_idle),
+    .ap_ready(backprojection_U0_ap_ready),
+    .s_xcor_dout(s_xcor_dout),
+    .s_xcor_empty_n(s_xcor_empty_n),
+    .s_xcor_read(backprojection_U0_s_xcor_read),
+    .s_xcor_num_data_valid(s_xcor_num_data_valid),
+    .s_xcor_fifo_cap(s_xcor_fifo_cap),
+    .b_in_TVALID(b_in_TVALID),
+    .tau_in_TVALID(tau_in_TVALID),
+    .out_r_TREADY(out_r_TREADY),
+    .b_in_TDATA(b_in_TDATA),
+    .b_in_TREADY(backprojection_U0_b_in_TREADY),
+    .tau_in_TDATA(tau_in_TDATA),
+    .tau_in_TREADY(backprojection_U0_tau_in_TREADY),
+    .out_r_TDATA(backprojection_U0_out_r_TDATA),
+    .out_r_TVALID(backprojection_U0_out_r_TVALID)
 );
 
 deepwaveaccel_fifo_w96_d64_A s_goertzel_U(
@@ -198,6 +269,21 @@ deepwaveaccel_fifo_w96_d64_A s_goertzel_U(
     .if_fifo_cap(s_goertzel_fifo_cap)
 );
 
+deepwaveaccel_fifo_w96_d256_A s_xcor_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(crosscor_U0_s_xcor_din),
+    .if_full_n(s_xcor_full_n),
+    .if_write(crosscor_U0_s_xcor_write),
+    .if_dout(s_xcor_dout),
+    .if_empty_n(s_xcor_empty_n),
+    .if_read(backprojection_U0_s_xcor_read),
+    .if_num_data_valid(s_xcor_num_data_valid),
+    .if_fifo_cap(s_xcor_fifo_cap)
+);
+
 deepwaveaccel_start_for_crosscor_U0 start_for_crosscor_U0_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
@@ -211,9 +297,28 @@ deepwaveaccel_start_for_crosscor_U0 start_for_crosscor_U0_U(
     .if_read(crosscor_U0_ap_ready)
 );
 
+deepwaveaccel_start_for_backprojection_U0 start_for_backprojection_U0_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(start_for_backprojection_U0_din),
+    .if_full_n(start_for_backprojection_U0_full_n),
+    .if_write(crosscor_U0_start_write),
+    .if_dout(start_for_backprojection_U0_dout),
+    .if_empty_n(start_for_backprojection_U0_empty_n),
+    .if_read(backprojection_U0_ap_ready)
+);
+
 always @ (*) begin
     ap_rst_n_inv = ~ap_rst_n;
 end
+
+assign b_in_TREADY = backprojection_U0_b_in_TREADY;
+
+assign backprojection_U0_ap_continue = 1'b1;
+
+assign backprojection_U0_ap_start = start_for_backprojection_U0_empty_n;
 
 assign crosscor_U0_ap_continue = 1'b1;
 
@@ -223,16 +328,20 @@ assign goertzel_U0_ap_continue = 1'b1;
 
 assign goertzel_U0_ap_start = 1'b1;
 
-assign in_r_TREADY = goertzel_U0_in_stream_TREADY;
+assign in_r_TREADY = goertzel_U0_in_r_TREADY;
 
 assign norm_TDATA = crosscor_U0_norm_TDATA;
 
 assign norm_TVALID = crosscor_U0_norm_TVALID;
 
-assign out_r_TDATA = crosscor_U0_out_r_TDATA;
+assign out_r_TDATA = backprojection_U0_out_r_TDATA;
 
-assign out_r_TVALID = crosscor_U0_out_r_TVALID;
+assign out_r_TVALID = backprojection_U0_out_r_TVALID;
+
+assign start_for_backprojection_U0_din = 1'b1;
 
 assign start_for_crosscor_U0_din = 1'b1;
+
+assign tau_in_TREADY = backprojection_U0_tau_in_TREADY;
 
 endmodule //deepwaveaccel

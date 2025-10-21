@@ -10,7 +10,7 @@ use IEEE.numeric_std.all;
 
 entity deepwaveaccel is
 generic (
-    C_S_AXI_CTRL_BUS_ADDR_WIDTH : INTEGER := 10;
+    C_S_AXI_CTRL_BUS_ADDR_WIDTH : INTEGER := 6;
     C_S_AXI_CTRL_BUS_DATA_WIDTH : INTEGER := 32 );
 port (
     s_axi_CTRL_BUS_AWVALID : IN STD_LOGIC;
@@ -33,58 +33,88 @@ port (
     ap_clk : IN STD_LOGIC;
     ap_rst_n : IN STD_LOGIC;
     in_r_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
-    out_r_TDATA : OUT STD_LOGIC_VECTOR (95 downto 0);
+    b_in_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
+    tau_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
+    out_r_TDATA : OUT STD_LOGIC_VECTOR (63 downto 0);
     norm_TDATA : OUT STD_LOGIC_VECTOR (23 downto 0);
     in_r_TVALID : IN STD_LOGIC;
     in_r_TREADY : OUT STD_LOGIC;
-    out_r_TVALID : OUT STD_LOGIC;
-    out_r_TREADY : IN STD_LOGIC;
     norm_TVALID : OUT STD_LOGIC;
-    norm_TREADY : IN STD_LOGIC );
+    norm_TREADY : IN STD_LOGIC;
+    b_in_TVALID : IN STD_LOGIC;
+    b_in_TREADY : OUT STD_LOGIC;
+    tau_in_TVALID : IN STD_LOGIC;
+    tau_in_TREADY : OUT STD_LOGIC;
+    out_r_TVALID : OUT STD_LOGIC;
+    out_r_TREADY : IN STD_LOGIC );
 end;
 
 
 architecture behav of deepwaveaccel is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.549457,HLS_SYN_LAT=58,HLS_SYN_TPT=4,HLS_SYN_MEM=22,HLS_SYN_DSP=0,HLS_SYN_FF=8595,HLS_SYN_LUT=6053,HLS_VERSION=2025_1}";
+    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.876000,HLS_SYN_LAT=90,HLS_SYN_TPT=4,HLS_SYN_MEM=37,HLS_SYN_DSP=0,HLS_SYN_FF=11252,HLS_SYN_LUT=17204,HLS_VERSION=2025_1}";
     constant C_S_AXI_DATA_WIDTH : INTEGER := 32;
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
 
     signal ap_rst_n_inv : STD_LOGIC;
-    signal goer_cfg_q0 : STD_LOGIC_VECTOR (63 downto 0);
+    signal goer_cfg_COS_OMEGA_0 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goer_cfg_COS_OMEGA_1 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goer_cfg_COS_OMEGA2_0 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goer_cfg_COS_OMEGA2_1 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goer_cfg_SIN_OMEGA_0 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goer_cfg_SIN_OMEGA_1 : STD_LOGIC_VECTOR (17 downto 0);
     signal goertzel_U0_ap_start : STD_LOGIC;
     signal goertzel_U0_ap_done : STD_LOGIC;
     signal goertzel_U0_ap_continue : STD_LOGIC;
     signal goertzel_U0_ap_idle : STD_LOGIC;
     signal goertzel_U0_ap_ready : STD_LOGIC;
-    signal goertzel_U0_s_goertzel_din : STD_LOGIC_VECTOR (95 downto 0);
-    signal goertzel_U0_s_goertzel_write : STD_LOGIC;
     signal goertzel_U0_start_out : STD_LOGIC;
     signal goertzel_U0_start_write : STD_LOGIC;
-    signal goertzel_U0_in_stream_TREADY : STD_LOGIC;
-    signal goertzel_U0_goer_cfg_address0 : STD_LOGIC_VECTOR (5 downto 0);
-    signal goertzel_U0_goer_cfg_ce0 : STD_LOGIC;
+    signal goertzel_U0_in_r_TREADY : STD_LOGIC;
+    signal goertzel_U0_s_goertzel_din : STD_LOGIC_VECTOR (95 downto 0);
+    signal goertzel_U0_s_goertzel_write : STD_LOGIC;
     signal crosscor_U0_ap_start : STD_LOGIC;
     signal crosscor_U0_ap_done : STD_LOGIC;
     signal crosscor_U0_ap_continue : STD_LOGIC;
     signal crosscor_U0_ap_idle : STD_LOGIC;
     signal crosscor_U0_ap_ready : STD_LOGIC;
+    signal crosscor_U0_s_xcor_din : STD_LOGIC_VECTOR (95 downto 0);
+    signal crosscor_U0_s_xcor_write : STD_LOGIC;
     signal crosscor_U0_s_goertzel_read : STD_LOGIC;
-    signal crosscor_U0_out_r_TDATA : STD_LOGIC_VECTOR (95 downto 0);
-    signal crosscor_U0_out_r_TVALID : STD_LOGIC;
+    signal crosscor_U0_start_out : STD_LOGIC;
+    signal crosscor_U0_start_write : STD_LOGIC;
     signal crosscor_U0_norm_TDATA : STD_LOGIC_VECTOR (23 downto 0);
     signal crosscor_U0_norm_TVALID : STD_LOGIC;
+    signal backprojection_U0_ap_start : STD_LOGIC;
+    signal backprojection_U0_ap_done : STD_LOGIC;
+    signal backprojection_U0_ap_continue : STD_LOGIC;
+    signal backprojection_U0_ap_idle : STD_LOGIC;
+    signal backprojection_U0_ap_ready : STD_LOGIC;
+    signal backprojection_U0_s_xcor_read : STD_LOGIC;
+    signal backprojection_U0_b_in_TREADY : STD_LOGIC;
+    signal backprojection_U0_tau_in_TREADY : STD_LOGIC;
+    signal backprojection_U0_out_r_TDATA : STD_LOGIC_VECTOR (63 downto 0);
+    signal backprojection_U0_out_r_TVALID : STD_LOGIC;
     signal s_goertzel_full_n : STD_LOGIC;
     signal s_goertzel_dout : STD_LOGIC_VECTOR (95 downto 0);
     signal s_goertzel_empty_n : STD_LOGIC;
     signal s_goertzel_num_data_valid : STD_LOGIC_VECTOR (6 downto 0);
     signal s_goertzel_fifo_cap : STD_LOGIC_VECTOR (6 downto 0);
+    signal s_xcor_full_n : STD_LOGIC;
+    signal s_xcor_dout : STD_LOGIC_VECTOR (95 downto 0);
+    signal s_xcor_empty_n : STD_LOGIC;
+    signal s_xcor_num_data_valid : STD_LOGIC_VECTOR (8 downto 0);
+    signal s_xcor_fifo_cap : STD_LOGIC_VECTOR (8 downto 0);
     signal start_for_crosscor_U0_din : STD_LOGIC_VECTOR (0 downto 0);
     signal start_for_crosscor_U0_full_n : STD_LOGIC;
     signal start_for_crosscor_U0_dout : STD_LOGIC_VECTOR (0 downto 0);
     signal start_for_crosscor_U0_empty_n : STD_LOGIC;
+    signal start_for_backprojection_U0_din : STD_LOGIC_VECTOR (0 downto 0);
+    signal start_for_backprojection_U0_full_n : STD_LOGIC;
+    signal start_for_backprojection_U0_dout : STD_LOGIC_VECTOR (0 downto 0);
+    signal start_for_backprojection_U0_empty_n : STD_LOGIC;
 
     component deepwaveaccel_goertzel IS
     port (
@@ -96,19 +126,22 @@ architecture behav of deepwaveaccel is
         ap_continue : IN STD_LOGIC;
         ap_idle : OUT STD_LOGIC;
         ap_ready : OUT STD_LOGIC;
+        start_out : OUT STD_LOGIC;
+        start_write : OUT STD_LOGIC;
+        goer_cfg_COS_OMEGA_0 : IN STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_COS_OMEGA_1 : IN STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_COS_OMEGA2_0 : IN STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_COS_OMEGA2_1 : IN STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_SIN_OMEGA_0 : IN STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_SIN_OMEGA_1 : IN STD_LOGIC_VECTOR (17 downto 0);
+        in_r_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
+        in_r_TVALID : IN STD_LOGIC;
+        in_r_TREADY : OUT STD_LOGIC;
         s_goertzel_din : OUT STD_LOGIC_VECTOR (95 downto 0);
         s_goertzel_full_n : IN STD_LOGIC;
         s_goertzel_write : OUT STD_LOGIC;
         s_goertzel_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
-        start_out : OUT STD_LOGIC;
-        start_write : OUT STD_LOGIC;
-        in_stream_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
-        in_stream_TVALID : IN STD_LOGIC;
-        in_stream_TREADY : OUT STD_LOGIC;
-        goer_cfg_address0 : OUT STD_LOGIC_VECTOR (5 downto 0);
-        goer_cfg_ce0 : OUT STD_LOGIC;
-        goer_cfg_q0 : IN STD_LOGIC_VECTOR (63 downto 0) );
+        s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0) );
     end component;
 
 
@@ -117,21 +150,52 @@ architecture behav of deepwaveaccel is
         ap_clk : IN STD_LOGIC;
         ap_rst : IN STD_LOGIC;
         ap_start : IN STD_LOGIC;
+        start_full_n : IN STD_LOGIC;
         ap_done : OUT STD_LOGIC;
         ap_continue : IN STD_LOGIC;
         ap_idle : OUT STD_LOGIC;
         ap_ready : OUT STD_LOGIC;
+        norm_TREADY : IN STD_LOGIC;
+        s_xcor_din : OUT STD_LOGIC_VECTOR (95 downto 0);
+        s_xcor_full_n : IN STD_LOGIC;
+        s_xcor_write : OUT STD_LOGIC;
+        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (8 downto 0);
+        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (8 downto 0);
         s_goertzel_dout : IN STD_LOGIC_VECTOR (95 downto 0);
         s_goertzel_empty_n : IN STD_LOGIC;
         s_goertzel_read : OUT STD_LOGIC;
         s_goertzel_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
         s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
-        norm_TREADY : IN STD_LOGIC;
-        out_r_TREADY : IN STD_LOGIC;
-        out_r_TDATA : OUT STD_LOGIC_VECTOR (95 downto 0);
-        out_r_TVALID : OUT STD_LOGIC;
+        start_out : OUT STD_LOGIC;
+        start_write : OUT STD_LOGIC;
         norm_TDATA : OUT STD_LOGIC_VECTOR (23 downto 0);
         norm_TVALID : OUT STD_LOGIC );
+    end component;
+
+
+    component deepwaveaccel_backprojection IS
+    port (
+        ap_clk : IN STD_LOGIC;
+        ap_rst : IN STD_LOGIC;
+        ap_start : IN STD_LOGIC;
+        ap_done : OUT STD_LOGIC;
+        ap_continue : IN STD_LOGIC;
+        ap_idle : OUT STD_LOGIC;
+        ap_ready : OUT STD_LOGIC;
+        s_xcor_dout : IN STD_LOGIC_VECTOR (95 downto 0);
+        s_xcor_empty_n : IN STD_LOGIC;
+        s_xcor_read : OUT STD_LOGIC;
+        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (8 downto 0);
+        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (8 downto 0);
+        b_in_TVALID : IN STD_LOGIC;
+        tau_in_TVALID : IN STD_LOGIC;
+        out_r_TREADY : IN STD_LOGIC;
+        b_in_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
+        b_in_TREADY : OUT STD_LOGIC;
+        tau_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
+        tau_in_TREADY : OUT STD_LOGIC;
+        out_r_TDATA : OUT STD_LOGIC_VECTOR (63 downto 0);
+        out_r_TVALID : OUT STD_LOGIC );
     end component;
 
 
@@ -152,7 +216,39 @@ architecture behav of deepwaveaccel is
     end component;
 
 
+    component deepwaveaccel_fifo_w96_d256_A IS
+    port (
+        clk : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        if_read_ce : IN STD_LOGIC;
+        if_write_ce : IN STD_LOGIC;
+        if_din : IN STD_LOGIC_VECTOR (95 downto 0);
+        if_full_n : OUT STD_LOGIC;
+        if_write : IN STD_LOGIC;
+        if_dout : OUT STD_LOGIC_VECTOR (95 downto 0);
+        if_empty_n : OUT STD_LOGIC;
+        if_read : IN STD_LOGIC;
+        if_num_data_valid : OUT STD_LOGIC_VECTOR (8 downto 0);
+        if_fifo_cap : OUT STD_LOGIC_VECTOR (8 downto 0) );
+    end component;
+
+
     component deepwaveaccel_start_for_crosscor_U0 IS
+    port (
+        clk : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        if_read_ce : IN STD_LOGIC;
+        if_write_ce : IN STD_LOGIC;
+        if_din : IN STD_LOGIC_VECTOR (0 downto 0);
+        if_full_n : OUT STD_LOGIC;
+        if_write : IN STD_LOGIC;
+        if_dout : OUT STD_LOGIC_VECTOR (0 downto 0);
+        if_empty_n : OUT STD_LOGIC;
+        if_read : IN STD_LOGIC );
+    end component;
+
+
+    component deepwaveaccel_start_for_backprojection_U0 IS
     port (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
@@ -192,9 +288,12 @@ architecture behav of deepwaveaccel is
         ACLK : IN STD_LOGIC;
         ARESET : IN STD_LOGIC;
         ACLK_EN : IN STD_LOGIC;
-        goer_cfg_address0 : IN STD_LOGIC_VECTOR (5 downto 0);
-        goer_cfg_ce0 : IN STD_LOGIC;
-        goer_cfg_q0 : OUT STD_LOGIC_VECTOR (63 downto 0) );
+        goer_cfg_COS_OMEGA_0 : OUT STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_COS_OMEGA_1 : OUT STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_COS_OMEGA2_0 : OUT STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_COS_OMEGA2_1 : OUT STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_SIN_OMEGA_0 : OUT STD_LOGIC_VECTOR (17 downto 0);
+        goer_cfg_SIN_OMEGA_1 : OUT STD_LOGIC_VECTOR (17 downto 0) );
     end component;
 
 
@@ -225,9 +324,12 @@ begin
         ACLK => ap_clk,
         ARESET => ap_rst_n_inv,
         ACLK_EN => ap_const_logic_1,
-        goer_cfg_address0 => goertzel_U0_goer_cfg_address0,
-        goer_cfg_ce0 => goertzel_U0_goer_cfg_ce0,
-        goer_cfg_q0 => goer_cfg_q0);
+        goer_cfg_COS_OMEGA_0 => goer_cfg_COS_OMEGA_0,
+        goer_cfg_COS_OMEGA_1 => goer_cfg_COS_OMEGA_1,
+        goer_cfg_COS_OMEGA2_0 => goer_cfg_COS_OMEGA2_0,
+        goer_cfg_COS_OMEGA2_1 => goer_cfg_COS_OMEGA2_1,
+        goer_cfg_SIN_OMEGA_0 => goer_cfg_SIN_OMEGA_0,
+        goer_cfg_SIN_OMEGA_1 => goer_cfg_SIN_OMEGA_1);
 
     goertzel_U0 : component deepwaveaccel_goertzel
     port map (
@@ -239,40 +341,72 @@ begin
         ap_continue => goertzel_U0_ap_continue,
         ap_idle => goertzel_U0_ap_idle,
         ap_ready => goertzel_U0_ap_ready,
+        start_out => goertzel_U0_start_out,
+        start_write => goertzel_U0_start_write,
+        goer_cfg_COS_OMEGA_0 => goer_cfg_COS_OMEGA_0,
+        goer_cfg_COS_OMEGA_1 => goer_cfg_COS_OMEGA_1,
+        goer_cfg_COS_OMEGA2_0 => goer_cfg_COS_OMEGA2_0,
+        goer_cfg_COS_OMEGA2_1 => goer_cfg_COS_OMEGA2_1,
+        goer_cfg_SIN_OMEGA_0 => goer_cfg_SIN_OMEGA_0,
+        goer_cfg_SIN_OMEGA_1 => goer_cfg_SIN_OMEGA_1,
+        in_r_TDATA => in_r_TDATA,
+        in_r_TVALID => in_r_TVALID,
+        in_r_TREADY => goertzel_U0_in_r_TREADY,
         s_goertzel_din => goertzel_U0_s_goertzel_din,
         s_goertzel_full_n => s_goertzel_full_n,
         s_goertzel_write => goertzel_U0_s_goertzel_write,
         s_goertzel_num_data_valid => s_goertzel_num_data_valid,
-        s_goertzel_fifo_cap => s_goertzel_fifo_cap,
-        start_out => goertzel_U0_start_out,
-        start_write => goertzel_U0_start_write,
-        in_stream_TDATA => in_r_TDATA,
-        in_stream_TVALID => in_r_TVALID,
-        in_stream_TREADY => goertzel_U0_in_stream_TREADY,
-        goer_cfg_address0 => goertzel_U0_goer_cfg_address0,
-        goer_cfg_ce0 => goertzel_U0_goer_cfg_ce0,
-        goer_cfg_q0 => goer_cfg_q0);
+        s_goertzel_fifo_cap => s_goertzel_fifo_cap);
 
     crosscor_U0 : component deepwaveaccel_crosscor
     port map (
         ap_clk => ap_clk,
         ap_rst => ap_rst_n_inv,
         ap_start => crosscor_U0_ap_start,
+        start_full_n => start_for_backprojection_U0_full_n,
         ap_done => crosscor_U0_ap_done,
         ap_continue => crosscor_U0_ap_continue,
         ap_idle => crosscor_U0_ap_idle,
         ap_ready => crosscor_U0_ap_ready,
+        norm_TREADY => norm_TREADY,
+        s_xcor_din => crosscor_U0_s_xcor_din,
+        s_xcor_full_n => s_xcor_full_n,
+        s_xcor_write => crosscor_U0_s_xcor_write,
+        s_xcor_num_data_valid => s_xcor_num_data_valid,
+        s_xcor_fifo_cap => s_xcor_fifo_cap,
         s_goertzel_dout => s_goertzel_dout,
         s_goertzel_empty_n => s_goertzel_empty_n,
         s_goertzel_read => crosscor_U0_s_goertzel_read,
         s_goertzel_num_data_valid => s_goertzel_num_data_valid,
         s_goertzel_fifo_cap => s_goertzel_fifo_cap,
-        norm_TREADY => norm_TREADY,
-        out_r_TREADY => out_r_TREADY,
-        out_r_TDATA => crosscor_U0_out_r_TDATA,
-        out_r_TVALID => crosscor_U0_out_r_TVALID,
+        start_out => crosscor_U0_start_out,
+        start_write => crosscor_U0_start_write,
         norm_TDATA => crosscor_U0_norm_TDATA,
         norm_TVALID => crosscor_U0_norm_TVALID);
+
+    backprojection_U0 : component deepwaveaccel_backprojection
+    port map (
+        ap_clk => ap_clk,
+        ap_rst => ap_rst_n_inv,
+        ap_start => backprojection_U0_ap_start,
+        ap_done => backprojection_U0_ap_done,
+        ap_continue => backprojection_U0_ap_continue,
+        ap_idle => backprojection_U0_ap_idle,
+        ap_ready => backprojection_U0_ap_ready,
+        s_xcor_dout => s_xcor_dout,
+        s_xcor_empty_n => s_xcor_empty_n,
+        s_xcor_read => backprojection_U0_s_xcor_read,
+        s_xcor_num_data_valid => s_xcor_num_data_valid,
+        s_xcor_fifo_cap => s_xcor_fifo_cap,
+        b_in_TVALID => b_in_TVALID,
+        tau_in_TVALID => tau_in_TVALID,
+        out_r_TREADY => out_r_TREADY,
+        b_in_TDATA => b_in_TDATA,
+        b_in_TREADY => backprojection_U0_b_in_TREADY,
+        tau_in_TDATA => tau_in_TDATA,
+        tau_in_TREADY => backprojection_U0_tau_in_TREADY,
+        out_r_TDATA => backprojection_U0_out_r_TDATA,
+        out_r_TVALID => backprojection_U0_out_r_TVALID);
 
     s_goertzel_U : component deepwaveaccel_fifo_w96_d64_A
     port map (
@@ -289,6 +423,21 @@ begin
         if_num_data_valid => s_goertzel_num_data_valid,
         if_fifo_cap => s_goertzel_fifo_cap);
 
+    s_xcor_U : component deepwaveaccel_fifo_w96_d256_A
+    port map (
+        clk => ap_clk,
+        reset => ap_rst_n_inv,
+        if_read_ce => ap_const_logic_1,
+        if_write_ce => ap_const_logic_1,
+        if_din => crosscor_U0_s_xcor_din,
+        if_full_n => s_xcor_full_n,
+        if_write => crosscor_U0_s_xcor_write,
+        if_dout => s_xcor_dout,
+        if_empty_n => s_xcor_empty_n,
+        if_read => backprojection_U0_s_xcor_read,
+        if_num_data_valid => s_xcor_num_data_valid,
+        if_fifo_cap => s_xcor_fifo_cap);
+
     start_for_crosscor_U0_U : component deepwaveaccel_start_for_crosscor_U0
     port map (
         clk => ap_clk,
@@ -302,6 +451,19 @@ begin
         if_empty_n => start_for_crosscor_U0_empty_n,
         if_read => crosscor_U0_ap_ready);
 
+    start_for_backprojection_U0_U : component deepwaveaccel_start_for_backprojection_U0
+    port map (
+        clk => ap_clk,
+        reset => ap_rst_n_inv,
+        if_read_ce => ap_const_logic_1,
+        if_write_ce => ap_const_logic_1,
+        if_din => start_for_backprojection_U0_din,
+        if_full_n => start_for_backprojection_U0_full_n,
+        if_write => crosscor_U0_start_write,
+        if_dout => start_for_backprojection_U0_dout,
+        if_empty_n => start_for_backprojection_U0_empty_n,
+        if_read => backprojection_U0_ap_ready);
+
 
 
 
@@ -311,14 +473,19 @@ begin
                 ap_rst_n_inv <= not(ap_rst_n);
     end process;
 
+    b_in_TREADY <= backprojection_U0_b_in_TREADY;
+    backprojection_U0_ap_continue <= ap_const_logic_1;
+    backprojection_U0_ap_start <= start_for_backprojection_U0_empty_n;
     crosscor_U0_ap_continue <= ap_const_logic_1;
     crosscor_U0_ap_start <= start_for_crosscor_U0_empty_n;
     goertzel_U0_ap_continue <= ap_const_logic_1;
     goertzel_U0_ap_start <= ap_const_logic_1;
-    in_r_TREADY <= goertzel_U0_in_stream_TREADY;
+    in_r_TREADY <= goertzel_U0_in_r_TREADY;
     norm_TDATA <= crosscor_U0_norm_TDATA;
     norm_TVALID <= crosscor_U0_norm_TVALID;
-    out_r_TDATA <= crosscor_U0_out_r_TDATA;
-    out_r_TVALID <= crosscor_U0_out_r_TVALID;
+    out_r_TDATA <= backprojection_U0_out_r_TDATA;
+    out_r_TVALID <= backprojection_U0_out_r_TVALID;
+    start_for_backprojection_U0_din <= (0=>ap_const_logic_1, others=>'-');
     start_for_crosscor_U0_din <= (0=>ap_const_logic_1, others=>'-');
+    tau_in_TREADY <= backprojection_U0_tau_in_TREADY;
 end behav;

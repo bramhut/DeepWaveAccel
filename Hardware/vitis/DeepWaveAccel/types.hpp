@@ -10,13 +10,14 @@ using std::complex;
 constexpr int N_ELEM  = 48;
 constexpr int IMG_LEN = 2234;
 
-// Consts
-constexpr int NPAIR = (N_ELEM * (N_ELEM - 1)) / 2;
-
 // Fixed-point types (Simulink mapping)
 using sampleIn_t    = ap_fixed<12, 1>;   // sfix12_En11
 using DFT_t         = ap_fixed<18, 5>;   // sfix18_En13
 using DFTc_t        = complex<DFT_t>;
+using b_real_t   = ap_fixed<14, -2>;            // sfix14_En16
+using b_t        = std::complex<b_real_t>;      // complex steering coefficients
+using tau_t      = ap_fixed<13, -3>;            // sfix13_En16 (per-pixel)
+using bp_out_t   = ap_fixed<18,  2>;            // sfix18_En16 (output pixel)
 
 // Axis types
 struct AxisWordSampleIn {
@@ -39,29 +40,21 @@ struct AxisWordDFTc {
         : re(d.real()), im(d.imag()), last(l), user(u) {}
 };
 
-// ROM constructors
-
-// ---------------------------------------------------------
-// Build (j,k) ROM for upper-triangle output order
-// ---------------------------------------------------------
-static void build_pair_rom(int j_rom[NPAIR], int k_rom[NPAIR]) {
-#pragma HLS INLINE
-    int p = 0;
-    for (int j = 0; j < N_ELEM; ++j) {
-        for (int k = j + 1; k < N_ELEM; ++k) {
-#pragma HLS PIPELINE II=1
-            j_rom[p] = j;
-            k_rom[p] = k;
-            ++p;
-        }
-    }
-}
+// Real image AXIS word (payload is bp_out_t)
+struct AxisWordImg {
+    bp_out_t  data;
+    ap_uint<1> last;
+    ap_uint<1> user;
+    AxisWordImg() {}
+    AxisWordImg(bp_out_t d, bool l=false, bool u=false) : data(d), last(l), user(u) {}
+};
 
 // ---- Stringizing helpers ----
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
 #define OUTPUT_DIR "../../../../output"
+#define PARAM_DIR  "../../../../parameters"
 
 // ---- Interface macros ----
 #define AXIS_IN_OUT(NAME) \

@@ -1,5 +1,6 @@
 #pragma once
 #include "types.hpp"
+#include "pair_rom_data.hpp"
 #include <vector>
 #include <cstdint>
 
