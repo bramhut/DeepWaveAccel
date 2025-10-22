@@ -10,14 +10,17 @@ int tb_top();
 int tb_goertzel();
 int tb_crosscor();
 int tb_backproj();
+int tb_deblur();
 
 int main() {
     std::cout.setf(std::ios::unitbuf); // Weird cout lines dissappearing... Not sure if this helpes
+    std::setvbuf(stdout, NULL, _IONBF, 0);
 
     // tb_top();
     // tb_goertzel();
     // tb_crosscor();
     // tb_backproj();
+    tb_deblur();
 
 }
 

@@ -4,7 +4,7 @@
 #include "goertzel.hpp"
 #include "crosscor.hpp"
 #include "backproj.hpp"
-// #include "deblur.hpp"
+#include "deblur.hpp"
 
 void deepwaveaccel(
     hls::stream<AxisWordSampleIn> &in,     // raw input samples
