@@ -138,7 +138,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
             bool first = (pix == 0);
             bool last  = (pix == IMG_LEN - 1);
-            img_stream.write(AxisWordImg((bp_out_t)y_sub, last, first));
+            img_stream.write(AxisWordImg((img_t)y_sub, last, first));
 
             ++pix;
             y_acc = 0;

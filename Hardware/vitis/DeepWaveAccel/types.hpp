@@ -14,10 +14,10 @@ constexpr int IMG_LEN = 2234;
 using sampleIn_t    = ap_fixed<12, 1>;   // sfix12_En11
 using DFT_t         = ap_fixed<18, 5>;   // sfix18_En13
 using DFTc_t        = complex<DFT_t>;
-using b_real_t   = ap_fixed<14, -2>;            // sfix14_En16
-using b_t        = std::complex<b_real_t>;      // complex steering coefficients
-using tau_t      = ap_fixed<13, -3>;            // sfix13_En16 (per-pixel)
-using bp_out_t   = ap_fixed<18,  2>;            // sfix18_En16 (output pixel)
+using b_real_t      = ap_fixed<14, -2>;            // sfix14_En16
+using b_t           = std::complex<b_real_t>;      // complex steering coefficients
+using tau_t         = ap_fixed<13, -3>;            // sfix13_En16 (per-pixel)
+using img_t         = ap_fixed<18,  2>;            // sfix18_En16 (output pixel)
 
 // Axis types
 struct AxisWordSampleIn {
@@ -40,13 +40,13 @@ struct AxisWordDFTc {
         : re(d.real()), im(d.imag()), last(l), user(u) {}
 };
 
-// Real image AXIS word (payload is bp_out_t)
+// Real image AXIS word (payload is img_t)
 struct AxisWordImg {
-    bp_out_t  data;
+    img_t  data;
     ap_uint<1> last;
     ap_uint<1> user;
     AxisWordImg() {}
-    AxisWordImg(bp_out_t d, bool l=false, bool u=false) : data(d), last(l), user(u) {}
+    AxisWordImg(img_t d, bool l=false, bool u=false) : data(d), last(l), user(u) {}
 };
 
 // ---- Stringizing helpers ----

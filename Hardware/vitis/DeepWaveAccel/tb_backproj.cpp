@@ -153,7 +153,7 @@ int tb_backproj() {
     // -------------------------------------------------------------------------
     // Collect output images
     // -------------------------------------------------------------------------
-    std::vector<bp_out_t> image_vals;
+    std::vector<img_t> image_vals;
     while (!img_stream.empty()) {
         AxisWordImg out = img_stream.read();
         image_vals.push_back(out.data);
