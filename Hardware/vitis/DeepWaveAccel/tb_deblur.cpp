@@ -40,7 +40,6 @@ int tb_deblur() {
         if (first) {
             lap_stream.write((lap_t)val); // main diagonal
             first = false;
-            std::cout << "[Deblur] Loaded laplacian main: " << (lap_t)val << std::endl;
         } else {
             lap_stream.write((lap_t)val);
             ++i;
@@ -104,7 +103,6 @@ int tb_deblur() {
     }
     th_in.close();
     std::cout << "[Deblur] Loaded theta coefficients (K=" << (int)cfg.K << ")" << std::endl;
-
 
     // ---------------------------------------------------------
     // Load backprojection input image
