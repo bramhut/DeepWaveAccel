@@ -138,11 +138,12 @@ lap_diags = laplacian(:,2:end);
 lap_offsets = laplacian(2:end,1);
 lap_main = laplacian(1, 2); % Lap main diag is constant
 lap_rest = laplacian(2:end, 2:end);
+lap_rest_neg = -lap_rest;
 diag_count = size(lap_offsets,1);
 
 lap_offsets_fi = fi(lap_offsets, 0, ceil(log2(max(lap_offsets))));
 lap_main_fi = fi(lap_main,0,fixp_lapmult_frac+ceil(log2(lap_main)),fixp_lapmult_frac);
-lap_rest_fi = fi(-lap_rest,0,fixp_lapmult_frac+ceil(log2(max(-lap_rest(:)))),fixp_lapmult_frac); % lap_rest is non-positive, so invert and make unsigned
+lap_rest_fi = fi(lap_rest_neg,0,fixp_lapmult_frac+ceil(log2(max(lap_rest_neg(:)))),fixp_lapmult_frac); % lap_rest is non-positive, so invert and make unsigned
 diag_count_fi = fi(diag_count, 0, ceil(log2(diag_count)));
 
 %% Normalization divider LUT replacement - needs further investigation 
@@ -311,21 +312,19 @@ deblurred = deblurred * 2^-11 * beta_retanh;
 save("deblurred.mat", "deblurred", "norm_value", "norm_floor_hit");
 
 %% Export model parameters to VitisHLS
+PARAM_DIR = fullfile('..','vitis','DeepWaveAccel','parameters');
 
 % ------------------------------------------------
 % Export b (steering vectors)
 % ------------------------------------------------
-
-fid_b = fopen('b_vectors.csv', 'w');
+fid_b = fopen(fullfile(PARAM_DIR,'b_vectors.csv'), 'w');
 fprintf(fid_b, 'pixel,elem,real,imag\n');
-
 for pix = 1:n_px
     for elem = 1:n_ch
         val = b_scaled(elem, pix);
         fprintf(fid_b, '%d,%d,%.10f,%.10f\n', pix-1, elem-1, real(val), imag(val));
     end
 end
-
 fclose(fid_b);
 
 % ------------------------------------------------
@@ -333,14 +332,33 @@ fclose(fid_b);
 % ------------------------------------------------
 y_diag = mean(abs(b_scaled(:)).^2)*sqrt(2);
 tau_adj = tau_scaled - y_diag;
-fid_tau = fopen('tau.csv', 'w');
+fid_tau = fopen(fullfile(PARAM_DIR,'tau.csv'), 'w');
 fprintf(fid_tau, 'tau\n');
-
 for i = 1:n_px
     fprintf(fid_tau, '%.10f\n', tau_adj(i));
 end
-
 fclose(fid_tau);
+
+% ------------------------------------------------
+% Export Laplacian (main + off-diagonals)
+% ------------------------------------------------
+fid_lap = fopen(fullfile(PARAM_DIR,'laplacian.csv'), 'w');
+fprintf(fid_lap, 'lap_value\n');
+fprintf(fid_lap, '%.12f\n', lap_main);
+[ND, IMG_LEN] = size(lap_rest_neg);
+for d = 1:ND
+    for i = 1:IMG_LEN
+        fprintf(fid_lap, '%.12f\n', lap_rest_neg(d,i));
+    end
+end
+fclose(fid_lap);
+
+% ------------------------------------------------
+% Export Laplacian offsets and Theta coefficients
+% ------------------------------------------------
+writematrix(lap_offsets(:)', fullfile(PARAM_DIR,'lap_offsets.csv'));
+writematrix(theta_cor(:)', fullfile(PARAM_DIR,'theta.csv'));
+
 
 %% Ref outputs
 

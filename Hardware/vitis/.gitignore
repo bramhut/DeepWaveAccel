@@ -2,6 +2,7 @@
 /build
 /export
 output/
+!/DeepWaveAccel/output
 
 # Ignore object files and dependent files
 .o
