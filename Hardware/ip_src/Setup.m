@@ -203,8 +203,8 @@ end
 
 %%
 
-cheb_in = out.image_in.Data;
-cheb_out = out.image_out.Data;
+% cheb_in = out.image_in.Data;
+% cheb_out = out.image_out.Data;
 
 function y = chebyshev_conv(L, x, theta)
 %CHEBYSHEV_CONV Compute y = sum_{k=0}^K theta_k * z_k
@@ -280,13 +280,13 @@ end
 
 lap_full = banded_to_full(laplacian);
 
-cheb_out_mat = chebyshev_conv(lap_full, cheb_in',theta)';
-cheb_out_mat = cheb_out_mat(1:end-1,:);
-
-cheb_out = cheb_out(2:end,:);
-max(abs(cheb_out - cheb_out_mat)./cheb_out_mat,[],"All")
-
-writematrix(cheb_in, 'cheb_in.csv');
+% cheb_out_mat = chebyshev_conv(lap_full, cheb_in',theta)';
+% cheb_out_mat = cheb_out_mat(1:end-1,:);
+% 
+% cheb_out = cheb_out(2:end,:);
+% max(abs(cheb_out - cheb_out_mat)./cheb_out_mat,[],"All")
+% 
+% writematrix(cheb_in, 'cheb_in.csv');
 
 %% Export model output to python 
 
@@ -380,3 +380,7 @@ str2 = '.';
 str3 = rawstr(pointIndex+1:end);
 outstr = ['0b' str1 str2 str3];
 disp(outstr)
+
+%%
+image_in = 0.1 * sin(2*pi*(0:n_px-1)/n_px).';
+test=lap_full*image_in;
