@@ -25,13 +25,23 @@ static inline img_t lap_pixel(
         int o  = (int)offs[d];
         int il = (int)i - o;
         int iu = (int)i + o;
-        lap_t a = lap_rest[d][(int)i];
 
-        if (il >= 0)         acc -= (acc_t)a * (acc_t)v[il];
-        if (iu < IMG_LEN)    acc -= (acc_t)a * (acc_t)v[iu];
+        // Lower diagonal uses coeff at current index (aligned bottom)
+        if (il >= 0) {
+            lap_t a_lower = lap_rest[d][(int)i];
+            acc -= (acc_t)a_lower * (acc_t)v[il];
+        }
+
+        // Upper diagonal uses coeff shifted by offset
+        if (iu < IMG_LEN) {
+            lap_t a_upper = lap_rest[d][(int)iu];
+            acc -= (acc_t)a_upper * (acc_t)v[iu];
+        }
     }
+
     return (img_t)acc;
 }
+
 
 // -------------------------------------------------------------
 // Top-level: cycle-accurate FSM (one operation per call)
@@ -59,7 +69,7 @@ void deblur(
 
     // working images
     static img_t bp_buf[IMG_LEN];   // backprojection per frame
-    static img_t y_acc[IMG_LEN];    // accumulator for Chebyshev sum
+    static acc_t y_acc[IMG_LEN];    // accumulator for Chebyshev sum
     static img_t z0[IMG_LEN], z1[IMG_LEN], z2[IMG_LEN];
 #pragma HLS BIND_STORAGE variable=bp_buf type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=y_acc  type=ram_1p impl=bram
@@ -133,11 +143,10 @@ void deblur(
     // ---------------- Start layer: seed z0 = 0 ----------------
     case LAYER_CLEAR_Z0: {
         z0[i] = (img_t)0;    // first layer uses zero seed - this can be changed if required
-        y_acc[i] = (img_t)0; // ensure clean accumulator
+        y_acc[i] = (acc_t)0; // ensure clean accumulator
         ++i;
         if (i == IMG_LEN) {
             i = 0;
-            k = 2;
             st = CHEB_Y0;
         }
         break;
@@ -145,7 +154,7 @@ void deblur(
 
     // y = θ0 * z0
     case CHEB_Y0: {
-        y_acc[i] = (img_t)((acc_t)cfg.theta[0] * (acc_t)z0[i]);
+        y_acc[i] = (acc_t)cfg.theta[0] * (acc_t)z0[i];
         ++i;
         if (i == IMG_LEN) {
             i = 0;
@@ -156,19 +165,20 @@ void deblur(
 
     case CHEB_Z1_ADD: {
         z1[i] = lap_pixel(z0, i, lap_main, cfg.lap_off, lap_rest);
-        y_acc[i] += cfg.theta[1] * z1[i];
+        y_acc[i] += (acc_t)cfg.theta[1] * (acc_t)z1[i];
         ++i;
         if (i == IMG_LEN) {
             i = 0;
+            k = 2; // Make k ready for CHEB_MAIN
             st = (cfg.K >= 2) ? CHEB_MAIN : LAYER_ADD_BP; 
         }
         break;
     }
 
     case CHEB_MAIN: {
-        lap_t t = lap_pixel(z1, i, lap_main, cfg.lap_off, lap_rest);
-        z2[i] = (2*t - z0[i]);
-        y_acc[i] += cfg.theta[k] * z2[i];
+        img_t t = lap_pixel(z1, i, lap_main, cfg.lap_off, lap_rest);
+        z2[i] = (t<<1) - z0[i];
+        y_acc[i] += (acc_t)cfg.theta[k] * (acc_t)z2[i];
         ++i;
         if (i == IMG_LEN) { 
             i = 0;
@@ -186,7 +196,7 @@ void deblur(
             i = 0;
             ++k;
             if (k <= cfg.K) {
-                st = CHEB_Z1_ADD;   // next Chebyshev term
+                st = CHEB_MAIN;   // next Chebyshev term
             } else {
                 st = LAYER_ADD_BP;    // layer done
             }
@@ -196,7 +206,7 @@ void deblur(
 
     // Finish layer: z0 = y + bp  (next layer input), or go to OUTPUT
     case LAYER_ADD_BP: {
-        img_t t = (img_t)((acc_t)y_acc[i] + (acc_t)bp_buf[i]);
+        img_t t = (img_t)(y_acc[i] + (acc_t)bp_buf[i]);
         if (t < 0)
             t=0;
         z0[i] = t;
