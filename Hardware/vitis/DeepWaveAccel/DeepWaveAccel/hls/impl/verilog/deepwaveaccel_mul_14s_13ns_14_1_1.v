@@ -2,7 +2,7 @@
 
 `timescale 1 ns / 1 ps
 
- module deepwaveaccel_mul_12s_7ns_12_1_1(din0, din1, dout);
+ module deepwaveaccel_mul_14s_13ns_14_1_1(din0, din1, dout);
 parameter ID = 1;
 parameter NUM_STAGE = 0;
 parameter din0_WIDTH = 14;

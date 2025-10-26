@@ -116,10 +116,10 @@ reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_
 reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_i_reg_182;
 reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_i_phi_fu_195_p4;
 reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_i_reg_192;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_phi_fu_205_p4;
-reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_reg_202;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_phi_fu_215_p4;
-reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_reg_212;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_phi_fu_205_p4;
+reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_reg_202;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_phi_fu_215_p4;
+reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_reg_212;
 wire   [63:0] zext_ln57_fu_250_p1;
 wire   [31:0] select_ln91_fu_428_p3;
 reg    hann_window_ce0_local;
@@ -368,9 +368,9 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln77_fu_370_p2 == 1'd0))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_reg_202 <= goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev;
+        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_reg_202 <= goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev;
     end else if (((1'b0 == ap_block_state7) & (icmp_ln77_reg_673 == 1'd1) & (tmp_i_reg_614 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_reg_202 <= 18'd0;
+        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_reg_202 <= 18'd0;
     end
 end
 
@@ -384,9 +384,9 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln77_fu_370_p2 == 1'd0))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_reg_212 <= {{sub_ln69_1_fu_350_p2[33:16]}};
+        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_reg_212 <= {{sub_ln69_1_fu_350_p2[33:16]}};
     end else if (((1'b0 == ap_block_state7) & (icmp_ln77_reg_673 == 1'd1) & (tmp_i_reg_614 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_reg_212 <= 18'd0;
+        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_reg_212 <= 18'd0;
     end
 end
 
@@ -424,8 +424,8 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state7) & (tmp_i_reg_614 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_phi_fu_215_p4;
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_phi_fu_205_p4;
+        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_phi_fu_215_p4;
+        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_phi_fu_205_p4;
         goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_1 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_i_phi_fu_195_p4;
         goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_i_phi_fu_185_p4;
         sample <= ap_phi_mux_sample_new_0_i_phi_fu_175_p4;
@@ -489,9 +489,9 @@ end
 
 always @ (*) begin
     if (((icmp_ln77_reg_673 == 1'd1) & (tmp_i_reg_614 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_phi_fu_205_p4 = 18'd0;
+        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_phi_fu_205_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_phi_fu_205_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_7_new_0_i_reg_202;
+        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_phi_fu_205_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_2_new_0_i_reg_202;
     end
 end
 
@@ -505,9 +505,9 @@ end
 
 always @ (*) begin
     if (((icmp_ln77_reg_673 == 1'd1) & (tmp_i_reg_614 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_phi_fu_215_p4 = 18'd0;
+        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_phi_fu_215_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_phi_fu_215_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_6_new_0_i_reg_212;
+        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_phi_fu_215_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_1_new_0_i_reg_212;
     end
 end
 

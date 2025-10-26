@@ -144,8 +144,8 @@ int tb_deblur() {
     memset(cycle_count, 0, sizeof(size_t)*frame_count);
 
     while(img_stream.size()/IMG_LEN < frame_count) {
-        deblur(bp_stream, lap_stream, img_stream, cfg);
         cycle_count[img_stream.size()/IMG_LEN]++;
+        deblur(bp_stream, lap_stream, img_stream, cfg);
     }
 
     if (!bp_stream.empty()){

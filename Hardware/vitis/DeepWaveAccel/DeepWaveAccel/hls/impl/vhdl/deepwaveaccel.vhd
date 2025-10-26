@@ -56,7 +56,7 @@ end;
 architecture behav of deepwaveaccel is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.940042,HLS_SYN_LAT=64,HLS_SYN_TPT=11,HLS_SYN_MEM=87,HLS_SYN_DSP=0,HLS_SYN_FF=12383,HLS_SYN_LUT=21367,HLS_VERSION=2025_1}";
+    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.103667,HLS_SYN_LAT=39,HLS_SYN_TPT=33,HLS_SYN_MEM=73,HLS_SYN_DSP=0,HLS_SYN_FF=9277,HLS_SYN_LUT=19737,HLS_VERSION=2025_1}";
     constant C_S_AXI_DATA_WIDTH : INTEGER := 32;
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
@@ -183,13 +183,13 @@ architecture behav of deepwaveaccel is
     signal crosscor_U0_ap_continue : STD_LOGIC;
     signal crosscor_U0_ap_idle : STD_LOGIC;
     signal crosscor_U0_ap_ready : STD_LOGIC;
-    signal crosscor_U0_s_xcor_din : STD_LOGIC_VECTOR (95 downto 0);
-    signal crosscor_U0_s_xcor_write : STD_LOGIC;
-    signal crosscor_U0_s_goertzel_read : STD_LOGIC;
     signal crosscor_U0_start_out : STD_LOGIC;
     signal crosscor_U0_start_write : STD_LOGIC;
     signal crosscor_U0_norm_TDATA : STD_LOGIC_VECTOR (23 downto 0);
     signal crosscor_U0_norm_TVALID : STD_LOGIC;
+    signal crosscor_U0_s_goertzel_read : STD_LOGIC;
+    signal crosscor_U0_s_xcor_din : STD_LOGIC_VECTOR (95 downto 0);
+    signal crosscor_U0_s_xcor_write : STD_LOGIC;
     signal backprojection_U0_ap_start : STD_LOGIC;
     signal backprojection_U0_ap_done : STD_LOGIC;
     signal backprojection_U0_ap_continue : STD_LOGIC;
@@ -663,21 +663,21 @@ architecture behav of deepwaveaccel is
         ap_continue : IN STD_LOGIC;
         ap_idle : OUT STD_LOGIC;
         ap_ready : OUT STD_LOGIC;
+        start_out : OUT STD_LOGIC;
+        start_write : OUT STD_LOGIC;
+        norm_TDATA : OUT STD_LOGIC_VECTOR (23 downto 0);
+        norm_TVALID : OUT STD_LOGIC;
         norm_TREADY : IN STD_LOGIC;
-        s_xcor_din : OUT STD_LOGIC_VECTOR (95 downto 0);
-        s_xcor_full_n : IN STD_LOGIC;
-        s_xcor_write : OUT STD_LOGIC;
-        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (8 downto 0);
-        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (8 downto 0);
         s_goertzel_dout : IN STD_LOGIC_VECTOR (95 downto 0);
         s_goertzel_empty_n : IN STD_LOGIC;
         s_goertzel_read : OUT STD_LOGIC;
         s_goertzel_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
         s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
-        start_out : OUT STD_LOGIC;
-        start_write : OUT STD_LOGIC;
-        norm_TDATA : OUT STD_LOGIC_VECTOR (23 downto 0);
-        norm_TVALID : OUT STD_LOGIC );
+        s_xcor_din : OUT STD_LOGIC_VECTOR (95 downto 0);
+        s_xcor_full_n : IN STD_LOGIC;
+        s_xcor_write : OUT STD_LOGIC;
+        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (8 downto 0);
+        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (8 downto 0) );
     end component;
 
 
@@ -1417,21 +1417,21 @@ begin
         ap_continue => crosscor_U0_ap_continue,
         ap_idle => crosscor_U0_ap_idle,
         ap_ready => crosscor_U0_ap_ready,
+        start_out => crosscor_U0_start_out,
+        start_write => crosscor_U0_start_write,
+        norm_TDATA => crosscor_U0_norm_TDATA,
+        norm_TVALID => crosscor_U0_norm_TVALID,
         norm_TREADY => norm_TREADY,
-        s_xcor_din => crosscor_U0_s_xcor_din,
-        s_xcor_full_n => s_xcor_full_n,
-        s_xcor_write => crosscor_U0_s_xcor_write,
-        s_xcor_num_data_valid => s_xcor_num_data_valid,
-        s_xcor_fifo_cap => s_xcor_fifo_cap,
         s_goertzel_dout => s_goertzel_dout,
         s_goertzel_empty_n => s_goertzel_empty_n,
         s_goertzel_read => crosscor_U0_s_goertzel_read,
         s_goertzel_num_data_valid => s_goertzel_num_data_valid,
         s_goertzel_fifo_cap => s_goertzel_fifo_cap,
-        start_out => crosscor_U0_start_out,
-        start_write => crosscor_U0_start_write,
-        norm_TDATA => crosscor_U0_norm_TDATA,
-        norm_TVALID => crosscor_U0_norm_TVALID);
+        s_xcor_din => crosscor_U0_s_xcor_din,
+        s_xcor_full_n => s_xcor_full_n,
+        s_xcor_write => crosscor_U0_s_xcor_write,
+        s_xcor_num_data_valid => s_xcor_num_data_valid,
+        s_xcor_fifo_cap => s_xcor_fifo_cap);
 
     backprojection_U0 : component deepwaveaccel_backprojection
     port map (

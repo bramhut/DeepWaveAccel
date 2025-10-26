@@ -4,11 +4,11 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // ==============================================================
 `timescale 1 ns / 1 ps
-module deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W (
+module deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W (
      
     address0, ce0,
-    d0, we0, 
     
+    q0, 
       
     address1, ce1,
     d1, we1, 
@@ -16,15 +16,14 @@ module deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W (
      
     reset, clk);
 
-parameter DataWidth = 36;
-parameter AddressWidth = 12;
-parameter AddressRange = 2304;
+parameter DataWidth = 15;
+parameter AddressWidth = 14;
+parameter AddressRange = 13404;
  
 input[AddressWidth-1:0] address0;
 input ce0;
-input[DataWidth-1:0] d0;
-input we0; 
 
+output reg[DataWidth-1:0] q0; 
  
 input[AddressWidth-1:0] address1;
 input ce1;
@@ -35,23 +34,22 @@ output reg[DataWidth-1:0] q1;
 input reset;
 input clk;
 
-(* ram_style = "auto"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
+(* ram_style = "block"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W.dat", ram);
+    $readmemh("./deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.dat", ram);
 end 
 
  
 
-always @(posedge clk)  
+
+
+always @(posedge clk) 
 begin 
     if (ce0) begin
-        if (we0) 
-            ram[address0] <= d0; 
+        q0 <= ram[address0];
     end
 end 
-
-
 
  
   

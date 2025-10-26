@@ -8,18 +8,17 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.std_logic_unsigned.all;
 
-entity deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W is 
+entity deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W is 
     generic(
-        MEM_TYPE        : string    := "auto"; 
-        DataWidth       : integer   := 36; 
-        AddressWidth    : integer   := 12;
-        AddressRange    : integer   := 2304
+        MEM_TYPE        : string    := "block"; 
+        DataWidth       : integer   := 15; 
+        AddressWidth    : integer   := 14;
+        AddressRange    : integer   := 13404
     ); 
     port (
         address0    : in std_logic_vector(AddressWidth-1 downto 0); 
         ce0         : in std_logic; 
-        d0          : in std_logic_vector(DataWidth-1 downto 0); 
-        we0         : in std_logic; 
+        q0          : out std_logic_vector(DataWidth-1 downto 0);
         address1    : in std_logic_vector(AddressWidth-1 downto 0); 
         ce1         : in std_logic; 
         d1          : in std_logic_vector(DataWidth-1 downto 0); 
@@ -30,8 +29,9 @@ entity deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W is
     ); 
 end entity; 
 
-architecture rtl of deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W is 
+architecture rtl of deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W is 
 
+signal address0_tmp : std_logic_vector(AddressWidth-1 downto 0);
 signal address1_tmp : std_logic_vector(AddressWidth-1 downto 0);
 
 
@@ -40,26 +40,35 @@ type mem_array is array (0 to AddressRange-1) of std_logic_vector (DataWidth-1 d
 shared variable ram : mem_array := (
     others=>(others=>'0')); -- 
 attribute syn_ramstyle : string;
-attribute syn_ramstyle of ram : variable is "auto";
+attribute syn_ramstyle of ram : variable is "block_ram";
 attribute ram_style : string;
 attribute ram_style of ram : variable is MEM_TYPE;
 
 begin 
 
 
+memory_access_guard_0: process (address0) 
+begin
+    address0_tmp <= address0;
+--synthesis translate_off
+    if (CONV_INTEGER(address0) > AddressRange-1) then
+        address0_tmp <= (others => '0');
+    else 
+       address0_tmp <= address0;
+    end if;
+--synthesis translate_on
+end process;   -- 
 
 
-p_memory_access_0: process (clk)  
+
+p_memory_access_0: process (clk)
 begin 
     if (clk'event and clk = '1') then
         if (ce0 = '1') then 
-            if (we0 = '1') then 
-                ram(CONV_INTEGER(address0)) := d0; 
-            end if;
+            q0 <= ram(CONV_INTEGER(address0_tmp));
         end if;
     end if;
-end process;      
-
+end process;
 
 
 

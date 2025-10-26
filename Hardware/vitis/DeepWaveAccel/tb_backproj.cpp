@@ -123,8 +123,8 @@ int tb_backproj() {
     auto start = high_resolution_clock::now();
 
     while (img_stream.size() / IMG_LEN < frame_count) {
-        backprojection(corr_stream, b_stream, tau_stream, img_stream);
         cycle_count[img_stream.size()/IMG_LEN]++;
+        backprojection(corr_stream, b_stream, tau_stream, img_stream);
     }
 
     if (!corr_stream.empty()){

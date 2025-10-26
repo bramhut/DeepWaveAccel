@@ -4,7 +4,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // ==============================================================
 `timescale 1 ns / 1 ps
-module deepwaveaccel_deblur_deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_5_RAMdEe (
+module deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W (
      
     address0, ce0,
     
@@ -12,13 +12,13 @@ module deepwaveaccel_deblur_deblur_stream_stream_stream_AxisWordImg_0_deblur_con
       
     address1, ce1,
     d1, we1, 
-    
+    q1, 
      
     reset, clk);
 
-parameter DataWidth = 15;
-parameter AddressWidth = 12;
-parameter AddressRange = 2234;
+parameter DataWidth = 36;
+parameter AddressWidth = 11;
+parameter AddressRange = 1128;
  
 input[AddressWidth-1:0] address0;
 input ce0;
@@ -29,7 +29,7 @@ input[AddressWidth-1:0] address1;
 input ce1;
 input[DataWidth-1:0] d1;
 input we1; 
-
+output reg[DataWidth-1:0] q1; 
 
 input reset;
 input clk;
@@ -37,7 +37,7 @@ input clk;
 (* ram_style = "block"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./deepwaveaccel_deblur_deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_5_RAMdEe.dat", ram);
+    $readmemh("./deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W.dat", ram);
 end 
 
  
@@ -54,16 +54,20 @@ end
  
   
 
+
+
+
+
+//read first
 always @(posedge clk)  
 begin 
     if (ce1) begin
         if (we1) 
             ram[address1] <= d1; 
+        q1 <= ram[address1];
+
     end
 end 
-
-
-
  
  
 
