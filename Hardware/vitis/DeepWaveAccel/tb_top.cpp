@@ -19,8 +19,8 @@ int main() {
     // tb_top();
     // tb_goertzel();
     // tb_crosscor();
-    // tb_backproj();
-    tb_deblur();
+    tb_backproj();
+    // tb_deblur();
 
 }
 

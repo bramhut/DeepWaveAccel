@@ -44,9 +44,9 @@ int tb_backproj() {
     csv_in.close();
 
     // Determine number of correlation matrices (frames)
-    int N_MAT = std::get<0>(rows.back()) + 1;
+    int frame_count = std::get<0>(rows.back()) + 1;
 
-    std::cout << "[Backproj] Loaded " << N_MAT
+    std::cout << "[Backproj] Loaded " << frame_count
               << " correlation matrices (upper only) from " << file_in << std::endl;
 
     // -------------------------------------------------------------------------
@@ -114,41 +114,34 @@ int tb_backproj() {
     // -------------------------------------------------------------------------
     // Run Backprojection kernel
     // -------------------------------------------------------------------------
-    const int LOAD_TAU_CYCLES   = IMG_LEN;                 // tau: IMG_LEN entries
-    const int LOAD_B_CYCLES     = N_ELEM * IMG_LEN;        // b: N_ELEM * IMG_LEN entries
-    const int LOAD_SIGMA_FRAME  = NPAIR;                   // upper only (no diag)
-    const int PER_PIXEL_CYCLES  = NPAIR + 1;               // COMPUTE_UP + OUTPUT
-    const int PIPELINE_SLACK    = 32;
 
-    const int TOTAL_CYCLES =
-        N_MAT * (LOAD_SIGMA_FRAME + IMG_LEN * PER_PIXEL_CYCLES) +
-        PIPELINE_SLACK;
+    size_t cycle_count[frame_count];
+    memset(cycle_count, 0, sizeof(size_t)*frame_count);
 
-    std::cout << "[Backproj] Loading b and tau parameters to BRAM..." << std::endl;
-
-    // Load parameters
-    for (int i = 0; i < (LOAD_TAU_CYCLES + LOAD_B_CYCLES); ++i)
-        backprojection(corr_stream, b_stream, tau_stream, img_stream);
-
-    if (!b_stream.empty() || !tau_stream.empty()) {
-        std::cerr << "[Backproj] ERROR: Loading of b and tau NOT completely finished" << std::endl;
-    } else {
-        std::cout << "[Backproj] Loading of b and tau finished" << std::endl;
-    }
-
-    std::cout << "[Backproj] Starting kernel execution with a total of "
-              << TOTAL_CYCLES << " cycles" << std::endl;
+    std::cout << "[Backproj] Starting kernel execution" << std::endl;
 
     auto start = high_resolution_clock::now();
 
-    for (int i = 0; i < TOTAL_CYCLES; ++i)
+    while (img_stream.size() / IMG_LEN < frame_count) {
         backprojection(corr_stream, b_stream, tau_stream, img_stream);
+        cycle_count[img_stream.size()/IMG_LEN]++;
+    }
+
+    if (!corr_stream.empty()){
+        std::cerr << "[Backproj] Did not process all frames! Exiting early. " << corr_stream.size()/N_ELEM/N_ELEM << " frames left" << std::endl;
+    }
 
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start);
 
     std::cout << "[Backproj] Finished kernel execution in "
               << duration.count() / 1000.0 << " s" << std::endl;
+
+    std::cout << "[Backproj] Cycle count per frame: " << std::endl;
+    for (int i=0; i<frame_count; i++){
+        std::cout << " " << i << ": " << cycle_count[i] << std::endl;
+    }
+
 
     // -------------------------------------------------------------------------
     // Collect output images

@@ -35,7 +35,7 @@
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>goertzel.cpp:39~top.cpp:38</SourceLocation>
+<SourceLocation>goertzel.cpp:38~top.cpp:45</SourceLocation>
 </SummaryOfViolations>
 </PerformanceEstimates>
 

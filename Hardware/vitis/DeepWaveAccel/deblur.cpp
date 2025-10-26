@@ -1,56 +1,56 @@
 #include "deblur.hpp"
 #include <iostream>
 
-// -------------------------------------------------------------
-// Single-pixel sparse Laplacian multiply: w[i] = (L * v)[i]
-// Uses: main scalar + ND off-diagonals (symmetric).
-// Called once per cycle from the FSM.
-// -------------------------------------------------------------
-static inline img_t lap_pixel(
-    const img_t                v[IMG_LEN],
-    idx_t                      i,
-    lap_t                      lap_main,
-    const idx_t                offs[ND],
-    const lap_t                lap_rest[ND][IMG_LEN])
+// -----------------------------------------------------------------------------
+// Helper macro for clean buffer selection (compile-time resolvable)
+// -----------------------------------------------------------------------------
+#define SELECT_Z(k_mod, idx, role) \
+    ((role) == 0 ? ((k_mod) == 0 ? Z1[idx] : ((k_mod) == 1 ? Z2[idx] : Z0[idx])) : \
+     (role) == 1 ? ((k_mod) == 0 ? Z2[idx] : ((k_mod) == 1 ? Z0[idx] : Z1[idx])) : \
+                   ((k_mod) == 0 ? Z0[idx] : ((k_mod) == 1 ? Z1[idx] : Z2[idx])))
+
+// role = 0 → v_prev
+// role = 1 → v_cur
+// role = 2 → v_next
+
+
+// -----------------------------------------------------------------------------
+// Cycle-accurate sequential sparse Laplacian multiply
+// -----------------------------------------------------------------------------
+static inline acc_t lap_pixel_seq(
+    const img_t  Z0[IMG_LEN],
+    const img_t  Z1[IMG_LEN],
+    const img_t  Z2[IMG_LEN],
+    int           k_mod,    // k % 3
+    idx_t         i,
+    const idx_t   offs[ND],
+    const lap_t   lap_rest[ND][IMG_LEN],
+    acc_t         acc_in,
+    int           d)
 {
 #pragma HLS INLINE
 #pragma HLS ARRAY_PARTITION variable=offs complete
-#pragma HLS ARRAY_PARTITION variable=lap_rest dim=1 complete
 
-    acc_t acc = (acc_t)lap_main * (acc_t)v[i];
+    acc_t acc = acc_in;
 
-    // ND symmetric off-diagonals
-    for (int d = 0; d < ND; ++d) {
-#pragma HLS UNROLL
-        int o  = (int)offs[d];
-        int il = (int)i - o;
-        int iu = (int)i + o;
+    int o  = (int)offs[d];
+    int il = (int)i - o;
+    int iu = (int)i + o;
 
-        // Lower diagonal uses coeff at current index (aligned bottom)
-        if (il >= 0) {
-            lap_t a_lower = lap_rest[d][(int)i];
-            acc -= (acc_t)a_lower * (acc_t)v[il];
-        }
+    if (il >= 0)
+        acc -= (acc_t)lap_rest[d][i] * (acc_t)SELECT_Z(k_mod, il, 1);
+    if (iu < IMG_LEN)
+        acc -= (acc_t)lap_rest[d][iu] * (acc_t)SELECT_Z(k_mod, iu, 1);
 
-        // Upper diagonal uses coeff shifted by offset
-        if (iu < IMG_LEN) {
-            lap_t a_upper = lap_rest[d][(int)iu];
-            acc -= (acc_t)a_upper * (acc_t)v[iu];
-        }
-    }
-
-    return (img_t)acc;
+    return acc;
 }
 
-
-// -------------------------------------------------------------
-// Top-level: cycle-accurate FSM (one operation per call)
-//   Process: load Lap → load BP → for each layer run Chebyshev
-//            recurrence with sparse L, then add BP, stream out.
-// -------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Top-level Deblur kernel with 3×IMG_LEN rotating buffers
+// -----------------------------------------------------------------------------
 void deblur(
     hls::stream<AxisWordImg> &bp_stream,
-    hls::stream<lap_t> &lap_stream,
+    hls::stream<lap_t>       &lap_stream,
     hls::stream<AxisWordImg> &img_stream,
     deblur_config            &cfg)
 {
@@ -59,56 +59,58 @@ void deblur(
     AXIS_IN_OUT(img_stream);
     AXIL_CFG(cfg);
     AP_CTRL_NONE;
-#pragma HLS PIPELINE II=1
+    // No pipelining as BRAM overlaps between states.
 
-    // ------------------- Persistent memories -------------------
+    // ---------------- Persistent memories ----------------
     static lap_t lap_main = 0;
     static lap_t lap_rest[ND][IMG_LEN];
 #pragma HLS BIND_STORAGE variable=lap_rest type=ram_2p impl=bram
-#pragma HLS ARRAY_PARTITION variable=lap_rest dim=1 complete
 
-    // working images
-    static img_t bp_buf[IMG_LEN];   // backprojection per frame
-    static acc_t y_acc[IMG_LEN];    // accumulator for Chebyshev sum
-    static img_t z0[IMG_LEN], z1[IMG_LEN], z2[IMG_LEN];
+    static img_t bp_buf[IMG_LEN];
+    static acc_t y_acc[IMG_LEN];
 #pragma HLS BIND_STORAGE variable=bp_buf type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=y_acc  type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=z0    type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=z1    type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=z2    type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=y_acc  type=ram_2p impl=bram
+#pragma HLS DEPENDENCE variable=y_acc inter false
+#pragma HLS DEPENDENCE variable=bp_buf inter false
 
-    // ------------------- FSM state -------------------
+    // ---------------- Triple buffers ----------------
+    static img_t Z0[IMG_LEN];
+    static img_t Z1[IMG_LEN];
+    static img_t Z2[IMG_LEN];
+#pragma HLS BIND_STORAGE variable=Z0 type=ram_2p impl=bram
+#pragma HLS BIND_STORAGE variable=Z1 type=ram_2p impl=bram
+#pragma HLS BIND_STORAGE variable=Z2 type=ram_2p impl=bram
+
+    // ---------------- FSM ----------------
     enum St {
-        LOAD_MAIN, 
+        LOAD_MAIN,
         LOAD_OFF_LINES,
         LOAD_BP,
-        LAYER_CLEAR_Z0,       // seed zeros for first layer
-        CHEB_Y0,              // y = θ0*z0
-        CHEB_Z1_ADD,          // z1 = L*z0, y += θ1*z1
-        CHEB_MAIN,            // t = L*z1  (reuse z2 as t), z2 = 2*t - z0, y += θk*z2
-        CHEB_SHIFT,           // z0=z1; z1=z2
-        LAYER_ADD_BP,         // z0 = y + bp (next layer input) OR final
-        OUTPUT                // stream final image and go back to LOAD_BP
+        CHEB_Y0,
+        CHEB_COMPUTE,
+        LAYER_ADD_BP,
+        OUTPUT
     };
     static St st = LOAD_MAIN;
 
-    static idx_t i = 0;                  // pixel index
-    static int   d = 0;                  // diag index
-    static int   k = 0;                  // Chebyshev k
-    static int   layer = 0;              // layer index
+    static idx_t i = 0;
+    static int   d = 0;
+    static int   k = 0;
+    static int   layer = 0;
+    static acc_t acc_tmp = 0;
+    static bool  centre  = true;
+    static acc_t y_tmp   = 0;
 
-    // AXI-lite arrays – partition for parallel access
 #pragma HLS ARRAY_PARTITION variable=cfg.lap_off complete
 #pragma HLS ARRAY_PARTITION variable=cfg.theta   complete
 
     switch (st)
     {
-    // ---------------- Load Laplacian once ----------------
     case LOAD_MAIN: {
         if (!lap_stream.empty()) {
             lap_main = lap_stream.read();
             d = 0; i = 0;
-            st = LOAD_OFF_LINES; // offsets come from AXI-Lite; just advance
+            st = LOAD_OFF_LINES;
         }
         break;
     }
@@ -118,126 +120,108 @@ void deblur(
             lap_rest[d][i] = lap_stream.read();
             ++i;
             if (i == IMG_LEN) { i = 0; ++d; }
-            if (d == ND) {
-                d = 0; i = 0;
-                st = LOAD_BP;
-            }
+            if (d == ND) { d = 0; i = 0; st = LOAD_BP; }
         }
         break;
     }
 
-    // ---------------- Load backprojection frame ----------------
     case LOAD_BP: {
         if (!bp_stream.empty()) {
             AxisWordImg w = bp_stream.read();
             bp_buf[i] = w.data;
+            Z0[i] = (img_t)0;
+            y_acc[i] = (acc_t)0;
             ++i;
             if (i == IMG_LEN) {
-                i = 0; layer = 0;
-                st = LAYER_CLEAR_Z0;
+                i = 0; layer = 0; k = 1;
+                centre = true; d = 0;
+                st = CHEB_COMPUTE; // skip CHEB_Y0
             }
         }
         break;
     }
 
-    // ---------------- Start layer: seed z0 = 0 ----------------
-    case LAYER_CLEAR_Z0: {
-        z0[i] = (img_t)0;    // first layer uses zero seed - this can be changed if required
-        y_acc[i] = (acc_t)0; // ensure clean accumulator
-        ++i;
-        if (i == IMG_LEN) {
-            i = 0;
-            st = CHEB_Y0;
-        }
-        break;
-    }
-
-    // y = θ0 * z0
     case CHEB_Y0: {
-        y_acc[i] = (acc_t)cfg.theta[0] * (acc_t)z0[i];
+        y_acc[i] = (acc_t)cfg.theta[0] * (acc_t)Z0[i];
         ++i;
         if (i == IMG_LEN) {
-            i = 0;
-            st = CHEB_Z1_ADD;
+            i = 0; k = 1; d = 0; centre = true;
+            st = CHEB_COMPUTE;
         }
         break;
     }
 
-    case CHEB_Z1_ADD: {
-        z1[i] = lap_pixel(z0, i, lap_main, cfg.lap_off, lap_rest);
-        y_acc[i] += (acc_t)cfg.theta[1] * (acc_t)z1[i];
-        ++i;
-        if (i == IMG_LEN) {
-            i = 0;
-            k = 2; // Make k ready for CHEB_MAIN
-            st = (cfg.K >= 2) ? CHEB_MAIN : LAYER_ADD_BP; 
-        }
-        break;
-    }
+    // ---------------- Chebyshev compute ----------------
+    case CHEB_COMPUTE: {
+        int k_mod = k % 3;
 
-    case CHEB_MAIN: {
-        img_t t = lap_pixel(z1, i, lap_main, cfg.lap_off, lap_rest);
-        z2[i] = (t<<1) - z0[i];
-        y_acc[i] += (acc_t)cfg.theta[k] * (acc_t)z2[i];
-        ++i;
-        if (i == IMG_LEN) { 
-            i = 0;
-            st = CHEB_SHIFT;
+        if (centre) {
+            img_t center_val = SELECT_Z(k_mod, i, 1);
+            acc_tmp = (acc_t)lap_main * (acc_t)center_val;
+            y_tmp   = y_acc[i];
+            d = 0;
+            centre = false;
         }
-        break;
-    }
+        else{
+            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, cfg.lap_off, lap_rest, acc_tmp, d);
 
-    // z0 <- z1 ; z1 <- z2 ; advance k
-    case CHEB_SHIFT: {
-        z0[i] = z1[i];
-        z1[i] = z2[i];
-        ++i;
-        if (i == IMG_LEN) {
-            i = 0;
-            ++k;
-            if (k <= cfg.K) {
-                st = CHEB_MAIN;   // next Chebyshev term
+            if (d == ND-1){
+                centre = true;
+                img_t t = (img_t)acc_tmp;
+
+                img_t z_prev_val = SELECT_Z(k_mod, i, 0);
+                img_t z_next_val = (k == 1)
+                    ? t
+                    : (img_t)((t<<1) - z_prev_val);
+
+                // Write result
+                switch (k_mod) {
+                case 0: Z0[i] = z_next_val; break;
+                case 1: Z1[i] = z_next_val; break;
+                default:Z2[i] = z_next_val; break;
+                }
+
+                y_acc[i] = y_tmp + (acc_t)cfg.theta[k] * (acc_t)z_next_val;
+
+                ++i;
+                if (i == IMG_LEN) {
+                    i = 0; ++k;
+                    if (k <= cfg.K) st = CHEB_COMPUTE;
+                    else st = LAYER_ADD_BP;
+                }
             } else {
-                st = LAYER_ADD_BP;    // layer done
+                ++d;
             }
         }
         break;
     }
 
-    // Finish layer: z0 = y + bp  (next layer input), or go to OUTPUT
     case LAYER_ADD_BP: {
         img_t t = (img_t)(y_acc[i] + (acc_t)bp_buf[i]);
-        if (t < 0)
-            t=0;
-        z0[i] = t;
+        if (t < 0) t = 0;
+        Z0[i] = t;
         ++i;
         if (i == IMG_LEN) {
-            i = 0;
-            ++layer;
+            i = 0; ++layer;
             if (layer < (int)cfg.n_layers) {
-                // Next layer: restart sequence with current z0 as seed
                 st = CHEB_Y0;
-            } else {
-                // All layers done → stream final result (z0)
-                st = OUTPUT;
-            }
+                k  = 1; d = 0; centre = true;
+            } else st = OUTPUT;
         }
         break;
     }
 
-    // Stream out final result and wait for next BP frame
     case OUTPUT: {
         AxisWordImg ow;
-        ow.data = z0[i];
+        ow.data = Z0[i];
         ow.last = (i == IMG_LEN-1);
         ow.user = (i == 0);
         img_stream.write(ow);
         ++i;
-        if (i == IMG_LEN) {
-            i = 0;
-            st = LOAD_BP;
-        }
+        if (i == IMG_LEN) { i = 0; st = LOAD_BP; }
         break;
     }
     }
 }
+
+#undef SELECT_Z

@@ -1,139 +1,139 @@
 [
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls",
-      "-hls-syn-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
+      "-hls-syn-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
       "-fhlstoplevel=deepwaveaccel",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\goertzel.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\crosscor.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\goertzel.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\crosscor.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls",
-      "-hls-syn-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
+      "-hls-syn-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
       "-fhlstoplevel=deepwaveaccel",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\backproj.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\backproj.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\backproj.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\backproj.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls",
-      "-hls-syn-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
+      "-hls-syn-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
       "-fhlstoplevel=deepwaveaccel",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\deblur.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\deblur.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\deblur.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\deblur.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls",
-      "-hls-syn-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
+      "-hls-syn-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
       "-fhlstoplevel=deepwaveaccel",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\top.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\goertzel.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\top.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\goertzel.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls",
-      "-hls-syn-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
+      "-hls-syn-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\common\\technology\\autopilot",
       "-fhlstoplevel=deepwaveaccel",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\crosscor.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\top.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\crosscor.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\top.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls-tb",
-      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-hls-sim-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_backproj.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_top.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_backproj.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_top.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls-tb",
-      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-hls-sim-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_base.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\tb_crosscor.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_base.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\tb_crosscor.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls-tb",
-      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-hls-sim-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\tb_crosscor.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_base.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\.\\tb_crosscor.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_base.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls-tb",
-      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-hls-sim-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_top.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_deblur.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_top.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_deblur.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls-tb",
-      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-hls-sim-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_goertzel.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_goertzel.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_goertzel.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_goertzel.cpp"
   },
   {
-    "directory": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
+    "directory": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel",
     "arguments": [
-      "C:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
-      "--sysroot=C:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
+      "F:\\Xilinx\\2025.1\\Vitis\\vcxx\\libexec\\clang++.exe",
+      "--sysroot=F:\\Xilinx\\2025.1\\Vitis\\tps\\mingw\\10.0.0\\win64.o\\nt",
       "-fhls-tb",
-      "-hls-sim-headers-dir=C:\\Xilinx\\2025.1\\Vitis\\include",
+      "-hls-sim-headers-dir=F:\\Xilinx\\2025.1\\Vitis\\include",
       "-c",
-      "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_deblur.cpp"
+      "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_backproj.cpp"
     ],
-    "file": "C:\\Users\\bramh\\Documents\\Github\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_deblur.cpp"
+    "file": "C:\\Users\\Bram\\Documents\\Git\\DeepWaveAccel\\Hardware\\vitis\\DeepWaveAccel\\tb_backproj.cpp"
   }
 ]

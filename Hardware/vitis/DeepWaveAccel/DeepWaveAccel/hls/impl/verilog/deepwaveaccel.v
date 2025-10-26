@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.876000,HLS_SYN_LAT=90,HLS_SYN_TPT=4,HLS_SYN_MEM=37,HLS_SYN_DSP=0,HLS_SYN_FF=11252,HLS_SYN_LUT=17204,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=6.940042,HLS_SYN_LAT=64,HLS_SYN_TPT=11,HLS_SYN_MEM=87,HLS_SYN_DSP=0,HLS_SYN_FF=12383,HLS_SYN_LUT=21367,HLS_VERSION=2025_1}" *)
 
 module deepwaveaccel (
         s_axi_CTRL_BUS_AWVALID,
@@ -31,6 +31,7 @@ module deepwaveaccel (
         in_r_TDATA,
         b_in_TDATA,
         tau_in_TDATA,
+        lap_in_TDATA,
         out_r_TDATA,
         norm_TDATA,
         in_r_TVALID,
@@ -41,12 +42,14 @@ module deepwaveaccel (
         b_in_TREADY,
         tau_in_TVALID,
         tau_in_TREADY,
+        lap_in_TVALID,
+        lap_in_TREADY,
         out_r_TVALID,
         out_r_TREADY
 );
 
 parameter    C_S_AXI_CTRL_BUS_DATA_WIDTH = 32;
-parameter    C_S_AXI_CTRL_BUS_ADDR_WIDTH = 6;
+parameter    C_S_AXI_CTRL_BUS_ADDR_WIDTH = 9;
 parameter    C_S_AXI_DATA_WIDTH = 32;
 
 parameter C_S_AXI_CTRL_BUS_WSTRB_WIDTH = (32 / 8);
@@ -74,6 +77,7 @@ input   ap_rst_n;
 input  [31:0] in_r_TDATA;
 input  [31:0] b_in_TDATA;
 input  [15:0] tau_in_TDATA;
+input  [15:0] lap_in_TDATA;
 output  [63:0] out_r_TDATA;
 output  [23:0] norm_TDATA;
 input   in_r_TVALID;
@@ -84,6 +88,8 @@ input   b_in_TVALID;
 output   b_in_TREADY;
 input   tau_in_TVALID;
 output   tau_in_TREADY;
+input   lap_in_TVALID;
+output   lap_in_TREADY;
 output   out_r_TVALID;
 input   out_r_TREADY;
 
@@ -94,6 +100,106 @@ wire   [17:0] goer_cfg_COS_OMEGA2_0;
 wire   [17:0] goer_cfg_COS_OMEGA2_1;
 wire   [17:0] goer_cfg_SIN_OMEGA_0;
 wire   [17:0] goer_cfg_SIN_OMEGA_1;
+wire   [7:0] debl_cfg_n_layers;
+wire   [5:0] debl_cfg_K;
+wire   [11:0] debl_cfg_lap_off_0;
+wire   [11:0] debl_cfg_lap_off_1;
+wire   [11:0] debl_cfg_lap_off_2;
+wire   [11:0] debl_cfg_lap_off_3;
+wire   [11:0] debl_cfg_lap_off_4;
+wire   [11:0] debl_cfg_lap_off_5;
+wire   [17:0] debl_cfg_theta_0;
+wire   [17:0] debl_cfg_theta_1;
+wire   [17:0] debl_cfg_theta_2;
+wire   [17:0] debl_cfg_theta_3;
+wire   [17:0] debl_cfg_theta_4;
+wire   [17:0] debl_cfg_theta_5;
+wire   [17:0] debl_cfg_theta_6;
+wire   [17:0] debl_cfg_theta_7;
+wire   [17:0] debl_cfg_theta_8;
+wire   [17:0] debl_cfg_theta_9;
+wire   [17:0] debl_cfg_theta_10;
+wire   [17:0] debl_cfg_theta_11;
+wire   [17:0] debl_cfg_theta_12;
+wire   [17:0] debl_cfg_theta_13;
+wire   [17:0] debl_cfg_theta_14;
+wire   [17:0] debl_cfg_theta_15;
+wire   [17:0] debl_cfg_theta_16;
+wire   [17:0] debl_cfg_theta_17;
+wire   [17:0] debl_cfg_theta_18;
+wire   [17:0] debl_cfg_theta_19;
+wire   [17:0] debl_cfg_theta_20;
+wire   [17:0] debl_cfg_theta_21;
+wire   [17:0] debl_cfg_theta_22;
+wire    entry_proc_U0_ap_start;
+wire    entry_proc_U0_ap_done;
+wire    entry_proc_U0_ap_continue;
+wire    entry_proc_U0_ap_idle;
+wire    entry_proc_U0_ap_ready;
+wire    entry_proc_U0_start_out;
+wire    entry_proc_U0_start_write;
+wire   [7:0] entry_proc_U0_debl_cfg_n_layers_c_din;
+wire    entry_proc_U0_debl_cfg_n_layers_c_write;
+wire   [5:0] entry_proc_U0_debl_cfg_K_c_din;
+wire    entry_proc_U0_debl_cfg_K_c_write;
+wire   [11:0] entry_proc_U0_debl_cfg_lap_off_0_c_din;
+wire    entry_proc_U0_debl_cfg_lap_off_0_c_write;
+wire   [11:0] entry_proc_U0_debl_cfg_lap_off_1_c_din;
+wire    entry_proc_U0_debl_cfg_lap_off_1_c_write;
+wire   [11:0] entry_proc_U0_debl_cfg_lap_off_2_c_din;
+wire    entry_proc_U0_debl_cfg_lap_off_2_c_write;
+wire   [11:0] entry_proc_U0_debl_cfg_lap_off_3_c_din;
+wire    entry_proc_U0_debl_cfg_lap_off_3_c_write;
+wire   [11:0] entry_proc_U0_debl_cfg_lap_off_4_c_din;
+wire    entry_proc_U0_debl_cfg_lap_off_4_c_write;
+wire   [11:0] entry_proc_U0_debl_cfg_lap_off_5_c_din;
+wire    entry_proc_U0_debl_cfg_lap_off_5_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_0_c_din;
+wire    entry_proc_U0_debl_cfg_theta_0_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_1_c_din;
+wire    entry_proc_U0_debl_cfg_theta_1_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_2_c_din;
+wire    entry_proc_U0_debl_cfg_theta_2_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_3_c_din;
+wire    entry_proc_U0_debl_cfg_theta_3_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_4_c_din;
+wire    entry_proc_U0_debl_cfg_theta_4_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_5_c_din;
+wire    entry_proc_U0_debl_cfg_theta_5_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_6_c_din;
+wire    entry_proc_U0_debl_cfg_theta_6_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_7_c_din;
+wire    entry_proc_U0_debl_cfg_theta_7_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_8_c_din;
+wire    entry_proc_U0_debl_cfg_theta_8_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_9_c_din;
+wire    entry_proc_U0_debl_cfg_theta_9_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_10_c_din;
+wire    entry_proc_U0_debl_cfg_theta_10_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_11_c_din;
+wire    entry_proc_U0_debl_cfg_theta_11_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_12_c_din;
+wire    entry_proc_U0_debl_cfg_theta_12_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_13_c_din;
+wire    entry_proc_U0_debl_cfg_theta_13_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_14_c_din;
+wire    entry_proc_U0_debl_cfg_theta_14_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_15_c_din;
+wire    entry_proc_U0_debl_cfg_theta_15_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_16_c_din;
+wire    entry_proc_U0_debl_cfg_theta_16_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_17_c_din;
+wire    entry_proc_U0_debl_cfg_theta_17_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_18_c_din;
+wire    entry_proc_U0_debl_cfg_theta_18_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_19_c_din;
+wire    entry_proc_U0_debl_cfg_theta_19_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_20_c_din;
+wire    entry_proc_U0_debl_cfg_theta_20_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_21_c_din;
+wire    entry_proc_U0_debl_cfg_theta_21_c_write;
+wire   [17:0] entry_proc_U0_debl_cfg_theta_22_c_din;
+wire    entry_proc_U0_debl_cfg_theta_22_c_write;
 wire    goertzel_U0_ap_start;
 wire    goertzel_U0_ap_done;
 wire    goertzel_U0_ap_continue;
@@ -122,10 +228,205 @@ wire    backprojection_U0_ap_continue;
 wire    backprojection_U0_ap_idle;
 wire    backprojection_U0_ap_ready;
 wire    backprojection_U0_s_xcor_read;
+wire   [63:0] backprojection_U0_s_bp_din;
+wire    backprojection_U0_s_bp_write;
 wire    backprojection_U0_b_in_TREADY;
 wire    backprojection_U0_tau_in_TREADY;
-wire   [63:0] backprojection_U0_out_r_TDATA;
-wire    backprojection_U0_out_r_TVALID;
+wire    deblur_U0_ap_start;
+wire    deblur_U0_ap_done;
+wire    deblur_U0_ap_continue;
+wire    deblur_U0_ap_idle;
+wire    deblur_U0_ap_ready;
+wire    deblur_U0_debl_cfg_n_layers_read;
+wire    deblur_U0_debl_cfg_K_read;
+wire    deblur_U0_debl_cfg_lap_off_0_read;
+wire    deblur_U0_debl_cfg_lap_off_1_read;
+wire    deblur_U0_debl_cfg_lap_off_2_read;
+wire    deblur_U0_debl_cfg_lap_off_3_read;
+wire    deblur_U0_debl_cfg_lap_off_4_read;
+wire    deblur_U0_debl_cfg_lap_off_5_read;
+wire    deblur_U0_debl_cfg_theta_0_read;
+wire    deblur_U0_debl_cfg_theta_1_read;
+wire    deblur_U0_debl_cfg_theta_2_read;
+wire    deblur_U0_debl_cfg_theta_3_read;
+wire    deblur_U0_debl_cfg_theta_4_read;
+wire    deblur_U0_debl_cfg_theta_5_read;
+wire    deblur_U0_debl_cfg_theta_6_read;
+wire    deblur_U0_debl_cfg_theta_7_read;
+wire    deblur_U0_debl_cfg_theta_8_read;
+wire    deblur_U0_debl_cfg_theta_9_read;
+wire    deblur_U0_debl_cfg_theta_10_read;
+wire    deblur_U0_debl_cfg_theta_11_read;
+wire    deblur_U0_debl_cfg_theta_12_read;
+wire    deblur_U0_debl_cfg_theta_13_read;
+wire    deblur_U0_debl_cfg_theta_14_read;
+wire    deblur_U0_debl_cfg_theta_15_read;
+wire    deblur_U0_debl_cfg_theta_16_read;
+wire    deblur_U0_debl_cfg_theta_17_read;
+wire    deblur_U0_debl_cfg_theta_18_read;
+wire    deblur_U0_debl_cfg_theta_19_read;
+wire    deblur_U0_debl_cfg_theta_20_read;
+wire    deblur_U0_debl_cfg_theta_21_read;
+wire    deblur_U0_debl_cfg_theta_22_read;
+wire    deblur_U0_lap_in_TREADY;
+wire   [63:0] deblur_U0_out_r_TDATA;
+wire    deblur_U0_out_r_TVALID;
+wire    deblur_U0_s_bp_read;
+wire    debl_cfg_n_layers_c_full_n;
+wire   [7:0] debl_cfg_n_layers_c_dout;
+wire    debl_cfg_n_layers_c_empty_n;
+wire   [3:0] debl_cfg_n_layers_c_num_data_valid;
+wire   [3:0] debl_cfg_n_layers_c_fifo_cap;
+wire    debl_cfg_K_c_full_n;
+wire   [5:0] debl_cfg_K_c_dout;
+wire    debl_cfg_K_c_empty_n;
+wire   [3:0] debl_cfg_K_c_num_data_valid;
+wire   [3:0] debl_cfg_K_c_fifo_cap;
+wire    debl_cfg_lap_off_0_c_full_n;
+wire   [11:0] debl_cfg_lap_off_0_c_dout;
+wire    debl_cfg_lap_off_0_c_empty_n;
+wire   [3:0] debl_cfg_lap_off_0_c_num_data_valid;
+wire   [3:0] debl_cfg_lap_off_0_c_fifo_cap;
+wire    debl_cfg_lap_off_1_c_full_n;
+wire   [11:0] debl_cfg_lap_off_1_c_dout;
+wire    debl_cfg_lap_off_1_c_empty_n;
+wire   [3:0] debl_cfg_lap_off_1_c_num_data_valid;
+wire   [3:0] debl_cfg_lap_off_1_c_fifo_cap;
+wire    debl_cfg_lap_off_2_c_full_n;
+wire   [11:0] debl_cfg_lap_off_2_c_dout;
+wire    debl_cfg_lap_off_2_c_empty_n;
+wire   [3:0] debl_cfg_lap_off_2_c_num_data_valid;
+wire   [3:0] debl_cfg_lap_off_2_c_fifo_cap;
+wire    debl_cfg_lap_off_3_c_full_n;
+wire   [11:0] debl_cfg_lap_off_3_c_dout;
+wire    debl_cfg_lap_off_3_c_empty_n;
+wire   [3:0] debl_cfg_lap_off_3_c_num_data_valid;
+wire   [3:0] debl_cfg_lap_off_3_c_fifo_cap;
+wire    debl_cfg_lap_off_4_c_full_n;
+wire   [11:0] debl_cfg_lap_off_4_c_dout;
+wire    debl_cfg_lap_off_4_c_empty_n;
+wire   [3:0] debl_cfg_lap_off_4_c_num_data_valid;
+wire   [3:0] debl_cfg_lap_off_4_c_fifo_cap;
+wire    debl_cfg_lap_off_5_c_full_n;
+wire   [11:0] debl_cfg_lap_off_5_c_dout;
+wire    debl_cfg_lap_off_5_c_empty_n;
+wire   [3:0] debl_cfg_lap_off_5_c_num_data_valid;
+wire   [3:0] debl_cfg_lap_off_5_c_fifo_cap;
+wire    debl_cfg_theta_0_c_full_n;
+wire   [17:0] debl_cfg_theta_0_c_dout;
+wire    debl_cfg_theta_0_c_empty_n;
+wire   [3:0] debl_cfg_theta_0_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_0_c_fifo_cap;
+wire    debl_cfg_theta_1_c_full_n;
+wire   [17:0] debl_cfg_theta_1_c_dout;
+wire    debl_cfg_theta_1_c_empty_n;
+wire   [3:0] debl_cfg_theta_1_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_1_c_fifo_cap;
+wire    debl_cfg_theta_2_c_full_n;
+wire   [17:0] debl_cfg_theta_2_c_dout;
+wire    debl_cfg_theta_2_c_empty_n;
+wire   [3:0] debl_cfg_theta_2_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_2_c_fifo_cap;
+wire    debl_cfg_theta_3_c_full_n;
+wire   [17:0] debl_cfg_theta_3_c_dout;
+wire    debl_cfg_theta_3_c_empty_n;
+wire   [3:0] debl_cfg_theta_3_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_3_c_fifo_cap;
+wire    debl_cfg_theta_4_c_full_n;
+wire   [17:0] debl_cfg_theta_4_c_dout;
+wire    debl_cfg_theta_4_c_empty_n;
+wire   [3:0] debl_cfg_theta_4_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_4_c_fifo_cap;
+wire    debl_cfg_theta_5_c_full_n;
+wire   [17:0] debl_cfg_theta_5_c_dout;
+wire    debl_cfg_theta_5_c_empty_n;
+wire   [3:0] debl_cfg_theta_5_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_5_c_fifo_cap;
+wire    debl_cfg_theta_6_c_full_n;
+wire   [17:0] debl_cfg_theta_6_c_dout;
+wire    debl_cfg_theta_6_c_empty_n;
+wire   [3:0] debl_cfg_theta_6_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_6_c_fifo_cap;
+wire    debl_cfg_theta_7_c_full_n;
+wire   [17:0] debl_cfg_theta_7_c_dout;
+wire    debl_cfg_theta_7_c_empty_n;
+wire   [3:0] debl_cfg_theta_7_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_7_c_fifo_cap;
+wire    debl_cfg_theta_8_c_full_n;
+wire   [17:0] debl_cfg_theta_8_c_dout;
+wire    debl_cfg_theta_8_c_empty_n;
+wire   [3:0] debl_cfg_theta_8_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_8_c_fifo_cap;
+wire    debl_cfg_theta_9_c_full_n;
+wire   [17:0] debl_cfg_theta_9_c_dout;
+wire    debl_cfg_theta_9_c_empty_n;
+wire   [3:0] debl_cfg_theta_9_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_9_c_fifo_cap;
+wire    debl_cfg_theta_10_c_full_n;
+wire   [17:0] debl_cfg_theta_10_c_dout;
+wire    debl_cfg_theta_10_c_empty_n;
+wire   [3:0] debl_cfg_theta_10_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_10_c_fifo_cap;
+wire    debl_cfg_theta_11_c_full_n;
+wire   [17:0] debl_cfg_theta_11_c_dout;
+wire    debl_cfg_theta_11_c_empty_n;
+wire   [3:0] debl_cfg_theta_11_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_11_c_fifo_cap;
+wire    debl_cfg_theta_12_c_full_n;
+wire   [17:0] debl_cfg_theta_12_c_dout;
+wire    debl_cfg_theta_12_c_empty_n;
+wire   [3:0] debl_cfg_theta_12_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_12_c_fifo_cap;
+wire    debl_cfg_theta_13_c_full_n;
+wire   [17:0] debl_cfg_theta_13_c_dout;
+wire    debl_cfg_theta_13_c_empty_n;
+wire   [3:0] debl_cfg_theta_13_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_13_c_fifo_cap;
+wire    debl_cfg_theta_14_c_full_n;
+wire   [17:0] debl_cfg_theta_14_c_dout;
+wire    debl_cfg_theta_14_c_empty_n;
+wire   [3:0] debl_cfg_theta_14_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_14_c_fifo_cap;
+wire    debl_cfg_theta_15_c_full_n;
+wire   [17:0] debl_cfg_theta_15_c_dout;
+wire    debl_cfg_theta_15_c_empty_n;
+wire   [3:0] debl_cfg_theta_15_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_15_c_fifo_cap;
+wire    debl_cfg_theta_16_c_full_n;
+wire   [17:0] debl_cfg_theta_16_c_dout;
+wire    debl_cfg_theta_16_c_empty_n;
+wire   [3:0] debl_cfg_theta_16_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_16_c_fifo_cap;
+wire    debl_cfg_theta_17_c_full_n;
+wire   [17:0] debl_cfg_theta_17_c_dout;
+wire    debl_cfg_theta_17_c_empty_n;
+wire   [3:0] debl_cfg_theta_17_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_17_c_fifo_cap;
+wire    debl_cfg_theta_18_c_full_n;
+wire   [17:0] debl_cfg_theta_18_c_dout;
+wire    debl_cfg_theta_18_c_empty_n;
+wire   [3:0] debl_cfg_theta_18_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_18_c_fifo_cap;
+wire    debl_cfg_theta_19_c_full_n;
+wire   [17:0] debl_cfg_theta_19_c_dout;
+wire    debl_cfg_theta_19_c_empty_n;
+wire   [3:0] debl_cfg_theta_19_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_19_c_fifo_cap;
+wire    debl_cfg_theta_20_c_full_n;
+wire   [17:0] debl_cfg_theta_20_c_dout;
+wire    debl_cfg_theta_20_c_empty_n;
+wire   [3:0] debl_cfg_theta_20_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_20_c_fifo_cap;
+wire    debl_cfg_theta_21_c_full_n;
+wire   [17:0] debl_cfg_theta_21_c_dout;
+wire    debl_cfg_theta_21_c_empty_n;
+wire   [3:0] debl_cfg_theta_21_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_21_c_fifo_cap;
+wire    debl_cfg_theta_22_c_full_n;
+wire   [17:0] debl_cfg_theta_22_c_dout;
+wire    debl_cfg_theta_22_c_empty_n;
+wire   [3:0] debl_cfg_theta_22_c_num_data_valid;
+wire   [3:0] debl_cfg_theta_22_c_fifo_cap;
 wire    s_goertzel_full_n;
 wire   [95:0] s_goertzel_dout;
 wire    s_goertzel_empty_n;
@@ -136,6 +437,15 @@ wire   [95:0] s_xcor_dout;
 wire    s_xcor_empty_n;
 wire   [8:0] s_xcor_num_data_valid;
 wire   [8:0] s_xcor_fifo_cap;
+wire    s_bp_full_n;
+wire   [63:0] s_bp_dout;
+wire    s_bp_empty_n;
+wire   [9:0] s_bp_num_data_valid;
+wire   [9:0] s_bp_fifo_cap;
+wire   [0:0] start_for_deblur_U0_din;
+wire    start_for_deblur_U0_full_n;
+wire   [0:0] start_for_deblur_U0_dout;
+wire    start_for_deblur_U0_empty_n;
 wire   [0:0] start_for_crosscor_U0_din;
 wire    start_for_crosscor_U0_full_n;
 wire   [0:0] start_for_crosscor_U0_dout;
@@ -174,7 +484,237 @@ CTRL_BUS_s_axi_U(
     .goer_cfg_COS_OMEGA2_0(goer_cfg_COS_OMEGA2_0),
     .goer_cfg_COS_OMEGA2_1(goer_cfg_COS_OMEGA2_1),
     .goer_cfg_SIN_OMEGA_0(goer_cfg_SIN_OMEGA_0),
-    .goer_cfg_SIN_OMEGA_1(goer_cfg_SIN_OMEGA_1)
+    .goer_cfg_SIN_OMEGA_1(goer_cfg_SIN_OMEGA_1),
+    .debl_cfg_n_layers(debl_cfg_n_layers),
+    .debl_cfg_K(debl_cfg_K),
+    .debl_cfg_lap_off_0(debl_cfg_lap_off_0),
+    .debl_cfg_lap_off_1(debl_cfg_lap_off_1),
+    .debl_cfg_lap_off_2(debl_cfg_lap_off_2),
+    .debl_cfg_lap_off_3(debl_cfg_lap_off_3),
+    .debl_cfg_lap_off_4(debl_cfg_lap_off_4),
+    .debl_cfg_lap_off_5(debl_cfg_lap_off_5),
+    .debl_cfg_theta_0(debl_cfg_theta_0),
+    .debl_cfg_theta_1(debl_cfg_theta_1),
+    .debl_cfg_theta_2(debl_cfg_theta_2),
+    .debl_cfg_theta_3(debl_cfg_theta_3),
+    .debl_cfg_theta_4(debl_cfg_theta_4),
+    .debl_cfg_theta_5(debl_cfg_theta_5),
+    .debl_cfg_theta_6(debl_cfg_theta_6),
+    .debl_cfg_theta_7(debl_cfg_theta_7),
+    .debl_cfg_theta_8(debl_cfg_theta_8),
+    .debl_cfg_theta_9(debl_cfg_theta_9),
+    .debl_cfg_theta_10(debl_cfg_theta_10),
+    .debl_cfg_theta_11(debl_cfg_theta_11),
+    .debl_cfg_theta_12(debl_cfg_theta_12),
+    .debl_cfg_theta_13(debl_cfg_theta_13),
+    .debl_cfg_theta_14(debl_cfg_theta_14),
+    .debl_cfg_theta_15(debl_cfg_theta_15),
+    .debl_cfg_theta_16(debl_cfg_theta_16),
+    .debl_cfg_theta_17(debl_cfg_theta_17),
+    .debl_cfg_theta_18(debl_cfg_theta_18),
+    .debl_cfg_theta_19(debl_cfg_theta_19),
+    .debl_cfg_theta_20(debl_cfg_theta_20),
+    .debl_cfg_theta_21(debl_cfg_theta_21),
+    .debl_cfg_theta_22(debl_cfg_theta_22)
+);
+
+deepwaveaccel_entry_proc entry_proc_U0(
+    .ap_clk(ap_clk),
+    .ap_rst(ap_rst_n_inv),
+    .ap_start(entry_proc_U0_ap_start),
+    .start_full_n(start_for_deblur_U0_full_n),
+    .ap_done(entry_proc_U0_ap_done),
+    .ap_continue(entry_proc_U0_ap_continue),
+    .ap_idle(entry_proc_U0_ap_idle),
+    .ap_ready(entry_proc_U0_ap_ready),
+    .start_out(entry_proc_U0_start_out),
+    .start_write(entry_proc_U0_start_write),
+    .debl_cfg_n_layers(debl_cfg_n_layers),
+    .debl_cfg_n_layers_c_din(entry_proc_U0_debl_cfg_n_layers_c_din),
+    .debl_cfg_n_layers_c_full_n(debl_cfg_n_layers_c_full_n),
+    .debl_cfg_n_layers_c_write(entry_proc_U0_debl_cfg_n_layers_c_write),
+    .debl_cfg_n_layers_c_num_data_valid(debl_cfg_n_layers_c_num_data_valid),
+    .debl_cfg_n_layers_c_fifo_cap(debl_cfg_n_layers_c_fifo_cap),
+    .debl_cfg_K(debl_cfg_K),
+    .debl_cfg_K_c_din(entry_proc_U0_debl_cfg_K_c_din),
+    .debl_cfg_K_c_full_n(debl_cfg_K_c_full_n),
+    .debl_cfg_K_c_write(entry_proc_U0_debl_cfg_K_c_write),
+    .debl_cfg_K_c_num_data_valid(debl_cfg_K_c_num_data_valid),
+    .debl_cfg_K_c_fifo_cap(debl_cfg_K_c_fifo_cap),
+    .debl_cfg_lap_off_0(debl_cfg_lap_off_0),
+    .debl_cfg_lap_off_0_c_din(entry_proc_U0_debl_cfg_lap_off_0_c_din),
+    .debl_cfg_lap_off_0_c_full_n(debl_cfg_lap_off_0_c_full_n),
+    .debl_cfg_lap_off_0_c_write(entry_proc_U0_debl_cfg_lap_off_0_c_write),
+    .debl_cfg_lap_off_0_c_num_data_valid(debl_cfg_lap_off_0_c_num_data_valid),
+    .debl_cfg_lap_off_0_c_fifo_cap(debl_cfg_lap_off_0_c_fifo_cap),
+    .debl_cfg_lap_off_1(debl_cfg_lap_off_1),
+    .debl_cfg_lap_off_1_c_din(entry_proc_U0_debl_cfg_lap_off_1_c_din),
+    .debl_cfg_lap_off_1_c_full_n(debl_cfg_lap_off_1_c_full_n),
+    .debl_cfg_lap_off_1_c_write(entry_proc_U0_debl_cfg_lap_off_1_c_write),
+    .debl_cfg_lap_off_1_c_num_data_valid(debl_cfg_lap_off_1_c_num_data_valid),
+    .debl_cfg_lap_off_1_c_fifo_cap(debl_cfg_lap_off_1_c_fifo_cap),
+    .debl_cfg_lap_off_2(debl_cfg_lap_off_2),
+    .debl_cfg_lap_off_2_c_din(entry_proc_U0_debl_cfg_lap_off_2_c_din),
+    .debl_cfg_lap_off_2_c_full_n(debl_cfg_lap_off_2_c_full_n),
+    .debl_cfg_lap_off_2_c_write(entry_proc_U0_debl_cfg_lap_off_2_c_write),
+    .debl_cfg_lap_off_2_c_num_data_valid(debl_cfg_lap_off_2_c_num_data_valid),
+    .debl_cfg_lap_off_2_c_fifo_cap(debl_cfg_lap_off_2_c_fifo_cap),
+    .debl_cfg_lap_off_3(debl_cfg_lap_off_3),
+    .debl_cfg_lap_off_3_c_din(entry_proc_U0_debl_cfg_lap_off_3_c_din),
+    .debl_cfg_lap_off_3_c_full_n(debl_cfg_lap_off_3_c_full_n),
+    .debl_cfg_lap_off_3_c_write(entry_proc_U0_debl_cfg_lap_off_3_c_write),
+    .debl_cfg_lap_off_3_c_num_data_valid(debl_cfg_lap_off_3_c_num_data_valid),
+    .debl_cfg_lap_off_3_c_fifo_cap(debl_cfg_lap_off_3_c_fifo_cap),
+    .debl_cfg_lap_off_4(debl_cfg_lap_off_4),
+    .debl_cfg_lap_off_4_c_din(entry_proc_U0_debl_cfg_lap_off_4_c_din),
+    .debl_cfg_lap_off_4_c_full_n(debl_cfg_lap_off_4_c_full_n),
+    .debl_cfg_lap_off_4_c_write(entry_proc_U0_debl_cfg_lap_off_4_c_write),
+    .debl_cfg_lap_off_4_c_num_data_valid(debl_cfg_lap_off_4_c_num_data_valid),
+    .debl_cfg_lap_off_4_c_fifo_cap(debl_cfg_lap_off_4_c_fifo_cap),
+    .debl_cfg_lap_off_5(debl_cfg_lap_off_5),
+    .debl_cfg_lap_off_5_c_din(entry_proc_U0_debl_cfg_lap_off_5_c_din),
+    .debl_cfg_lap_off_5_c_full_n(debl_cfg_lap_off_5_c_full_n),
+    .debl_cfg_lap_off_5_c_write(entry_proc_U0_debl_cfg_lap_off_5_c_write),
+    .debl_cfg_lap_off_5_c_num_data_valid(debl_cfg_lap_off_5_c_num_data_valid),
+    .debl_cfg_lap_off_5_c_fifo_cap(debl_cfg_lap_off_5_c_fifo_cap),
+    .debl_cfg_theta_0(debl_cfg_theta_0),
+    .debl_cfg_theta_0_c_din(entry_proc_U0_debl_cfg_theta_0_c_din),
+    .debl_cfg_theta_0_c_full_n(debl_cfg_theta_0_c_full_n),
+    .debl_cfg_theta_0_c_write(entry_proc_U0_debl_cfg_theta_0_c_write),
+    .debl_cfg_theta_0_c_num_data_valid(debl_cfg_theta_0_c_num_data_valid),
+    .debl_cfg_theta_0_c_fifo_cap(debl_cfg_theta_0_c_fifo_cap),
+    .debl_cfg_theta_1(debl_cfg_theta_1),
+    .debl_cfg_theta_1_c_din(entry_proc_U0_debl_cfg_theta_1_c_din),
+    .debl_cfg_theta_1_c_full_n(debl_cfg_theta_1_c_full_n),
+    .debl_cfg_theta_1_c_write(entry_proc_U0_debl_cfg_theta_1_c_write),
+    .debl_cfg_theta_1_c_num_data_valid(debl_cfg_theta_1_c_num_data_valid),
+    .debl_cfg_theta_1_c_fifo_cap(debl_cfg_theta_1_c_fifo_cap),
+    .debl_cfg_theta_2(debl_cfg_theta_2),
+    .debl_cfg_theta_2_c_din(entry_proc_U0_debl_cfg_theta_2_c_din),
+    .debl_cfg_theta_2_c_full_n(debl_cfg_theta_2_c_full_n),
+    .debl_cfg_theta_2_c_write(entry_proc_U0_debl_cfg_theta_2_c_write),
+    .debl_cfg_theta_2_c_num_data_valid(debl_cfg_theta_2_c_num_data_valid),
+    .debl_cfg_theta_2_c_fifo_cap(debl_cfg_theta_2_c_fifo_cap),
+    .debl_cfg_theta_3(debl_cfg_theta_3),
+    .debl_cfg_theta_3_c_din(entry_proc_U0_debl_cfg_theta_3_c_din),
+    .debl_cfg_theta_3_c_full_n(debl_cfg_theta_3_c_full_n),
+    .debl_cfg_theta_3_c_write(entry_proc_U0_debl_cfg_theta_3_c_write),
+    .debl_cfg_theta_3_c_num_data_valid(debl_cfg_theta_3_c_num_data_valid),
+    .debl_cfg_theta_3_c_fifo_cap(debl_cfg_theta_3_c_fifo_cap),
+    .debl_cfg_theta_4(debl_cfg_theta_4),
+    .debl_cfg_theta_4_c_din(entry_proc_U0_debl_cfg_theta_4_c_din),
+    .debl_cfg_theta_4_c_full_n(debl_cfg_theta_4_c_full_n),
+    .debl_cfg_theta_4_c_write(entry_proc_U0_debl_cfg_theta_4_c_write),
+    .debl_cfg_theta_4_c_num_data_valid(debl_cfg_theta_4_c_num_data_valid),
+    .debl_cfg_theta_4_c_fifo_cap(debl_cfg_theta_4_c_fifo_cap),
+    .debl_cfg_theta_5(debl_cfg_theta_5),
+    .debl_cfg_theta_5_c_din(entry_proc_U0_debl_cfg_theta_5_c_din),
+    .debl_cfg_theta_5_c_full_n(debl_cfg_theta_5_c_full_n),
+    .debl_cfg_theta_5_c_write(entry_proc_U0_debl_cfg_theta_5_c_write),
+    .debl_cfg_theta_5_c_num_data_valid(debl_cfg_theta_5_c_num_data_valid),
+    .debl_cfg_theta_5_c_fifo_cap(debl_cfg_theta_5_c_fifo_cap),
+    .debl_cfg_theta_6(debl_cfg_theta_6),
+    .debl_cfg_theta_6_c_din(entry_proc_U0_debl_cfg_theta_6_c_din),
+    .debl_cfg_theta_6_c_full_n(debl_cfg_theta_6_c_full_n),
+    .debl_cfg_theta_6_c_write(entry_proc_U0_debl_cfg_theta_6_c_write),
+    .debl_cfg_theta_6_c_num_data_valid(debl_cfg_theta_6_c_num_data_valid),
+    .debl_cfg_theta_6_c_fifo_cap(debl_cfg_theta_6_c_fifo_cap),
+    .debl_cfg_theta_7(debl_cfg_theta_7),
+    .debl_cfg_theta_7_c_din(entry_proc_U0_debl_cfg_theta_7_c_din),
+    .debl_cfg_theta_7_c_full_n(debl_cfg_theta_7_c_full_n),
+    .debl_cfg_theta_7_c_write(entry_proc_U0_debl_cfg_theta_7_c_write),
+    .debl_cfg_theta_7_c_num_data_valid(debl_cfg_theta_7_c_num_data_valid),
+    .debl_cfg_theta_7_c_fifo_cap(debl_cfg_theta_7_c_fifo_cap),
+    .debl_cfg_theta_8(debl_cfg_theta_8),
+    .debl_cfg_theta_8_c_din(entry_proc_U0_debl_cfg_theta_8_c_din),
+    .debl_cfg_theta_8_c_full_n(debl_cfg_theta_8_c_full_n),
+    .debl_cfg_theta_8_c_write(entry_proc_U0_debl_cfg_theta_8_c_write),
+    .debl_cfg_theta_8_c_num_data_valid(debl_cfg_theta_8_c_num_data_valid),
+    .debl_cfg_theta_8_c_fifo_cap(debl_cfg_theta_8_c_fifo_cap),
+    .debl_cfg_theta_9(debl_cfg_theta_9),
+    .debl_cfg_theta_9_c_din(entry_proc_U0_debl_cfg_theta_9_c_din),
+    .debl_cfg_theta_9_c_full_n(debl_cfg_theta_9_c_full_n),
+    .debl_cfg_theta_9_c_write(entry_proc_U0_debl_cfg_theta_9_c_write),
+    .debl_cfg_theta_9_c_num_data_valid(debl_cfg_theta_9_c_num_data_valid),
+    .debl_cfg_theta_9_c_fifo_cap(debl_cfg_theta_9_c_fifo_cap),
+    .debl_cfg_theta_10(debl_cfg_theta_10),
+    .debl_cfg_theta_10_c_din(entry_proc_U0_debl_cfg_theta_10_c_din),
+    .debl_cfg_theta_10_c_full_n(debl_cfg_theta_10_c_full_n),
+    .debl_cfg_theta_10_c_write(entry_proc_U0_debl_cfg_theta_10_c_write),
+    .debl_cfg_theta_10_c_num_data_valid(debl_cfg_theta_10_c_num_data_valid),
+    .debl_cfg_theta_10_c_fifo_cap(debl_cfg_theta_10_c_fifo_cap),
+    .debl_cfg_theta_11(debl_cfg_theta_11),
+    .debl_cfg_theta_11_c_din(entry_proc_U0_debl_cfg_theta_11_c_din),
+    .debl_cfg_theta_11_c_full_n(debl_cfg_theta_11_c_full_n),
+    .debl_cfg_theta_11_c_write(entry_proc_U0_debl_cfg_theta_11_c_write),
+    .debl_cfg_theta_11_c_num_data_valid(debl_cfg_theta_11_c_num_data_valid),
+    .debl_cfg_theta_11_c_fifo_cap(debl_cfg_theta_11_c_fifo_cap),
+    .debl_cfg_theta_12(debl_cfg_theta_12),
+    .debl_cfg_theta_12_c_din(entry_proc_U0_debl_cfg_theta_12_c_din),
+    .debl_cfg_theta_12_c_full_n(debl_cfg_theta_12_c_full_n),
+    .debl_cfg_theta_12_c_write(entry_proc_U0_debl_cfg_theta_12_c_write),
+    .debl_cfg_theta_12_c_num_data_valid(debl_cfg_theta_12_c_num_data_valid),
+    .debl_cfg_theta_12_c_fifo_cap(debl_cfg_theta_12_c_fifo_cap),
+    .debl_cfg_theta_13(debl_cfg_theta_13),
+    .debl_cfg_theta_13_c_din(entry_proc_U0_debl_cfg_theta_13_c_din),
+    .debl_cfg_theta_13_c_full_n(debl_cfg_theta_13_c_full_n),
+    .debl_cfg_theta_13_c_write(entry_proc_U0_debl_cfg_theta_13_c_write),
+    .debl_cfg_theta_13_c_num_data_valid(debl_cfg_theta_13_c_num_data_valid),
+    .debl_cfg_theta_13_c_fifo_cap(debl_cfg_theta_13_c_fifo_cap),
+    .debl_cfg_theta_14(debl_cfg_theta_14),
+    .debl_cfg_theta_14_c_din(entry_proc_U0_debl_cfg_theta_14_c_din),
+    .debl_cfg_theta_14_c_full_n(debl_cfg_theta_14_c_full_n),
+    .debl_cfg_theta_14_c_write(entry_proc_U0_debl_cfg_theta_14_c_write),
+    .debl_cfg_theta_14_c_num_data_valid(debl_cfg_theta_14_c_num_data_valid),
+    .debl_cfg_theta_14_c_fifo_cap(debl_cfg_theta_14_c_fifo_cap),
+    .debl_cfg_theta_15(debl_cfg_theta_15),
+    .debl_cfg_theta_15_c_din(entry_proc_U0_debl_cfg_theta_15_c_din),
+    .debl_cfg_theta_15_c_full_n(debl_cfg_theta_15_c_full_n),
+    .debl_cfg_theta_15_c_write(entry_proc_U0_debl_cfg_theta_15_c_write),
+    .debl_cfg_theta_15_c_num_data_valid(debl_cfg_theta_15_c_num_data_valid),
+    .debl_cfg_theta_15_c_fifo_cap(debl_cfg_theta_15_c_fifo_cap),
+    .debl_cfg_theta_16(debl_cfg_theta_16),
+    .debl_cfg_theta_16_c_din(entry_proc_U0_debl_cfg_theta_16_c_din),
+    .debl_cfg_theta_16_c_full_n(debl_cfg_theta_16_c_full_n),
+    .debl_cfg_theta_16_c_write(entry_proc_U0_debl_cfg_theta_16_c_write),
+    .debl_cfg_theta_16_c_num_data_valid(debl_cfg_theta_16_c_num_data_valid),
+    .debl_cfg_theta_16_c_fifo_cap(debl_cfg_theta_16_c_fifo_cap),
+    .debl_cfg_theta_17(debl_cfg_theta_17),
+    .debl_cfg_theta_17_c_din(entry_proc_U0_debl_cfg_theta_17_c_din),
+    .debl_cfg_theta_17_c_full_n(debl_cfg_theta_17_c_full_n),
+    .debl_cfg_theta_17_c_write(entry_proc_U0_debl_cfg_theta_17_c_write),
+    .debl_cfg_theta_17_c_num_data_valid(debl_cfg_theta_17_c_num_data_valid),
+    .debl_cfg_theta_17_c_fifo_cap(debl_cfg_theta_17_c_fifo_cap),
+    .debl_cfg_theta_18(debl_cfg_theta_18),
+    .debl_cfg_theta_18_c_din(entry_proc_U0_debl_cfg_theta_18_c_din),
+    .debl_cfg_theta_18_c_full_n(debl_cfg_theta_18_c_full_n),
+    .debl_cfg_theta_18_c_write(entry_proc_U0_debl_cfg_theta_18_c_write),
+    .debl_cfg_theta_18_c_num_data_valid(debl_cfg_theta_18_c_num_data_valid),
+    .debl_cfg_theta_18_c_fifo_cap(debl_cfg_theta_18_c_fifo_cap),
+    .debl_cfg_theta_19(debl_cfg_theta_19),
+    .debl_cfg_theta_19_c_din(entry_proc_U0_debl_cfg_theta_19_c_din),
+    .debl_cfg_theta_19_c_full_n(debl_cfg_theta_19_c_full_n),
+    .debl_cfg_theta_19_c_write(entry_proc_U0_debl_cfg_theta_19_c_write),
+    .debl_cfg_theta_19_c_num_data_valid(debl_cfg_theta_19_c_num_data_valid),
+    .debl_cfg_theta_19_c_fifo_cap(debl_cfg_theta_19_c_fifo_cap),
+    .debl_cfg_theta_20(debl_cfg_theta_20),
+    .debl_cfg_theta_20_c_din(entry_proc_U0_debl_cfg_theta_20_c_din),
+    .debl_cfg_theta_20_c_full_n(debl_cfg_theta_20_c_full_n),
+    .debl_cfg_theta_20_c_write(entry_proc_U0_debl_cfg_theta_20_c_write),
+    .debl_cfg_theta_20_c_num_data_valid(debl_cfg_theta_20_c_num_data_valid),
+    .debl_cfg_theta_20_c_fifo_cap(debl_cfg_theta_20_c_fifo_cap),
+    .debl_cfg_theta_21(debl_cfg_theta_21),
+    .debl_cfg_theta_21_c_din(entry_proc_U0_debl_cfg_theta_21_c_din),
+    .debl_cfg_theta_21_c_full_n(debl_cfg_theta_21_c_full_n),
+    .debl_cfg_theta_21_c_write(entry_proc_U0_debl_cfg_theta_21_c_write),
+    .debl_cfg_theta_21_c_num_data_valid(debl_cfg_theta_21_c_num_data_valid),
+    .debl_cfg_theta_21_c_fifo_cap(debl_cfg_theta_21_c_fifo_cap),
+    .debl_cfg_theta_22(debl_cfg_theta_22),
+    .debl_cfg_theta_22_c_din(entry_proc_U0_debl_cfg_theta_22_c_din),
+    .debl_cfg_theta_22_c_full_n(debl_cfg_theta_22_c_full_n),
+    .debl_cfg_theta_22_c_write(entry_proc_U0_debl_cfg_theta_22_c_write),
+    .debl_cfg_theta_22_c_num_data_valid(debl_cfg_theta_22_c_num_data_valid),
+    .debl_cfg_theta_22_c_fifo_cap(debl_cfg_theta_22_c_fifo_cap)
 );
 
 deepwaveaccel_goertzel goertzel_U0(
@@ -245,13 +785,656 @@ deepwaveaccel_backprojection backprojection_U0(
     .s_xcor_fifo_cap(s_xcor_fifo_cap),
     .b_in_TVALID(b_in_TVALID),
     .tau_in_TVALID(tau_in_TVALID),
-    .out_r_TREADY(out_r_TREADY),
+    .s_bp_din(backprojection_U0_s_bp_din),
+    .s_bp_full_n(s_bp_full_n),
+    .s_bp_write(backprojection_U0_s_bp_write),
+    .s_bp_num_data_valid(s_bp_num_data_valid),
+    .s_bp_fifo_cap(s_bp_fifo_cap),
     .b_in_TDATA(b_in_TDATA),
     .b_in_TREADY(backprojection_U0_b_in_TREADY),
     .tau_in_TDATA(tau_in_TDATA),
-    .tau_in_TREADY(backprojection_U0_tau_in_TREADY),
-    .out_r_TDATA(backprojection_U0_out_r_TDATA),
-    .out_r_TVALID(backprojection_U0_out_r_TVALID)
+    .tau_in_TREADY(backprojection_U0_tau_in_TREADY)
+);
+
+deepwaveaccel_deblur deblur_U0(
+    .ap_clk(ap_clk),
+    .ap_rst(ap_rst_n_inv),
+    .ap_start(deblur_U0_ap_start),
+    .ap_done(deblur_U0_ap_done),
+    .ap_continue(deblur_U0_ap_continue),
+    .ap_idle(deblur_U0_ap_idle),
+    .ap_ready(deblur_U0_ap_ready),
+    .debl_cfg_n_layers_dout(debl_cfg_n_layers_c_dout),
+    .debl_cfg_n_layers_empty_n(debl_cfg_n_layers_c_empty_n),
+    .debl_cfg_n_layers_read(deblur_U0_debl_cfg_n_layers_read),
+    .debl_cfg_n_layers_num_data_valid(debl_cfg_n_layers_c_num_data_valid),
+    .debl_cfg_n_layers_fifo_cap(debl_cfg_n_layers_c_fifo_cap),
+    .debl_cfg_K_dout(debl_cfg_K_c_dout),
+    .debl_cfg_K_empty_n(debl_cfg_K_c_empty_n),
+    .debl_cfg_K_read(deblur_U0_debl_cfg_K_read),
+    .debl_cfg_K_num_data_valid(debl_cfg_K_c_num_data_valid),
+    .debl_cfg_K_fifo_cap(debl_cfg_K_c_fifo_cap),
+    .debl_cfg_lap_off_0_dout(debl_cfg_lap_off_0_c_dout),
+    .debl_cfg_lap_off_0_empty_n(debl_cfg_lap_off_0_c_empty_n),
+    .debl_cfg_lap_off_0_read(deblur_U0_debl_cfg_lap_off_0_read),
+    .debl_cfg_lap_off_0_num_data_valid(debl_cfg_lap_off_0_c_num_data_valid),
+    .debl_cfg_lap_off_0_fifo_cap(debl_cfg_lap_off_0_c_fifo_cap),
+    .debl_cfg_lap_off_1_dout(debl_cfg_lap_off_1_c_dout),
+    .debl_cfg_lap_off_1_empty_n(debl_cfg_lap_off_1_c_empty_n),
+    .debl_cfg_lap_off_1_read(deblur_U0_debl_cfg_lap_off_1_read),
+    .debl_cfg_lap_off_1_num_data_valid(debl_cfg_lap_off_1_c_num_data_valid),
+    .debl_cfg_lap_off_1_fifo_cap(debl_cfg_lap_off_1_c_fifo_cap),
+    .debl_cfg_lap_off_2_dout(debl_cfg_lap_off_2_c_dout),
+    .debl_cfg_lap_off_2_empty_n(debl_cfg_lap_off_2_c_empty_n),
+    .debl_cfg_lap_off_2_read(deblur_U0_debl_cfg_lap_off_2_read),
+    .debl_cfg_lap_off_2_num_data_valid(debl_cfg_lap_off_2_c_num_data_valid),
+    .debl_cfg_lap_off_2_fifo_cap(debl_cfg_lap_off_2_c_fifo_cap),
+    .debl_cfg_lap_off_3_dout(debl_cfg_lap_off_3_c_dout),
+    .debl_cfg_lap_off_3_empty_n(debl_cfg_lap_off_3_c_empty_n),
+    .debl_cfg_lap_off_3_read(deblur_U0_debl_cfg_lap_off_3_read),
+    .debl_cfg_lap_off_3_num_data_valid(debl_cfg_lap_off_3_c_num_data_valid),
+    .debl_cfg_lap_off_3_fifo_cap(debl_cfg_lap_off_3_c_fifo_cap),
+    .debl_cfg_lap_off_4_dout(debl_cfg_lap_off_4_c_dout),
+    .debl_cfg_lap_off_4_empty_n(debl_cfg_lap_off_4_c_empty_n),
+    .debl_cfg_lap_off_4_read(deblur_U0_debl_cfg_lap_off_4_read),
+    .debl_cfg_lap_off_4_num_data_valid(debl_cfg_lap_off_4_c_num_data_valid),
+    .debl_cfg_lap_off_4_fifo_cap(debl_cfg_lap_off_4_c_fifo_cap),
+    .debl_cfg_lap_off_5_dout(debl_cfg_lap_off_5_c_dout),
+    .debl_cfg_lap_off_5_empty_n(debl_cfg_lap_off_5_c_empty_n),
+    .debl_cfg_lap_off_5_read(deblur_U0_debl_cfg_lap_off_5_read),
+    .debl_cfg_lap_off_5_num_data_valid(debl_cfg_lap_off_5_c_num_data_valid),
+    .debl_cfg_lap_off_5_fifo_cap(debl_cfg_lap_off_5_c_fifo_cap),
+    .debl_cfg_theta_0_dout(debl_cfg_theta_0_c_dout),
+    .debl_cfg_theta_0_empty_n(debl_cfg_theta_0_c_empty_n),
+    .debl_cfg_theta_0_read(deblur_U0_debl_cfg_theta_0_read),
+    .debl_cfg_theta_0_num_data_valid(debl_cfg_theta_0_c_num_data_valid),
+    .debl_cfg_theta_0_fifo_cap(debl_cfg_theta_0_c_fifo_cap),
+    .debl_cfg_theta_1_dout(debl_cfg_theta_1_c_dout),
+    .debl_cfg_theta_1_empty_n(debl_cfg_theta_1_c_empty_n),
+    .debl_cfg_theta_1_read(deblur_U0_debl_cfg_theta_1_read),
+    .debl_cfg_theta_1_num_data_valid(debl_cfg_theta_1_c_num_data_valid),
+    .debl_cfg_theta_1_fifo_cap(debl_cfg_theta_1_c_fifo_cap),
+    .debl_cfg_theta_2_dout(debl_cfg_theta_2_c_dout),
+    .debl_cfg_theta_2_empty_n(debl_cfg_theta_2_c_empty_n),
+    .debl_cfg_theta_2_read(deblur_U0_debl_cfg_theta_2_read),
+    .debl_cfg_theta_2_num_data_valid(debl_cfg_theta_2_c_num_data_valid),
+    .debl_cfg_theta_2_fifo_cap(debl_cfg_theta_2_c_fifo_cap),
+    .debl_cfg_theta_3_dout(debl_cfg_theta_3_c_dout),
+    .debl_cfg_theta_3_empty_n(debl_cfg_theta_3_c_empty_n),
+    .debl_cfg_theta_3_read(deblur_U0_debl_cfg_theta_3_read),
+    .debl_cfg_theta_3_num_data_valid(debl_cfg_theta_3_c_num_data_valid),
+    .debl_cfg_theta_3_fifo_cap(debl_cfg_theta_3_c_fifo_cap),
+    .debl_cfg_theta_4_dout(debl_cfg_theta_4_c_dout),
+    .debl_cfg_theta_4_empty_n(debl_cfg_theta_4_c_empty_n),
+    .debl_cfg_theta_4_read(deblur_U0_debl_cfg_theta_4_read),
+    .debl_cfg_theta_4_num_data_valid(debl_cfg_theta_4_c_num_data_valid),
+    .debl_cfg_theta_4_fifo_cap(debl_cfg_theta_4_c_fifo_cap),
+    .debl_cfg_theta_5_dout(debl_cfg_theta_5_c_dout),
+    .debl_cfg_theta_5_empty_n(debl_cfg_theta_5_c_empty_n),
+    .debl_cfg_theta_5_read(deblur_U0_debl_cfg_theta_5_read),
+    .debl_cfg_theta_5_num_data_valid(debl_cfg_theta_5_c_num_data_valid),
+    .debl_cfg_theta_5_fifo_cap(debl_cfg_theta_5_c_fifo_cap),
+    .debl_cfg_theta_6_dout(debl_cfg_theta_6_c_dout),
+    .debl_cfg_theta_6_empty_n(debl_cfg_theta_6_c_empty_n),
+    .debl_cfg_theta_6_read(deblur_U0_debl_cfg_theta_6_read),
+    .debl_cfg_theta_6_num_data_valid(debl_cfg_theta_6_c_num_data_valid),
+    .debl_cfg_theta_6_fifo_cap(debl_cfg_theta_6_c_fifo_cap),
+    .debl_cfg_theta_7_dout(debl_cfg_theta_7_c_dout),
+    .debl_cfg_theta_7_empty_n(debl_cfg_theta_7_c_empty_n),
+    .debl_cfg_theta_7_read(deblur_U0_debl_cfg_theta_7_read),
+    .debl_cfg_theta_7_num_data_valid(debl_cfg_theta_7_c_num_data_valid),
+    .debl_cfg_theta_7_fifo_cap(debl_cfg_theta_7_c_fifo_cap),
+    .debl_cfg_theta_8_dout(debl_cfg_theta_8_c_dout),
+    .debl_cfg_theta_8_empty_n(debl_cfg_theta_8_c_empty_n),
+    .debl_cfg_theta_8_read(deblur_U0_debl_cfg_theta_8_read),
+    .debl_cfg_theta_8_num_data_valid(debl_cfg_theta_8_c_num_data_valid),
+    .debl_cfg_theta_8_fifo_cap(debl_cfg_theta_8_c_fifo_cap),
+    .debl_cfg_theta_9_dout(debl_cfg_theta_9_c_dout),
+    .debl_cfg_theta_9_empty_n(debl_cfg_theta_9_c_empty_n),
+    .debl_cfg_theta_9_read(deblur_U0_debl_cfg_theta_9_read),
+    .debl_cfg_theta_9_num_data_valid(debl_cfg_theta_9_c_num_data_valid),
+    .debl_cfg_theta_9_fifo_cap(debl_cfg_theta_9_c_fifo_cap),
+    .debl_cfg_theta_10_dout(debl_cfg_theta_10_c_dout),
+    .debl_cfg_theta_10_empty_n(debl_cfg_theta_10_c_empty_n),
+    .debl_cfg_theta_10_read(deblur_U0_debl_cfg_theta_10_read),
+    .debl_cfg_theta_10_num_data_valid(debl_cfg_theta_10_c_num_data_valid),
+    .debl_cfg_theta_10_fifo_cap(debl_cfg_theta_10_c_fifo_cap),
+    .debl_cfg_theta_11_dout(debl_cfg_theta_11_c_dout),
+    .debl_cfg_theta_11_empty_n(debl_cfg_theta_11_c_empty_n),
+    .debl_cfg_theta_11_read(deblur_U0_debl_cfg_theta_11_read),
+    .debl_cfg_theta_11_num_data_valid(debl_cfg_theta_11_c_num_data_valid),
+    .debl_cfg_theta_11_fifo_cap(debl_cfg_theta_11_c_fifo_cap),
+    .debl_cfg_theta_12_dout(debl_cfg_theta_12_c_dout),
+    .debl_cfg_theta_12_empty_n(debl_cfg_theta_12_c_empty_n),
+    .debl_cfg_theta_12_read(deblur_U0_debl_cfg_theta_12_read),
+    .debl_cfg_theta_12_num_data_valid(debl_cfg_theta_12_c_num_data_valid),
+    .debl_cfg_theta_12_fifo_cap(debl_cfg_theta_12_c_fifo_cap),
+    .debl_cfg_theta_13_dout(debl_cfg_theta_13_c_dout),
+    .debl_cfg_theta_13_empty_n(debl_cfg_theta_13_c_empty_n),
+    .debl_cfg_theta_13_read(deblur_U0_debl_cfg_theta_13_read),
+    .debl_cfg_theta_13_num_data_valid(debl_cfg_theta_13_c_num_data_valid),
+    .debl_cfg_theta_13_fifo_cap(debl_cfg_theta_13_c_fifo_cap),
+    .debl_cfg_theta_14_dout(debl_cfg_theta_14_c_dout),
+    .debl_cfg_theta_14_empty_n(debl_cfg_theta_14_c_empty_n),
+    .debl_cfg_theta_14_read(deblur_U0_debl_cfg_theta_14_read),
+    .debl_cfg_theta_14_num_data_valid(debl_cfg_theta_14_c_num_data_valid),
+    .debl_cfg_theta_14_fifo_cap(debl_cfg_theta_14_c_fifo_cap),
+    .debl_cfg_theta_15_dout(debl_cfg_theta_15_c_dout),
+    .debl_cfg_theta_15_empty_n(debl_cfg_theta_15_c_empty_n),
+    .debl_cfg_theta_15_read(deblur_U0_debl_cfg_theta_15_read),
+    .debl_cfg_theta_15_num_data_valid(debl_cfg_theta_15_c_num_data_valid),
+    .debl_cfg_theta_15_fifo_cap(debl_cfg_theta_15_c_fifo_cap),
+    .debl_cfg_theta_16_dout(debl_cfg_theta_16_c_dout),
+    .debl_cfg_theta_16_empty_n(debl_cfg_theta_16_c_empty_n),
+    .debl_cfg_theta_16_read(deblur_U0_debl_cfg_theta_16_read),
+    .debl_cfg_theta_16_num_data_valid(debl_cfg_theta_16_c_num_data_valid),
+    .debl_cfg_theta_16_fifo_cap(debl_cfg_theta_16_c_fifo_cap),
+    .debl_cfg_theta_17_dout(debl_cfg_theta_17_c_dout),
+    .debl_cfg_theta_17_empty_n(debl_cfg_theta_17_c_empty_n),
+    .debl_cfg_theta_17_read(deblur_U0_debl_cfg_theta_17_read),
+    .debl_cfg_theta_17_num_data_valid(debl_cfg_theta_17_c_num_data_valid),
+    .debl_cfg_theta_17_fifo_cap(debl_cfg_theta_17_c_fifo_cap),
+    .debl_cfg_theta_18_dout(debl_cfg_theta_18_c_dout),
+    .debl_cfg_theta_18_empty_n(debl_cfg_theta_18_c_empty_n),
+    .debl_cfg_theta_18_read(deblur_U0_debl_cfg_theta_18_read),
+    .debl_cfg_theta_18_num_data_valid(debl_cfg_theta_18_c_num_data_valid),
+    .debl_cfg_theta_18_fifo_cap(debl_cfg_theta_18_c_fifo_cap),
+    .debl_cfg_theta_19_dout(debl_cfg_theta_19_c_dout),
+    .debl_cfg_theta_19_empty_n(debl_cfg_theta_19_c_empty_n),
+    .debl_cfg_theta_19_read(deblur_U0_debl_cfg_theta_19_read),
+    .debl_cfg_theta_19_num_data_valid(debl_cfg_theta_19_c_num_data_valid),
+    .debl_cfg_theta_19_fifo_cap(debl_cfg_theta_19_c_fifo_cap),
+    .debl_cfg_theta_20_dout(debl_cfg_theta_20_c_dout),
+    .debl_cfg_theta_20_empty_n(debl_cfg_theta_20_c_empty_n),
+    .debl_cfg_theta_20_read(deblur_U0_debl_cfg_theta_20_read),
+    .debl_cfg_theta_20_num_data_valid(debl_cfg_theta_20_c_num_data_valid),
+    .debl_cfg_theta_20_fifo_cap(debl_cfg_theta_20_c_fifo_cap),
+    .debl_cfg_theta_21_dout(debl_cfg_theta_21_c_dout),
+    .debl_cfg_theta_21_empty_n(debl_cfg_theta_21_c_empty_n),
+    .debl_cfg_theta_21_read(deblur_U0_debl_cfg_theta_21_read),
+    .debl_cfg_theta_21_num_data_valid(debl_cfg_theta_21_c_num_data_valid),
+    .debl_cfg_theta_21_fifo_cap(debl_cfg_theta_21_c_fifo_cap),
+    .debl_cfg_theta_22_dout(debl_cfg_theta_22_c_dout),
+    .debl_cfg_theta_22_empty_n(debl_cfg_theta_22_c_empty_n),
+    .debl_cfg_theta_22_read(deblur_U0_debl_cfg_theta_22_read),
+    .debl_cfg_theta_22_num_data_valid(debl_cfg_theta_22_c_num_data_valid),
+    .debl_cfg_theta_22_fifo_cap(debl_cfg_theta_22_c_fifo_cap),
+    .lap_in_TDATA(lap_in_TDATA),
+    .lap_in_TVALID(lap_in_TVALID),
+    .lap_in_TREADY(deblur_U0_lap_in_TREADY),
+    .out_r_TDATA(deblur_U0_out_r_TDATA),
+    .out_r_TVALID(deblur_U0_out_r_TVALID),
+    .out_r_TREADY(out_r_TREADY),
+    .s_bp_dout(s_bp_dout),
+    .s_bp_empty_n(s_bp_empty_n),
+    .s_bp_read(deblur_U0_s_bp_read),
+    .s_bp_num_data_valid(s_bp_num_data_valid),
+    .s_bp_fifo_cap(s_bp_fifo_cap)
+);
+
+deepwaveaccel_fifo_w8_d5_S debl_cfg_n_layers_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_n_layers_c_din),
+    .if_full_n(debl_cfg_n_layers_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_n_layers_c_write),
+    .if_dout(debl_cfg_n_layers_c_dout),
+    .if_empty_n(debl_cfg_n_layers_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_n_layers_read),
+    .if_num_data_valid(debl_cfg_n_layers_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_n_layers_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w6_d5_S debl_cfg_K_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_K_c_din),
+    .if_full_n(debl_cfg_K_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_K_c_write),
+    .if_dout(debl_cfg_K_c_dout),
+    .if_empty_n(debl_cfg_K_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_K_read),
+    .if_num_data_valid(debl_cfg_K_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_K_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w12_d5_S debl_cfg_lap_off_0_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_lap_off_0_c_din),
+    .if_full_n(debl_cfg_lap_off_0_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_lap_off_0_c_write),
+    .if_dout(debl_cfg_lap_off_0_c_dout),
+    .if_empty_n(debl_cfg_lap_off_0_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_lap_off_0_read),
+    .if_num_data_valid(debl_cfg_lap_off_0_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_lap_off_0_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w12_d5_S debl_cfg_lap_off_1_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_lap_off_1_c_din),
+    .if_full_n(debl_cfg_lap_off_1_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_lap_off_1_c_write),
+    .if_dout(debl_cfg_lap_off_1_c_dout),
+    .if_empty_n(debl_cfg_lap_off_1_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_lap_off_1_read),
+    .if_num_data_valid(debl_cfg_lap_off_1_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_lap_off_1_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w12_d5_S debl_cfg_lap_off_2_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_lap_off_2_c_din),
+    .if_full_n(debl_cfg_lap_off_2_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_lap_off_2_c_write),
+    .if_dout(debl_cfg_lap_off_2_c_dout),
+    .if_empty_n(debl_cfg_lap_off_2_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_lap_off_2_read),
+    .if_num_data_valid(debl_cfg_lap_off_2_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_lap_off_2_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w12_d5_S debl_cfg_lap_off_3_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_lap_off_3_c_din),
+    .if_full_n(debl_cfg_lap_off_3_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_lap_off_3_c_write),
+    .if_dout(debl_cfg_lap_off_3_c_dout),
+    .if_empty_n(debl_cfg_lap_off_3_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_lap_off_3_read),
+    .if_num_data_valid(debl_cfg_lap_off_3_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_lap_off_3_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w12_d5_S debl_cfg_lap_off_4_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_lap_off_4_c_din),
+    .if_full_n(debl_cfg_lap_off_4_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_lap_off_4_c_write),
+    .if_dout(debl_cfg_lap_off_4_c_dout),
+    .if_empty_n(debl_cfg_lap_off_4_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_lap_off_4_read),
+    .if_num_data_valid(debl_cfg_lap_off_4_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_lap_off_4_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w12_d5_S debl_cfg_lap_off_5_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_lap_off_5_c_din),
+    .if_full_n(debl_cfg_lap_off_5_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_lap_off_5_c_write),
+    .if_dout(debl_cfg_lap_off_5_c_dout),
+    .if_empty_n(debl_cfg_lap_off_5_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_lap_off_5_read),
+    .if_num_data_valid(debl_cfg_lap_off_5_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_lap_off_5_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_0_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_0_c_din),
+    .if_full_n(debl_cfg_theta_0_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_0_c_write),
+    .if_dout(debl_cfg_theta_0_c_dout),
+    .if_empty_n(debl_cfg_theta_0_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_0_read),
+    .if_num_data_valid(debl_cfg_theta_0_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_0_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_1_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_1_c_din),
+    .if_full_n(debl_cfg_theta_1_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_1_c_write),
+    .if_dout(debl_cfg_theta_1_c_dout),
+    .if_empty_n(debl_cfg_theta_1_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_1_read),
+    .if_num_data_valid(debl_cfg_theta_1_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_1_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_2_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_2_c_din),
+    .if_full_n(debl_cfg_theta_2_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_2_c_write),
+    .if_dout(debl_cfg_theta_2_c_dout),
+    .if_empty_n(debl_cfg_theta_2_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_2_read),
+    .if_num_data_valid(debl_cfg_theta_2_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_2_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_3_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_3_c_din),
+    .if_full_n(debl_cfg_theta_3_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_3_c_write),
+    .if_dout(debl_cfg_theta_3_c_dout),
+    .if_empty_n(debl_cfg_theta_3_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_3_read),
+    .if_num_data_valid(debl_cfg_theta_3_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_3_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_4_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_4_c_din),
+    .if_full_n(debl_cfg_theta_4_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_4_c_write),
+    .if_dout(debl_cfg_theta_4_c_dout),
+    .if_empty_n(debl_cfg_theta_4_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_4_read),
+    .if_num_data_valid(debl_cfg_theta_4_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_4_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_5_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_5_c_din),
+    .if_full_n(debl_cfg_theta_5_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_5_c_write),
+    .if_dout(debl_cfg_theta_5_c_dout),
+    .if_empty_n(debl_cfg_theta_5_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_5_read),
+    .if_num_data_valid(debl_cfg_theta_5_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_5_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_6_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_6_c_din),
+    .if_full_n(debl_cfg_theta_6_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_6_c_write),
+    .if_dout(debl_cfg_theta_6_c_dout),
+    .if_empty_n(debl_cfg_theta_6_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_6_read),
+    .if_num_data_valid(debl_cfg_theta_6_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_6_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_7_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_7_c_din),
+    .if_full_n(debl_cfg_theta_7_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_7_c_write),
+    .if_dout(debl_cfg_theta_7_c_dout),
+    .if_empty_n(debl_cfg_theta_7_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_7_read),
+    .if_num_data_valid(debl_cfg_theta_7_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_7_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_8_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_8_c_din),
+    .if_full_n(debl_cfg_theta_8_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_8_c_write),
+    .if_dout(debl_cfg_theta_8_c_dout),
+    .if_empty_n(debl_cfg_theta_8_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_8_read),
+    .if_num_data_valid(debl_cfg_theta_8_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_8_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_9_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_9_c_din),
+    .if_full_n(debl_cfg_theta_9_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_9_c_write),
+    .if_dout(debl_cfg_theta_9_c_dout),
+    .if_empty_n(debl_cfg_theta_9_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_9_read),
+    .if_num_data_valid(debl_cfg_theta_9_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_9_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_10_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_10_c_din),
+    .if_full_n(debl_cfg_theta_10_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_10_c_write),
+    .if_dout(debl_cfg_theta_10_c_dout),
+    .if_empty_n(debl_cfg_theta_10_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_10_read),
+    .if_num_data_valid(debl_cfg_theta_10_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_10_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_11_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_11_c_din),
+    .if_full_n(debl_cfg_theta_11_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_11_c_write),
+    .if_dout(debl_cfg_theta_11_c_dout),
+    .if_empty_n(debl_cfg_theta_11_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_11_read),
+    .if_num_data_valid(debl_cfg_theta_11_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_11_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_12_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_12_c_din),
+    .if_full_n(debl_cfg_theta_12_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_12_c_write),
+    .if_dout(debl_cfg_theta_12_c_dout),
+    .if_empty_n(debl_cfg_theta_12_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_12_read),
+    .if_num_data_valid(debl_cfg_theta_12_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_12_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_13_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_13_c_din),
+    .if_full_n(debl_cfg_theta_13_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_13_c_write),
+    .if_dout(debl_cfg_theta_13_c_dout),
+    .if_empty_n(debl_cfg_theta_13_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_13_read),
+    .if_num_data_valid(debl_cfg_theta_13_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_13_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_14_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_14_c_din),
+    .if_full_n(debl_cfg_theta_14_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_14_c_write),
+    .if_dout(debl_cfg_theta_14_c_dout),
+    .if_empty_n(debl_cfg_theta_14_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_14_read),
+    .if_num_data_valid(debl_cfg_theta_14_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_14_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_15_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_15_c_din),
+    .if_full_n(debl_cfg_theta_15_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_15_c_write),
+    .if_dout(debl_cfg_theta_15_c_dout),
+    .if_empty_n(debl_cfg_theta_15_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_15_read),
+    .if_num_data_valid(debl_cfg_theta_15_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_15_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_16_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_16_c_din),
+    .if_full_n(debl_cfg_theta_16_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_16_c_write),
+    .if_dout(debl_cfg_theta_16_c_dout),
+    .if_empty_n(debl_cfg_theta_16_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_16_read),
+    .if_num_data_valid(debl_cfg_theta_16_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_16_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_17_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_17_c_din),
+    .if_full_n(debl_cfg_theta_17_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_17_c_write),
+    .if_dout(debl_cfg_theta_17_c_dout),
+    .if_empty_n(debl_cfg_theta_17_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_17_read),
+    .if_num_data_valid(debl_cfg_theta_17_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_17_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_18_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_18_c_din),
+    .if_full_n(debl_cfg_theta_18_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_18_c_write),
+    .if_dout(debl_cfg_theta_18_c_dout),
+    .if_empty_n(debl_cfg_theta_18_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_18_read),
+    .if_num_data_valid(debl_cfg_theta_18_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_18_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_19_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_19_c_din),
+    .if_full_n(debl_cfg_theta_19_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_19_c_write),
+    .if_dout(debl_cfg_theta_19_c_dout),
+    .if_empty_n(debl_cfg_theta_19_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_19_read),
+    .if_num_data_valid(debl_cfg_theta_19_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_19_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_20_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_20_c_din),
+    .if_full_n(debl_cfg_theta_20_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_20_c_write),
+    .if_dout(debl_cfg_theta_20_c_dout),
+    .if_empty_n(debl_cfg_theta_20_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_20_read),
+    .if_num_data_valid(debl_cfg_theta_20_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_20_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_21_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_21_c_din),
+    .if_full_n(debl_cfg_theta_21_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_21_c_write),
+    .if_dout(debl_cfg_theta_21_c_dout),
+    .if_empty_n(debl_cfg_theta_21_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_21_read),
+    .if_num_data_valid(debl_cfg_theta_21_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_21_c_fifo_cap)
+);
+
+deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_22_c_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(entry_proc_U0_debl_cfg_theta_22_c_din),
+    .if_full_n(debl_cfg_theta_22_c_full_n),
+    .if_write(entry_proc_U0_debl_cfg_theta_22_c_write),
+    .if_dout(debl_cfg_theta_22_c_dout),
+    .if_empty_n(debl_cfg_theta_22_c_empty_n),
+    .if_read(deblur_U0_debl_cfg_theta_22_read),
+    .if_num_data_valid(debl_cfg_theta_22_c_num_data_valid),
+    .if_fifo_cap(debl_cfg_theta_22_c_fifo_cap)
 );
 
 deepwaveaccel_fifo_w96_d64_A s_goertzel_U(
@@ -282,6 +1465,34 @@ deepwaveaccel_fifo_w96_d256_A s_xcor_U(
     .if_read(backprojection_U0_s_xcor_read),
     .if_num_data_valid(s_xcor_num_data_valid),
     .if_fifo_cap(s_xcor_fifo_cap)
+);
+
+deepwaveaccel_fifo_w64_d512_A s_bp_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(backprojection_U0_s_bp_din),
+    .if_full_n(s_bp_full_n),
+    .if_write(backprojection_U0_s_bp_write),
+    .if_dout(s_bp_dout),
+    .if_empty_n(s_bp_empty_n),
+    .if_read(deblur_U0_s_bp_read),
+    .if_num_data_valid(s_bp_num_data_valid),
+    .if_fifo_cap(s_bp_fifo_cap)
+);
+
+deepwaveaccel_start_for_deblur_U0 start_for_deblur_U0_U(
+    .clk(ap_clk),
+    .reset(ap_rst_n_inv),
+    .if_read_ce(1'b1),
+    .if_write_ce(1'b1),
+    .if_din(start_for_deblur_U0_din),
+    .if_full_n(start_for_deblur_U0_full_n),
+    .if_write(entry_proc_U0_start_write),
+    .if_dout(start_for_deblur_U0_dout),
+    .if_empty_n(start_for_deblur_U0_empty_n),
+    .if_read(deblur_U0_ap_ready)
 );
 
 deepwaveaccel_start_for_crosscor_U0 start_for_crosscor_U0_U(
@@ -324,23 +1535,35 @@ assign crosscor_U0_ap_continue = 1'b1;
 
 assign crosscor_U0_ap_start = start_for_crosscor_U0_empty_n;
 
+assign deblur_U0_ap_continue = 1'b1;
+
+assign deblur_U0_ap_start = start_for_deblur_U0_empty_n;
+
+assign entry_proc_U0_ap_continue = 1'b1;
+
+assign entry_proc_U0_ap_start = 1'b1;
+
 assign goertzel_U0_ap_continue = 1'b1;
 
 assign goertzel_U0_ap_start = 1'b1;
 
 assign in_r_TREADY = goertzel_U0_in_r_TREADY;
 
+assign lap_in_TREADY = deblur_U0_lap_in_TREADY;
+
 assign norm_TDATA = crosscor_U0_norm_TDATA;
 
 assign norm_TVALID = crosscor_U0_norm_TVALID;
 
-assign out_r_TDATA = backprojection_U0_out_r_TDATA;
+assign out_r_TDATA = deblur_U0_out_r_TDATA;
 
-assign out_r_TVALID = backprojection_U0_out_r_TVALID;
+assign out_r_TVALID = deblur_U0_out_r_TVALID;
 
 assign start_for_backprojection_U0_din = 1'b1;
 
 assign start_for_crosscor_U0_din = 1'b1;
+
+assign start_for_deblur_U0_din = 1'b1;
 
 assign tau_in_TREADY = backprojection_U0_tau_in_TREADY;
 

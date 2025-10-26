@@ -140,11 +140,13 @@ int tb_deblur() {
     std::cout << "[Deblur] Starting kernel execution..." << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
 
-    const int cycles_per_frame =
-        1 + ND * IMG_LEN + IMG_LEN * (int)cfg.n_layers * (int)cfg.K;  // safe upper bound
+    size_t cycle_count[frame_count];
+    memset(cycle_count, 0, sizeof(size_t)*frame_count);
 
-    while(img_stream.size() < frame_count*IMG_LEN)
+    while(img_stream.size()/IMG_LEN < frame_count) {
         deblur(bp_stream, lap_stream, img_stream, cfg);
+        cycle_count[img_stream.size()/IMG_LEN]++;
+    }
 
     if (!bp_stream.empty()){
         std::cerr << "[Deblur] Did not process all frames! Exiting early. " << bp_stream.size() << " pixels left (" << bp_stream.size()/IMG_LEN << " frames)" << std::endl;
@@ -153,6 +155,11 @@ int tb_deblur() {
     auto end = std::chrono::high_resolution_clock::now();
     auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "[Deblur] Kernel finished in " << dur / 1000.0 << " s" << std::endl;
+
+    std::cout << "[Deblur] Cycle count per frame: " << std::endl;
+    for (int i=0; i<frame_count; i++){
+        std::cout << " " << i << ": " << cycle_count[i] << std::endl;
+    }
 
     // ---------------------------------------------------------
     // Collect output image(s)

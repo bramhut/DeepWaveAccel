@@ -54,8 +54,21 @@
           "direction": "in"
         }]
     },
-    "out": {
+    "lap_in": {
       "index": "3",
+      "direction": "in",
+      "srcType": "stream<ap_ufixed<15, -1, AP_TRN, AP_WRAP, 0>, 0>&",
+      "srcSize": "16",
+      "hwRefs": [{
+          "type": "interface",
+          "interface": "lap_in",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        }]
+    },
+    "out": {
+      "index": "4",
       "direction": "out",
       "srcType": "stream<AxisWordImg, 0>&",
       "srcSize": "64",
@@ -68,7 +81,7 @@
         }]
     },
     "norm": {
-      "index": "4",
+      "index": "5",
       "direction": "out",
       "srcType": "stream<ap_ufixed<23, 10, AP_TRN, AP_WRAP, 0>, 0>&",
       "srcSize": "32",
@@ -81,11 +94,236 @@
         }]
     },
     "goer_cfg": {
-      "index": "5",
+      "index": "6",
       "direction": "in",
       "srcType": "goertzel_config&",
       "srcSize": "192",
       "hwRefs": [
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        }
+      ]
+    },
+    "debl_cfg": {
+      "index": "7",
+      "direction": "in",
+      "srcType": "deblur_config&",
+      "srcSize": "864",
+      "hwRefs": [
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "in"
+        },
         {
           "type": "interface",
           "interface": "s_axi_CTRL_BUS",
@@ -148,8 +386,8 @@
     "ClockPeriod": "10",
     "Uncertainty": "2.7",
     "IsCombinational": "0",
-    "II": "2 ~ 7",
-    "Latency": "90"
+    "II": "2 ~ 40",
+    "Latency": "55"
   },
   "Xdc": {"OocClocks": ["create_clock -name ap_clk -period 10.000 [get_ports ap_clk]"]},
   "Ipx": {
@@ -158,7 +396,7 @@
     "Name": "deepwaveaccel",
     "Version": "1.0",
     "DisplayName": "Deepwaveaccel",
-    "Revision": "2114313768",
+    "Revision": "2114320976",
     "Description": "An IP generated by Vitis HLS",
     "Taxonomy": "\/VITIS_HLS_IP",
     "AutoFamilySupport": "",
@@ -169,14 +407,16 @@
       "..\/..\/goertzel.cpp",
       "..\/..\/top.cpp",
       "..\/..\/crosscor.cpp",
-      "..\/..\/backproj.cpp"
+      "..\/..\/backproj.cpp",
+      "..\/..\/deblur.cpp"
     ],
     "TestBench": [
       "..\/..\/tb_goertzel.cpp",
       "..\/..\/tb_base.cpp",
       "..\/..\/tb_top.cpp",
       "..\/..\/tb_crosscor.cpp",
-      "..\/..\/tb_backproj.cpp"
+      "..\/..\/tb_backproj.cpp",
+      "..\/..\/tb_deblur.cpp"
     ],
     "Vhdl": [
       "impl\/vhdl\/deepwaveaccel_backprojection.vhd",
@@ -189,6 +429,17 @@
       "impl\/vhdl\/deepwaveaccel_crosscor_R_M_real_RAM_AUTO_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_crosscor_u_M_real_RAM_2P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_CTRL_BUS_s_axi.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_5_RAMdEe.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.vhd",
+      "impl\/vhdl\/deepwaveaccel_entry_proc.vhd",
+      "impl\/vhdl\/deepwaveaccel_fifo_w6_d5_S.vhd",
+      "impl\/vhdl\/deepwaveaccel_fifo_w8_d5_S.vhd",
+      "impl\/vhdl\/deepwaveaccel_fifo_w12_d5_S.vhd",
+      "impl\/vhdl\/deepwaveaccel_fifo_w18_d5_S.vhd",
+      "impl\/vhdl\/deepwaveaccel_fifo_w64_d512_A.vhd",
       "impl\/vhdl\/deepwaveaccel_fifo_w96_d64_A.vhd",
       "impl\/vhdl\/deepwaveaccel_fifo_w96_d256_A.vhd",
       "impl\/vhdl\/deepwaveaccel_goertzel.vhd",
@@ -202,18 +453,25 @@
       "impl\/vhdl\/deepwaveaccel_mul_22s_22s_44_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_23ns_14ns_36_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_23s_22s_45_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_mul_24s_21ns_45_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_24s_22s_46_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_mul_24s_24s_46_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_31s_31s_62_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_32s_31s_61_1_1.vhd",
-      "impl\/vhdl\/deepwaveaccel_mul_32s_34ns_65_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_36s_24ns_54_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_regslice_both.vhd",
+      "impl\/vhdl\/deepwaveaccel_sparsemux_7_2_18_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_sparsemux_13_3_12_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_sparsemux_13_3_15_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_sparsemux_47_5_18_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_sparsemux_95_6_14_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_sparsemux_2257_11_6_1_1.vhd",
-      "impl\/vhdl\/deepwaveaccel_srem_32s_7ns_9_36_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_srem_32ns_3ns_3_36_seq_1.vhd",
       "impl\/vhdl\/deepwaveaccel_start_for_backprojection_U0.vhd",
       "impl\/vhdl\/deepwaveaccel_start_for_crosscor_U0.vhd",
+      "impl\/vhdl\/deepwaveaccel_start_for_deblur_U0.vhd",
       "impl\/vhdl\/deepwaveaccel_udiv_37s_23ns_24_41_1.vhd",
       "impl\/vhdl\/deepwaveaccel.vhd"
     ],
@@ -235,6 +493,21 @@
       "impl\/verilog\/deepwaveaccel_crosscor_u_M_real_RAM_2P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_crosscor_u_M_real_RAM_2P_BRAM_1R1W.v",
       "impl\/verilog\/deepwaveaccel_CTRL_BUS_s_axi.v",
+      "impl\/verilog\/deepwaveaccel_deblur.v",
+      "impl\/verilog\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.v",
+      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_5_RAMdEe.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_5_RAMdEe.v",
+      "impl\/verilog\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.v",
+      "impl\/verilog\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.v",
+      "impl\/verilog\/deepwaveaccel_entry_proc.v",
+      "impl\/verilog\/deepwaveaccel_fifo_w6_d5_S.v",
+      "impl\/verilog\/deepwaveaccel_fifo_w8_d5_S.v",
+      "impl\/verilog\/deepwaveaccel_fifo_w12_d5_S.v",
+      "impl\/verilog\/deepwaveaccel_fifo_w18_d5_S.v",
+      "impl\/verilog\/deepwaveaccel_fifo_w64_d512_A.v",
       "impl\/verilog\/deepwaveaccel_fifo_w96_d64_A.v",
       "impl\/verilog\/deepwaveaccel_fifo_w96_d256_A.v",
       "impl\/verilog\/deepwaveaccel_goertzel.v",
@@ -249,18 +522,25 @@
       "impl\/verilog\/deepwaveaccel_mul_22s_22s_44_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_23ns_14ns_36_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_23s_22s_45_1_1.v",
+      "impl\/verilog\/deepwaveaccel_mul_24s_21ns_45_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_24s_22s_46_1_1.v",
+      "impl\/verilog\/deepwaveaccel_mul_24s_24s_46_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_31s_31s_62_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_32s_31s_61_1_1.v",
-      "impl\/verilog\/deepwaveaccel_mul_32s_34ns_65_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_36s_24ns_54_1_1.v",
       "impl\/verilog\/deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1.v",
       "impl\/verilog\/deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1.v",
       "impl\/verilog\/deepwaveaccel_regslice_both.v",
+      "impl\/verilog\/deepwaveaccel_sparsemux_7_2_18_1_1.v",
+      "impl\/verilog\/deepwaveaccel_sparsemux_13_3_12_1_1.v",
+      "impl\/verilog\/deepwaveaccel_sparsemux_13_3_15_1_1.v",
+      "impl\/verilog\/deepwaveaccel_sparsemux_47_5_18_1_1.v",
+      "impl\/verilog\/deepwaveaccel_sparsemux_95_6_14_1_1.v",
       "impl\/verilog\/deepwaveaccel_sparsemux_2257_11_6_1_1.v",
-      "impl\/verilog\/deepwaveaccel_srem_32s_7ns_9_36_1.v",
+      "impl\/verilog\/deepwaveaccel_srem_32ns_3ns_3_36_seq_1.v",
       "impl\/verilog\/deepwaveaccel_start_for_backprojection_U0.v",
       "impl\/verilog\/deepwaveaccel_start_for_crosscor_U0.v",
+      "impl\/verilog\/deepwaveaccel_start_for_deblur_U0.v",
       "impl\/verilog\/deepwaveaccel_udiv_37s_23ns_24_41_1.v",
       "impl\/verilog\/deepwaveaccel.v"
     ],
@@ -297,7 +577,7 @@
       "busTypeName": "aximm",
       "mode": "slave",
       "dataWidth": "32",
-      "addrWidth": "6",
+      "addrWidth": "9",
       "portPrefix": "s_axi_CTRL_BUS_",
       "paramPrefix": "C_S_AXI_CTRL_BUS_",
       "ports": [
@@ -457,6 +737,719 @@
               "description": "Reserved.  0s on read."
             }
           ]
+        },
+        {
+          "offset": "0x40",
+          "name": "debl_cfg_n_layers",
+          "access": "W",
+          "description": "Data signal of debl_cfg_n_layers",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "8",
+              "name": "debl_cfg_n_layers",
+              "access": "W",
+              "description": "Bit 7 to 0 of debl_cfg_n_layers"
+            },
+            {
+              "offset": "8",
+              "width": "24",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x48",
+          "name": "debl_cfg_K",
+          "access": "W",
+          "description": "Data signal of debl_cfg_K",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "6",
+              "name": "debl_cfg_K",
+              "access": "W",
+              "description": "Bit 5 to 0 of debl_cfg_K"
+            },
+            {
+              "offset": "6",
+              "width": "26",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x50",
+          "name": "debl_cfg_lap_off_0",
+          "access": "W",
+          "description": "Data signal of debl_cfg_lap_off_0",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "12",
+              "name": "debl_cfg_lap_off_0",
+              "access": "W",
+              "description": "Bit 11 to 0 of debl_cfg_lap_off_0"
+            },
+            {
+              "offset": "12",
+              "width": "20",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x58",
+          "name": "debl_cfg_lap_off_1",
+          "access": "W",
+          "description": "Data signal of debl_cfg_lap_off_1",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "12",
+              "name": "debl_cfg_lap_off_1",
+              "access": "W",
+              "description": "Bit 11 to 0 of debl_cfg_lap_off_1"
+            },
+            {
+              "offset": "12",
+              "width": "20",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x60",
+          "name": "debl_cfg_lap_off_2",
+          "access": "W",
+          "description": "Data signal of debl_cfg_lap_off_2",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "12",
+              "name": "debl_cfg_lap_off_2",
+              "access": "W",
+              "description": "Bit 11 to 0 of debl_cfg_lap_off_2"
+            },
+            {
+              "offset": "12",
+              "width": "20",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x68",
+          "name": "debl_cfg_lap_off_3",
+          "access": "W",
+          "description": "Data signal of debl_cfg_lap_off_3",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "12",
+              "name": "debl_cfg_lap_off_3",
+              "access": "W",
+              "description": "Bit 11 to 0 of debl_cfg_lap_off_3"
+            },
+            {
+              "offset": "12",
+              "width": "20",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x70",
+          "name": "debl_cfg_lap_off_4",
+          "access": "W",
+          "description": "Data signal of debl_cfg_lap_off_4",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "12",
+              "name": "debl_cfg_lap_off_4",
+              "access": "W",
+              "description": "Bit 11 to 0 of debl_cfg_lap_off_4"
+            },
+            {
+              "offset": "12",
+              "width": "20",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x78",
+          "name": "debl_cfg_lap_off_5",
+          "access": "W",
+          "description": "Data signal of debl_cfg_lap_off_5",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "12",
+              "name": "debl_cfg_lap_off_5",
+              "access": "W",
+              "description": "Bit 11 to 0 of debl_cfg_lap_off_5"
+            },
+            {
+              "offset": "12",
+              "width": "20",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x80",
+          "name": "debl_cfg_theta_0",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_0",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_0",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_0"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x88",
+          "name": "debl_cfg_theta_1",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_1",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_1",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_1"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x90",
+          "name": "debl_cfg_theta_2",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_2",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_2",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_2"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x98",
+          "name": "debl_cfg_theta_3",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_3",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_3",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_3"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xa0",
+          "name": "debl_cfg_theta_4",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_4",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_4",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_4"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xa8",
+          "name": "debl_cfg_theta_5",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_5",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_5",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_5"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xb0",
+          "name": "debl_cfg_theta_6",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_6",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_6",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_6"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xb8",
+          "name": "debl_cfg_theta_7",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_7",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_7",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_7"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xc0",
+          "name": "debl_cfg_theta_8",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_8",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_8",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_8"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xc8",
+          "name": "debl_cfg_theta_9",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_9",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_9",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_9"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xd0",
+          "name": "debl_cfg_theta_10",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_10",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_10",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_10"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xd8",
+          "name": "debl_cfg_theta_11",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_11",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_11",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_11"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xe0",
+          "name": "debl_cfg_theta_12",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_12",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_12",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_12"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xe8",
+          "name": "debl_cfg_theta_13",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_13",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_13",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_13"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xf0",
+          "name": "debl_cfg_theta_14",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_14",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_14",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_14"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xf8",
+          "name": "debl_cfg_theta_15",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_15",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_15",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_15"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x100",
+          "name": "debl_cfg_theta_16",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_16",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_16",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_16"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x108",
+          "name": "debl_cfg_theta_17",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_17",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_17",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_17"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x110",
+          "name": "debl_cfg_theta_18",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_18",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_18",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_18"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x118",
+          "name": "debl_cfg_theta_19",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_19",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_19",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_19"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x120",
+          "name": "debl_cfg_theta_20",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_20",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_20",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_20"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x128",
+          "name": "debl_cfg_theta_21",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_21",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_21",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_21"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x130",
+          "name": "debl_cfg_theta_22",
+          "access": "W",
+          "description": "Data signal of debl_cfg_theta_22",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "18",
+              "name": "debl_cfg_theta_22",
+              "access": "W",
+              "description": "Bit 17 to 0 of debl_cfg_theta_22"
+            },
+            {
+              "offset": "18",
+              "width": "14",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
         }
       ],
       "constraints": [
@@ -501,6 +1494,223 @@
           "register_option": "0",
           "offset": "56",
           "argName": "goer_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "64",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "72",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "80",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "88",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "96",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "104",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "112",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "120",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "128",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "136",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "144",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "152",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "160",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "168",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "176",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "184",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "192",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "200",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "208",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "216",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "224",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "232",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "240",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "248",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "256",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "264",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "272",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "280",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "288",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "296",
+          "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "304",
+          "argName": "debl_cfg"
         }
       ]
     },
@@ -509,7 +1719,7 @@
       "busTypeName": "clock",
       "mode": "slave",
       "busParams": {
-        "ASSOCIATED_BUSIF": "s_axi_CTRL_BUS:in_r:b_in:tau_in:out_r:norm",
+        "ASSOCIATED_BUSIF": "s_axi_CTRL_BUS:in_r:b_in:tau_in:lap_in:out_r:norm",
         "ASSOCIATED_RESET": "ap_rst_n"
       },
       "portMap": {"ap_clk": "CLK"},
@@ -583,6 +1793,26 @@
           "argName": "tau_in"
         }]
     },
+    "lap_in": {
+      "type": "axi4stream",
+      "busTypeName": "axis",
+      "mode": "slave",
+      "direction": "in",
+      "dataWidth": "16",
+      "portPrefix": "lap_in_",
+      "ports": [
+        "lap_in_TDATA",
+        "lap_in_TREADY",
+        "lap_in_TVALID"
+      ],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "axis",
+          "register_option": "1",
+          "register_mode": "both",
+          "argName": "lap_in"
+        }]
+    },
     "out_r": {
       "type": "axi4stream",
       "busTypeName": "axis",
@@ -635,7 +1865,7 @@
     },
     "s_axi_CTRL_BUS_AWADDR": {
       "dir": "in",
-      "width": "6"
+      "width": "9"
     },
     "s_axi_CTRL_BUS_WVALID": {
       "dir": "in",
@@ -663,7 +1893,7 @@
     },
     "s_axi_CTRL_BUS_ARADDR": {
       "dir": "in",
-      "width": "6"
+      "width": "9"
     },
     "s_axi_CTRL_BUS_RVALID": {
       "dir": "out",
@@ -737,6 +1967,18 @@
       "dir": "out",
       "width": "1"
     },
+    "lap_in_TDATA": {
+      "dir": "in",
+      "width": "16"
+    },
+    "lap_in_TVALID": {
+      "dir": "in",
+      "width": "1"
+    },
+    "lap_in_TREADY": {
+      "dir": "out",
+      "width": "1"
+    },
     "out_r_TDATA": {
       "dir": "out",
       "width": "64"
@@ -765,26 +2007,42 @@
   "ModuleInfo": {
     "Hierarchy": {
       "ModuleName": "deepwaveaccel",
-      "BindInstances": "s_goertzel_U s_xcor_U CTRL_BUS_s_axi_U",
+      "BindInstances": "debl_cfg_n_layers_c_U debl_cfg_K_c_U debl_cfg_lap_off_0_c_U debl_cfg_lap_off_1_c_U debl_cfg_lap_off_2_c_U debl_cfg_lap_off_3_c_U debl_cfg_lap_off_4_c_U debl_cfg_lap_off_5_c_U debl_cfg_theta_0_c_U debl_cfg_theta_1_c_U debl_cfg_theta_2_c_U debl_cfg_theta_3_c_U debl_cfg_theta_4_c_U debl_cfg_theta_5_c_U debl_cfg_theta_6_c_U debl_cfg_theta_7_c_U debl_cfg_theta_8_c_U debl_cfg_theta_9_c_U debl_cfg_theta_10_c_U debl_cfg_theta_11_c_U debl_cfg_theta_12_c_U debl_cfg_theta_13_c_U debl_cfg_theta_14_c_U debl_cfg_theta_15_c_U debl_cfg_theta_16_c_U debl_cfg_theta_17_c_U debl_cfg_theta_18_c_U debl_cfg_theta_19_c_U debl_cfg_theta_20_c_U debl_cfg_theta_21_c_U debl_cfg_theta_22_c_U s_goertzel_U s_xcor_U s_bp_U CTRL_BUS_s_axi_U",
       "Instances": [
         {
           "ModuleName": "goertzel",
           "InstanceName": "goertzel_U0",
-          "BindInstances": "mul_14s_13ns_27_1_1_U1 mac_muladd_18s_18s_30s_34_4_1_U3 mac_muladd_18s_18s_30s_34_4_1_U3 sub_ln70_fu_323_p2 mac_muladd_18s_18s_30s_34_4_1_U4 mac_muladd_18s_18s_30s_34_4_1_U4 sub_ln70_1_fu_350_p2 add_ln75_fu_365_p2 icmp_ln78_fu_370_p2 mac_mulsub_18s_18s_34ns_34_4_1_U5 mac_mulsub_18s_18s_34ns_34_4_1_U5 mul_18s_18s_34_1_1_U2 mac_mulsub_18s_18s_34ns_34_4_1_U6 mac_mulsub_18s_18s_34ns_34_4_1_U6 add_ln83_fu_480_p2 mac_muladd_18s_18s_34ns_34_4_1_U7 mac_muladd_18s_18s_34ns_34_4_1_U7 add_ln91_fu_416_p2 icmp_ln92_fu_422_p2 select_ln92_fu_428_p3 hann_window_U"
+          "BindInstances": "mul_14s_13ns_27_1_1_U63 mac_muladd_18s_18s_30s_34_4_1_U65 mac_muladd_18s_18s_30s_34_4_1_U65 sub_ln69_fu_323_p2 mac_muladd_18s_18s_30s_34_4_1_U66 mac_muladd_18s_18s_30s_34_4_1_U66 sub_ln69_1_fu_350_p2 add_ln74_fu_365_p2 icmp_ln77_fu_370_p2 mac_mulsub_18s_18s_34ns_34_4_1_U67 mac_mulsub_18s_18s_34ns_34_4_1_U67 mul_18s_18s_34_1_1_U64 mac_mulsub_18s_18s_34ns_34_4_1_U68 mac_mulsub_18s_18s_34ns_34_4_1_U68 add_ln82_fu_480_p2 mac_muladd_18s_18s_34ns_34_4_1_U69 mac_muladd_18s_18s_34ns_34_4_1_U69 add_ln90_fu_416_p2 icmp_ln91_fu_422_p2 select_ln91_fu_428_p3 hann_window_U"
         },
         {
           "ModuleName": "crosscor",
           "InstanceName": "crosscor_U0",
-          "BindInstances": "icmp_ln118_fu_3063_p2 sparsemux_2257_11_6_1_1_U29 sparsemux_2257_11_6_1_1_U30 mul_36s_24ns_54_1_1_U27 mul_36s_24ns_54_1_1_U28 first_fu_12619_p2 last_fu_12624_p2 add_ln130_fu_12157_p2 mul_12s_7ns_12_1_1_U31 add_ln93_fu_12388_p2 add_ln94_fu_12184_p2 icmp_ln96_fu_12190_p2 mul_23ns_14ns_36_1_1_U32 icmp_ln103_fu_12430_p2 corrected_1_fu_12629_p3 udiv_37s_23ns_24_41_1_U33 grp_fu_2971_p2 sub_ln699_fu_12456_p2 mul_31s_31s_62_1_1_U23 mul_32s_31s_61_1_1_U25 sub_ln68_fu_12514_p2 mul_31s_31s_62_1_1_U24 mul_32s_31s_61_1_1_U26 add_ln68_fu_12524_p2 add_ln69_fu_12645_p2 add_ln69_1_fu_12651_p2 grp_fu_2975_p2 grp_fu_2980_p2 grp_fu_2986_p2 select_ln74_fu_12550_p3 grp_fu_2991_p3 grp_fu_2998_p2 add_ln77_fu_12270_p2 icmp_ln78_fu_12282_p2 grp_fu_2971_p2 grp_fu_2975_p2 grp_fu_2980_p2 grp_fu_2986_p2 select_ln146_fu_12568_p3 grp_fu_2991_p3 grp_fu_2998_p2 add_ln52_fu_12356_p2 icmp_ln53_fu_12362_p2 u_M_real_U u_M_imag_U R_M_real_U R_M_imag_U"
+          "BindInstances": "icmp_ln118_fu_3063_p2 sparsemux_2257_11_6_1_1_U91 sparsemux_2257_11_6_1_1_U92 mul_36s_24ns_54_1_1_U89 mul_36s_24ns_54_1_1_U90 first_fu_12619_p2 last_fu_12624_p2 add_ln130_fu_12157_p2 mul_12s_7ns_12_1_1_U93 add_ln93_fu_12388_p2 add_ln94_fu_12184_p2 icmp_ln96_fu_12190_p2 mul_23ns_14ns_36_1_1_U94 icmp_ln103_fu_12430_p2 corrected_1_fu_12629_p3 udiv_37s_23ns_24_41_1_U95 grp_fu_2971_p2 sub_ln699_fu_12456_p2 mul_31s_31s_62_1_1_U85 mul_32s_31s_61_1_1_U87 sub_ln68_fu_12514_p2 mul_31s_31s_62_1_1_U86 mul_32s_31s_61_1_1_U88 add_ln68_fu_12524_p2 add_ln69_fu_12645_p2 add_ln69_2_fu_12651_p2 grp_fu_2975_p2 grp_fu_2980_p2 grp_fu_2986_p2 select_ln74_fu_12550_p3 grp_fu_2991_p3 grp_fu_2998_p2 add_ln77_fu_12270_p2 icmp_ln78_fu_12282_p2 grp_fu_2971_p2 grp_fu_2975_p2 grp_fu_2980_p2 grp_fu_2986_p2 select_ln146_fu_12568_p3 grp_fu_2991_p3 grp_fu_2998_p2 add_ln52_fu_12356_p2 icmp_ln53_fu_12362_p2 u_M_real_U u_M_imag_U R_M_real_U R_M_imag_U"
         },
         {
           "ModuleName": "backprojection",
           "InstanceName": "backprojection_U0",
-          "BindInstances": "sub_ln101_fu_937_p2 partselect_14ns_672ns_10ns_14_1_1_U55 partselect_14ns_672ns_10ns_14_1_1_U56 sub_ln102_fu_979_p2 partselect_14ns_672ns_10ns_14_1_1_U57 partselect_14ns_672ns_10ns_14_1_1_U58 mul_24s_22s_46_1_1_U50 mul_24s_22s_46_1_1_U51 sub_ln115_fu_1121_p2 mul_24s_22s_46_1_1_U52 mul_24s_22s_46_1_1_U50 add_ln116_fu_1142_p2 mul_22s_22s_44_1_1_U48 mul_23s_22s_45_1_1_U49 add_ln119_fu_1241_p2 add_ln122_fu_1268_p2 add_ln125_fu_664_p2 icmp_ln126_fu_670_p2 grp_fu_624_p2 icmp_ln83_fu_696_p2 srem_32s_7ns_9_36_1_U54 mul_32s_34ns_65_1_1_U53 sub_ln67_fu_851_p2 select_ln68_fu_877_p3 sub_ln68_fu_884_p2 select_ln67_fu_890_p3 sub_ln68_1_fu_1077_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U59 partset_672ns_672ns_14ns_10ns_672_1_1_U60 add_ln69_fu_732_p2 icmp_ln70_fu_738_p2 y_sub_fu_1195_p2 first_fu_907_p2 last_fu_912_p2 add_ln143_fu_750_p2 icmp_ln146_fu_756_p2 select_ln146_fu_762_p3 storemerge_cast_i_cast_cast_fu_770_p3 grp_fu_624_p2 icmp_ln55_fu_788_p2 tau_mem_U backprojection_stream_stream_stream_stream_AxisWordImg_0_bvec_M_real_U backprojection_stream_stream_stream_stream_AxisWordImg_0_bvec_M_imag_U Sigma_up_M_real_U Sigma_up_M_imag_U j_rom_U k_rom_U"
+          "BindInstances": "sparsemux_95_6_14_1_1_U116 sparsemux_95_6_14_1_1_U117 sparsemux_95_6_14_1_1_U118 sparsemux_95_6_14_1_1_U119 mul_24s_22s_46_1_1_U112 mul_24s_22s_46_1_1_U113 sub_ln143_fu_2778_p2 mul_24s_22s_46_1_1_U114 mul_24s_22s_46_1_1_U115 add_ln144_fu_2802_p2 mul_22s_22s_44_1_1_U110 mul_23s_22s_45_1_1_U111 add_ln147_fu_3466_p2 add_ln150_fu_3494_p2 add_ln153_fu_1054_p2 icmp_ln154_fu_1061_p2 sub_ln111_fu_1525_p2 partselect_14ns_672ns_10ns_14_1_1_U120 partselect_14ns_672ns_10ns_14_1_1_U121 grp_fu_1015_p2 grp_fu_1015_p2 icmp_ln100_fu_1293_p2 sub_ln80_fu_1343_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U122 partset_672ns_672ns_14ns_10ns_672_1_1_U123 add_ln83_fu_1361_p2 icmp_ln84_fu_1367_p2 add_ln84_fu_1374_p2 select_ln84_fu_1380_p3 select_ln84_1_fu_1389_p3 icmp_ln86_fu_1398_p2 y_sub_fu_3523_p2 first_fu_1540_p2 last_fu_1545_p2 add_ln172_fu_1422_p2 icmp_ln175_fu_1428_p2 select_ln175_fu_1434_p3 storemerge_cast_i_cast_cast_fu_1443_p3 grp_fu_1015_p2 icmp_ln69_fu_1461_p2 tau_mem_U backprojection_stream_stream_stream_stream_AxisWordImg_0_bvec_M_real_U backprojection_stream_stream_stream_stream_AxisWordImg_0_bvec_M_imag_U Sigma_up_M_real_U Sigma_up_M_imag_U j_rom_U k_rom_U"
+        },
+        {
+          "ModuleName": "entry_proc",
+          "InstanceName": "entry_proc_U0"
+        },
+        {
+          "ModuleName": "deblur",
+          "InstanceName": "deblur_U0",
+          "BindInstances": "add_ln202_fu_1388_p2 t_fu_1412_p3 grp_fu_1219_p2 grp_fu_1225_p2 add_ln207_fu_1429_p2 icmp_ln208_fu_1444_p2 srem_32ns_3ns_3_36_seq_1_U145 sparsemux_13_3_12_1_1_U146 il_fu_1514_p2 iu_fu_1520_p2 sparsemux_13_3_15_1_1_U144 grp_fu_1262_p2 grp_fu_1267_p2 sparsemux_7_2_18_1_1_U147 mul_24s_21ns_45_1_1_U142 sub_ln42_fu_1631_p2 acc_2_fu_1647_p3 icmp_ln43_fu_1654_p2 sparsemux_13_3_15_1_1_U144 sparsemux_7_2_18_1_1_U148 mul_24s_21ns_45_1_1_U142 sub_ln44_fu_1727_p2 acc_4_fu_1743_p3 icmp_ln170_fu_1755_p2 grp_fu_1272_p2 sparsemux_7_2_18_1_1_U149 icmp_ln175_fu_1794_p2 z_next_val_fu_1816_p2 z_next_val_1_fu_1822_p3 sparsemux_47_5_18_1_1_U150 mul_24s_24s_46_1_1_U143 add_ln186_fu_1954_p2 grp_fu_1219_p2 grp_fu_1225_p2 add_ln190_fu_1970_p2 icmp_ln191_fu_1984_p2 select_ln191_fu_1989_p3 grp_fu_1262_p2 grp_fu_1267_p2 sparsemux_7_2_18_1_1_U151 mul_24s_21ns_45_1_1_U142 mul_24s_24s_46_1_1_U143 grp_fu_1219_p2 grp_fu_1225_p2 grp_fu_1219_p2 grp_fu_1225_p2 grp_fu_1219_p2 grp_fu_1225_p2 grp_fu_1272_p2 select_ln124_fu_2198_p3 select_ln124_1_fu_2206_p3 icmp_ln125_fu_2213_p2 ow_last_fu_2229_p2 ow_user_fu_2234_p2 grp_fu_1219_p2 grp_fu_1225_p2 deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_5_U deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_4_U deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_3_U deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_2_U deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_1_U deblur_stream_stream_stream_AxisWordImg_0_deblur_config_lap_rest_U bp_buf_U Z0_U y_acc_U Z1_U Z2_U"
         }
       ]
     },
     "Info": {
+      "entry_proc": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "0",
+        "isCombinational": "0",
+        "isOneStateSeq": "1"
+      },
       "goertzel": {
         "FunctionProtocol": "ap_ctrl_none",
         "isTaskLevelControl": "0",
@@ -806,6 +2064,13 @@
         "isCombinational": "0",
         "isOneStateSeq": "0"
       },
+      "deblur": {
+        "FunctionProtocol": "ap_ctrl_none",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
       "deepwaveaccel": {
         "FunctionProtocol": "ap_ctrl_none",
         "isTaskLevelControl": "0",
@@ -815,6 +2080,38 @@
       }
     },
     "Metrics": {
+      "entry_proc": {
+        "Latency": {
+          "LatencyBest": "0",
+          "LatencyAvg": "0",
+          "LatencyWorst": "0",
+          "PipelineII": "0",
+          "PipelineDepth": "",
+          "PipelineType": "no"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.861"
+        },
+        "Area": {
+          "FF": "3",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "299",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
       "goertzel": {
         "Latency": {
           "LatencyBest": "1",
@@ -883,65 +2180,99 @@
       },
       "backprojection": {
         "Latency": {
-          "LatencyBest": "40",
-          "LatencyAvg": "40",
-          "LatencyWorst": "40",
-          "PipelineII": "2",
-          "PipelineDepth": "41",
+          "LatencyBest": "3",
+          "LatencyAvg": "3",
+          "LatencyWorst": "3",
+          "PipelineII": "1",
+          "PipelineDepth": "4",
           "PipelineType": "yes(flp)"
         },
         "Timing": {
           "Target": "10.00",
           "Uncertainty": "2.70",
-          "Estimate": "6.876"
+          "Estimate": "6.327"
         },
         "Area": {
           "BRAM_18K": "10",
           "AVAIL_BRAM": "288",
           "UTIL_BRAM": "3",
-          "DSP": "14",
+          "DSP": "12",
           "AVAIL_DSP": "1248",
-          "UTIL_DSP": "1",
-          "FF": "6197",
+          "UTIL_DSP": "~0",
+          "FF": "1989",
           "AVAIL_FF": "234240",
-          "UTIL_FF": "2",
-          "LUT": "6761",
+          "UTIL_FF": "~0",
+          "LUT": "5112",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "5",
+          "UTIL_LUT": "4",
           "URAM": "20",
           "AVAIL_URAM": "64",
           "UTIL_URAM": "31"
         }
       },
+      "deblur": {
+        "Latency": {
+          "LatencyBest": "1",
+          "LatencyAvg": "10",
+          "LatencyWorst": "39",
+          "PipelineIIMin": "1",
+          "PipelineIIMax": "39",
+          "PipelineII": "1 ~ 39",
+          "PipelineDepth": "",
+          "PipelineType": "no"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "6.940"
+        },
+        "Area": {
+          "BRAM_18K": "46",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "15",
+          "DSP": "4",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "1420",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "2411",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "2",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
       "deepwaveaccel": {
         "Latency": {
-          "LatencyBest": "90",
-          "LatencyAvg": "90",
-          "LatencyWorst": "90",
+          "LatencyBest": "55",
+          "LatencyAvg": "64",
+          "LatencyWorst": "93",
           "PipelineIIMin": "2",
-          "PipelineIIMax": "7",
-          "PipelineII": "2 ~ 7",
+          "PipelineIIMax": "40",
+          "PipelineII": "2 ~ 40",
           "PipelineDepth": "",
           "PipelineType": "dataflow"
         },
         "Timing": {
           "Target": "10.00",
           "Uncertainty": "2.70",
-          "Estimate": "6.876"
+          "Estimate": "6.940"
         },
         "Area": {
-          "BRAM_18K": "37",
+          "BRAM_18K": "87",
           "AVAIL_BRAM": "288",
-          "UTIL_BRAM": "12",
-          "DSP": "43",
+          "UTIL_BRAM": "30",
+          "DSP": "45",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "3",
-          "FF": "11252",
+          "FF": "12383",
           "AVAIL_FF": "234240",
-          "UTIL_FF": "4",
-          "LUT": "17204",
+          "UTIL_FF": "5",
+          "LUT": "21367",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "14",
+          "UTIL_LUT": "18",
           "URAM": "20",
           "AVAIL_URAM": "64",
           "UTIL_URAM": "31"
@@ -952,7 +2283,7 @@
   "GenerateBdFiles": "0",
   "GenData": {
     "DataVersion": "0.2",
-    "Time": "2025-10-21 21:48:20 +0200",
+    "Time": "2025-10-26 20:56:36 +0100",
     "ToolName": "vitis_hls",
     "ToolVersion": "2025.1"
   }
