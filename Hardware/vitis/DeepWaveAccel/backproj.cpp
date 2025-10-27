@@ -6,14 +6,13 @@
 void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
                     hls::stream<b_t>          &b_stream,
                     hls::stream<tau_t>        &tau_stream,
-                    hls::stream<AxisWordImg>  &img_stream)
+                    hls::stream<img_t>  &img_stream)
 {
     AXIS_IN_OUT(corr_stream);
     AXIS_IN_OUT(b_stream);
     AXIS_IN_OUT(tau_stream);
     AXIS_IN_OUT(img_stream);
     AP_CTRL_NONE;
-#pragma HLS PIPELINE II=1
 
     // ---------------- Persistent storage ----------------
 
@@ -163,9 +162,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
         tau_t tau_val = tau_mem[pix];
         acc_fix_t y_sub = y_acc - (acc_fix_t)tau_val;
 
-        bool first = (pix == 0);
-        bool last  = (pix == IMG_LEN - 1);
-        img_stream.write(AxisWordImg((img_t)y_sub, last, first));
+        img_stream.write((img_t)y_sub);
 
         // next pixel
         ++pix;

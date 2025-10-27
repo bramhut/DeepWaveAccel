@@ -49,9 +49,9 @@ static inline acc_t lap_pixel_seq(
 // Top-level Deblur kernel with 3×IMG_LEN rotating buffers
 // -----------------------------------------------------------------------------
 void deblur(
-    hls::stream<AxisWordImg> &bp_stream,
+    hls::stream<img_t> &bp_stream,
     hls::stream<lap_t>       &lap_stream,
-    hls::stream<AxisWordImg> &img_stream,
+    hls::stream<img_axis_t> &img_stream,
     deblur_config            &cfg)
 {
     AXIS_IN_OUT(bp_stream);
@@ -127,8 +127,7 @@ void deblur(
 
     case LOAD_BP: {
         if (!bp_stream.empty()) {
-            AxisWordImg w = bp_stream.read();
-            bp_buf[i] = w.data;
+            bp_buf[i] = bp_stream.read();
             Z0[i] = (img_t)0;
             y_acc[i] = (acc_t)0;
             ++i;
@@ -212,11 +211,7 @@ void deblur(
     }
 
     case OUTPUT: {
-        AxisWordImg ow;
-        ow.data = Z0[i];
-        ow.last = (i == IMG_LEN-1);
-        ow.user = (i == 0);
-        img_stream.write(ow);
+        img_stream.write(Z0[i]);
         ++i;
         if (i == IMG_LEN) { i = 0; st = LOAD_BP; }
         break;

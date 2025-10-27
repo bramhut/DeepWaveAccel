@@ -32,12 +32,12 @@ port (
     s_axi_CTRL_BUS_BRESP : OUT STD_LOGIC_VECTOR (1 downto 0);
     ap_clk : IN STD_LOGIC;
     ap_rst_n : IN STD_LOGIC;
-    in_r_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
+    in_r_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
     b_in_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
     tau_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
     lap_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
-    out_r_TDATA : OUT STD_LOGIC_VECTOR (63 downto 0);
-    norm_TDATA : OUT STD_LOGIC_VECTOR (23 downto 0);
+    out_r_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
+    norm_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
     in_r_TVALID : IN STD_LOGIC;
     in_r_TREADY : OUT STD_LOGIC;
     norm_TVALID : OUT STD_LOGIC;
@@ -56,7 +56,7 @@ end;
 architecture behav of deepwaveaccel is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.103667,HLS_SYN_LAT=39,HLS_SYN_TPT=33,HLS_SYN_MEM=73,HLS_SYN_DSP=0,HLS_SYN_FF=9277,HLS_SYN_LUT=19737,HLS_VERSION=2025_1}";
+    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=8.177042,HLS_SYN_LAT=40,HLS_SYN_TPT=34,HLS_SYN_MEM=66,HLS_SYN_DSP=0,HLS_SYN_FF=9124,HLS_SYN_LUT=19487,HLS_VERSION=2025_1}";
     constant C_S_AXI_DATA_WIDTH : INTEGER := 32;
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
@@ -176,7 +176,7 @@ architecture behav of deepwaveaccel is
     signal goertzel_U0_start_out : STD_LOGIC;
     signal goertzel_U0_start_write : STD_LOGIC;
     signal goertzel_U0_in_r_TREADY : STD_LOGIC;
-    signal goertzel_U0_s_goertzel_din : STD_LOGIC_VECTOR (95 downto 0);
+    signal goertzel_U0_s_goertzel_din : STD_LOGIC_VECTOR (63 downto 0);
     signal goertzel_U0_s_goertzel_write : STD_LOGIC;
     signal crosscor_U0_ap_start : STD_LOGIC;
     signal crosscor_U0_ap_done : STD_LOGIC;
@@ -185,21 +185,21 @@ architecture behav of deepwaveaccel is
     signal crosscor_U0_ap_ready : STD_LOGIC;
     signal crosscor_U0_start_out : STD_LOGIC;
     signal crosscor_U0_start_write : STD_LOGIC;
-    signal crosscor_U0_norm_TDATA : STD_LOGIC_VECTOR (23 downto 0);
+    signal crosscor_U0_norm_TDATA : STD_LOGIC_VECTOR (31 downto 0);
     signal crosscor_U0_norm_TVALID : STD_LOGIC;
     signal crosscor_U0_s_goertzel_read : STD_LOGIC;
-    signal crosscor_U0_s_xcor_din : STD_LOGIC_VECTOR (95 downto 0);
+    signal crosscor_U0_s_xcor_din : STD_LOGIC_VECTOR (63 downto 0);
     signal crosscor_U0_s_xcor_write : STD_LOGIC;
     signal backprojection_U0_ap_start : STD_LOGIC;
     signal backprojection_U0_ap_done : STD_LOGIC;
     signal backprojection_U0_ap_continue : STD_LOGIC;
     signal backprojection_U0_ap_idle : STD_LOGIC;
     signal backprojection_U0_ap_ready : STD_LOGIC;
-    signal backprojection_U0_s_xcor_read : STD_LOGIC;
-    signal backprojection_U0_s_bp_din : STD_LOGIC_VECTOR (63 downto 0);
-    signal backprojection_U0_s_bp_write : STD_LOGIC;
     signal backprojection_U0_b_in_TREADY : STD_LOGIC;
     signal backprojection_U0_tau_in_TREADY : STD_LOGIC;
+    signal backprojection_U0_s_xcor_read : STD_LOGIC;
+    signal backprojection_U0_s_bp_din : STD_LOGIC_VECTOR (17 downto 0);
+    signal backprojection_U0_s_bp_write : STD_LOGIC;
     signal deblur_U0_ap_start : STD_LOGIC;
     signal deblur_U0_ap_done : STD_LOGIC;
     signal deblur_U0_ap_continue : STD_LOGIC;
@@ -237,7 +237,7 @@ architecture behav of deepwaveaccel is
     signal deblur_U0_debl_cfg_theta_21_read : STD_LOGIC;
     signal deblur_U0_debl_cfg_theta_22_read : STD_LOGIC;
     signal deblur_U0_lap_in_TREADY : STD_LOGIC;
-    signal deblur_U0_out_r_TDATA : STD_LOGIC_VECTOR (63 downto 0);
+    signal deblur_U0_out_r_TDATA : STD_LOGIC_VECTOR (31 downto 0);
     signal deblur_U0_out_r_TVALID : STD_LOGIC;
     signal deblur_U0_s_bp_read : STD_LOGIC;
     signal debl_cfg_n_layers_c_full_n : STD_LOGIC;
@@ -396,17 +396,17 @@ architecture behav of deepwaveaccel is
     signal debl_cfg_theta_22_c_num_data_valid : STD_LOGIC_VECTOR (3 downto 0);
     signal debl_cfg_theta_22_c_fifo_cap : STD_LOGIC_VECTOR (3 downto 0);
     signal s_goertzel_full_n : STD_LOGIC;
-    signal s_goertzel_dout : STD_LOGIC_VECTOR (95 downto 0);
+    signal s_goertzel_dout : STD_LOGIC_VECTOR (63 downto 0);
     signal s_goertzel_empty_n : STD_LOGIC;
     signal s_goertzel_num_data_valid : STD_LOGIC_VECTOR (6 downto 0);
     signal s_goertzel_fifo_cap : STD_LOGIC_VECTOR (6 downto 0);
     signal s_xcor_full_n : STD_LOGIC;
-    signal s_xcor_dout : STD_LOGIC_VECTOR (95 downto 0);
+    signal s_xcor_dout : STD_LOGIC_VECTOR (63 downto 0);
     signal s_xcor_empty_n : STD_LOGIC;
     signal s_xcor_num_data_valid : STD_LOGIC_VECTOR (8 downto 0);
     signal s_xcor_fifo_cap : STD_LOGIC_VECTOR (8 downto 0);
     signal s_bp_full_n : STD_LOGIC;
-    signal s_bp_dout : STD_LOGIC_VECTOR (63 downto 0);
+    signal s_bp_dout : STD_LOGIC_VECTOR (17 downto 0);
     signal s_bp_empty_n : STD_LOGIC;
     signal s_bp_num_data_valid : STD_LOGIC_VECTOR (9 downto 0);
     signal s_bp_fifo_cap : STD_LOGIC_VECTOR (9 downto 0);
@@ -642,10 +642,10 @@ architecture behav of deepwaveaccel is
         goer_cfg_COS_OMEGA2_1 : IN STD_LOGIC_VECTOR (17 downto 0);
         goer_cfg_SIN_OMEGA_0 : IN STD_LOGIC_VECTOR (17 downto 0);
         goer_cfg_SIN_OMEGA_1 : IN STD_LOGIC_VECTOR (17 downto 0);
-        in_r_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
+        in_r_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
         in_r_TVALID : IN STD_LOGIC;
         in_r_TREADY : OUT STD_LOGIC;
-        s_goertzel_din : OUT STD_LOGIC_VECTOR (95 downto 0);
+        s_goertzel_din : OUT STD_LOGIC_VECTOR (63 downto 0);
         s_goertzel_full_n : IN STD_LOGIC;
         s_goertzel_write : OUT STD_LOGIC;
         s_goertzel_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
@@ -665,15 +665,15 @@ architecture behav of deepwaveaccel is
         ap_ready : OUT STD_LOGIC;
         start_out : OUT STD_LOGIC;
         start_write : OUT STD_LOGIC;
-        norm_TDATA : OUT STD_LOGIC_VECTOR (23 downto 0);
+        norm_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
         norm_TVALID : OUT STD_LOGIC;
         norm_TREADY : IN STD_LOGIC;
-        s_goertzel_dout : IN STD_LOGIC_VECTOR (95 downto 0);
+        s_goertzel_dout : IN STD_LOGIC_VECTOR (63 downto 0);
         s_goertzel_empty_n : IN STD_LOGIC;
         s_goertzel_read : OUT STD_LOGIC;
         s_goertzel_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
         s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_xcor_din : OUT STD_LOGIC_VECTOR (95 downto 0);
+        s_xcor_din : OUT STD_LOGIC_VECTOR (63 downto 0);
         s_xcor_full_n : IN STD_LOGIC;
         s_xcor_write : OUT STD_LOGIC;
         s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (8 downto 0);
@@ -690,22 +690,22 @@ architecture behav of deepwaveaccel is
         ap_continue : IN STD_LOGIC;
         ap_idle : OUT STD_LOGIC;
         ap_ready : OUT STD_LOGIC;
-        s_xcor_dout : IN STD_LOGIC_VECTOR (95 downto 0);
+        b_in_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
+        b_in_TVALID : IN STD_LOGIC;
+        b_in_TREADY : OUT STD_LOGIC;
+        tau_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
+        tau_in_TVALID : IN STD_LOGIC;
+        tau_in_TREADY : OUT STD_LOGIC;
+        s_xcor_dout : IN STD_LOGIC_VECTOR (63 downto 0);
         s_xcor_empty_n : IN STD_LOGIC;
         s_xcor_read : OUT STD_LOGIC;
         s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (8 downto 0);
         s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (8 downto 0);
-        b_in_TVALID : IN STD_LOGIC;
-        tau_in_TVALID : IN STD_LOGIC;
-        s_bp_din : OUT STD_LOGIC_VECTOR (63 downto 0);
+        s_bp_din : OUT STD_LOGIC_VECTOR (17 downto 0);
         s_bp_full_n : IN STD_LOGIC;
         s_bp_write : OUT STD_LOGIC;
         s_bp_num_data_valid : IN STD_LOGIC_VECTOR (9 downto 0);
-        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (9 downto 0);
-        b_in_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
-        b_in_TREADY : OUT STD_LOGIC;
-        tau_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
-        tau_in_TREADY : OUT STD_LOGIC );
+        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (9 downto 0) );
     end component;
 
 
@@ -876,10 +876,10 @@ architecture behav of deepwaveaccel is
         lap_in_TDATA : IN STD_LOGIC_VECTOR (15 downto 0);
         lap_in_TVALID : IN STD_LOGIC;
         lap_in_TREADY : OUT STD_LOGIC;
-        out_r_TDATA : OUT STD_LOGIC_VECTOR (63 downto 0);
+        out_r_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
         out_r_TVALID : OUT STD_LOGIC;
         out_r_TREADY : IN STD_LOGIC;
-        s_bp_dout : IN STD_LOGIC_VECTOR (63 downto 0);
+        s_bp_dout : IN STD_LOGIC_VECTOR (17 downto 0);
         s_bp_empty_n : IN STD_LOGIC;
         s_bp_read : OUT STD_LOGIC;
         s_bp_num_data_valid : IN STD_LOGIC_VECTOR (9 downto 0);
@@ -955,41 +955,7 @@ architecture behav of deepwaveaccel is
     end component;
 
 
-    component deepwaveaccel_fifo_w96_d64_A IS
-    port (
-        clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC;
-        if_read_ce : IN STD_LOGIC;
-        if_write_ce : IN STD_LOGIC;
-        if_din : IN STD_LOGIC_VECTOR (95 downto 0);
-        if_full_n : OUT STD_LOGIC;
-        if_write : IN STD_LOGIC;
-        if_dout : OUT STD_LOGIC_VECTOR (95 downto 0);
-        if_empty_n : OUT STD_LOGIC;
-        if_read : IN STD_LOGIC;
-        if_num_data_valid : OUT STD_LOGIC_VECTOR (6 downto 0);
-        if_fifo_cap : OUT STD_LOGIC_VECTOR (6 downto 0) );
-    end component;
-
-
-    component deepwaveaccel_fifo_w96_d256_A IS
-    port (
-        clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC;
-        if_read_ce : IN STD_LOGIC;
-        if_write_ce : IN STD_LOGIC;
-        if_din : IN STD_LOGIC_VECTOR (95 downto 0);
-        if_full_n : OUT STD_LOGIC;
-        if_write : IN STD_LOGIC;
-        if_dout : OUT STD_LOGIC_VECTOR (95 downto 0);
-        if_empty_n : OUT STD_LOGIC;
-        if_read : IN STD_LOGIC;
-        if_num_data_valid : OUT STD_LOGIC_VECTOR (8 downto 0);
-        if_fifo_cap : OUT STD_LOGIC_VECTOR (8 downto 0) );
-    end component;
-
-
-    component deepwaveaccel_fifo_w64_d512_A IS
+    component deepwaveaccel_fifo_w64_d64_A IS
     port (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
@@ -999,6 +965,40 @@ architecture behav of deepwaveaccel is
         if_full_n : OUT STD_LOGIC;
         if_write : IN STD_LOGIC;
         if_dout : OUT STD_LOGIC_VECTOR (63 downto 0);
+        if_empty_n : OUT STD_LOGIC;
+        if_read : IN STD_LOGIC;
+        if_num_data_valid : OUT STD_LOGIC_VECTOR (6 downto 0);
+        if_fifo_cap : OUT STD_LOGIC_VECTOR (6 downto 0) );
+    end component;
+
+
+    component deepwaveaccel_fifo_w64_d256_A IS
+    port (
+        clk : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        if_read_ce : IN STD_LOGIC;
+        if_write_ce : IN STD_LOGIC;
+        if_din : IN STD_LOGIC_VECTOR (63 downto 0);
+        if_full_n : OUT STD_LOGIC;
+        if_write : IN STD_LOGIC;
+        if_dout : OUT STD_LOGIC_VECTOR (63 downto 0);
+        if_empty_n : OUT STD_LOGIC;
+        if_read : IN STD_LOGIC;
+        if_num_data_valid : OUT STD_LOGIC_VECTOR (8 downto 0);
+        if_fifo_cap : OUT STD_LOGIC_VECTOR (8 downto 0) );
+    end component;
+
+
+    component deepwaveaccel_fifo_w18_d512_A IS
+    port (
+        clk : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        if_read_ce : IN STD_LOGIC;
+        if_write_ce : IN STD_LOGIC;
+        if_din : IN STD_LOGIC_VECTOR (17 downto 0);
+        if_full_n : OUT STD_LOGIC;
+        if_write : IN STD_LOGIC;
+        if_dout : OUT STD_LOGIC_VECTOR (17 downto 0);
         if_empty_n : OUT STD_LOGIC;
         if_read : IN STD_LOGIC;
         if_num_data_valid : OUT STD_LOGIC_VECTOR (9 downto 0);
@@ -1442,22 +1442,22 @@ begin
         ap_continue => backprojection_U0_ap_continue,
         ap_idle => backprojection_U0_ap_idle,
         ap_ready => backprojection_U0_ap_ready,
+        b_in_TDATA => b_in_TDATA,
+        b_in_TVALID => b_in_TVALID,
+        b_in_TREADY => backprojection_U0_b_in_TREADY,
+        tau_in_TDATA => tau_in_TDATA,
+        tau_in_TVALID => tau_in_TVALID,
+        tau_in_TREADY => backprojection_U0_tau_in_TREADY,
         s_xcor_dout => s_xcor_dout,
         s_xcor_empty_n => s_xcor_empty_n,
         s_xcor_read => backprojection_U0_s_xcor_read,
         s_xcor_num_data_valid => s_xcor_num_data_valid,
         s_xcor_fifo_cap => s_xcor_fifo_cap,
-        b_in_TVALID => b_in_TVALID,
-        tau_in_TVALID => tau_in_TVALID,
         s_bp_din => backprojection_U0_s_bp_din,
         s_bp_full_n => s_bp_full_n,
         s_bp_write => backprojection_U0_s_bp_write,
         s_bp_num_data_valid => s_bp_num_data_valid,
-        s_bp_fifo_cap => s_bp_fifo_cap,
-        b_in_TDATA => b_in_TDATA,
-        b_in_TREADY => backprojection_U0_b_in_TREADY,
-        tau_in_TDATA => tau_in_TDATA,
-        tau_in_TREADY => backprojection_U0_tau_in_TREADY);
+        s_bp_fifo_cap => s_bp_fifo_cap);
 
     deblur_U0 : component deepwaveaccel_deblur
     port map (
@@ -2100,7 +2100,7 @@ begin
         if_num_data_valid => debl_cfg_theta_22_c_num_data_valid,
         if_fifo_cap => debl_cfg_theta_22_c_fifo_cap);
 
-    s_goertzel_U : component deepwaveaccel_fifo_w96_d64_A
+    s_goertzel_U : component deepwaveaccel_fifo_w64_d64_A
     port map (
         clk => ap_clk,
         reset => ap_rst_n_inv,
@@ -2115,7 +2115,7 @@ begin
         if_num_data_valid => s_goertzel_num_data_valid,
         if_fifo_cap => s_goertzel_fifo_cap);
 
-    s_xcor_U : component deepwaveaccel_fifo_w96_d256_A
+    s_xcor_U : component deepwaveaccel_fifo_w64_d256_A
     port map (
         clk => ap_clk,
         reset => ap_rst_n_inv,
@@ -2130,7 +2130,7 @@ begin
         if_num_data_valid => s_xcor_num_data_valid,
         if_fifo_cap => s_xcor_fifo_cap);
 
-    s_bp_U : component deepwaveaccel_fifo_w64_d512_A
+    s_bp_U : component deepwaveaccel_fifo_w18_d512_A
     port map (
         clk => ap_clk,
         reset => ap_rst_n_inv,

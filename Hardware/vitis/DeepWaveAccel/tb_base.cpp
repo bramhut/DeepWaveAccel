@@ -3,7 +3,7 @@
 #include <fstream>
 
 // Minimal WAV reader for 16-bit PCM, 48 channels
-bool read_wav_16bit(const char* filename, std::vector<int16_t>& samples, int& channels, int& samplerate, int& frames) {
+bool read_wav_16bit(std::string filename, std::vector<int16_t>& samples, int& channels, int& samplerate, int& frames) {
     std::ifstream f(filename, std::ios::binary);
     if (!f) return false;
 

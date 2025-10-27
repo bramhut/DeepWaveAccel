@@ -10,9 +10,9 @@
 // Deblur testbench (cycle-accurate simulation)
 // -------------------------------------------------------------
 int tb_deblur() {
-    hls::stream<AxisWordImg> bp_stream;
+    hls::stream<img_t> bp_stream;
     hls::stream<lap_t>       lap_stream;
-    hls::stream<AxisWordImg> img_stream;
+    hls::stream<img_axis_t> img_stream;
 
     deblur_config cfg;
     cfg.n_layers = 5;
@@ -34,19 +34,13 @@ int tb_deblur() {
     std::getline(lap_in, header); // skip header
 
     double val;
-    bool first = true;
     int d = 0, i = 0;
     while (lap_in >> val) {
-        if (first) {
-            lap_stream.write((lap_t)val); // main diagonal
-            first = false;
-        } else {
-            lap_stream.write((lap_t)val);
-            ++i;
-            if (i == IMG_LEN) {
-                i = 0;
-                ++d;
-            }
+        lap_stream.write((lap_t)val);
+        ++i;
+        if (i == IMG_LEN) {
+            i = 0;
+            ++d;
         }
     }
     lap_in.close();
@@ -121,11 +115,7 @@ int tb_deblur() {
     while (bp_in >> frame) {
         char comma;
         bp_in >> comma >> pixel >> comma >> value;
-        AxisWordImg word;
-        word.data = (img_t)value;
-        word.user = (pixel == 0);
-        word.last = (pixel == IMG_LEN - 1);
-        bp_stream.write(word);
+        bp_stream.write((img_t)value);
         ++count;
     }
     bp_in.close();
@@ -166,8 +156,7 @@ int tb_deblur() {
     // ---------------------------------------------------------
     std::vector<img_t> output;
     while (!img_stream.empty()) {
-        AxisWordImg ow = img_stream.read();
-        output.push_back(ow.data);
+        output.push_back(img_stream.read());
     }
 
     std::cout << "[Deblur] Collected " << output.size()

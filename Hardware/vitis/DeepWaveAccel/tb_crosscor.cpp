@@ -61,9 +61,7 @@ int tb_crosscor() {
     // -------------------------------------------------------------------------
     for (int b = 0; b < N_BATCH; ++b) {
         for (int ch = 0; ch < N_ELEM; ++ch) {
-            bool first = (ch == 0);
-            bool last  = (ch == N_ELEM - 1);
-            in_stream.write(AxisWordDFTc(goertzel_out[ch][b], last, first));
+            in_stream.write(AxisWordDFTc(goertzel_out[ch][b]));
         }
     }
 

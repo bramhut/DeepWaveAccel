@@ -10,7 +10,7 @@
 <Part>xck26-sfvc784-2LV-c</Part>
 <TopModelName>crosscor</TopModelName>
 <TargetClockPeriod>10.00</TargetClockPeriod>
-<ClockUncertainty>2.70</ClockUncertainty>
+<ClockUncertainty>1.50</ClockUncertainty>
 <FlowTarget>vivado</FlowTarget>
 </UserAssignments>
 
@@ -18,24 +18,24 @@
 <PipelineType>no</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>6.751</EstimatedClockPeriod>
+<EstimatedClockPeriod>8.007</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
 <Best-caseLatency>1</Best-caseLatency>
-<Average-caseLatency>32</Average-caseLatency>
-<Worst-caseLatency>42</Worst-caseLatency>
+<Average-caseLatency>33</Average-caseLatency>
+<Worst-caseLatency>44</Worst-caseLatency>
 <Best-caseRealTimeLatency>10.000 ns</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>0.320 us</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>0.420 us</Worst-caseRealTimeLatency>
+<Average-caseRealTimeLatency>0.330 us</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>0.440 us</Worst-caseRealTimeLatency>
 <Interval-min>1</Interval-min>
-<Interval-max>42</Interval-max>
+<Interval-max>44</Interval-max>
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>crosscor.cpp:13</SourceLocation>
+<SourceLocation>crosscor.cpp:12</SourceLocation>
 </SummaryOfViolations>
 </PerformanceEstimates>
 
@@ -43,8 +43,8 @@
 <Resources>
 <BRAM_18K>10</BRAM_18K>
 <DSP>21</DSP>
-<FF>1106</FF>
-<LUT>7955</LUT>
+<FF>1110</FF>
+<LUT>7940</LUT>
 <URAM>0</URAM>
 </Resources>
 <AvailableResources>
@@ -175,7 +175,7 @@
 <IOProtocol>axis</IOProtocol>
 <IOConfig>register, both mode</IOConfig>
 <Dir>out</Dir>
-<Bits>24</Bits>
+<Bits>32</Bits>
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
@@ -208,7 +208,7 @@
 <IOProtocol>ap_fifo</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>96</Bits>
+<Bits>64</Bits>
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
@@ -263,7 +263,7 @@
 <IOProtocol>ap_fifo</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>96</Bits>
+<Bits>64</Bits>
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>

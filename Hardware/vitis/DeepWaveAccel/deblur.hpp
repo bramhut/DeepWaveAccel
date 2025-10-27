@@ -31,8 +31,8 @@ struct deblur_config {
 //                 then ND*IMG_LEN words = off-diagonal lines
 // ---------------------------------------------------------
 void deblur(
-    hls::stream<AxisWordImg> &bp_stream,     // input backprojection image (IMG_LEN)
+    hls::stream<img_t> &bp_stream,     // input backprojection image (IMG_LEN)
     hls::stream<lap_t> &lap_stream,    // Laplacian coeff stream (main, then off-diagonals)
-    hls::stream<AxisWordImg> &img_stream,    // output image (IMG_LEN)
+    hls::stream<img_axis_t> &img_stream,    // output image (IMG_LEN)
     deblur_config            &cfg            // AXI-Lite
 );

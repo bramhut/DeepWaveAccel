@@ -16,7 +16,7 @@ int tb_backproj() {
     hls::stream<AxisWordDFTc> corr_stream;
     hls::stream<b_t>          b_stream;
     hls::stream<tau_t>        tau_stream;
-    hls::stream<AxisWordImg>  img_stream;
+    hls::stream<img_t>  img_stream;
 
     // -------------------------------------------------------------------------
     // Load correlation data (crosscor_sim.csv)
@@ -148,8 +148,7 @@ int tb_backproj() {
     // -------------------------------------------------------------------------
     std::vector<img_t> image_vals;
     while (!img_stream.empty()) {
-        AxisWordImg out = img_stream.read();
-        image_vals.push_back(out.data);
+        image_vals.push_back(img_stream.read());
     }
 
     std::cout << "[Backproj] Collected " << image_vals.size()

@@ -11,50 +11,31 @@ constexpr int N_ELEM  = 48;
 constexpr int IMG_LEN = 2234;
 
 // Fixed-point types (Simulink mapping)
-using sampleIn_t    = ap_fixed<12, 1>;   // sfix12_En11
+using sample_t      = ap_fixed<12, 1>;   // sfix12_En11
 using DFT_t         = ap_fixed<18, 5>;   // sfix18_En13
 using DFTc_t        = complex<DFT_t>;
 using b_real_t      = ap_fixed<14, -2>;            // sfix14_En16
 using b_t           = std::complex<b_real_t>;      // complex steering coefficients
 using tau_t         = ap_fixed<13, -3>;            // sfix13_En16 (per-pixel)
 using img_t         = ap_fixed<18,  2>;            // sfix18_En16 (output pixel)
+using img_axis_t    = ap_fixed<32, 16>;            // 32 bit aligned version of img_t for AXIS
 
-// Axis types
-struct AxisWordSampleIn {
-    sampleIn_t data;
-    ap_uint<1> last;
-    ap_uint<1> user;
-    AxisWordSampleIn() {}
-    AxisWordSampleIn(sampleIn_t d, bool l=false, bool u=false)
-        : data(d), last(l), user(u) {}
-};
 
 struct AxisWordDFTc {
     DFT_t re, im;
-    ap_uint<1> last;
-    ap_uint<1> user;
     AxisWordDFTc() {}
-    AxisWordDFTc(DFT_t r, DFT_t i, bool l=false, bool u=false)
-        : re(r), im(i), last(l), user(u) {}
-    AxisWordDFTc(DFTc_t d, bool l=false, bool u=false) 
-        : re(d.real()), im(d.imag()), last(l), user(u) {}
+    AxisWordDFTc(DFT_t r, DFT_t i)
+        : re(r), im(i) {}
+    AxisWordDFTc(DFTc_t d) 
+        : re(d.real()), im(d.imag()) {}
 };
-
-// Real image AXIS word (payload is img_t)
-struct AxisWordImg {
-    img_t  data;
-    ap_uint<1> last;
-    ap_uint<1> user;
-    AxisWordImg() {}
-    AxisWordImg(img_t d, bool l=false, bool u=false) : data(d), last(l), user(u) {}
-};
-
 // ---- Stringizing helpers ----
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
 #define OUTPUT_DIR "../../../../output"
 #define PARAM_DIR  "../../../../parameters"
+#define WAVE_DIR  "../../../../../../../Simulation/FRIDA"
 
 // ---- Interface macros ----
 #define AXIS_IN_OUT(NAME) \

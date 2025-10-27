@@ -10,7 +10,7 @@
 <Part>xck26-sfvc784-2LV-c</Part>
 <TopModelName>entry_proc</TopModelName>
 <TargetClockPeriod>10.00</TargetClockPeriod>
-<ClockUncertainty>2.70</ClockUncertainty>
+<ClockUncertainty>1.50</ClockUncertainty>
 <FlowTarget>vivado</FlowTarget>
 </UserAssignments>
 

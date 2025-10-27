@@ -1,6 +1,5 @@
 #include "crosscor.hpp"
 #include "pair_rom_data.hpp"
-#include <hls_math.h>   // for hls::recip if you later want to use it
 #include <cmath>
 #include <iostream>
 
@@ -128,9 +127,7 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
             DFT_t out_re = (DFT_t)(v.real() * scale);
             DFT_t out_im = (DFT_t)(v.imag() * scale);
 
-            bool first = (pair_idx == 0);
-            bool last  = (pair_idx == NPAIR - 1);
-            out_stream.write(AxisWordDFTc(out_re, out_im, last, first));
+            out_stream.write(AxisWordDFTc(out_re, out_im));
 
             pair_idx++;
             if (pair_idx == NPAIR) {

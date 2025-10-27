@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.103667,HLS_SYN_LAT=39,HLS_SYN_TPT=33,HLS_SYN_MEM=73,HLS_SYN_DSP=0,HLS_SYN_FF=9277,HLS_SYN_LUT=19737,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=8.177042,HLS_SYN_LAT=40,HLS_SYN_TPT=34,HLS_SYN_MEM=66,HLS_SYN_DSP=0,HLS_SYN_FF=9124,HLS_SYN_LUT=19487,HLS_VERSION=2025_1}" *)
 
 module deepwaveaccel (
         s_axi_CTRL_BUS_AWVALID,
@@ -74,12 +74,12 @@ input   s_axi_CTRL_BUS_BREADY;
 output  [1:0] s_axi_CTRL_BUS_BRESP;
 input   ap_clk;
 input   ap_rst_n;
-input  [31:0] in_r_TDATA;
+input  [15:0] in_r_TDATA;
 input  [31:0] b_in_TDATA;
 input  [15:0] tau_in_TDATA;
 input  [15:0] lap_in_TDATA;
-output  [63:0] out_r_TDATA;
-output  [23:0] norm_TDATA;
+output  [31:0] out_r_TDATA;
+output  [31:0] norm_TDATA;
 input   in_r_TVALID;
 output   in_r_TREADY;
 output   norm_TVALID;
@@ -208,7 +208,7 @@ wire    goertzel_U0_ap_ready;
 wire    goertzel_U0_start_out;
 wire    goertzel_U0_start_write;
 wire    goertzel_U0_in_r_TREADY;
-wire   [95:0] goertzel_U0_s_goertzel_din;
+wire   [63:0] goertzel_U0_s_goertzel_din;
 wire    goertzel_U0_s_goertzel_write;
 wire    crosscor_U0_ap_start;
 wire    crosscor_U0_ap_done;
@@ -217,21 +217,21 @@ wire    crosscor_U0_ap_idle;
 wire    crosscor_U0_ap_ready;
 wire    crosscor_U0_start_out;
 wire    crosscor_U0_start_write;
-wire   [23:0] crosscor_U0_norm_TDATA;
+wire   [31:0] crosscor_U0_norm_TDATA;
 wire    crosscor_U0_norm_TVALID;
 wire    crosscor_U0_s_goertzel_read;
-wire   [95:0] crosscor_U0_s_xcor_din;
+wire   [63:0] crosscor_U0_s_xcor_din;
 wire    crosscor_U0_s_xcor_write;
 wire    backprojection_U0_ap_start;
 wire    backprojection_U0_ap_done;
 wire    backprojection_U0_ap_continue;
 wire    backprojection_U0_ap_idle;
 wire    backprojection_U0_ap_ready;
-wire    backprojection_U0_s_xcor_read;
-wire   [63:0] backprojection_U0_s_bp_din;
-wire    backprojection_U0_s_bp_write;
 wire    backprojection_U0_b_in_TREADY;
 wire    backprojection_U0_tau_in_TREADY;
+wire    backprojection_U0_s_xcor_read;
+wire   [17:0] backprojection_U0_s_bp_din;
+wire    backprojection_U0_s_bp_write;
 wire    deblur_U0_ap_start;
 wire    deblur_U0_ap_done;
 wire    deblur_U0_ap_continue;
@@ -269,7 +269,7 @@ wire    deblur_U0_debl_cfg_theta_20_read;
 wire    deblur_U0_debl_cfg_theta_21_read;
 wire    deblur_U0_debl_cfg_theta_22_read;
 wire    deblur_U0_lap_in_TREADY;
-wire   [63:0] deblur_U0_out_r_TDATA;
+wire   [31:0] deblur_U0_out_r_TDATA;
 wire    deblur_U0_out_r_TVALID;
 wire    deblur_U0_s_bp_read;
 wire    debl_cfg_n_layers_c_full_n;
@@ -428,17 +428,17 @@ wire    debl_cfg_theta_22_c_empty_n;
 wire   [3:0] debl_cfg_theta_22_c_num_data_valid;
 wire   [3:0] debl_cfg_theta_22_c_fifo_cap;
 wire    s_goertzel_full_n;
-wire   [95:0] s_goertzel_dout;
+wire   [63:0] s_goertzel_dout;
 wire    s_goertzel_empty_n;
 wire   [6:0] s_goertzel_num_data_valid;
 wire   [6:0] s_goertzel_fifo_cap;
 wire    s_xcor_full_n;
-wire   [95:0] s_xcor_dout;
+wire   [63:0] s_xcor_dout;
 wire    s_xcor_empty_n;
 wire   [8:0] s_xcor_num_data_valid;
 wire   [8:0] s_xcor_fifo_cap;
 wire    s_bp_full_n;
-wire   [63:0] s_bp_dout;
+wire   [17:0] s_bp_dout;
 wire    s_bp_empty_n;
 wire   [9:0] s_bp_num_data_valid;
 wire   [9:0] s_bp_fifo_cap;
@@ -778,22 +778,22 @@ deepwaveaccel_backprojection backprojection_U0(
     .ap_continue(backprojection_U0_ap_continue),
     .ap_idle(backprojection_U0_ap_idle),
     .ap_ready(backprojection_U0_ap_ready),
+    .b_in_TDATA(b_in_TDATA),
+    .b_in_TVALID(b_in_TVALID),
+    .b_in_TREADY(backprojection_U0_b_in_TREADY),
+    .tau_in_TDATA(tau_in_TDATA),
+    .tau_in_TVALID(tau_in_TVALID),
+    .tau_in_TREADY(backprojection_U0_tau_in_TREADY),
     .s_xcor_dout(s_xcor_dout),
     .s_xcor_empty_n(s_xcor_empty_n),
     .s_xcor_read(backprojection_U0_s_xcor_read),
     .s_xcor_num_data_valid(s_xcor_num_data_valid),
     .s_xcor_fifo_cap(s_xcor_fifo_cap),
-    .b_in_TVALID(b_in_TVALID),
-    .tau_in_TVALID(tau_in_TVALID),
     .s_bp_din(backprojection_U0_s_bp_din),
     .s_bp_full_n(s_bp_full_n),
     .s_bp_write(backprojection_U0_s_bp_write),
     .s_bp_num_data_valid(s_bp_num_data_valid),
-    .s_bp_fifo_cap(s_bp_fifo_cap),
-    .b_in_TDATA(b_in_TDATA),
-    .b_in_TREADY(backprojection_U0_b_in_TREADY),
-    .tau_in_TDATA(tau_in_TDATA),
-    .tau_in_TREADY(backprojection_U0_tau_in_TREADY)
+    .s_bp_fifo_cap(s_bp_fifo_cap)
 );
 
 deepwaveaccel_deblur deblur_U0(
@@ -1437,7 +1437,7 @@ deepwaveaccel_fifo_w18_d5_S debl_cfg_theta_22_c_U(
     .if_fifo_cap(debl_cfg_theta_22_c_fifo_cap)
 );
 
-deepwaveaccel_fifo_w96_d64_A s_goertzel_U(
+deepwaveaccel_fifo_w64_d64_A s_goertzel_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
     .if_read_ce(1'b1),
@@ -1452,7 +1452,7 @@ deepwaveaccel_fifo_w96_d64_A s_goertzel_U(
     .if_fifo_cap(s_goertzel_fifo_cap)
 );
 
-deepwaveaccel_fifo_w96_d256_A s_xcor_U(
+deepwaveaccel_fifo_w64_d256_A s_xcor_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
     .if_read_ce(1'b1),
@@ -1467,7 +1467,7 @@ deepwaveaccel_fifo_w96_d256_A s_xcor_U(
     .if_fifo_cap(s_xcor_fifo_cap)
 );
 
-deepwaveaccel_fifo_w64_d512_A s_bp_U(
+deepwaveaccel_fifo_w18_d512_A s_bp_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
     .if_read_ce(1'b1),

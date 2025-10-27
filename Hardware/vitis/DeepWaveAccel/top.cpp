@@ -5,11 +5,11 @@
 #include "top.hpp"
 
 void deepwaveaccel(
-    hls::stream<AxisWordSampleIn> &in,      // raw input samples
+    hls::stream<sample_t> &in,      // raw input samples
     hls::stream<b_t>              &b_in,    // steering vectors (streamed once)
     hls::stream<tau_t>            &tau_in,  // tau compensation values (streamed once)
     hls::stream<lap_t>            &lap_in,  // Laplacian coefficient stream (PS→PL)
-    hls::stream<AxisWordImg>      &out,     // final deblurred image output
+    hls::stream<img_axis_t>       &out,     // final deblurred image output
     hls::stream<norm_sum_t>       &norm,    // crosscor normalization info
     goertzel_config               &goer_cfg,
     deblur_config                 &debl_cfg)
@@ -34,7 +34,7 @@ void deepwaveaccel(
     // -------------------------------------------------------------------------
     static hls::stream<AxisWordDFTc> s_goertzel("s_goertzel");
     static hls::stream<AxisWordDFTc> s_xcor("s_xcor");
-    static hls::stream<AxisWordImg>  s_bp("s_bp"); // backprojection output
+    static hls::stream<img_t>  s_bp("s_bp"); // backprojection output
 #pragma HLS STREAM variable=s_goertzel depth=64
 #pragma HLS STREAM variable=s_xcor     depth=256
 #pragma HLS STREAM variable=s_bp       depth=512
