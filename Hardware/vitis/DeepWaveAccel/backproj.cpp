@@ -20,7 +20,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 #pragma HLS BIND_STORAGE variable=Sigma_up type=ram_1p impl=bram
 
     // Temporary per-pixel cache of steering line
-    b_t b_line[N_ELEM];
+    static b_t b_line[N_ELEM];
 #pragma HLS ARRAY_PARTITION variable=b_line complete dim=1
 
     // ROM lookup tables (compile-time constants)
@@ -91,7 +91,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
         // Re{ conj(b_j) * u } = bj_re*u_re + bj_im*u_im
         acc_fix_t contrib = bj_re * u_re + bj_im * u_im;
-
+   
         y_acc += (contrib << 1);  // symmetric pair factor
 
         ++pdx;

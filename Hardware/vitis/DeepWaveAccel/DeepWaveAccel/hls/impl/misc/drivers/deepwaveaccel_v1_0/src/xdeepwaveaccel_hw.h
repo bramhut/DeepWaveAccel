@@ -5,6 +5,35 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // 
 // ==============================================================
+// control
+// 0x00 : reserved
+// 0x04 : reserved
+// 0x08 : reserved
+// 0x0c : reserved
+// 0x10 : Data signal of b_ddr
+//        bit 31~0 - b_ddr[31:0] (Read/Write)
+// 0x14 : Data signal of b_ddr
+//        bit 31~0 - b_ddr[63:32] (Read/Write)
+// 0x18 : reserved
+// 0x1c : Data signal of tau_ddr
+//        bit 31~0 - tau_ddr[31:0] (Read/Write)
+// 0x20 : Data signal of tau_ddr
+//        bit 31~0 - tau_ddr[63:32] (Read/Write)
+// 0x24 : reserved
+// 0x28 : Data signal of lap_ddr
+//        bit 31~0 - lap_ddr[31:0] (Read/Write)
+// 0x2c : Data signal of lap_ddr
+//        bit 31~0 - lap_ddr[63:32] (Read/Write)
+// 0x30 : reserved
+// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
+
+#define XDEEPWAVEACCEL_CONTROL_ADDR_B_DDR_DATA   0x10
+#define XDEEPWAVEACCEL_CONTROL_BITS_B_DDR_DATA   64
+#define XDEEPWAVEACCEL_CONTROL_ADDR_TAU_DDR_DATA 0x1c
+#define XDEEPWAVEACCEL_CONTROL_BITS_TAU_DDR_DATA 64
+#define XDEEPWAVEACCEL_CONTROL_ADDR_LAP_DDR_DATA 0x28
+#define XDEEPWAVEACCEL_CONTROL_BITS_LAP_DDR_DATA 64
+
 // CTRL_BUS
 // 0x000 : reserved
 // 0x004 : reserved

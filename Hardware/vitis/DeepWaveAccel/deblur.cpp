@@ -16,17 +16,10 @@
 // -----------------------------------------------------------------------------
 // Bit-pack helpers: convert to unified 32-bit AXIS payload
 // -----------------------------------------------------------------------------
-static inline out_axis_t pack_img_word(img_t x) {
+template <typename T>
+static inline out_axis_t pack_word(T x) {
 #pragma HLS INLINE
-    img_axis_t ax = (img_axis_t)x;     // widen to 32-bit aligned format
-    return (out_axis_t)ax.range(31, 0);
-}
-
-static inline out_axis_t pack_norm_word(norm_sum_t n) {
-#pragma HLS INLINE
-    // Sign-extend to 32 bits (norm_sum_t is 24-bit fixed in types.hpp)
-    ap_int<32> w = (ap_int<32>)n;
-    return (out_axis_t)w;
+    return (out_axis_t)x.range();
 }
 
 // -----------------------------------------------------------------------------
@@ -174,7 +167,6 @@ void deblur(
 
                 // Accumulate Chebyshev weighted sum
                 y_acc[i] = y_tmp + (acc_t)cfg.theta[k] * (acc_t)z_next_val;
-
                 ++i;
                 if (i == IMG_LEN) {
                     i = 0; ++k;
@@ -201,7 +193,7 @@ void deblur(
             } else {
                 // before OUTPUT, fetch normalization and send it
                 norm_sum_t nv = norm_stream.read();
-                out_stream.write(pack_norm_word(nv));
+                out_stream.write(pack_word(nv));
                 st = OUTPUT;
             }
         }
@@ -209,7 +201,7 @@ void deblur(
     }
 
     case OUTPUT: {
-        out_stream.write(pack_img_word(Z0[i]));
+        out_stream.write(pack_word(Z0[i]));
         ++i;
         if (i == IMG_LEN) {
             i = 0;

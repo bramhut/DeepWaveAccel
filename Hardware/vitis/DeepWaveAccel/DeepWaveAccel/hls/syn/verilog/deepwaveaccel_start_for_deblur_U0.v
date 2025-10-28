@@ -12,7 +12,7 @@ module deepwaveaccel_start_for_deblur_U0
     MEM_STYLE    = "shiftReg",
     DATA_WIDTH   = 1,
     ADDR_WIDTH   = 2,
-    DEPTH        = 4)
+    DEPTH        = 3)
 (
     // system signal
     input  wire                  clk,
@@ -125,7 +125,7 @@ module deepwaveaccel_start_for_deblur_U0_ShiftReg
 #(parameter
     DATA_WIDTH  = 1,
     ADDR_WIDTH  = 2,
-    DEPTH       = 4)
+    DEPTH       = 3)
 (
     input  wire                  clk,
     input  wire                  we,

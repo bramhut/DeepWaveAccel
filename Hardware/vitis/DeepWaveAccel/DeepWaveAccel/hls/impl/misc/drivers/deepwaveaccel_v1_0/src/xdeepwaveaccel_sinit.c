@@ -22,7 +22,7 @@ XDeepwaveaccel_Config *XDeepwaveaccel_LookupConfig(UINTPTR BaseAddress) {
 	int Index;
 
 	for (Index = (u32)0x0; XDeepwaveaccel_ConfigTable[Index].Name != NULL; Index++) {
-		if (!BaseAddress || XDeepwaveaccel_ConfigTable[Index].Ctrl_bus_BaseAddress == BaseAddress) {
+		if (!BaseAddress || XDeepwaveaccel_ConfigTable[Index].Control_BaseAddress == BaseAddress) {
 			ConfigPtr = &XDeepwaveaccel_ConfigTable[Index];
 			break;
 		}

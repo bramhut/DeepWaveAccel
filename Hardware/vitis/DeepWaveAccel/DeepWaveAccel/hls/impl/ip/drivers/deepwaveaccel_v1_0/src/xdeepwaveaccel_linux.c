@@ -125,8 +125,12 @@ int XDeepwaveaccel_Initialize(XDeepwaveaccel *InstancePtr, const char* InstanceN
         return XST_OPEN_DEVICE_FAILED;
     }
 
-    // NOTE: slave interface 'Ctrl_bus' should be mapped to uioX/map0
-    InstancePtr->Ctrl_bus_BaseAddress = (u64)mmap(NULL, InfoPtr->maps[0].size, PROT_READ|PROT_WRITE, MAP_SHARED, InfoPtr->uio_fd, 0 * getpagesize());
+    // NOTE: slave interface 'Control' should be mapped to uioX/map0
+    InstancePtr->Control_BaseAddress = (u64)mmap(NULL, InfoPtr->maps[0].size, PROT_READ|PROT_WRITE, MAP_SHARED, InfoPtr->uio_fd, 0 * getpagesize());
+    assert(InstancePtr->Control_BaseAddress);
+
+    // NOTE: slave interface 'Ctrl_bus' should be mapped to uioX/map1
+    InstancePtr->Ctrl_bus_BaseAddress = (u64)mmap(NULL, InfoPtr->maps[1].size, PROT_READ|PROT_WRITE, MAP_SHARED, InfoPtr->uio_fd, 1 * getpagesize());
     assert(InstancePtr->Ctrl_bus_BaseAddress);
 
     InstancePtr->IsReady = XIL_COMPONENT_IS_READY;
@@ -140,7 +144,8 @@ int XDeepwaveaccel_Release(XDeepwaveaccel *InstancePtr) {
     assert(InstancePtr != NULL);
     assert(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    munmap((void*)InstancePtr->Ctrl_bus_BaseAddress, InfoPtr->maps[0].size);
+    munmap((void*)InstancePtr->Control_BaseAddress, InfoPtr->maps[0].size);
+    munmap((void*)InstancePtr->Ctrl_bus_BaseAddress, InfoPtr->maps[1].size);
 
     close(InfoPtr->uio_fd);
 

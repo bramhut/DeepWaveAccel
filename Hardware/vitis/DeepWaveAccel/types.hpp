@@ -26,7 +26,7 @@ using img_t         = ap_fixed<18,  2>;   // sfix18_En16 (image pixel)
 using img_axis_t    = ap_fixed<32, 16>;   // aligned 32-bit AXIS representation
 
 // normalization info (produced once per frame in crosscor)
-using norm_sum_t    = ap_fixed<24, 4>;    // 24-bit scalar (example scaling)
+using norm_sum_t    = ap_fixed<25, 10>;    // 25-bit scalar
 
 // ---------------- Stream Word Structures ----------------
 struct AxisWordDFTc {

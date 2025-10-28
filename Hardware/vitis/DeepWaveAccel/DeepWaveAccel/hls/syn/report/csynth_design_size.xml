@@ -2,46 +2,51 @@
     <item name="Total Instructions per Compilation Phase">
         <table>
             <keys size="4">Phase, Step, Instructions, Description</keys>
-            <column name="Compile/Link">, 15860, After all functions are compiled and linked into a single design</column>
+            <column name="Compile/Link">, 15697, After all functions are compiled and linked into a single design</column>
             <column name="">, , </column>
             <column name="Unroll/Inline">, , After user unroll and inline pragmas are applied</column>
-            <column name="">(1) unroll,  2374, user unroll pragmas are applied</column>
-            <column name="">(2) simplification,  1095, simplification of applied user unroll pragmas</column>
-            <column name="">(3) inline,  1016, user inline pragmas are applied</column>
-            <column name="">(4) simplification,    965, simplification of applied user inline pragmas</column>
+            <column name="">(1) unroll,  2350, user unroll pragmas are applied</column>
+            <column name="">(2) simplification,  1082, simplification of applied user unroll pragmas</column>
+            <column name="">(3) inline,    996, user inline pragmas are applied</column>
+            <column name="">(4) simplification,    945, simplification of applied user inline pragmas</column>
             <column name="">, , </column>
             <column name="Array/Struct">, , After user array partition and struct aggregate/disaggregate pragmas are applied</column>
-            <column name="">(1) array partition,  3792, user array partition pragmas are applied</column>
-            <column name="">(2) simplification,  1409, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
-            <column name="">(3) aggregate/disaggregate ,  1409, user struct aggregate/disaggregate pragmas are applied</column>
-            <column name="">(4) array reshape,  1427, apply array reshape pragmas</column>
-            <column name="">(5) access patterns,  1417, array access pattern optmizations</column>
+            <column name="">(1) array partition,  3772, user array partition pragmas are applied</column>
+            <column name="">(2) simplification,  1389, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
+            <column name="">(3) aggregate/disaggregate ,  1389, user struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(4) array reshape,  1405, apply array reshape pragmas</column>
+            <column name="">(5) access patterns,  1406, array access pattern optmizations</column>
             <column name="">, , </column>
             <column name="Performance">, , After transformations are applied to meet performance pragma targets</column>
-            <column name="">(1) loop simplification,  1415, loop and instruction simplification</column>
-            <column name="">(2) parallelization,  1415, loops are unrolled or pipelined to meet performance targets</column>
-            <column name="">(3) array partition,  1380, arrays are partitioned to meet performance targets</column>
-            <column name="">(4) simplification,  1380, simplification of design after performance transformations</column>
+            <column name="">(1) loop simplification,  1404, loop and instruction simplification</column>
+            <column name="">(2) parallelization,  1402, loops are unrolled or pipelined to meet performance targets</column>
+            <column name="">(3) array partition,  1367, arrays are partitioned to meet performance targets</column>
+            <column name="">(4) simplification,  1367, simplification of design after performance transformations</column>
             <column name="">, , </column>
             <column name="HW Transforms">, , After hardware transfomations</column>
-            <column name="">(1) lowering,  1469, initial conversion to HW specific instructions</column>
-            <column name="">(2) optimizations,  1499, high level synthesis optimizations</column>
+            <column name="">(1) lowering,  1489, initial conversion to HW specific instructions</column>
+            <column name="">(2) optimizations,  1533, high level synthesis optimizations</column>
         </table>
     </item>
     <item name="Instructions per Function for each Compilation Phase">
         <hiertable>
             <header size="7" col0="Function" col1="Location" col2="Compile/Link" col3="Unroll/Inline" col4="Array/Struct" col5="Performance" col6="HW Transforms"/>
             <rows>
-                <row id="0" col0="deepwaveaccel" col1="top.cpp:7" col2="15860" col3="965" col4="1417" col5="1380" col6="1499">
-                    <row id="7" col0="goertzel" col1="goertzel.cpp:26" col2="2301" col3="132" col4="121" col5="109" col6="">
-                        <row id="3" col0="AxisWordDFTc" col1="types.hpp:27" col2="7" col3="" col4="" col5="" col6=""/>
-                    </row>
-                    <row id="1" col0="crosscor" col1="crosscor.cpp:12" col2="5685" col3="196" col4="192" col5="192" col6="203">
-                        <row id="3" col0="AxisWordDFTc" col1="types.hpp:27" col2="7" col3="" col4="" col5="" col6=""/>
-                    </row>
-                    <row id="5" col0="backprojection" col1="backproj.cpp:6" col2="3210" col3="241" col4="619" col5="619" col6="625"/>
-                    <row id="4" col0="deblur" col1="deblur.cpp:51" col2="4620" col3="371" col4="430" col5="368" col6="">
-                        <row id="6" col0="lap_pixel_seq" col1="deblur.cpp:20" col2="1118" col3="" col4="" col5="" col6=""/>
+                <row id="0" col0="deepwaveaccel" col1="top.cpp:100" col2="15697" col3="945" col4="1406" col5="1367" col6="1533">
+                    <row id="1" col0="load_params" col1="top.cpp:9" col2="81" col3="" col4="" col5="" col6=""/>
+                    <row id="5" col0="deepwave" col1="top.cpp:62" col2="15599" col3="862" col4="1279" col5="1205" col6="1234">
+                        <row id="9" col0="goertzel" col1="goertzel.cpp:26" col2="2301" col3="132" col4="121" col5="109" col6="118">
+                            <row id="10" col0="AxisWordDFTc" col1="types.hpp:35" col2="7" col3="" col4="" col5="" col6=""/>
+                        </row>
+                        <row id="7" col0="crosscor" col1="crosscor.cpp:12" col2="5686" col3="196" col4="192" col5="192" col6="202">
+                            <row id="10" col0="AxisWordDFTc" col1="types.hpp:35" col2="7" col3="" col4="" col5="" col6=""/>
+                        </row>
+                        <row id="2" col0="backprojection" col1="backproj.cpp:8" col2="3118" col3="184" col4="557" col5="557" col6="561"/>
+                        <row id="6" col0="deblur" col1="deblur.cpp:60" col2="4450" col3="335" col4="394" col5="332" col6="">
+                            <row id="8" col0="pack_word&lt;ap_fixed&lt;18, 2, AP_TRN, AP_WRAP, 0&gt; &gt;" col1="deblur.cpp:20" col2="52" col3="" col4="" col5="" col6=""/>
+                            <row id="4" col0="pack_word&lt;ap_fixed&lt;25, 10, AP_TRN, AP_WRAP, 0&gt; &gt;" col1="deblur.cpp:20" col2="52" col3="" col4="" col5="" col6=""/>
+                            <row id="12" col0="lap_pixel_seq" col1="deblur.cpp:28" col2="1118" col3="" col4="" col5="" col6=""/>
+                        </row>
                     </row>
                 </row>
             </rows>

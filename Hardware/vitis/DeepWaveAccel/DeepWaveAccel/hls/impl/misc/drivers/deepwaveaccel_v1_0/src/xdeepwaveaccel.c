@@ -14,12 +14,70 @@ int XDeepwaveaccel_CfgInitialize(XDeepwaveaccel *InstancePtr, XDeepwaveaccel_Con
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(ConfigPtr != NULL);
 
+    InstancePtr->Control_BaseAddress = ConfigPtr->Control_BaseAddress;
     InstancePtr->Ctrl_bus_BaseAddress = ConfigPtr->Ctrl_bus_BaseAddress;
     InstancePtr->IsReady = XIL_COMPONENT_IS_READY;
 
     return XST_SUCCESS;
 }
 #endif
+
+void XDeepwaveaccel_Set_b_ddr(XDeepwaveaccel *InstancePtr, u64 Data) {
+    Xil_AssertVoid(InstancePtr != NULL);
+    Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    XDeepwaveaccel_WriteReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_B_DDR_DATA, (u32)(Data));
+    XDeepwaveaccel_WriteReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_B_DDR_DATA + 4, (u32)(Data >> 32));
+}
+
+u64 XDeepwaveaccel_Get_b_ddr(XDeepwaveaccel *InstancePtr) {
+    u64 Data;
+
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    Data = XDeepwaveaccel_ReadReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_B_DDR_DATA);
+    Data += (u64)XDeepwaveaccel_ReadReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_B_DDR_DATA + 4) << 32;
+    return Data;
+}
+
+void XDeepwaveaccel_Set_tau_ddr(XDeepwaveaccel *InstancePtr, u64 Data) {
+    Xil_AssertVoid(InstancePtr != NULL);
+    Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    XDeepwaveaccel_WriteReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_TAU_DDR_DATA, (u32)(Data));
+    XDeepwaveaccel_WriteReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_TAU_DDR_DATA + 4, (u32)(Data >> 32));
+}
+
+u64 XDeepwaveaccel_Get_tau_ddr(XDeepwaveaccel *InstancePtr) {
+    u64 Data;
+
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    Data = XDeepwaveaccel_ReadReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_TAU_DDR_DATA);
+    Data += (u64)XDeepwaveaccel_ReadReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_TAU_DDR_DATA + 4) << 32;
+    return Data;
+}
+
+void XDeepwaveaccel_Set_lap_ddr(XDeepwaveaccel *InstancePtr, u64 Data) {
+    Xil_AssertVoid(InstancePtr != NULL);
+    Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    XDeepwaveaccel_WriteReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_LAP_DDR_DATA, (u32)(Data));
+    XDeepwaveaccel_WriteReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_LAP_DDR_DATA + 4, (u32)(Data >> 32));
+}
+
+u64 XDeepwaveaccel_Get_lap_ddr(XDeepwaveaccel *InstancePtr) {
+    u64 Data;
+
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    Data = XDeepwaveaccel_ReadReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_LAP_DDR_DATA);
+    Data += (u64)XDeepwaveaccel_ReadReg(InstancePtr->Control_BaseAddress, XDEEPWAVEACCEL_CONTROL_ADDR_LAP_DDR_DATA + 4) << 32;
+    return Data;
+}
 
 void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA_0(XDeepwaveaccel *InstancePtr, u32 Data) {
     Xil_AssertVoid(InstancePtr != NULL);

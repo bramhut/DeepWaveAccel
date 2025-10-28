@@ -45,11 +45,13 @@ typedef struct {
 #else
     u16 DeviceId;
 #endif
+    u64 Control_BaseAddress;
     u64 Ctrl_bus_BaseAddress;
 } XDeepwaveaccel_Config;
 #endif
 
 typedef struct {
+    u64 Control_BaseAddress;
     u64 Ctrl_bus_BaseAddress;
     u32 IsReady;
 } XDeepwaveaccel;
@@ -93,6 +95,12 @@ int XDeepwaveaccel_Release(XDeepwaveaccel *InstancePtr);
 #endif
 
 
+void XDeepwaveaccel_Set_b_ddr(XDeepwaveaccel *InstancePtr, u64 Data);
+u64 XDeepwaveaccel_Get_b_ddr(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_tau_ddr(XDeepwaveaccel *InstancePtr, u64 Data);
+u64 XDeepwaveaccel_Get_tau_ddr(XDeepwaveaccel *InstancePtr);
+void XDeepwaveaccel_Set_lap_ddr(XDeepwaveaccel *InstancePtr, u64 Data);
+u64 XDeepwaveaccel_Get_lap_ddr(XDeepwaveaccel *InstancePtr);
 void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA_0(XDeepwaveaccel *InstancePtr, u32 Data);
 u32 XDeepwaveaccel_Get_goer_cfg_COS_OMEGA_0(XDeepwaveaccel *InstancePtr);
 void XDeepwaveaccel_Set_goer_cfg_COS_OMEGA_1(XDeepwaveaccel *InstancePtr, u32 Data);

@@ -14,7 +14,7 @@ entity deepwaveaccel_start_for_deblur_U0 is
         MEM_STYLE         : string  := "shiftReg";
         DATA_WIDTH        : integer := 1;
         ADDR_WIDTH        : integer := 2;
-        DEPTH             : integer := 4);
+        DEPTH             : integer := 3);
     port (
         clk               : in  std_logic;
         reset             : in  std_logic;
@@ -44,7 +44,7 @@ constant SRL_AWIDTH : INTEGER := ADDR_WIDTH;
     generic (
         DATA_WIDTH : integer := 1;
         ADDR_WIDTH : integer := 2;
-        DEPTH      : integer := 4);
+        DEPTH      : integer := 3);
     port (
         clk        : in std_logic;
         we         : in std_logic;
@@ -161,7 +161,7 @@ entity deepwaveaccel_start_for_deblur_U0_ShiftReg is
     generic (
         DATA_WIDTH : integer := 1;
         ADDR_WIDTH : integer := 2;
-        DEPTH      : integer := 4);
+        DEPTH      : integer := 3);
     port (
         clk        : in std_logic;
         we         : in std_logic;
