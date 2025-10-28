@@ -13,9 +13,24 @@
 // role = 1 → v_cur
 // role = 2 → v_next
 
+// -----------------------------------------------------------------------------
+// Bit-pack helpers: convert to unified 32-bit AXIS payload
+// -----------------------------------------------------------------------------
+static inline out_axis_t pack_img_word(img_t x) {
+#pragma HLS INLINE
+    img_axis_t ax = (img_axis_t)x;     // widen to 32-bit aligned format
+    return (out_axis_t)ax.range(31, 0);
+}
+
+static inline out_axis_t pack_norm_word(norm_sum_t n) {
+#pragma HLS INLINE
+    // Sign-extend to 32 bits (norm_sum_t is 24-bit fixed in types.hpp)
+    ap_int<32> w = (ap_int<32>)n;
+    return (out_axis_t)w;
+}
 
 // -----------------------------------------------------------------------------
-// Cycle-accurate sequential sparse Laplacian multiply
+// Sequential sparse Laplacian multiply (center + ND off-diagonals)
 // -----------------------------------------------------------------------------
 static inline acc_t lap_pixel_seq(
     const img_t  Z0[IMG_LEN],
@@ -46,26 +61,24 @@ static inline acc_t lap_pixel_seq(
 }
 
 // -----------------------------------------------------------------------------
-// Top-level Deblur kernel with 3×IMG_LEN rotating buffers
+// Deblur kernel (with global preloaded Laplacian + per-frame norm prepend)
+// Output order per frame:   [ norm ] , then IMG_LEN pixels
 // -----------------------------------------------------------------------------
 void deblur(
-    hls::stream<img_t> &bp_stream,
-    hls::stream<lap_t>       &lap_stream,
-    hls::stream<img_axis_t> &img_stream,
-    deblur_config            &cfg)
+    hls::stream<img_t>      &bp_stream,
+    lap_t                    lap_main,
+    const lap_t              lap_rest[ND][IMG_LEN],
+    hls::stream<out_axis_t> &out_stream,
+    hls::stream<norm_sum_t> &norm_stream,
+    deblur_config           &cfg)
 {
     AXIS_IN_OUT(bp_stream);
-    AXIS_IN_OUT(lap_stream);
-    AXIS_IN_OUT(img_stream);
+    AXIS_IN_OUT(out_stream);
     AXIL_CFG(cfg);
     AP_CTRL_NONE;
-    // No pipelining as BRAM overlaps between states.
+    // No loop-level PIPELINE on whole function; intra-stage pipelining is used.
 
     // ---------------- Persistent memories ----------------
-    static lap_t lap_main = 0;
-    static lap_t lap_rest[ND][IMG_LEN];
-#pragma HLS BIND_STORAGE variable=lap_rest type=ram_2p impl=bram
-
     static img_t bp_buf[IMG_LEN];
     static acc_t y_acc[IMG_LEN];
 #pragma HLS BIND_STORAGE variable=bp_buf type=ram_1p impl=bram
@@ -81,17 +94,18 @@ void deblur(
 #pragma HLS BIND_STORAGE variable=Z1 type=ram_2p impl=bram
 #pragma HLS BIND_STORAGE variable=Z2 type=ram_2p impl=bram
 
+#pragma HLS ARRAY_PARTITION variable=cfg.lap_off complete
+#pragma HLS ARRAY_PARTITION variable=cfg.theta   complete
+
     // ---------------- FSM ----------------
     enum St {
-        LOAD_MAIN,
-        LOAD_OFF_LINES,
         LOAD_BP,
         CHEB_Y0,
         CHEB_COMPUTE,
         LAYER_ADD_BP,
         OUTPUT
     };
-    static St st = LOAD_MAIN;
+    static St st = LOAD_BP;
 
     static idx_t i = 0;
     static int   d = 0;
@@ -101,30 +115,8 @@ void deblur(
     static bool  centre  = true;
     static acc_t y_tmp   = 0;
 
-#pragma HLS ARRAY_PARTITION variable=cfg.lap_off complete
-#pragma HLS ARRAY_PARTITION variable=cfg.theta   complete
-
     switch (st)
     {
-    case LOAD_MAIN: {
-        if (!lap_stream.empty()) {
-            lap_main = lap_stream.read();
-            d = 0; i = 0;
-            st = LOAD_OFF_LINES;
-        }
-        break;
-    }
-
-    case LOAD_OFF_LINES: {
-        if (!lap_stream.empty()) {
-            lap_rest[d][i] = lap_stream.read();
-            ++i;
-            if (i == IMG_LEN) { i = 0; ++d; }
-            if (d == ND) { d = 0; i = 0; st = LOAD_BP; }
-        }
-        break;
-    }
-
     case LOAD_BP: {
         if (!bp_stream.empty()) {
             bp_buf[i] = bp_stream.read();
@@ -134,13 +126,14 @@ void deblur(
             if (i == IMG_LEN) {
                 i = 0; layer = 0; k = 1;
                 centre = true; d = 0;
-                st = CHEB_COMPUTE; // skip CHEB_Y0
+                st = CHEB_COMPUTE; // skip CHEB_Y0 (θ0 applied in loop)
             }
         }
         break;
     }
 
     case CHEB_Y0: {
+        // Optional: initial y = θ0 * Z0 (if you prefer explicit first-step)
         y_acc[i] = (acc_t)cfg.theta[0] * (acc_t)Z0[i];
         ++i;
         if (i == IMG_LEN) {
@@ -161,32 +154,32 @@ void deblur(
             d = 0;
             centre = false;
         }
-        else{
+        else {
             acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, cfg.lap_off, lap_rest, acc_tmp, d);
 
-            if (d == ND-1){
+            if (d == ND-1) {
                 centre = true;
                 img_t t = (img_t)acc_tmp;
 
                 img_t z_prev_val = SELECT_Z(k_mod, i, 0);
-                img_t z_next_val = (k == 1)
-                    ? t
-                    : (img_t)((t<<1) - z_prev_val);
+                img_t z_next_val = (k == 1) ? t
+                                            : (img_t)((t<<1) - z_prev_val);
 
-                // Write result
+                // Rotate triple buffer
                 switch (k_mod) {
                 case 0: Z0[i] = z_next_val; break;
                 case 1: Z1[i] = z_next_val; break;
                 default:Z2[i] = z_next_val; break;
                 }
 
+                // Accumulate Chebyshev weighted sum
                 y_acc[i] = y_tmp + (acc_t)cfg.theta[k] * (acc_t)z_next_val;
 
                 ++i;
                 if (i == IMG_LEN) {
                     i = 0; ++k;
                     if (k <= cfg.K) st = CHEB_COMPUTE;
-                    else st = LAYER_ADD_BP;
+                    else            st = LAYER_ADD_BP;
                 }
             } else {
                 ++d;
@@ -205,18 +198,26 @@ void deblur(
             if (layer < (int)cfg.n_layers) {
                 st = CHEB_Y0;
                 k  = 1; d = 0; centre = true;
-            } else st = OUTPUT;
+            } else {
+                // before OUTPUT, fetch normalization and send it
+                norm_sum_t nv = norm_stream.read();
+                out_stream.write(pack_norm_word(nv));
+                st = OUTPUT;
+            }
         }
         break;
     }
 
     case OUTPUT: {
-        img_stream.write(Z0[i]);
+        out_stream.write(pack_img_word(Z0[i]));
         ++i;
-        if (i == IMG_LEN) { i = 0; st = LOAD_BP; }
+        if (i == IMG_LEN) {
+            i = 0;
+            st = LOAD_BP;   // next frame
+        }
         break;
     }
-    }
+    } // switch
 }
 
 #undef SELECT_Z

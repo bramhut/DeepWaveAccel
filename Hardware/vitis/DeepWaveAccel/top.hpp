@@ -1,5 +1,6 @@
 // -----------------------------------------------------------------------------
-// top.hpp  –  DeepWaveAccel top-level kernel declarations
+// top.hpp – DeepWaveAccel top-level declarations
+//             (Global parameter loading + unified 32-bit output stream)
 // -----------------------------------------------------------------------------
 #pragma once
 
@@ -10,14 +11,13 @@
 #include "deblur.hpp"
 
 // -----------------------------------------------------------------------------
-// Combined top-level kernel (with Laplacian stream input)
+// Top-level kernel prototype
 // -----------------------------------------------------------------------------
 void deepwaveaccel(
-    hls::stream<sample_t> &in,      // raw input samples
-    hls::stream<b_t>              &b_in,    // steering vectors (streamed once)
-    hls::stream<tau_t>            &tau_in,  // tau compensation values (streamed once)
-    hls::stream<lap_t>            &lap_in,  // Laplacian coefficient stream (PS→PL)
-    hls::stream<img_t>      &out,     // final deblurred image output
-    hls::stream<norm_sum_t>       &norm,    // crosscor normalization info
-    goertzel_config               &goer_cfg,
-    deblur_config                 &debl_cfg);
+    hls::stream<sample_t>   &in,    // raw input samples
+    const b_t*              b_ddr,  // steering vectors in DDR
+    const tau_t*            tau_ddr,// tau values in DDR
+    const lap_t*            lap_ddr,// Laplacian coefficients in DDR
+    hls::stream<out_axis_t> &out,   // unified 32-bit output stream
+    goertzel_config         &goer_cfg,
+    deblur_config           &debl_cfg);

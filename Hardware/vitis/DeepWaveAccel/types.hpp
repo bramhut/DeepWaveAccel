@@ -1,43 +1,54 @@
 #pragma once
+// -----------------------------------------------------------------------------
+// types.hpp  –  Shared types and global configuration for DeepWaveAccel
+// -----------------------------------------------------------------------------
 #include <ap_fixed.h>
 #include <hls_stream.h>
 #include <complex>
-
-// Shared 
-using std::complex;
+#include <ap_axi_sdata.h>
 
 // ---------------- Global Config ----------------
-constexpr int N_ELEM  = 48;
-constexpr int IMG_LEN = 2234;
+constexpr int N_ELEM  = 48;     // number of array elements
+constexpr int IMG_LEN = 2234;   // pixels per frame
 
-// Fixed-point types (Simulink mapping)
-using sample_t      = ap_fixed<12, 1>;   // sfix12_En11
-using DFT_t         = ap_fixed<18, 5>;   // sfix18_En13
+// ---------------- Shared Fixed-Point Types ----------------
+using std::complex;
+
+using sample_t      = ap_fixed<12, 1>;    // sfix12_En11 – input samples
+using DFT_t         = ap_fixed<18, 5>;    // sfix18_En13 – DFT values
 using DFTc_t        = complex<DFT_t>;
-using b_real_t      = ap_fixed<14, -2>;            // sfix14_En16
-using b_t           = std::complex<b_real_t>;      // complex steering coefficients
-using tau_t         = ap_fixed<13, -3>;            // sfix13_En16 (per-pixel)
-using img_t         = ap_fixed<18,  2>;            // sfix18_En16 (output pixel)
-using img_axis_t    = ap_fixed<32, 16>;            // 32 bit aligned version of img_t for AXIS
 
+using b_real_t      = ap_fixed<14, -2>;   // sfix14_En16
+using b_t           = std::complex<b_real_t>; // complex steering coefficients
 
+using tau_t         = ap_fixed<13, -3>;   // sfix13_En16 (per-pixel tau)
+using img_t         = ap_fixed<18,  2>;   // sfix18_En16 (image pixel)
+using img_axis_t    = ap_fixed<32, 16>;   // aligned 32-bit AXIS representation
+
+// normalization info (produced once per frame in crosscor)
+using norm_sum_t    = ap_fixed<24, 4>;    // 24-bit scalar (example scaling)
+
+// ---------------- Stream Word Structures ----------------
 struct AxisWordDFTc {
     DFT_t re, im;
     AxisWordDFTc() {}
-    AxisWordDFTc(DFT_t r, DFT_t i)
-        : re(r), im(i) {}
-    AxisWordDFTc(DFTc_t d) 
-        : re(d.real()), im(d.imag()) {}
+    AxisWordDFTc(DFT_t r, DFT_t i) : re(r), im(i) {}
+    AxisWordDFTc(DFTc_t d) : re(d.real()), im(d.imag()) {}
 };
-// ---- Stringizing helpers ----
+
+// unified 32-bit AXIS output (1 norm + IMG_LEN pixels per frame)
+using out_axis_t = ap_uint<32>;
+
+// ---------------- Stringizing Helpers ----------------
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
+// ---------------- Default Directories ----------------
 #define OUTPUT_DIR "../../../../output"
 #define PARAM_DIR  "../../../../parameters"
-#define WAVE_DIR  "../../../../../../../Simulation/FRIDA"
+#define WAVE_DIR   "../../../../../../../Simulation/FRIDA"
 
-// ---- Interface macros ----
+// ---------------- Interface Macros ----------------
 #define AXIS_IN_OUT(NAME) \
   _Pragma(TOSTRING(HLS INTERFACE axis port=NAME))
 
@@ -47,3 +58,8 @@ struct AxisWordDFTc {
 #define AP_CTRL_NONE \
   _Pragma("HLS INTERFACE ap_ctrl_none port=return")
 
+#define M_AXI_PARAM(NAME,BUNDLE) \
+  _Pragma(TOSTRING(HLS INTERFACE m_axi port=NAME offset=slave bundle=BUNDLE max_read_burst_length=256))
+
+#define S_AXILITE_SCALAR(NAME) \
+  _Pragma(TOSTRING(HLS INTERFACE s_axilite port=NAME bundle=CTRL_BUS))
