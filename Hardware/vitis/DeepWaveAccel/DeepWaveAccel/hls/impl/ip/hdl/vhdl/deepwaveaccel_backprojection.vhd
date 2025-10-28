@@ -1018,7 +1018,7 @@ begin
         ce0 => k_rom_ce0_local,
         q0 => k_rom_q0);
 
-    mul_22s_22s_44_1_1_U108 : component deepwaveaccel_mul_22s_22s_44_1_1
+    mul_22s_22s_44_1_1_U107 : component deepwaveaccel_mul_22s_22s_44_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1030,7 +1030,7 @@ begin
         din1 => bj_re_fu_2452_p3,
         dout => mul_ln145_fu_996_p2);
 
-    mul_23s_22s_45_1_1_U109 : component deepwaveaccel_mul_23s_22s_45_1_1
+    mul_23s_22s_45_1_1_U108 : component deepwaveaccel_mul_23s_22s_45_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1042,7 +1042,7 @@ begin
         din1 => bj_im_fu_2459_p3,
         dout => mul_ln145_1_fu_1000_p2);
 
-    mul_24s_22s_46_1_1_U110 : component deepwaveaccel_mul_24s_22s_46_1_1
+    mul_24s_22s_46_1_1_U109 : component deepwaveaccel_mul_24s_22s_46_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1054,7 +1054,7 @@ begin
         din1 => mul_ln141_fu_1004_p1,
         dout => mul_ln141_fu_1004_p2);
 
-    mul_24s_22s_46_1_1_U111 : component deepwaveaccel_mul_24s_22s_46_1_1
+    mul_24s_22s_46_1_1_U110 : component deepwaveaccel_mul_24s_22s_46_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1066,7 +1066,7 @@ begin
         din1 => mul_ln141_1_fu_1008_p1,
         dout => mul_ln141_1_fu_1008_p2);
 
-    mul_24s_22s_46_1_1_U112 : component deepwaveaccel_mul_24s_22s_46_1_1
+    mul_24s_22s_46_1_1_U111 : component deepwaveaccel_mul_24s_22s_46_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1078,7 +1078,7 @@ begin
         din1 => mul_ln142_fu_1012_p1,
         dout => mul_ln142_fu_1012_p2);
 
-    mul_24s_22s_46_1_1_U113 : component deepwaveaccel_mul_24s_22s_46_1_1
+    mul_24s_22s_46_1_1_U112 : component deepwaveaccel_mul_24s_22s_46_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1090,7 +1090,7 @@ begin
         din1 => mul_ln142_1_fu_1016_p1,
         dout => mul_ln142_1_fu_1016_p2);
 
-    sparsemux_95_6_14_1_1_U114 : component deepwaveaccel_sparsemux_95_6_14_1_1
+    sparsemux_95_6_14_1_1_U113 : component deepwaveaccel_sparsemux_95_6_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1243,7 +1243,7 @@ begin
         sel => j_rom_q0,
         dout => bj_b_M_real_fu_1376_p97);
 
-    sparsemux_95_6_14_1_1_U115 : component deepwaveaccel_sparsemux_95_6_14_1_1
+    sparsemux_95_6_14_1_1_U114 : component deepwaveaccel_sparsemux_95_6_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1396,7 +1396,7 @@ begin
         sel => j_rom_q0,
         dout => bj_b_M_imag_fu_1760_p97);
 
-    sparsemux_95_6_14_1_1_U116 : component deepwaveaccel_sparsemux_95_6_14_1_1
+    sparsemux_95_6_14_1_1_U115 : component deepwaveaccel_sparsemux_95_6_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1549,7 +1549,7 @@ begin
         sel => k_rom_q0,
         dout => bk_b_M_real_fu_1960_p97);
 
-    sparsemux_95_6_14_1_1_U117 : component deepwaveaccel_sparsemux_95_6_14_1_1
+    sparsemux_95_6_14_1_1_U116 : component deepwaveaccel_sparsemux_95_6_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1702,7 +1702,7 @@ begin
         sel => k_rom_q0,
         dout => bk_b_M_imag_fu_2160_p97);
 
-    partselect_14ns_672ns_10ns_14_1_1_U118 : component deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1
+    partselect_14ns_672ns_10ns_14_1_1_U117 : component deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1
     generic map (
         DATAWIDTH => 672,
         ADDRWIDTH => 10,
@@ -1712,7 +1712,7 @@ begin
         sel => sub_ln109_fu_2849_p2,
         dout => tmp_i_112_fu_2855_p3);
 
-    partselect_14ns_672ns_10ns_14_1_1_U119 : component deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1
+    partselect_14ns_672ns_10ns_14_1_1_U118 : component deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1
     generic map (
         DATAWIDTH => 672,
         ADDRWIDTH => 10,
@@ -1722,7 +1722,7 @@ begin
         sel => sub_ln109_fu_2849_p2,
         dout => tmp_1_i_fu_2863_p3);
 
-    partset_672ns_672ns_14ns_10ns_672_1_1_U120 : component deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1
+    partset_672ns_672ns_14ns_10ns_672_1_1_U119 : component deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1
     generic map (
         DATAWIDTH => 672,
         DATA1WIDTH => 14,
@@ -1733,7 +1733,7 @@ begin
         sel => sub_ln79_fu_3220_p2,
         dout => tmp_2_i_fu_3230_p4);
 
-    partset_672ns_672ns_14ns_10ns_672_1_1_U121 : component deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1
+    partset_672ns_672ns_14ns_10ns_672_1_1_U120 : component deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1
     generic map (
         DATAWIDTH => 672,
         DATA1WIDTH => 14,

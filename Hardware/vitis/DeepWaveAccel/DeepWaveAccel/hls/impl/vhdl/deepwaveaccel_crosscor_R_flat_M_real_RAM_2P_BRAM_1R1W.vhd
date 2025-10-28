@@ -16,9 +16,6 @@ entity deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W is
         AddressRange    : integer   := 1128
     ); 
     port (
-        address0    : in std_logic_vector(AddressWidth-1 downto 0); 
-        ce0         : in std_logic; 
-        q0          : out std_logic_vector(DataWidth-1 downto 0);
         address1    : in std_logic_vector(AddressWidth-1 downto 0); 
         ce1         : in std_logic; 
         d1          : in std_logic_vector(DataWidth-1 downto 0); 
@@ -31,7 +28,6 @@ end entity;
 
 architecture rtl of deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W is 
 
-signal address0_tmp : std_logic_vector(AddressWidth-1 downto 0);
 signal address1_tmp : std_logic_vector(AddressWidth-1 downto 0);
 
 
@@ -45,32 +41,6 @@ attribute ram_style : string;
 attribute ram_style of ram : variable is MEM_TYPE;
 
 begin 
-
-
-memory_access_guard_0: process (address0) 
-begin
-    address0_tmp <= address0;
---synthesis translate_off
-    if (CONV_INTEGER(address0) > AddressRange-1) then
-        address0_tmp <= (others => '0');
-    else 
-       address0_tmp <= address0;
-    end if;
---synthesis translate_on
-end process;   -- 
-
-
-
-p_memory_access_0: process (clk)
-begin 
-    if (clk'event and clk = '1') then
-        if (ce0 = '1') then 
-            q0 <= ram(CONV_INTEGER(address0_tmp));
-        end if;
-    end if;
-end process;
-
-
 
  
 memory_access_guard_1: process (address1) 

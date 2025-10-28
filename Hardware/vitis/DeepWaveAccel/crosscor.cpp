@@ -99,8 +99,13 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
             // ---- Phase 2: accumulate upper triangle using pair_rom mapping
             int j_ = j_rom[pair_idx];
             int k_ = k_rom[pair_idx];
-            corr_accum_t prod = std::conj((corr_accum_t)u[k_]) * (corr_accum_t)u[j_];
-            R_flat[pair_idx] += prod;
+            power_accum_t re1 = u[k_].real();
+            power_accum_t im1 = u[k_].imag();
+            power_accum_t re2 = u[j_].real();
+            power_accum_t im2 = u[j_].imag();
+            power_accum_t reo = re1 * re2 + im1 * im2 + R_flat[pair_idx].real();
+            power_accum_t imo = re1 * im2 - re2 * im1 + R_flat[pair_idx].imag();
+            R_flat[pair_idx] = corr_accum_t(reo, imo);
 
             pair_idx++;
             if (pair_idx == NPAIR) {

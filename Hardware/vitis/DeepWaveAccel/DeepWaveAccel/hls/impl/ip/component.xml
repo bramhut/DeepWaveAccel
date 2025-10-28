@@ -1839,7 +1839,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>dccb9693</spirit:value>
+            <spirit:value>a2afb10c</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1855,7 +1855,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>e3c5e8d7</spirit:value>
+            <spirit:value>aa755c0a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1871,7 +1871,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>e411fc14</spirit:value>
+            <spirit:value>909fc9b8</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1887,7 +1887,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>50f2a249</spirit:value>
+            <spirit:value>545d1467</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2715,10 +2715,6 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_mul_32s_31s_61_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_mul_36s_24ns_54_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -3025,11 +3021,6 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_mul_32s_31s_61_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_mul_36s_24ns_54_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
@@ -3269,10 +3260,6 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/deepwaveaccel_mul_32s_31s_61_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_mul_36s_24ns_54_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
@@ -3331,7 +3318,7 @@
       <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_e88e63ea</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_78fc7554</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -3532,11 +3519,6 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/deepwaveaccel_mul_32s_31s_61_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_mul_36s_24ns_54_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
@@ -3724,8 +3706,8 @@
       </xilinx:taxonomies>
       <xilinx:displayName>DeepWave</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2114322091</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2025-10-27T14:32:05Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2114322330</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2025-10-27T18:31:14Z</xilinx:coreCreationDateTime>
       <xilinx:sdxKernelAttributes>
         <xilinx:sdx_kernel>true</xilinx:sdx_kernel>
         <xilinx:sdx_kernel_type>hls</xilinx:sdx_kernel_type>
@@ -3735,7 +3717,7 @@
       <xilinx:xilinxVersion>2025.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="df1de757"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="e3589083"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="c996538f"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="25ac19fe"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="dd4cbabe"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="64401ee1"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="7b8956c0"/>
