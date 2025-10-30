@@ -16,7 +16,6 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
     AXIS_IN_OUT(norm_stream);
-    AP_CTRL_NONE;
 
     // ---------------- Persistent State ----------------
     enum State { COLLECT, CORRELATE, OUTPUT };

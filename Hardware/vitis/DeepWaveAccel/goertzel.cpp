@@ -29,7 +29,6 @@ void goertzel(hls::stream<sample_t> &in_stream,
 {
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
-    AP_CTRL_NONE;
     AXIL_CFG(cfg);
 
     // ---------------------------------------------------------------------

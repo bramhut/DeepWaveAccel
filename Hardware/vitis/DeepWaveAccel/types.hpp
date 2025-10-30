@@ -4,6 +4,7 @@
 // -----------------------------------------------------------------------------
 #include <ap_fixed.h>
 #include <hls_stream.h>
+#include <hls_task.h>
 #include <complex>
 #include <ap_axi_sdata.h>
 
@@ -20,10 +21,14 @@ using DFTc_t        = complex<DFT_t>;
 
 using b_real_t      = ap_fixed<14, -2>;   // sfix14_En16
 using b_t           = std::complex<b_real_t>; // complex steering coefficients
-
+using lap_t         = ap_ufixed<15, -1>;              // Laplacian coeff
 using tau_t         = ap_fixed<13, -3>;   // sfix13_En16 (per-pixel tau)
+
 using img_t         = ap_fixed<18,  2>;   // sfix18_En16 (image pixel)
 using img_axis_t    = ap_fixed<32, 16>;   // aligned 32-bit AXIS representation
+
+using idx_t   = ap_uint<12>;                  // diagonal offset (>=0)
+using theta_t = img_t;                        // θ_k shares format with img_t
 
 // normalization info (produced once per frame in crosscor)
 using norm_sum_t    = ap_fixed<25, 10>;    // 25-bit scalar
@@ -37,7 +42,8 @@ struct AxisWordDFTc {
 };
 
 // unified 32-bit AXIS output (1 norm + IMG_LEN pixels per frame)
-using out_axis_t = ap_uint<32>;
+using out_word_t = ap_uint<32>;
+using out_axis_t = ap_axiu<32,0,0,0>;
 
 // ---------------- Stringizing Helpers ----------------
 #define STRINGIFY(x) #x
@@ -54,9 +60,6 @@ using out_axis_t = ap_uint<32>;
 
 #define AXIL_CFG(NAME) \
   _Pragma(TOSTRING(HLS INTERFACE s_axilite port=NAME bundle=CTRL_BUS))
-
-#define AP_CTRL_NONE \
-  _Pragma("HLS INTERFACE ap_ctrl_none port=return")
 
 #define M_AXI_PARAM(NAME,BUNDLE) \
   _Pragma(TOSTRING(HLS INTERFACE m_axi port=NAME offset=slave bundle=BUNDLE max_read_burst_length=256))

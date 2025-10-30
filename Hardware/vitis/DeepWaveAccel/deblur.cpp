@@ -1,4 +1,7 @@
 #include "deblur.hpp"
+#include "laplacian_data.hpp"
+#include "lap_offsets_data.hpp"
+#include "theta_data.hpp"
 #include <iostream>
 
 // -----------------------------------------------------------------------------
@@ -13,13 +16,14 @@
 // role = 1 → v_cur
 // role = 2 → v_next
 
-// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------c:\Users\Bram\Documents\Git\DeepWaveAccel\Hardware\vitis\DeepWaveAccel\theta_data.hpp
 // Bit-pack helpers: convert to unified 32-bit AXIS payload
 // -----------------------------------------------------------------------------
 template <typename T>
-static inline out_axis_t pack_word(T x) {
+static inline out_word_t pack_word(T x) {
 #pragma HLS INLINE
-    return (out_axis_t)x.range();
+    auto r = x.range();
+    return (out_word_t)x.range();
 }
 
 // -----------------------------------------------------------------------------
@@ -55,12 +59,10 @@ static inline acc_t lap_pixel_seq(
 
 // -----------------------------------------------------------------------------
 // Deblur kernel (with global preloaded Laplacian + per-frame norm prepend)
-// Output order per frame:   [ norm ] , then IMG_LEN pixels
+// Output order per frame:   [ norm ] , then IMG_LEN pixelsc:\Users\Bram\Documents\Git\DeepWaveAccel\Hardware\vitis\DeepWaveAccel\laplacian_data.hpp
 // -----------------------------------------------------------------------------
 void deblur(
     hls::stream<img_t>      &bp_stream,
-    lap_t                    lap_main,
-    const lap_t              lap_rest[ND][IMG_LEN],
     hls::stream<out_axis_t> &out_stream,
     hls::stream<norm_sum_t> &norm_stream,
     deblur_config           &cfg)
@@ -68,7 +70,6 @@ void deblur(
     AXIS_IN_OUT(bp_stream);
     AXIS_IN_OUT(out_stream);
     AXIL_CFG(cfg);
-    AP_CTRL_NONE;
     // No loop-level PIPELINE on whole function; intra-stage pipelining is used.
 
     // ---------------- Persistent memories ----------------
@@ -87,9 +88,6 @@ void deblur(
 #pragma HLS BIND_STORAGE variable=Z1 type=ram_2p impl=bram
 #pragma HLS BIND_STORAGE variable=Z2 type=ram_2p impl=bram
 
-#pragma HLS ARRAY_PARTITION variable=cfg.lap_off complete
-#pragma HLS ARRAY_PARTITION variable=cfg.theta   complete
-
     // ---------------- FSM ----------------
     enum St {
         LOAD_BP,
@@ -99,6 +97,8 @@ void deblur(
         OUTPUT
     };
     static St st = LOAD_BP;
+
+    // static bool frame_sent = false;
 
     static idx_t i = 0;
     static int   d = 0;
@@ -111,6 +111,22 @@ void deblur(
     switch (st)
     {
     case LOAD_BP: {
+        // -----------------------------------------------------------------------------
+        // DEBUG: Emit one frame of constant '1.0' pixels to out_stream
+        // -----------------------------------------------------------------------------
+        
+        // if (!frame_sent) {
+        //     out_axis_t w;
+        //     w.data = 0xDEADBEEF;
+        //     w.last = (i == IMG_LEN - 1); // Assert TLAST on final pixel
+        //     out_stream.write(w);
+        //     ++i;
+        //     if (i == IMG_LEN) {
+        //         i = 0;
+        //         frame_sent = true;
+        //     } 
+        // }
+        // else 
         if (!bp_stream.empty()) {
             bp_buf[i] = bp_stream.read();
             Z0[i] = (img_t)0;
@@ -127,7 +143,7 @@ void deblur(
 
     case CHEB_Y0: {
         // Optional: initial y = θ0 * Z0 (if you prefer explicit first-step)
-        y_acc[i] = (acc_t)cfg.theta[0] * (acc_t)Z0[i];
+        y_acc[i] = (acc_t)theta_rom[0] * (acc_t)Z0[i];
         ++i;
         if (i == IMG_LEN) {
             i = 0; k = 1; d = 0; centre = true;
@@ -142,13 +158,13 @@ void deblur(
 
         if (centre) {
             img_t center_val = SELECT_Z(k_mod, i, 1);
-            acc_tmp = (acc_t)lap_main * (acc_t)center_val;
+            acc_tmp = (acc_t)lap_main_rom * (acc_t)center_val;
             y_tmp   = y_acc[i];
             d = 0;
             centre = false;
         }
         else {
-            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, cfg.lap_off, lap_rest, acc_tmp, d);
+            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, lap_offsets_rom, lap_rest_rom, acc_tmp, d);
 
             if (d == ND-1) {
                 centre = true;
@@ -166,7 +182,7 @@ void deblur(
                 }
 
                 // Accumulate Chebyshev weighted sum
-                y_acc[i] = y_tmp + (acc_t)cfg.theta[k] * (acc_t)z_next_val;
+                y_acc[i] = y_tmp + (acc_t)theta_rom[k] * (acc_t)z_next_val;
                 ++i;
                 if (i == IMG_LEN) {
                     i = 0; ++k;
@@ -193,7 +209,10 @@ void deblur(
             } else {
                 // before OUTPUT, fetch normalization and send it
                 norm_sum_t nv = norm_stream.read();
-                out_stream.write(pack_word(nv));
+                out_axis_t out;
+                out.data = pack_word(nv);
+                out.last = 0;
+                out_stream.write(out);
                 st = OUTPUT;
             }
         }
@@ -201,7 +220,10 @@ void deblur(
     }
 
     case OUTPUT: {
-        out_stream.write(pack_word(Z0[i]));
+        out_axis_t out;
+        out.data = pack_word(Z0[i]);
+        out.last = (i==IMG_LEN-1) ? 1 : 0;
+        out_stream.write(out);
         ++i;
         if (i == IMG_LEN) {
             i = 0;

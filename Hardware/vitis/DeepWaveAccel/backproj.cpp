@@ -1,18 +1,17 @@
 #include "backproj.hpp"
 #include "pair_rom_data.hpp"
+#include "b_vectors_data.hpp"
+#include "tau_data.hpp"
 
 // -----------------------------------------------------------------------------
 // Compute y = 2 * Σ_{j<k} Re{ conj(b_j) * Σ_jk * b_k } - τ[pix]
 // τ is pre-biased with the diagonal term (done in preprocessing).
 // -----------------------------------------------------------------------------
 void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
-                    const b_t                  b_mem[IMG_LEN][N_ELEM],
-                    const tau_t                tau_mem[IMG_LEN],
                     hls::stream<img_t>        &img_stream)
 {
     AXIS_IN_OUT(corr_stream);
     AXIS_IN_OUT(img_stream);
-    AP_CTRL_NONE;
 
     // ---------------- Persistent storage ----------------
     // Σ upper triangle (pair ROM order)
@@ -58,7 +57,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
     // Load current pixel's steering vector from b_mem into local registers
     case LOAD_BLINE:
-        b_line[idx] = b_mem[pix][idx];
+        b_line[idx] = b_vectors_rom[pix][idx];
         ++idx;
         if (idx == N_ELEM) {
             idx = 0;
@@ -105,7 +104,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
     // Output final pixel result
     case OUTPUT:
     {
-        acc_fix_t y_sub = y_acc - (acc_fix_t)tau_mem[pix];
+        acc_fix_t y_sub = y_acc - (acc_fix_t)tau_rom[pix];
         img_stream.write((img_t)y_sub);
 
         ++pix;

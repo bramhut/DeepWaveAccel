@@ -33,7 +33,7 @@ int main() {
 int tb_deepwaveaccel() {
     // Settings
 
-    int max_frames = -1;  // Set to -1 to process all frames (takes around 8min currently)
+    int max_frames = 2;  // Set to -1 to process all frames (takes around 8min currently)
 
     // -------------------------------------------------------------------------
     // Define AXIS streams (new interfaces)
@@ -49,146 +49,10 @@ int tb_deepwaveaccel() {
     std::cout << "----------------------------------------------\n";
 
     // -------------------------------------------------------------------------
-    // Load steering vectors (DDR-style array: IMG_LEN x N_ELEM, pixel-major)
-    // -------------------------------------------------------------------------
-    std::string b_file = std::string(PARAM_DIR) + "/b_vectors.csv";
-    std::ifstream b_in(b_file);
-    if (!b_in.is_open()) {
-        std::cerr << "Failed to open steering vector file: " << b_file << std::endl;
-        return 1;
-    }
-
-    std::string header;
-    std::getline(b_in, header); // skip header
-
-    // Flat DDR buffer in pixel-major order: idx = pixel*N_ELEM + elem
-    std::vector<b_t> b_ddr(IMG_LEN * N_ELEM);
-    int pixel, elem;
-    double bre, bim;
-    int b_count = 0;
-    while (b_in >> pixel) {
-        char comma;
-        b_in >> comma >> elem >> comma >> bre >> comma >> bim;
-        if (pixel < 0 || pixel >= IMG_LEN || elem < 0 || elem >= N_ELEM) {
-            std::cerr << "b_vectors.csv index out of bounds: pixel=" << pixel
-                      << ", elem=" << elem << std::endl;
-            return 1;
-        }
-        b_ddr[pixel * N_ELEM + elem] = b_t((b_real_t)bre, (b_real_t)bim);
-        ++b_count;
-    }
-    b_in.close();
-    std::cout << "[DeepWave] Loaded " << b_count << " steering vector entries ("
-              << "expected " << (IMG_LEN * N_ELEM) << ")\n";
-
-    // -------------------------------------------------------------------------
-    // Load tau compensation (DDR-style array: IMG_LEN entries)
-    // -------------------------------------------------------------------------
-    std::string tau_file = std::string(PARAM_DIR) + "/tau.csv";
-    std::ifstream tau_in(tau_file);
-    if (!tau_in.is_open()) {
-        std::cerr << "Failed to open tau file: " << tau_file << std::endl;
-        return 1;
-    }
-    std::getline(tau_in, header);
-
-    std::vector<tau_t> tau_ddr(IMG_LEN);
-    double tau_val;
-    int tau_count = 0;
-    while (tau_in >> tau_val) {
-        if (tau_count >= IMG_LEN) {
-            std::cerr << "tau.csv has more than IMG_LEN entries\n";
-            return 1;
-        }
-        tau_ddr[tau_count++] = (tau_t)tau_val;
-    }
-    tau_in.close();
-    std::cout << "[DeepWave] Loaded " << tau_count << " tau compensation values ("
-              << "expected " << IMG_LEN << ")\n";
-
-    // -------------------------------------------------------------------------
-    // Load Laplacian data (DDR-style array: main + ND*IMG_LEN)
-    // Layout must be: [main_diag] then [ND rows each of IMG_LEN]
-    // -------------------------------------------------------------------------
-    std::string lap_file = std::string(PARAM_DIR) + "/laplacian.csv";
-    std::ifstream lap_in(lap_file);
-    if (!lap_in.is_open()) {
-        std::cerr << "Failed to open Laplacian file: " << lap_file << std::endl;
-        return 1;
-    }
-    std::getline(lap_in, header);
-
-    std::vector<lap_t> lap_ddr;
-    lap_ddr.reserve(1 + ND * IMG_LEN);
-
-    double lap_val;
-    int lap_count = 0;
-    while (lap_in >> lap_val) {
-        lap_ddr.push_back((lap_t)lap_val);
-        ++lap_count;
-    }
-    lap_in.close();
-
-    if (lap_count != 1 + ND * IMG_LEN) {
-        std::cerr << "[DeepWave] Laplacian length mismatch. Got " << lap_count
-                  << ", expected " << (1 + ND * IMG_LEN) << " (main + ND*IMG_LEN)\n";
-        return 1;
-    }
-    std::cout << "[DeepWave] Loaded Laplacian: main + " << ND << " off-diagonals\n";
-
-    // -------------------------------------------------------------------------
-    // Load Laplacian offsets (AXI-Lite config)
+    // Configure deblurring settings
     // -------------------------------------------------------------------------
     debl_cfg.n_layers = 5;
     debl_cfg.K = 22;
-
-    std::string offset_file = std::string(PARAM_DIR) + "/lap_offsets.csv";
-    std::ifstream off_in(offset_file);
-    if (!off_in.is_open()) {
-        std::cerr << "Failed to open Laplacian offset file: " << offset_file << std::endl;
-        return 1;
-    }
-
-    std::string token;
-    for (int k = 0; k < ND; ++k) {
-        if (!std::getline(off_in, token, (k == ND - 1 ? '\n' : ','))) {
-            std::cerr << "Not enough offsets in file!" << std::endl;
-            return 1;
-        }
-        try {
-            debl_cfg.lap_off[k] = (idx_t)std::stod(token);
-        } catch (...) {
-            std::cerr << "Invalid offset format in file!" << std::endl;
-            return 1;
-        }
-    }
-    off_in.close();
-    std::cout << "[DeepWave] Loaded " << ND << " Laplacian offsets\n";
-
-    // -------------------------------------------------------------------------
-    // Load θ coefficients (AXI-Lite config)
-    // -------------------------------------------------------------------------
-    std::string theta_file = std::string(PARAM_DIR) + "/theta.csv";
-    std::ifstream th_in(theta_file);
-    if (!th_in.is_open()) {
-        std::cerr << "Failed to open theta file: " << theta_file << std::endl;
-        return 1;
-    }
-
-    for (int k = 0; k <= MAX_ORDER; ++k) {
-        if (!std::getline(th_in, token, (k == MAX_ORDER ? '\n' : ','))) {
-            std::cerr << "Not enough theta coefficients loaded!" << std::endl;
-            return 1;
-        }
-        try {
-            debl_cfg.theta[k] = (theta_t)std::stod(token);
-        } catch (...) {
-            std::cerr << "Invalid theta coefficient format in file!" << std::endl;
-            return 1;
-        }
-    }
-    th_in.close();
-    std::cout << "[DeepWave] Loaded theta coefficients (K=" << (int)debl_cfg.K << ")\n";
 
     // -------------------------------------------------------------------------
     // Load Goertzel input (from WAV)
@@ -243,9 +107,6 @@ int tb_deepwaveaccel() {
 
     while (true) {
         deepwaveaccel(in_stream,
-                    b_ddr.data(),
-                    tau_ddr.data(),
-                    lap_ddr.data(),
                     out_stream,
                     goer_cfg,
                     debl_cfg);
@@ -287,14 +148,16 @@ int tb_deepwaveaccel() {
     image_out.reserve((size_t)expected_frames * IMG_LEN);
 
     while (!out_stream.empty()) {
-        out_axis_t w_norm = out_stream.read();
+        out_axis_t w_norm_axis = out_stream.read();
+        out_word_t w_norm = w_norm_axis.data;
         norm_sum_t nv;
         nv.range() = w_norm.range(norm_sum_t::width-1, 0); 
         norms.push_back(nv);
 
         for (int i = 0; i < IMG_LEN; ++i) {
             img_t pix;
-            out_axis_t w_pix = out_stream.read();
+            out_axis_t w_pix_axis = out_stream.read();
+            out_word_t w_pix = w_pix_axis.data;
             pix.range() = w_pix.range(img_t::width-1, 0);
             image_out.push_back(pix);
         }
