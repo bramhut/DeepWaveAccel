@@ -42,7 +42,7 @@ struct AxisWordDFTc {
 };
 
 // unified 32-bit AXIS output (1 norm + IMG_LEN pixels per frame)
-using out_word_t = ap_uint<32>;
+using word_t = ap_uint<32>;
 using out_axis_t = ap_axiu<32,0,0,0>;
 
 // ---------------- Stringizing Helpers ----------------
@@ -66,3 +66,6 @@ using out_axis_t = ap_axiu<32,0,0,0>;
 
 #define S_AXILITE_SCALAR(NAME) \
   _Pragma(TOSTRING(HLS INTERFACE s_axilite port=NAME bundle=CTRL_BUS))
+
+#define AP_CTRL_NONE \
+  _Pragma("HLS INTERFACE ap_ctrl_none port=return")

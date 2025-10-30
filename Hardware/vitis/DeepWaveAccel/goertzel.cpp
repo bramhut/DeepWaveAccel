@@ -23,10 +23,11 @@ void goertzel_prepare_config(goertzel_config &cfg, double fs_in, double ff) {
 // ---------------------------------------------
 // Synthesizable Goertzel kernel (AXI-Lite + AXI-Stream)
 // ---------------------------------------------
-void goertzel(hls::stream<sample_t> &in_stream,
+void goertzel(hls::stream<word_t> &in_stream,
               hls::stream<AxisWordDFTc>     &out_stream,
               goertzel_config               &cfg)
 {
+    AP_CTRL_NONE;
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
     AXIL_CFG(cfg);
@@ -49,7 +50,9 @@ void goertzel(hls::stream<sample_t> &in_stream,
     static int sample = 0;
 
     if (!in_stream.empty()) {
-        sample_t xin = in_stream.read();
+        auto s = in_stream.read();
+        sample_t xin;
+        xin.range() = s.range();
 
         // Apply Hann window directly from ROM (fixed-point)
         win_t w = hann_window[sample];

@@ -1,7 +1,4 @@
 #include "deblur.hpp"
-#include "laplacian_data.hpp"
-#include "lap_offsets_data.hpp"
-#include "theta_data.hpp"
 #include <iostream>
 
 // -----------------------------------------------------------------------------
@@ -20,10 +17,10 @@
 // Bit-pack helpers: convert to unified 32-bit AXIS payload
 // -----------------------------------------------------------------------------
 template <typename T>
-static inline out_word_t pack_word(T x) {
+static inline word_t pack_word(T x) {
 #pragma HLS INLINE
     auto r = x.range();
-    return (out_word_t)x.range();
+    return (word_t)x.range();
 }
 
 // -----------------------------------------------------------------------------
@@ -63,16 +60,31 @@ static inline acc_t lap_pixel_seq(
 // -----------------------------------------------------------------------------
 void deblur(
     hls::stream<img_t>      &bp_stream,
+    hls::stream<word_t> &param_in,
     hls::stream<out_axis_t> &out_stream,
     hls::stream<norm_sum_t> &norm_stream,
     deblur_config           &cfg)
 {
+    AP_CTRL_NONE;
     AXIS_IN_OUT(bp_stream);
+    AXIS_IN_OUT(param_in);
     AXIS_IN_OUT(out_stream);
     AXIL_CFG(cfg);
     // No loop-level PIPELINE on whole function; intra-stage pipelining is used.
 
     // ---------------- Persistent memories ----------------
+    static lap_t lap_main;
+    static lap_t lap_rest[ND][IMG_LEN];
+    static theta_t theta[MAX_ORDER];
+    static idx_t lap_offsets[ND];
+    static ap_uint<8> K;
+
+#pragma HLS BIND_STORAGE variable=theta type=ram_1p impl=auto
+#pragma HLS ARRAY_PARTITION variable=lap_offsets complete
+#pragma HLS BIND_STORAGE variable=lap_offsets type=ram_2p impl=bram
+#pragma HLS BIND_STORAGE variable=lap_rest type=ram_2p impl=bram
+#pragma HLS ARRAY_PARTITION variable=lap_rest dim=1 complete
+
     static img_t bp_buf[IMG_LEN];
     static acc_t y_acc[IMG_LEN];
 #pragma HLS BIND_STORAGE variable=bp_buf type=ram_1p impl=bram
@@ -90,13 +102,22 @@ void deblur(
 
     // ---------------- FSM ----------------
     enum St {
+        LOAD_PARAMS,
         LOAD_BP,
         CHEB_Y0,
         CHEB_COMPUTE,
         LAYER_ADD_BP,
         OUTPUT
     };
-    static St st = LOAD_BP;
+    enum StL { // Loading states   
+        READ_K,
+        READ_THETA,
+        READ_OFFSETS,
+        READ_MAIN,
+        READ_REST
+    };
+    static St st = LOAD_PARAMS;
+    static StL stl = READ_K;
 
     // static bool frame_sent = false;
 
@@ -107,9 +128,70 @@ void deblur(
     static acc_t acc_tmp = 0;
     static bool  centre  = true;
     static acc_t y_tmp   = 0;
+    static bool  config_loaded = false;
 
     switch (st)
     {
+    case LOAD_PARAMS: {
+        if (!param_in.empty()){
+            ap_uint<32> w = param_in.read();
+
+            // We can only receive in the following order: K(1), theta(K+1), lap_offsets(ND), lap_main(1), lap_rest(ND)(2234)
+            switch (stl) {
+                case READ_K: {
+                    K = w;
+                    config_loaded = false; // Reset, we are reloading everything
+                    i = 0;
+                    d = 0;
+                    stl = READ_THETA;
+                    break;
+                }
+                case READ_THETA: {
+                    theta[i].range() = w.range();
+                    i++;
+                    if (i > K) {
+                        i = 0;
+                        stl = READ_OFFSETS;
+                    }
+                    break;
+                }
+                case READ_OFFSETS: {
+                    lap_offsets[i] = w;
+                    i++;
+                    if (i == ND) {
+                        i = 0;
+                        stl = READ_MAIN;
+                    }
+                    break;
+                }
+                case READ_MAIN: {
+                    lap_main.range() = w.range();
+                    stl = READ_REST;
+                    break;
+                }
+                case READ_REST: {
+                    lap_rest[d][i].range() = w.range();
+                    i++;
+                    if (i == IMG_LEN) {
+                        i = 0;
+                        d++;
+                        if (d == ND) {
+                            d = 0;
+                            config_loaded = true;
+                            stl = READ_K;
+                            st = LOAD_BP; // We have finished loading all params
+                        }
+                        break;
+                    }
+                }
+
+            }
+        } else if (config_loaded) { // We can go straight to LOAD_BP if we have already loaded all params
+            st = LOAD_BP;
+        }
+        break;
+    }
+
     case LOAD_BP: {
         // -----------------------------------------------------------------------------
         // DEBUG: Emit one frame of constant '1.0' pixels to out_stream
@@ -143,7 +225,7 @@ void deblur(
 
     case CHEB_Y0: {
         // Optional: initial y = θ0 * Z0 (if you prefer explicit first-step)
-        y_acc[i] = (acc_t)theta_rom[0] * (acc_t)Z0[i];
+        y_acc[i] = (acc_t)theta[0] * (acc_t)Z0[i];
         ++i;
         if (i == IMG_LEN) {
             i = 0; k = 1; d = 0; centre = true;
@@ -158,13 +240,13 @@ void deblur(
 
         if (centre) {
             img_t center_val = SELECT_Z(k_mod, i, 1);
-            acc_tmp = (acc_t)lap_main_rom * (acc_t)center_val;
+            acc_tmp = (acc_t)lap_main * (acc_t)center_val;
             y_tmp   = y_acc[i];
             d = 0;
             centre = false;
         }
         else {
-            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, lap_offsets_rom, lap_rest_rom, acc_tmp, d);
+            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, lap_offsets, lap_rest, acc_tmp, d);
 
             if (d == ND-1) {
                 centre = true;
@@ -182,11 +264,11 @@ void deblur(
                 }
 
                 // Accumulate Chebyshev weighted sum
-                y_acc[i] = y_tmp + (acc_t)theta_rom[k] * (acc_t)z_next_val;
+                y_acc[i] = y_tmp + (acc_t)theta[k] * (acc_t)z_next_val;
                 ++i;
                 if (i == IMG_LEN) {
                     i = 0; ++k;
-                    if (k <= cfg.K) st = CHEB_COMPUTE;
+                    if (k <= K) st = CHEB_COMPUTE;
                     else            st = LAYER_ADD_BP;
                 }
             } else {
@@ -227,7 +309,7 @@ void deblur(
         ++i;
         if (i == IMG_LEN) {
             i = 0;
-            st = LOAD_BP;   // next frame
+            st = LOAD_PARAMS;   // next frame
         }
         break;
     }

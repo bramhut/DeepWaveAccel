@@ -1,17 +1,32 @@
 #include "backproj.hpp"
 #include "pair_rom_data.hpp"
-#include "b_vectors_data.hpp"
-#include "tau_data.hpp"
+#include <iostream>
 
 // -----------------------------------------------------------------------------
 // Compute y = 2 * Σ_{j<k} Re{ conj(b_j) * Σ_jk * b_k } - τ[pix]
 // τ is pre-biased with the diagonal term (done in preprocessing).
 // -----------------------------------------------------------------------------
 void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
+                    hls::stream<word_t> &param_in,
                     hls::stream<img_t>        &img_stream)
 {
+    AP_CTRL_NONE;
     AXIS_IN_OUT(corr_stream);
+    AXIS_IN_OUT(param_in);
     AXIS_IN_OUT(img_stream);
+
+    // =========================================================================
+    // Persistent parameter memories
+    // =========================================================================
+    static b_t   b_mem[IMG_LEN][N_ELEM]; // steering vectors
+    static tau_t tau_mem[IMG_LEN];       // tau compensation values
+
+#pragma HLS BIND_STORAGE variable=b_mem  type=ram_2p impl=uram
+#pragma HLS ARRAY_RESHAPE variable=b_mem complete dim=2
+#pragma HLS BIND_STORAGE variable=tau_mem type=ram_1p impl=bram
+#pragma HLS DEPENDENCE variable=b_mem inter false
+#pragma HLS DEPENDENCE variable=tau_mem inter false
+
 
     // ---------------- Persistent storage ----------------
     // Σ upper triangle (pair ROM order)
@@ -30,17 +45,95 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 #pragma HLS DEPENDENCE variable=Sigma_up inter false
 #pragma HLS DEPENDENCE variable=b_line   inter false
 
-    // ---------------- FSM ----------------
-    enum St { LOAD_UP, LOAD_BLINE, COMPUTE_UP, OUTPUT };
-    static St st = LOAD_UP;
+    // =========================================================================
+    // FSM definitions
+    // =========================================================================
+    enum St {
+        LOAD_PARAMS,  // receive b_mem + tau_mem
+        LOAD_UP,      // receive Σ frame
+        LOAD_BLINE,   // preload steering line
+        COMPUTE_UP,   // compute upper-triangular sum
+        OUTPUT        // write pixel result
+    };
+    static St st = LOAD_PARAMS;
 
-    static int pdx = 0;      // Σ pair index
-    static int pix = 0;      // pixel index [0..IMG_LEN)
-    static int idx = 0;      // generic index
+    enum StL {
+        READ_B,       // loading b_mem
+        READ_TAU      // loading tau_mem
+    };
+    static StL stl = READ_B;
+
+    // Indices / accumulators
+    static int pdx = 0;
+    static int pix = 0;
+    static int idx = 0;
+    static int elem = 0;
     static acc_fix_t y_acc = 0;
+    static bool config_loaded = false;
+    static bool imag_word = false;
+    static b_real_t real_in;
 
+    // =========================================================================
+    // Main FSM
+    // =========================================================================
     switch (st)
     {
+         // -------------------------------------------------------------------------
+    // LOAD_PARAMS: Receive all steering vectors and tau values
+    // -------------------------------------------------------------------------
+    case LOAD_PARAMS: {
+        if (!param_in.empty()) {
+            ap_uint<32> w = param_in.read();
+
+            switch (stl)
+            {
+            case READ_B: {
+                // Expecting N_ELEM * IMG_LEN complex pairs:
+                // - real part word (user=0x1)
+                // - imag part word (user=0x2)
+                // We'll interpret bits directly into ap_fixed fields.
+                // user[0]=0 ⇒ real, user[0]=1 ⇒ imag
+                
+                if (!imag_word) {
+                    // real part
+                    real_in.range() = w.range();
+                    imag_word = !imag_word;
+                } else {
+                    // imag part completes the complex sample
+                    b_real_t imag_in;
+                    imag_in.range() = w.range();
+                    b_mem[pix][elem] = b_t(real_in, imag_in);
+                    imag_word = !imag_word;
+                    elem++;
+                    if (elem == N_ELEM) {
+                        elem = 0;
+                        pix++;
+                        if (pix == IMG_LEN) {
+                            pix = 0;
+                            stl = READ_TAU;
+                        }
+                    }
+                }
+                break;
+            }
+
+            case READ_TAU: {
+                tau_mem[pix].range() = w.range();
+                pix++;
+                if (pix == IMG_LEN) {
+                    pix = 0;
+                    config_loaded = true;
+                    stl = READ_B;
+                    st  = LOAD_UP; // Ready to process frames
+                }
+                break;
+            }
+            } // switch(stl)
+        } else if (config_loaded) {
+            st = LOAD_UP;
+        }
+        break;
+    }
     // Load upper-triangular correlation matrix from stream
     case LOAD_UP:
         if (!corr_stream.empty()) {
@@ -57,7 +150,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
     // Load current pixel's steering vector from b_mem into local registers
     case LOAD_BLINE:
-        b_line[idx] = b_vectors_rom[pix][idx];
+        b_line[idx] = b_mem[pix][idx];
         ++idx;
         if (idx == N_ELEM) {
             idx = 0;
@@ -104,7 +197,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
     // Output final pixel result
     case OUTPUT:
     {
-        acc_fix_t y_sub = y_acc - (acc_fix_t)tau_rom[pix];
+        acc_fix_t y_sub = y_acc - (acc_fix_t)tau_mem[pix];
         img_stream.write((img_t)y_sub);
 
         ++pix;
@@ -112,7 +205,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
         if (pix == IMG_LEN) {
             pix = 0;
-            st  = LOAD_UP;   // next correlation frame
+            st  = LOAD_PARAMS; // next correlation frame, but first check if there are any params to be updated
         } else {
             st  = LOAD_BLINE; // next pixel
         }

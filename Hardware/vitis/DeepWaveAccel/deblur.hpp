@@ -20,7 +20,6 @@ using acc_t   = ap_fixed<img_t::width + 6, 2>; // accumulator
 // ---------------------------------------------------------
 struct deblur_config {
     ap_uint<8>  n_layers;               // # layers (e.g., 5)
-    ap_uint<6>  K;                      // Chebyshev order (≤ MAX_ORDER)
 };
 
 // ---------------------------------------------------------
@@ -32,6 +31,7 @@ struct deblur_config {
 // ---------------------------------------------------------
 void deblur(
     hls::stream<img_t>      &bp_stream,
+    hls::stream<word_t> &param_in,
     hls::stream<out_axis_t> &out_stream,
     hls::stream<norm_sum_t> &norm_stream,
     deblur_config           &cfg

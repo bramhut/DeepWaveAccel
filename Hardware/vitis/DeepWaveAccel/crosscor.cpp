@@ -13,6 +13,7 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
               hls::stream<AxisWordDFTc> &out_stream,
               hls::stream<norm_sum_t>   &norm_stream)
 {
+    AP_CTRL_NONE;
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
     AXIS_IN_OUT(norm_stream);

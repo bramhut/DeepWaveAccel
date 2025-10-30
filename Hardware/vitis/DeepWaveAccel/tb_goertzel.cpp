@@ -7,7 +7,7 @@
 #include <complex>
 
 int tb_goertzel() {
-    hls::stream<sample_t> in_stream;
+    hls::stream<word_t> in_stream;
     hls::stream<AxisWordDFTc> out_stream;
     goertzel_config cfg;
 
@@ -44,7 +44,9 @@ int tb_goertzel() {
             for(int n = 0; n < N_WIN; ++n) {
                 int idx = (b * N_WIN + n) * N_ELEM + ch; // interleaved
                 sample_t t = 16.0 * double(wav_samples[idx]) / 32768.0; // apply gain
-                in_stream.write(t);
+                word_t out;
+                out.range() = t.range();
+                in_stream.write(out);
             }
         }
     }

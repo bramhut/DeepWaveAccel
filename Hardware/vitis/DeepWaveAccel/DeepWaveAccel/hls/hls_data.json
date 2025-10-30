@@ -18,8 +18,8 @@
     "in": {
       "index": "0",
       "direction": "in",
-      "srcType": "stream<ap_fixed<12, 1, AP_TRN, AP_WRAP, 0>, 0>&",
-      "srcSize": "16",
+      "srcType": "stream<ap_uint<32>, 0>&",
+      "srcSize": "32",
       "hwRefs": [{
           "type": "interface",
           "interface": "in_r",
@@ -28,95 +28,34 @@
           "direction": "in"
         }]
     },
-    "b_ddr": {
+    "param_bp": {
       "index": "1",
       "direction": "in",
-      "srcType": "complex<ap_fixed<14, -2, AP_TRN, AP_WRAP, 0> > const *",
+      "srcType": "stream<ap_uint<32>, 0>&",
       "srcSize": "32",
-      "hwRefs": [
-        {
+      "hwRefs": [{
           "type": "interface",
-          "interface": "m_axi_PARAMS",
+          "interface": "param_bp",
           "name": "",
           "usage": "data",
           "direction": "in"
-        },
-        {
-          "type": "register",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "b_ddr_1",
-          "usage": "address",
-          "direction": "in"
-        },
-        {
-          "type": "register",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "b_ddr_2",
-          "usage": "address",
-          "direction": "in"
-        }
-      ]
+        }]
     },
-    "tau_ddr": {
+    "param_db": {
       "index": "2",
       "direction": "in",
-      "srcType": "ap_fixed<13, -3, AP_TRN, AP_WRAP, 0> const *",
-      "srcSize": "16",
-      "hwRefs": [
-        {
+      "srcType": "stream<ap_uint<32>, 0>&",
+      "srcSize": "32",
+      "hwRefs": [{
           "type": "interface",
-          "interface": "m_axi_PARAMS",
+          "interface": "param_db",
           "name": "",
           "usage": "data",
           "direction": "in"
-        },
-        {
-          "type": "register",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "tau_ddr_1",
-          "usage": "address",
-          "direction": "in"
-        },
-        {
-          "type": "register",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "tau_ddr_2",
-          "usage": "address",
-          "direction": "in"
-        }
-      ]
-    },
-    "lap_ddr": {
-      "index": "3",
-      "direction": "in",
-      "srcType": "ap_ufixed<15, -1, AP_TRN, AP_WRAP, 0> const *",
-      "srcSize": "16",
-      "hwRefs": [
-        {
-          "type": "interface",
-          "interface": "m_axi_PARAMS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "register",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "lap_ddr_1",
-          "usage": "address",
-          "direction": "in"
-        },
-        {
-          "type": "register",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "lap_ddr_2",
-          "usage": "address",
-          "direction": "in"
-        }
-      ]
+        }]
     },
     "out": {
-      "index": "4",
+      "index": "3",
       "direction": "out",
       "srcType": "stream<hls::axis<ap_uint<32>, 0, 0, 0, '8', false>, 0>&",
       "srcSize": "96",
@@ -129,7 +68,7 @@
         }]
     },
     "goer_cfg": {
-      "index": "5",
+      "index": "4",
       "direction": "in",
       "srcType": "goertzel_config&",
       "srcSize": "192",
@@ -179,229 +118,17 @@
       ]
     },
     "debl_cfg": {
-      "index": "6",
+      "index": "5",
       "direction": "in",
       "srcType": "deblur_config&",
-      "srcSize": "864",
-      "hwRefs": [
-        {
-          "type": "interface",
+      "srcSize": "8",
+      "hwRefs": [{
+          "type": "register",
           "interface": "s_axi_CTRL_BUS",
-          "name": "",
+          "name": "debl_cfg",
           "usage": "data",
           "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        },
-        {
-          "type": "interface",
-          "interface": "s_axi_CTRL_BUS",
-          "name": "",
-          "usage": "data",
-          "direction": "in"
-        }
-      ]
+        }]
     }
   },
   "HlsSolution": {
@@ -430,25 +157,17 @@
     "ClockPeriod": "10",
     "Uncertainty": "1.5",
     "IsCombinational": "0",
-    "II": "2 ~ 1465530",
+    "II": "2 ~ 45",
     "Latency": "12"
   },
-  "Xdc": {
-    "OocClocks": ["create_clock -name ap_clk -period 10.000 [get_ports ap_clk]"],
-    "FalsePaths": [
-      "set_false_path -through [get_ports g_b_mem_M_real_193[*]]",
-      "set_false_path -through [get_ports g_b_mem_M_imag_192[*]]",
-      "set_false_path -through [get_ports g_tau_mem[*]]",
-      "set_false_path -through [get_ports g_lap_rest[*]]"
-    ]
-  },
+  "Xdc": {"OocClocks": ["create_clock -name ap_clk -period 10.000 [get_ports ap_clk]"]},
   "Ipx": {
     "Vendor": "xilinx.com",
     "Library": "hls",
     "Name": "DeepWave",
     "Version": "1.0",
     "DisplayName": "DeepWave",
-    "Revision": "2114326437",
+    "Revision": "2114326868",
     "Description": "An IP generated by Vitis HLS",
     "Taxonomy": "\/VITIS_HLS_IP",
     "AutoFamilySupport": "",
@@ -472,39 +191,31 @@
     ],
     "Vhdl": [
       "impl\/vhdl\/deepwaveaccel_backprojection.vhd",
+      "impl\/vhdl\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.vhd",
       "impl\/vhdl\/deepwaveaccel_backprojection_j_rom_ROM_1P_BRAM_1R.vhd",
       "impl\/vhdl\/deepwaveaccel_backprojection_k_rom_ROM_1P_BRAM_1R.vhd",
       "impl\/vhdl\/deepwaveaccel_backprojection_Sigma_up_M_real_RAM_1P_BRAM_1R1W.vhd",
+      "impl\/vhdl\/deepwaveaccel_backprojection_tau_mem_RAM_1P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_crosscor.vhd",
       "impl\/vhdl\/deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_crosscor_u_M_real_RAM_2P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_CTRL_BUS_s_axi.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5dEe.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_theta_RAM_1P_AUTO_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_entry_proc.vhd",
-      "impl\/vhdl\/deepwaveaccel_fifo_w6_d5_S.vhd",
       "impl\/vhdl\/deepwaveaccel_fifo_w8_d5_S.vhd",
-      "impl\/vhdl\/deepwaveaccel_fifo_w12_d5_S.vhd",
-      "impl\/vhdl\/deepwaveaccel_fifo_w15_d4_S.vhd",
-      "impl\/vhdl\/deepwaveaccel_fifo_w18_d5_S.vhd",
       "impl\/vhdl\/deepwaveaccel_fifo_w18_d64_A.vhd",
       "impl\/vhdl\/deepwaveaccel_fifo_w25_d4_S.vhd",
       "impl\/vhdl\/deepwaveaccel_fifo_w36_d64_A.vhd",
-      "impl\/vhdl\/deepwaveaccel_g_b_mem_M_real_193_RAM_2P_URAM_1R1W.vhd",
-      "impl\/vhdl\/deepwaveaccel_g_b_mem_M_real_193_RAM_2P_URAM_1R1W_memcore.vhd",
-      "impl\/vhdl\/deepwaveaccel_g_lap_rest_RAM_2P_BRAM_1R1W.vhd",
-      "impl\/vhdl\/deepwaveaccel_g_lap_rest_RAM_2P_BRAM_1R1W_memcore.vhd",
-      "impl\/vhdl\/deepwaveaccel_g_tau_mem_RAM_2P_BRAM_1R1W.vhd",
-      "impl\/vhdl\/deepwaveaccel_g_tau_mem_RAM_2P_BRAM_1R1W_memcore.vhd",
       "impl\/vhdl\/deepwaveaccel_goertzel.vhd",
       "impl\/vhdl\/deepwaveaccel_goertzel_hann_window_ROM_1P_BRAM_1R.vhd",
-      "impl\/vhdl\/deepwaveaccel_load_params.vhd",
       "impl\/vhdl\/deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mac_muladd_18s_18s_34ns_34_4_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1.vhd",
-      "impl\/vhdl\/deepwaveaccel_mul_14s_13ns_14_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_14s_13ns_27_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_18s_18s_34_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_22s_22s_44_1_1.vhd",
@@ -515,27 +226,33 @@
       "impl\/vhdl\/deepwaveaccel_mul_25s_16ns_40_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_31s_31s_62_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_mul_36s_24ns_54_1_1.vhd",
-      "impl\/vhdl\/deepwaveaccel_PARAMS_m_axi.vhd",
       "impl\/vhdl\/deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_regslice_both.vhd",
       "impl\/vhdl\/deepwaveaccel_sparsemux_7_2_18_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_sparsemux_13_3_12_1_1.vhd",
-      "impl\/vhdl\/deepwaveaccel_sparsemux_47_5_18_1_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_sparsemux_13_3_15_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_sparsemux_95_6_14_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_sparsemux_2257_11_6_1_1.vhd",
       "impl\/vhdl\/deepwaveaccel_srem_32ns_3ns_3_36_seq_1.vhd",
+      "impl\/vhdl\/deepwaveaccel_start_for_backprojection_U0.vhd",
+      "impl\/vhdl\/deepwaveaccel_start_for_crosscor_U0.vhd",
+      "impl\/vhdl\/deepwaveaccel_start_for_deblur_U0.vhd",
       "impl\/vhdl\/deepwaveaccel_udiv_39s_24ns_24_43_seq_1.vhd",
       "impl\/vhdl\/deepwaveaccel.vhd"
     ],
     "Verilog": [
       "impl\/verilog\/deepwaveaccel_backprojection.v",
+      "impl\/verilog\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.dat",
+      "impl\/verilog\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.v",
       "impl\/verilog\/deepwaveaccel_backprojection_j_rom_ROM_1P_BRAM_1R.dat",
       "impl\/verilog\/deepwaveaccel_backprojection_j_rom_ROM_1P_BRAM_1R.v",
       "impl\/verilog\/deepwaveaccel_backprojection_k_rom_ROM_1P_BRAM_1R.dat",
       "impl\/verilog\/deepwaveaccel_backprojection_k_rom_ROM_1P_BRAM_1R.v",
       "impl\/verilog\/deepwaveaccel_backprojection_Sigma_up_M_real_RAM_1P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_backprojection_Sigma_up_M_real_RAM_1P_BRAM_1R1W.v",
+      "impl\/verilog\/deepwaveaccel_backprojection_tau_mem_RAM_1P_BRAM_1R1W.dat",
+      "impl\/verilog\/deepwaveaccel_backprojection_tau_mem_RAM_1P_BRAM_1R1W.v",
       "impl\/verilog\/deepwaveaccel_crosscor.v",
       "impl\/verilog\/deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_crosscor_R_flat_M_real_RAM_2P_BRAM_1R1W.v",
@@ -545,36 +262,25 @@
       "impl\/verilog\/deepwaveaccel_deblur.v",
       "impl\/verilog\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.v",
+      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5dEe.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5dEe.v",
+      "impl\/verilog\/deepwaveaccel_deblur_theta_RAM_1P_AUTO_1R1W.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_theta_RAM_1P_AUTO_1R1W.v",
       "impl\/verilog\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.v",
       "impl\/verilog\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.v",
       "impl\/verilog\/deepwaveaccel_entry_proc.v",
-      "impl\/verilog\/deepwaveaccel_fifo_w6_d5_S.v",
       "impl\/verilog\/deepwaveaccel_fifo_w8_d5_S.v",
-      "impl\/verilog\/deepwaveaccel_fifo_w12_d5_S.v",
-      "impl\/verilog\/deepwaveaccel_fifo_w15_d4_S.v",
-      "impl\/verilog\/deepwaveaccel_fifo_w18_d5_S.v",
       "impl\/verilog\/deepwaveaccel_fifo_w18_d64_A.v",
       "impl\/verilog\/deepwaveaccel_fifo_w25_d4_S.v",
       "impl\/verilog\/deepwaveaccel_fifo_w36_d64_A.v",
-      "impl\/verilog\/deepwaveaccel_g_b_mem_M_real_193_RAM_2P_URAM_1R1W.v",
-      "impl\/verilog\/deepwaveaccel_g_b_mem_M_real_193_RAM_2P_URAM_1R1W_memcore.dat",
-      "impl\/verilog\/deepwaveaccel_g_b_mem_M_real_193_RAM_2P_URAM_1R1W_memcore.v",
-      "impl\/verilog\/deepwaveaccel_g_lap_rest_RAM_2P_BRAM_1R1W.v",
-      "impl\/verilog\/deepwaveaccel_g_lap_rest_RAM_2P_BRAM_1R1W_memcore.dat",
-      "impl\/verilog\/deepwaveaccel_g_lap_rest_RAM_2P_BRAM_1R1W_memcore.v",
-      "impl\/verilog\/deepwaveaccel_g_tau_mem_RAM_2P_BRAM_1R1W.v",
-      "impl\/verilog\/deepwaveaccel_g_tau_mem_RAM_2P_BRAM_1R1W_memcore.dat",
-      "impl\/verilog\/deepwaveaccel_g_tau_mem_RAM_2P_BRAM_1R1W_memcore.v",
       "impl\/verilog\/deepwaveaccel_goertzel.v",
       "impl\/verilog\/deepwaveaccel_goertzel_hann_window_ROM_1P_BRAM_1R.dat",
       "impl\/verilog\/deepwaveaccel_goertzel_hann_window_ROM_1P_BRAM_1R.v",
-      "impl\/verilog\/deepwaveaccel_load_params.v",
       "impl\/verilog\/deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1.v",
       "impl\/verilog\/deepwaveaccel_mac_muladd_18s_18s_34ns_34_4_1.v",
       "impl\/verilog\/deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1.v",
-      "impl\/verilog\/deepwaveaccel_mul_14s_13ns_14_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_14s_13ns_27_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_18s_18s_34_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_22s_22s_44_1_1.v",
@@ -585,16 +291,18 @@
       "impl\/verilog\/deepwaveaccel_mul_25s_16ns_40_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_31s_31s_62_1_1.v",
       "impl\/verilog\/deepwaveaccel_mul_36s_24ns_54_1_1.v",
-      "impl\/verilog\/deepwaveaccel_PARAMS_m_axi.v",
       "impl\/verilog\/deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1.v",
       "impl\/verilog\/deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1.v",
       "impl\/verilog\/deepwaveaccel_regslice_both.v",
       "impl\/verilog\/deepwaveaccel_sparsemux_7_2_18_1_1.v",
       "impl\/verilog\/deepwaveaccel_sparsemux_13_3_12_1_1.v",
-      "impl\/verilog\/deepwaveaccel_sparsemux_47_5_18_1_1.v",
+      "impl\/verilog\/deepwaveaccel_sparsemux_13_3_15_1_1.v",
       "impl\/verilog\/deepwaveaccel_sparsemux_95_6_14_1_1.v",
       "impl\/verilog\/deepwaveaccel_sparsemux_2257_11_6_1_1.v",
       "impl\/verilog\/deepwaveaccel_srem_32ns_3ns_3_36_seq_1.v",
+      "impl\/verilog\/deepwaveaccel_start_for_backprojection_U0.v",
+      "impl\/verilog\/deepwaveaccel_start_for_crosscor_U0.v",
+      "impl\/verilog\/deepwaveaccel_start_for_deblur_U0.v",
       "impl\/verilog\/deepwaveaccel_udiv_39s_24ns_24_43_seq_1.v",
       "impl\/verilog\/deepwaveaccel.v"
     ],
@@ -631,10 +339,9 @@
       "busTypeName": "aximm",
       "mode": "slave",
       "dataWidth": "32",
-      "addrWidth": "9",
+      "addrWidth": "7",
       "portPrefix": "s_axi_CTRL_BUS_",
       "paramPrefix": "C_S_AXI_CTRL_BUS_",
-      "offsetMasterName": "m_axi_PARAMS",
       "ports": [
         "s_axi_CTRL_BUS_ARADDR",
         "s_axi_CTRL_BUS_ARREADY",
@@ -657,90 +364,6 @@
       "registers": [
         {
           "offset": "0x10",
-          "name": "b_ddr_1",
-          "access": "W",
-          "description": "Data signal of b_ddr",
-          "range": "32",
-          "fields": [{
-              "offset": "0",
-              "width": "32",
-              "name": "b_ddr",
-              "access": "W",
-              "description": "Bit 31 to 0 of b_ddr"
-            }]
-        },
-        {
-          "offset": "0x14",
-          "name": "b_ddr_2",
-          "access": "W",
-          "description": "Data signal of b_ddr",
-          "range": "32",
-          "fields": [{
-              "offset": "0",
-              "width": "32",
-              "name": "b_ddr",
-              "access": "W",
-              "description": "Bit 63 to 32 of b_ddr"
-            }]
-        },
-        {
-          "offset": "0x1c",
-          "name": "tau_ddr_1",
-          "access": "W",
-          "description": "Data signal of tau_ddr",
-          "range": "32",
-          "fields": [{
-              "offset": "0",
-              "width": "32",
-              "name": "tau_ddr",
-              "access": "W",
-              "description": "Bit 31 to 0 of tau_ddr"
-            }]
-        },
-        {
-          "offset": "0x20",
-          "name": "tau_ddr_2",
-          "access": "W",
-          "description": "Data signal of tau_ddr",
-          "range": "32",
-          "fields": [{
-              "offset": "0",
-              "width": "32",
-              "name": "tau_ddr",
-              "access": "W",
-              "description": "Bit 63 to 32 of tau_ddr"
-            }]
-        },
-        {
-          "offset": "0x28",
-          "name": "lap_ddr_1",
-          "access": "W",
-          "description": "Data signal of lap_ddr",
-          "range": "32",
-          "fields": [{
-              "offset": "0",
-              "width": "32",
-              "name": "lap_ddr",
-              "access": "W",
-              "description": "Bit 31 to 0 of lap_ddr"
-            }]
-        },
-        {
-          "offset": "0x2c",
-          "name": "lap_ddr_2",
-          "access": "W",
-          "description": "Data signal of lap_ddr",
-          "range": "32",
-          "fields": [{
-              "offset": "0",
-              "width": "32",
-              "name": "lap_ddr",
-              "access": "W",
-              "description": "Bit 63 to 32 of lap_ddr"
-            }]
-        },
-        {
-          "offset": "0x34",
           "name": "goer_cfg_COS_OMEGA_0",
           "access": "W",
           "description": "Data signal of goer_cfg_COS_OMEGA_0",
@@ -763,7 +386,7 @@
           ]
         },
         {
-          "offset": "0x3c",
+          "offset": "0x18",
           "name": "goer_cfg_COS_OMEGA_1",
           "access": "W",
           "description": "Data signal of goer_cfg_COS_OMEGA_1",
@@ -786,7 +409,7 @@
           ]
         },
         {
-          "offset": "0x44",
+          "offset": "0x20",
           "name": "goer_cfg_COS_OMEGA2_0",
           "access": "W",
           "description": "Data signal of goer_cfg_COS_OMEGA2_0",
@@ -809,7 +432,7 @@
           ]
         },
         {
-          "offset": "0x4c",
+          "offset": "0x28",
           "name": "goer_cfg_COS_OMEGA2_1",
           "access": "W",
           "description": "Data signal of goer_cfg_COS_OMEGA2_1",
@@ -832,7 +455,7 @@
           ]
         },
         {
-          "offset": "0x54",
+          "offset": "0x30",
           "name": "goer_cfg_SIN_OMEGA_0",
           "access": "W",
           "description": "Data signal of goer_cfg_SIN_OMEGA_0",
@@ -855,7 +478,7 @@
           ]
         },
         {
-          "offset": "0x5c",
+          "offset": "0x38",
           "name": "goer_cfg_SIN_OMEGA_1",
           "access": "W",
           "description": "Data signal of goer_cfg_SIN_OMEGA_1",
@@ -878,712 +501,22 @@
           ]
         },
         {
-          "offset": "0x64",
-          "name": "debl_cfg_n_layers",
+          "offset": "0x40",
+          "name": "debl_cfg",
           "access": "W",
-          "description": "Data signal of debl_cfg_n_layers",
+          "description": "Data signal of debl_cfg",
           "range": "32",
           "fields": [
             {
               "offset": "0",
               "width": "8",
-              "name": "debl_cfg_n_layers",
+              "name": "debl_cfg",
               "access": "W",
-              "description": "Bit 7 to 0 of debl_cfg_n_layers"
+              "description": "Bit 7 to 0 of debl_cfg"
             },
             {
               "offset": "8",
               "width": "24",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x6c",
-          "name": "debl_cfg_K",
-          "access": "W",
-          "description": "Data signal of debl_cfg_K",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "6",
-              "name": "debl_cfg_K",
-              "access": "W",
-              "description": "Bit 5 to 0 of debl_cfg_K"
-            },
-            {
-              "offset": "6",
-              "width": "26",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x74",
-          "name": "debl_cfg_lap_off_0",
-          "access": "W",
-          "description": "Data signal of debl_cfg_lap_off_0",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "12",
-              "name": "debl_cfg_lap_off_0",
-              "access": "W",
-              "description": "Bit 11 to 0 of debl_cfg_lap_off_0"
-            },
-            {
-              "offset": "12",
-              "width": "20",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x7c",
-          "name": "debl_cfg_lap_off_1",
-          "access": "W",
-          "description": "Data signal of debl_cfg_lap_off_1",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "12",
-              "name": "debl_cfg_lap_off_1",
-              "access": "W",
-              "description": "Bit 11 to 0 of debl_cfg_lap_off_1"
-            },
-            {
-              "offset": "12",
-              "width": "20",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x84",
-          "name": "debl_cfg_lap_off_2",
-          "access": "W",
-          "description": "Data signal of debl_cfg_lap_off_2",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "12",
-              "name": "debl_cfg_lap_off_2",
-              "access": "W",
-              "description": "Bit 11 to 0 of debl_cfg_lap_off_2"
-            },
-            {
-              "offset": "12",
-              "width": "20",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x8c",
-          "name": "debl_cfg_lap_off_3",
-          "access": "W",
-          "description": "Data signal of debl_cfg_lap_off_3",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "12",
-              "name": "debl_cfg_lap_off_3",
-              "access": "W",
-              "description": "Bit 11 to 0 of debl_cfg_lap_off_3"
-            },
-            {
-              "offset": "12",
-              "width": "20",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x94",
-          "name": "debl_cfg_lap_off_4",
-          "access": "W",
-          "description": "Data signal of debl_cfg_lap_off_4",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "12",
-              "name": "debl_cfg_lap_off_4",
-              "access": "W",
-              "description": "Bit 11 to 0 of debl_cfg_lap_off_4"
-            },
-            {
-              "offset": "12",
-              "width": "20",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x9c",
-          "name": "debl_cfg_lap_off_5",
-          "access": "W",
-          "description": "Data signal of debl_cfg_lap_off_5",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "12",
-              "name": "debl_cfg_lap_off_5",
-              "access": "W",
-              "description": "Bit 11 to 0 of debl_cfg_lap_off_5"
-            },
-            {
-              "offset": "12",
-              "width": "20",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xa4",
-          "name": "debl_cfg_theta_0",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_0",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_0",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_0"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xac",
-          "name": "debl_cfg_theta_1",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_1",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_1",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_1"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xb4",
-          "name": "debl_cfg_theta_2",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_2",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_2",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_2"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xbc",
-          "name": "debl_cfg_theta_3",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_3",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_3",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_3"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xc4",
-          "name": "debl_cfg_theta_4",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_4",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_4",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_4"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xcc",
-          "name": "debl_cfg_theta_5",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_5",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_5",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_5"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xd4",
-          "name": "debl_cfg_theta_6",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_6",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_6",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_6"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xdc",
-          "name": "debl_cfg_theta_7",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_7",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_7",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_7"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xe4",
-          "name": "debl_cfg_theta_8",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_8",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_8",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_8"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xec",
-          "name": "debl_cfg_theta_9",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_9",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_9",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_9"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xf4",
-          "name": "debl_cfg_theta_10",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_10",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_10",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_10"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0xfc",
-          "name": "debl_cfg_theta_11",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_11",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_11",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_11"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x104",
-          "name": "debl_cfg_theta_12",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_12",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_12",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_12"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x10c",
-          "name": "debl_cfg_theta_13",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_13",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_13",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_13"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x114",
-          "name": "debl_cfg_theta_14",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_14",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_14",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_14"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x11c",
-          "name": "debl_cfg_theta_15",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_15",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_15",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_15"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x124",
-          "name": "debl_cfg_theta_16",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_16",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_16",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_16"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x12c",
-          "name": "debl_cfg_theta_17",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_17",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_17",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_17"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x134",
-          "name": "debl_cfg_theta_18",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_18",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_18",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_18"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x13c",
-          "name": "debl_cfg_theta_19",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_19",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_19",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_19"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x144",
-          "name": "debl_cfg_theta_20",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_20",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_20",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_20"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x14c",
-          "name": "debl_cfg_theta_21",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_21",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_21",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_21"
-            },
-            {
-              "offset": "18",
-              "width": "14",
-              "name": "RESERVED",
-              "access": "R",
-              "description": "Reserved.  0s on read."
-            }
-          ]
-        },
-        {
-          "offset": "0x154",
-          "name": "debl_cfg_theta_22",
-          "access": "W",
-          "description": "Data signal of debl_cfg_theta_22",
-          "range": "32",
-          "fields": [
-            {
-              "offset": "0",
-              "width": "18",
-              "name": "debl_cfg_theta_22",
-              "access": "W",
-              "description": "Bit 17 to 0 of debl_cfg_theta_22"
-            },
-            {
-              "offset": "18",
-              "width": "14",
               "name": "RESERVED",
               "access": "R",
               "description": "Reserved.  0s on read."
@@ -1597,279 +530,48 @@
           "mode": "s_axilite",
           "register_option": "0",
           "offset": "16",
-          "argName": "b_ddr"
+          "argName": "goer_cfg"
         },
         {
           "constraint_type": "pragma interface",
           "mode": "s_axilite",
           "register_option": "0",
-          "offset": "28",
-          "argName": "tau_ddr"
+          "offset": "24",
+          "argName": "goer_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "32",
+          "argName": "goer_cfg"
         },
         {
           "constraint_type": "pragma interface",
           "mode": "s_axilite",
           "register_option": "0",
           "offset": "40",
-          "argName": "lap_ddr"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "52",
           "argName": "goer_cfg"
         },
         {
           "constraint_type": "pragma interface",
           "mode": "s_axilite",
           "register_option": "0",
-          "offset": "60",
+          "offset": "48",
           "argName": "goer_cfg"
         },
         {
           "constraint_type": "pragma interface",
           "mode": "s_axilite",
           "register_option": "0",
-          "offset": "68",
+          "offset": "56",
           "argName": "goer_cfg"
         },
         {
           "constraint_type": "pragma interface",
           "mode": "s_axilite",
           "register_option": "0",
-          "offset": "76",
-          "argName": "goer_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "84",
-          "argName": "goer_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "92",
-          "argName": "goer_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "100",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "108",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "116",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "124",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "132",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "140",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "148",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "156",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "164",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "172",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "180",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "188",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "196",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "204",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "212",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "220",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "228",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "236",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "244",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "252",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "260",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "268",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "276",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "284",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "292",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "300",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "308",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "316",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "324",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "332",
-          "argName": "debl_cfg"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "s_axilite",
-          "register_option": "0",
-          "offset": "340",
+          "offset": "64",
           "argName": "debl_cfg"
         }
       ]
@@ -1879,7 +581,7 @@
       "busTypeName": "clock",
       "mode": "slave",
       "busParams": {
-        "ASSOCIATED_BUSIF": "s_axi_CTRL_BUS:m_axi_PARAMS:in_r:out_r",
+        "ASSOCIATED_BUSIF": "s_axi_CTRL_BUS:in_r:param_bp:param_db:out_r",
         "ASSOCIATED_RESET": "ap_rst_n"
       },
       "portMap": {"ap_clk": "CLK"},
@@ -1893,143 +595,12 @@
       "portMap": {"ap_rst_n": "RST"},
       "ports": ["ap_rst_n"]
     },
-    "m_axi_PARAMS": {
-      "type": "axi4full",
-      "busTypeName": "aximm",
-      "mode": "master",
-      "dataWidth": "32",
-      "addrWidth": "64",
-      "portPrefix": "m_axi_PARAMS_",
-      "paramPrefix": "C_M_AXI_PARAMS_",
-      "offsetSlaveName": "s_axi_CTRL_BUS",
-      "preferredUsageValue": "MEMORY",
-      "busParams": {
-        "NUM_READ_OUTSTANDING": "16",
-        "NUM_WRITE_OUTSTANDING": "16",
-        "MAX_READ_BURST_LENGTH": "256",
-        "MAX_WRITE_BURST_LENGTH": "16",
-        "MAX_BURST_LENGTH": "256",
-        "PROTOCOL": "AXI4",
-        "READ_WRITE_MODE": "READ_ONLY",
-        "HAS_BURST": "0",
-        "SUPPORTS_NARROW_BURST": "0"
-      },
-      "ports": [
-        "m_axi_PARAMS_ARADDR",
-        "m_axi_PARAMS_ARBURST",
-        "m_axi_PARAMS_ARCACHE",
-        "m_axi_PARAMS_ARID",
-        "m_axi_PARAMS_ARLEN",
-        "m_axi_PARAMS_ARLOCK",
-        "m_axi_PARAMS_ARPROT",
-        "m_axi_PARAMS_ARQOS",
-        "m_axi_PARAMS_ARREADY",
-        "m_axi_PARAMS_ARREGION",
-        "m_axi_PARAMS_ARSIZE",
-        "m_axi_PARAMS_ARUSER",
-        "m_axi_PARAMS_ARVALID",
-        "m_axi_PARAMS_AWADDR",
-        "m_axi_PARAMS_AWBURST",
-        "m_axi_PARAMS_AWCACHE",
-        "m_axi_PARAMS_AWID",
-        "m_axi_PARAMS_AWLEN",
-        "m_axi_PARAMS_AWLOCK",
-        "m_axi_PARAMS_AWPROT",
-        "m_axi_PARAMS_AWQOS",
-        "m_axi_PARAMS_AWREADY",
-        "m_axi_PARAMS_AWREGION",
-        "m_axi_PARAMS_AWSIZE",
-        "m_axi_PARAMS_AWUSER",
-        "m_axi_PARAMS_AWVALID",
-        "m_axi_PARAMS_BID",
-        "m_axi_PARAMS_BREADY",
-        "m_axi_PARAMS_BRESP",
-        "m_axi_PARAMS_BUSER",
-        "m_axi_PARAMS_BVALID",
-        "m_axi_PARAMS_RDATA",
-        "m_axi_PARAMS_RID",
-        "m_axi_PARAMS_RLAST",
-        "m_axi_PARAMS_RREADY",
-        "m_axi_PARAMS_RRESP",
-        "m_axi_PARAMS_RUSER",
-        "m_axi_PARAMS_RVALID",
-        "m_axi_PARAMS_WDATA",
-        "m_axi_PARAMS_WID",
-        "m_axi_PARAMS_WLAST",
-        "m_axi_PARAMS_WREADY",
-        "m_axi_PARAMS_WSTRB",
-        "m_axi_PARAMS_WUSER",
-        "m_axi_PARAMS_WVALID"
-      ],
-      "constraints": [
-        {
-          "constraint_type": "pragma interface",
-          "mode": "m_axi",
-          "register_option": "0",
-          "offset": "slave",
-          "latency": "0",
-          "num_read_outstanding": "16",
-          "num_write_outstanding": "16",
-          "max_read_burst_length": "256",
-          "max_write_burst_length": "16",
-          "max_widen_bitwidth": "0",
-          "channel_id": "0",
-          "argName": "b_ddr"
-        },
-        {
-          "constraint_type": "bitwidth",
-          "orig_bitwidth": "32",
-          "final_bitwidth": "32",
-          "argName": "b_ddr"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "m_axi",
-          "register_option": "0",
-          "offset": "slave",
-          "latency": "0",
-          "num_read_outstanding": "16",
-          "num_write_outstanding": "16",
-          "max_read_burst_length": "256",
-          "max_write_burst_length": "16",
-          "max_widen_bitwidth": "0",
-          "channel_id": "0",
-          "argName": "tau_ddr"
-        },
-        {
-          "constraint_type": "bitwidth",
-          "orig_bitwidth": "13",
-          "final_bitwidth": "32",
-          "argName": "tau_ddr"
-        },
-        {
-          "constraint_type": "pragma interface",
-          "mode": "m_axi",
-          "register_option": "0",
-          "offset": "slave",
-          "latency": "0",
-          "num_read_outstanding": "16",
-          "num_write_outstanding": "16",
-          "max_read_burst_length": "256",
-          "max_write_burst_length": "16",
-          "max_widen_bitwidth": "0",
-          "channel_id": "0",
-          "argName": "lap_ddr"
-        },
-        {
-          "constraint_type": "bitwidth",
-          "orig_bitwidth": "15",
-          "final_bitwidth": "32",
-          "argName": "lap_ddr"
-        }
-      ]
-    },
     "in_r": {
       "type": "axi4stream",
       "busTypeName": "axis",
       "mode": "slave",
       "direction": "in",
-      "dataWidth": "16",
+      "dataWidth": "32",
       "portPrefix": "in_r_",
       "ports": [
         "in_r_TDATA",
@@ -2042,6 +613,46 @@
           "register_option": "1",
           "register_mode": "both",
           "argName": "in"
+        }]
+    },
+    "param_bp": {
+      "type": "axi4stream",
+      "busTypeName": "axis",
+      "mode": "slave",
+      "direction": "in",
+      "dataWidth": "32",
+      "portPrefix": "param_bp_",
+      "ports": [
+        "param_bp_TDATA",
+        "param_bp_TREADY",
+        "param_bp_TVALID"
+      ],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "axis",
+          "register_option": "1",
+          "register_mode": "both",
+          "argName": "param_bp"
+        }]
+    },
+    "param_db": {
+      "type": "axi4stream",
+      "busTypeName": "axis",
+      "mode": "slave",
+      "direction": "in",
+      "dataWidth": "32",
+      "portPrefix": "param_db_",
+      "ports": [
+        "param_db_TDATA",
+        "param_db_TREADY",
+        "param_db_TVALID"
+      ],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "axis",
+          "register_option": "1",
+          "register_mode": "both",
+          "argName": "param_db"
         }]
     },
     "out_r": {
@@ -2079,7 +690,7 @@
     },
     "s_axi_CTRL_BUS_AWADDR": {
       "dir": "in",
-      "width": "9"
+      "width": "7"
     },
     "s_axi_CTRL_BUS_WVALID": {
       "dir": "in",
@@ -2107,7 +718,7 @@
     },
     "s_axi_CTRL_BUS_ARADDR": {
       "dir": "in",
-      "width": "9"
+      "width": "7"
     },
     "s_axi_CTRL_BUS_RVALID": {
       "dir": "out",
@@ -2145,205 +756,39 @@
       "dir": "in",
       "width": "1"
     },
-    "m_axi_PARAMS_AWVALID": {
-      "dir": "out",
-      "width": "1"
-    },
-    "m_axi_PARAMS_AWREADY": {
-      "dir": "in",
-      "width": "1"
-    },
-    "m_axi_PARAMS_AWADDR": {
-      "dir": "out",
-      "width": "64"
-    },
-    "m_axi_PARAMS_AWID": {
-      "dir": "out",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_AWLEN": {
-      "dir": "out",
-      "width": "8"
-    },
-    "m_axi_PARAMS_AWSIZE": {
-      "dir": "out",
-      "width": "3"
-    },
-    "m_axi_PARAMS_AWBURST": {
-      "dir": "out",
-      "width": "2"
-    },
-    "m_axi_PARAMS_AWLOCK": {
-      "dir": "out",
-      "width": "2"
-    },
-    "m_axi_PARAMS_AWCACHE": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_AWPROT": {
-      "dir": "out",
-      "width": "3"
-    },
-    "m_axi_PARAMS_AWQOS": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_AWREGION": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_AWUSER": {
-      "dir": "out",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_WVALID": {
-      "dir": "out",
-      "width": "1"
-    },
-    "m_axi_PARAMS_WREADY": {
-      "dir": "in",
-      "width": "1"
-    },
-    "m_axi_PARAMS_WDATA": {
-      "dir": "out",
-      "width": "32"
-    },
-    "m_axi_PARAMS_WSTRB": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_WLAST": {
-      "dir": "out",
-      "width": "1"
-    },
-    "m_axi_PARAMS_WID": {
-      "dir": "out",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_WUSER": {
-      "dir": "out",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_ARVALID": {
-      "dir": "out",
-      "width": "1"
-    },
-    "m_axi_PARAMS_ARREADY": {
-      "dir": "in",
-      "width": "1"
-    },
-    "m_axi_PARAMS_ARADDR": {
-      "dir": "out",
-      "width": "64"
-    },
-    "m_axi_PARAMS_ARID": {
-      "dir": "out",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_ARLEN": {
-      "dir": "out",
-      "width": "8"
-    },
-    "m_axi_PARAMS_ARSIZE": {
-      "dir": "out",
-      "width": "3"
-    },
-    "m_axi_PARAMS_ARBURST": {
-      "dir": "out",
-      "width": "2"
-    },
-    "m_axi_PARAMS_ARLOCK": {
-      "dir": "out",
-      "width": "2"
-    },
-    "m_axi_PARAMS_ARCACHE": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_ARPROT": {
-      "dir": "out",
-      "width": "3"
-    },
-    "m_axi_PARAMS_ARQOS": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_ARREGION": {
-      "dir": "out",
-      "width": "4"
-    },
-    "m_axi_PARAMS_ARUSER": {
-      "dir": "out",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_RVALID": {
-      "dir": "in",
-      "width": "1"
-    },
-    "m_axi_PARAMS_RREADY": {
-      "dir": "out",
-      "width": "1"
-    },
-    "m_axi_PARAMS_RDATA": {
-      "dir": "in",
-      "width": "32"
-    },
-    "m_axi_PARAMS_RLAST": {
-      "dir": "in",
-      "width": "1"
-    },
-    "m_axi_PARAMS_RID": {
-      "dir": "in",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_RUSER": {
-      "dir": "in",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_RRESP": {
-      "dir": "in",
-      "width": "2"
-    },
-    "m_axi_PARAMS_BVALID": {
-      "dir": "in",
-      "width": "1"
-    },
-    "m_axi_PARAMS_BREADY": {
-      "dir": "out",
-      "width": "1"
-    },
-    "m_axi_PARAMS_BRESP": {
-      "dir": "in",
-      "width": "2"
-    },
-    "m_axi_PARAMS_BID": {
-      "dir": "in",
-      "width": "1",
-      "isVector": "true"
-    },
-    "m_axi_PARAMS_BUSER": {
-      "dir": "in",
-      "width": "1",
-      "isVector": "true"
-    },
     "in_r_TDATA": {
       "dir": "in",
-      "width": "16"
+      "width": "32"
     },
     "in_r_TVALID": {
       "dir": "in",
       "width": "1"
     },
     "in_r_TREADY": {
+      "dir": "out",
+      "width": "1"
+    },
+    "param_bp_TDATA": {
+      "dir": "in",
+      "width": "32"
+    },
+    "param_bp_TVALID": {
+      "dir": "in",
+      "width": "1"
+    },
+    "param_bp_TREADY": {
+      "dir": "out",
+      "width": "1"
+    },
+    "param_db_TDATA": {
+      "dir": "in",
+      "width": "32"
+    },
+    "param_db_TVALID": {
+      "dir": "in",
+      "width": "1"
+    },
+    "param_db_TREADY": {
       "dir": "out",
       "width": "1"
     },
@@ -2376,27 +821,22 @@
   "ModuleInfo": {
     "Hierarchy": {
       "ModuleName": "deepwaveaccel",
-      "BindInstances": "debl_cfg_n_layers_c_U debl_cfg_K_c_U debl_cfg_lap_off_0_c_U debl_cfg_lap_off_1_c_U debl_cfg_lap_off_2_c_U debl_cfg_lap_off_3_c_U debl_cfg_lap_off_4_c_U debl_cfg_lap_off_5_c_U debl_cfg_theta_0_c_U debl_cfg_theta_1_c_U debl_cfg_theta_2_c_U debl_cfg_theta_3_c_U debl_cfg_theta_4_c_U debl_cfg_theta_5_c_U debl_cfg_theta_6_c_U debl_cfg_theta_7_c_U debl_cfg_theta_8_c_U debl_cfg_theta_9_c_U debl_cfg_theta_10_c_U debl_cfg_theta_11_c_U debl_cfg_theta_12_c_U debl_cfg_theta_13_c_U debl_cfg_theta_14_c_U debl_cfg_theta_15_c_U debl_cfg_theta_16_c_U debl_cfg_theta_17_c_U debl_cfg_theta_18_c_U debl_cfg_theta_19_c_U debl_cfg_theta_20_c_U debl_cfg_theta_21_c_U debl_cfg_theta_22_c_U g_lap_main_channel_U g_b_mem_M_real_193_U g_b_mem_M_imag_192_U g_tau_mem_U g_lap_rest_U s_goertzel_U s_xcor_U s_norm_U s_bp_U CTRL_BUS_s_axi_U PARAMS_m_axi_U",
+      "BindInstances": "debl_cfg_c_U s_goertzel_U s_xcor_U s_norm_U s_bp_U CTRL_BUS_s_axi_U",
       "Instances": [
-        {
-          "ModuleName": "load_params",
-          "InstanceName": "load_params_U0",
-          "BindInstances": "empty_fu_368_p2 p_cast10_i_cast_cast_fu_374_p3 icmp_ln24_fu_410_p2 add_ln24_fu_416_p2 icmp_ln26_fu_433_p2 add_ln26_fu_439_p2 add_ln28_fu_445_p2 add_ln28_1_fu_463_p2 sub_ln28_fu_522_p2 lshr_ln28_fu_540_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U63 partset_672ns_672ns_14ns_10ns_672_1_1_U64 add_ln24_1_fu_488_p2 icmp_ln35_fu_580_p2 add_ln35_fu_586_p2 add_ln37_fu_604_p2 lshr_ln37_fu_653_p2 lshr_ln43_fu_714_p2 add_ln45_1_fu_734_p2 add_ln45_2_fu_740_p2 icmp_ln45_fu_746_p2 add_ln45_fu_752_p2 icmp_ln47_fu_764_p2 add_ln47_fu_770_p2 add_ln49_3_fu_780_p2 add_ln49_fu_785_p2 add_ln49_2_fu_798_p2 add_ln49_1_fu_808_p2 lshr_ln49_fu_864_p2"
-        },
         {
           "ModuleName": "goertzel",
           "InstanceName": "goertzel_U0",
-          "BindInstances": "mul_14s_13ns_27_1_1_U75 mac_muladd_18s_18s_30s_34_4_1_U77 mac_muladd_18s_18s_30s_34_4_1_U77 sub_ln67_fu_319_p2 mac_muladd_18s_18s_30s_34_4_1_U78 mac_muladd_18s_18s_30s_34_4_1_U78 sub_ln67_1_fu_346_p2 add_ln72_fu_361_p2 icmp_ln75_fu_366_p2 mac_mulsub_18s_18s_34ns_34_4_1_U79 mac_mulsub_18s_18s_34ns_34_4_1_U79 mul_18s_18s_34_1_1_U76 mac_mulsub_18s_18s_34ns_34_4_1_U80 mac_mulsub_18s_18s_34ns_34_4_1_U80 add_ln80_fu_476_p2 mac_muladd_18s_18s_34ns_34_4_1_U81 mac_muladd_18s_18s_34ns_34_4_1_U81 add_ln88_fu_412_p2 icmp_ln89_fu_418_p2 select_ln89_fu_424_p3 hann_window_U"
+          "BindInstances": "mul_14s_13ns_27_1_1_U3 mac_muladd_18s_18s_30s_34_4_1_U5 mac_muladd_18s_18s_30s_34_4_1_U5 sub_ln70_fu_321_p2 mac_muladd_18s_18s_30s_34_4_1_U6 mac_muladd_18s_18s_30s_34_4_1_U6 sub_ln70_1_fu_348_p2 add_ln75_fu_363_p2 icmp_ln78_fu_368_p2 mac_mulsub_18s_18s_34ns_34_4_1_U7 mac_mulsub_18s_18s_34ns_34_4_1_U7 mul_18s_18s_34_1_1_U4 mac_mulsub_18s_18s_34ns_34_4_1_U8 mac_mulsub_18s_18s_34ns_34_4_1_U8 add_ln83_fu_478_p2 mac_muladd_18s_18s_34ns_34_4_1_U9 mac_muladd_18s_18s_34ns_34_4_1_U9 add_ln91_fu_414_p2 icmp_ln92_fu_420_p2 select_ln92_fu_426_p3 hann_window_U"
         },
         {
           "ModuleName": "crosscor",
           "InstanceName": "crosscor_U0",
-          "BindInstances": "mul_31s_31s_62_1_1_U97 mul_31s_31s_62_1_1_U98 add_ln80_fu_2834_p2 icmp_ln81_fu_2846_p2 icmp_ln84_fu_12034_p2 mul_25s_16ns_40_1_1_U105 icmp_ln88_fu_12089_p2 corrected_1_fu_12095_p3 udiv_39s_24ns_24_43_seq_1_U106 sparsemux_2257_11_6_1_1_U103 sparsemux_2257_11_6_1_1_U104 mul_31s_31s_62_1_1_U97 mul_31s_31s_62_1_1_U98 mul_31s_31s_62_1_1_U99 mul_31s_31s_62_1_1_U100 grp_fu_2785_p2 grp_fu_2790_p2 add_ln112_fu_12259_p2 icmp_ln113_fu_12264_p2 select_ln113_fu_12270_p3 select_ln113_1_fu_12278_p3 pair_idx_new_3_cast_cast_cast_fu_12286_p3 mul_36s_24ns_54_1_1_U101 mul_36s_24ns_54_1_1_U102 grp_fu_2785_p2 grp_fu_2790_p2 add_ln58_fu_11942_p2 icmp_ln59_fu_11948_p2 u_M_real_U u_M_imag_U R_flat_M_real_U R_flat_M_imag_U"
+          "BindInstances": "mul_31s_31s_62_1_1_U25 mul_31s_31s_62_1_1_U26 add_ln81_fu_2836_p2 icmp_ln82_fu_2848_p2 icmp_ln85_fu_12036_p2 mul_25s_16ns_40_1_1_U33 icmp_ln89_fu_12091_p2 corrected_1_fu_12097_p3 udiv_39s_24ns_24_43_seq_1_U34 sparsemux_2257_11_6_1_1_U31 sparsemux_2257_11_6_1_1_U32 mul_31s_31s_62_1_1_U25 mul_31s_31s_62_1_1_U26 mul_31s_31s_62_1_1_U27 mul_31s_31s_62_1_1_U28 grp_fu_2787_p2 grp_fu_2792_p2 add_ln113_fu_12261_p2 icmp_ln114_fu_12266_p2 select_ln114_fu_12272_p3 select_ln114_1_fu_12280_p3 pair_idx_new_3_cast_cast_cast_fu_12288_p3 mul_36s_24ns_54_1_1_U29 mul_36s_24ns_54_1_1_U30 grp_fu_2787_p2 grp_fu_2792_p2 add_ln59_fu_11944_p2 icmp_ln60_fu_11950_p2 u_M_real_U u_M_imag_U R_flat_M_real_U R_flat_M_imag_U"
         },
         {
           "ModuleName": "backprojection",
           "InstanceName": "backprojection_U0",
-          "BindInstances": "sparsemux_95_6_14_1_1_U124 sparsemux_95_6_14_1_1_U125 sparsemux_95_6_14_1_1_U126 sparsemux_95_6_14_1_1_U127 mul_24s_22s_46_1_1_U120 mul_24s_22s_46_1_1_U121 sub_ln88_fu_2249_p2 mul_24s_22s_46_1_1_U122 mul_24s_22s_46_1_1_U123 add_ln89_fu_2273_p2 mul_22s_22s_44_1_1_U118 mul_23s_22s_45_1_1_U119 add_ln92_fu_2325_p2 add_ln94_fu_2353_p2 add_ln96_fu_2364_p2 icmp_ln97_fu_2370_p2 sub_ln60_fu_2674_p2 partselect_14ns_672ns_10ns_14_1_1_U128 partselect_14ns_672ns_10ns_14_1_1_U129 grp_fu_835_p2 y_sub_fu_2996_p2 add_ln110_fu_989_p2 icmp_ln113_fu_995_p2 select_ln113_fu_1001_p3 xor_ln113_fu_1009_p2 grp_fu_835_p2 icmp_ln50_fu_3043_p2 Sigma_up_M_real_U Sigma_up_M_imag_U j_rom_U k_rom_U"
+          "BindInstances": "sparsemux_95_6_14_1_1_U52 sparsemux_95_6_14_1_1_U53 sparsemux_95_6_14_1_1_U54 sparsemux_95_6_14_1_1_U55 mul_24s_22s_46_1_1_U48 mul_24s_22s_46_1_1_U49 sub_ln181_fu_2475_p2 mul_24s_22s_46_1_1_U50 mul_24s_22s_46_1_1_U51 add_ln182_fu_2499_p2 mul_22s_22s_44_1_1_U46 mul_23s_22s_45_1_1_U47 add_ln185_fu_2551_p2 add_ln187_fu_2579_p2 add_ln189_fu_2590_p2 icmp_ln190_fu_2596_p2 sub_ln153_fu_2906_p2 partselect_14ns_672ns_10ns_14_1_1_U56 partselect_14ns_672ns_10ns_14_1_1_U57 grp_fu_1034_p2 grp_fu_1034_p2 icmp_ln143_fu_3237_p2 y_sub_fu_3261_p2 grp_fu_1139_p2 grp_fu_1144_p2 select_ln206_fu_3287_p3 storemerge_cast_cast_cast_fu_3295_p3 sub_ln105_fu_3341_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U58 partset_672ns_672ns_14ns_10ns_672_1_1_U59 add_ln107_fu_3374_p2 icmp_ln108_fu_3380_p2 grp_fu_1139_p2 grp_fu_1144_p2 grp_fu_1139_p2 grp_fu_1144_p2 backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_U backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_imag_U tau_mem_U Sigma_up_M_real_U Sigma_up_M_imag_U j_rom_U k_rom_U"
         },
         {
           "ModuleName": "entry_proc",
@@ -2405,7 +845,7 @@
         {
           "ModuleName": "deblur",
           "InstanceName": "deblur_U0",
-          "BindInstances": "add_ln202_fu_964_p2 t_fu_988_p3 grp_fu_895_p2 grp_fu_901_p2 add_ln207_fu_1005_p2 icmp_ln208_fu_1020_p2 srem_32ns_3ns_3_36_seq_1_U147 mul_14s_13ns_14_1_1_U148 sparsemux_13_3_12_1_1_U149 il_fu_1120_p2 iu_fu_1126_p2 add_ln50_fu_1143_p2 grp_fu_907_p2 grp_fu_912_p2 sparsemux_7_2_18_1_1_U150 mul_24s_21ns_45_1_1_U144 sub_ln50_fu_1276_p2 acc_2_fu_1292_p3 icmp_ln51_fu_1165_p2 add_ln52_fu_1182_p2 sparsemux_7_2_18_1_1_U151 mul_24s_21ns_45_1_1_U145 sub_ln52_fu_1357_p2 acc_4_fu_1373_p3 icmp_ln171_fu_1386_p2 add_ln195_fu_1391_p2 sparsemux_7_2_18_1_1_U152 icmp_ln176_fu_1436_p2 z_next_val_fu_1458_p2 z_next_val_1_fu_1464_p3 sparsemux_47_5_18_1_1_U153 mul_24s_24s_46_1_1_U146 add_ln187_fu_1596_p2 grp_fu_895_p2 grp_fu_901_p2 add_ln190_fu_1613_p2 icmp_ln191_fu_1627_p2 select_ln191_cast_i_cast_cast_fu_1632_p3 grp_fu_907_p2 grp_fu_912_p2 sparsemux_7_2_18_1_1_U154 mul_24s_21ns_45_1_1_U144 mul_24s_24s_46_1_1_U146 grp_fu_895_p2 grp_fu_901_p2 out_last_fu_1816_p2 grp_fu_895_p2 grp_fu_901_p2 grp_fu_895_p2 grp_fu_901_p2 bp_buf_U Z0_U y_acc_U Z1_U Z2_U"
+          "BindInstances": "add_ln282_fu_1324_p2 t_fu_1348_p3 grp_fu_1074_p2 grp_fu_1080_p2 add_ln287_fu_1365_p2 icmp_ln288_fu_1380_p2 srem_32ns_3ns_3_36_seq_1_U79 sparsemux_13_3_12_1_1_U80 il_fu_1485_p2 iu_fu_1491_p2 sparsemux_13_3_15_1_1_U81 grp_fu_1086_p2 grp_fu_1091_p2 sparsemux_7_2_18_1_1_U82 mul_24s_21ns_45_1_1_U76 sub_ln50_fu_1652_p2 acc_2_fu_1668_p3 icmp_ln51_fu_1525_p2 sparsemux_13_3_15_1_1_U83 sparsemux_7_2_18_1_1_U84 mul_24s_21ns_45_1_1_U77 sub_ln52_fu_1764_p2 acc_4_fu_1780_p3 icmp_ln251_fu_1793_p2 grp_fu_1096_p2 sparsemux_7_2_18_1_1_U85 icmp_ln256_fu_1832_p2 z_next_val_fu_1854_p2 z_next_val_1_fu_1860_p3 mul_24s_24s_46_1_1_U78 add_ln267_fu_1919_p2 grp_fu_1074_p2 grp_fu_1080_p2 add_ln270_fu_1936_p2 icmp_ln271_fu_1950_p2 select_ln271_fu_1955_p3 grp_fu_1086_p2 grp_fu_1091_p2 sparsemux_7_2_18_1_1_U86 mul_24s_21ns_45_1_1_U76 mul_24s_24s_46_1_1_U78 grp_fu_1074_p2 grp_fu_1080_p2 grp_fu_1074_p2 grp_fu_1080_p2 out_last_fu_2169_p2 grp_fu_1074_p2 grp_fu_1080_p2 grp_fu_1074_p2 icmp_ln161_fu_2181_p2 grp_fu_1074_p2 icmp_ln152_fu_2200_p2 grp_fu_1074_p2 grp_fu_1080_p2 grp_fu_1096_p2 icmp_ln178_fu_2216_p2 theta_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_3_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_2_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_1_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_4_U bp_buf_U Z0_U y_acc_U Z1_U Z2_U"
         }
       ]
     },
@@ -2417,38 +857,31 @@
         "isCombinational": "0",
         "isOneStateSeq": "1"
       },
-      "load_params": {
-        "FunctionProtocol": "ap_ctrl_hs",
-        "isTaskLevelControl": "0",
-        "isPipelined": "0",
-        "isCombinational": "0",
-        "isOneStateSeq": "0"
-      },
       "goertzel": {
-        "FunctionProtocol": "ap_ctrl_hs",
+        "FunctionProtocol": "ap_ctrl_none",
         "isTaskLevelControl": "0",
-        "isPipelined": "0",
+        "isPipelined": "1",
         "isCombinational": "0",
         "isOneStateSeq": "0"
       },
       "crosscor": {
-        "FunctionProtocol": "ap_ctrl_hs",
+        "FunctionProtocol": "ap_ctrl_none",
         "isTaskLevelControl": "0",
-        "isPipelined": "0",
+        "isPipelined": "1",
         "isCombinational": "0",
         "isOneStateSeq": "0"
       },
       "backprojection": {
-        "FunctionProtocol": "ap_ctrl_hs",
+        "FunctionProtocol": "ap_ctrl_none",
         "isTaskLevelControl": "0",
-        "isPipelined": "0",
+        "isPipelined": "1",
         "isCombinational": "0",
         "isOneStateSeq": "0"
       },
       "deblur": {
-        "FunctionProtocol": "ap_ctrl_hs",
+        "FunctionProtocol": "ap_ctrl_none",
         "isTaskLevelControl": "0",
-        "isPipelined": "0",
+        "isPipelined": "1",
         "isCombinational": "0",
         "isOneStateSeq": "0"
       },
@@ -2476,91 +909,12 @@
           "Estimate": "1.861"
         },
         "Area": {
-          "FF": "2",
+          "FF": "3",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "290",
+          "LUT": "29",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "~0",
-          "BRAM_18K": "0",
-          "AVAIL_BRAM": "288",
-          "UTIL_BRAM": "0",
-          "DSP": "0",
-          "AVAIL_DSP": "1248",
-          "UTIL_DSP": "0",
-          "URAM": "0",
-          "AVAIL_URAM": "64",
-          "UTIL_URAM": "0"
-        }
-      },
-      "load_params": {
-        "Latency": {
-          "LatencyBest": "1",
-          "LatencyAvg": "732765",
-          "LatencyWorst": "1465529",
-          "PipelineIIMin": "1",
-          "PipelineIIMax": "1465529",
-          "PipelineII": "1 ~ 1465529",
-          "PipelineDepth": "",
-          "PipelineType": "no"
-        },
-        "Timing": {
-          "Target": "10.00",
-          "Uncertainty": "1.50",
-          "Estimate": "8.500"
-        },
-        "Loops": [
-          {
-            "Name": "VITIS_LOOP_24_1",
-            "TripCount": "2234",
-            "LatencyMin": "1186254",
-            "LatencyMax": "1293486",
-            "Latency": "1186254 ~ 1293486",
-            "PipelineII": "",
-            "PipelineDepthMin": "531",
-            "PipelineDepthMax": "579",
-            "PipelineDepth": "531 ~ 579",
-            "Loops": [{
-                "Name": "VITIS_LOOP_26_2",
-                "TripCount": "48",
-                "LatencyMin": "528",
-                "LatencyMax": "576",
-                "Latency": "528 ~ 576",
-                "PipelineII": "",
-                "PipelineDepthMin": "11",
-                "PipelineDepthMax": "12",
-                "PipelineDepth": "11 ~ 12"
-              }]
-          },
-          {
-            "Name": "VITIS_LOOP_35_3",
-            "TripCount": "2234",
-            "Latency": "24574",
-            "PipelineII": "",
-            "PipelineDepth": "11"
-          },
-          {
-            "Name": "VITIS_LOOP_45_4",
-            "TripCount": "6",
-            "Latency": "147456",
-            "PipelineII": "",
-            "PipelineDepth": "24576",
-            "Loops": [{
-                "Name": "VITIS_LOOP_47_5",
-                "TripCount": "2234",
-                "Latency": "24574",
-                "PipelineII": "",
-                "PipelineDepth": "11"
-              }]
-          }
-        ],
-        "Area": {
-          "FF": "2101",
-          "AVAIL_FF": "234240",
-          "UTIL_FF": "~0",
-          "LUT": "3573",
-          "AVAIL_LUT": "117120",
-          "UTIL_LUT": "3",
           "BRAM_18K": "0",
           "AVAIL_BRAM": "288",
           "UTIL_BRAM": "0",
@@ -2595,10 +949,10 @@
           "DSP": "7",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "~0",
-          "FF": "340",
+          "FF": "341",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "489",
+          "LUT": "498",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "~0",
           "URAM": "0",
@@ -2629,10 +983,10 @@
           "DSP": "21",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "1",
-          "FF": "1067",
+          "FF": "1068",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "7943",
+          "LUT": "7952",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "6",
           "URAM": "0",
@@ -2657,52 +1011,52 @@
           "Estimate": "6.327"
         },
         "Area": {
-          "BRAM_18K": "6",
+          "BRAM_18K": "10",
           "AVAIL_BRAM": "288",
-          "UTIL_BRAM": "2",
+          "UTIL_BRAM": "3",
           "DSP": "12",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "~0",
-          "FF": "1748",
+          "FF": "1908",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "2359",
+          "LUT": "4764",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "2",
-          "URAM": "0",
+          "UTIL_LUT": "4",
+          "URAM": "20",
           "AVAIL_URAM": "64",
-          "UTIL_URAM": "0"
+          "UTIL_URAM": "31"
         }
       },
       "deblur": {
         "Latency": {
           "LatencyBest": "1",
-          "LatencyAvg": "13",
-          "LatencyWorst": "37",
+          "LatencyAvg": "10",
+          "LatencyWorst": "38",
           "PipelineIIMin": "1",
-          "PipelineIIMax": "37",
-          "PipelineII": "1 ~ 37",
+          "PipelineIIMax": "38",
+          "PipelineII": "1 ~ 38",
           "PipelineDepth": "",
           "PipelineType": "no"
         },
         "Timing": {
           "Target": "10.00",
           "Uncertainty": "1.50",
-          "Estimate": "8.177"
+          "Estimate": "8.048"
         },
         "Area": {
-          "BRAM_18K": "22",
+          "BRAM_18K": "46",
           "AVAIL_BRAM": "288",
-          "UTIL_BRAM": "7",
-          "DSP": "7",
+          "UTIL_BRAM": "15",
+          "DSP": "6",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "~0",
-          "FF": "1289",
+          "FF": "1036",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "2250",
+          "LUT": "2393",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "1",
+          "UTIL_LUT": "2",
           "URAM": "0",
           "AVAIL_URAM": "64",
           "UTIL_URAM": "0"
@@ -2711,35 +1065,35 @@
       "deepwaveaccel": {
         "Latency": {
           "LatencyBest": "12",
-          "LatencyAvg": "732781",
-          "LatencyWorst": "1465569",
+          "LatencyAvg": "40",
+          "LatencyWorst": "51",
           "PipelineIIMin": "2",
-          "PipelineIIMax": "1465530",
-          "PipelineII": "2 ~ 1465530",
+          "PipelineIIMax": "45",
+          "PipelineII": "2 ~ 45",
           "PipelineDepth": "",
           "PipelineType": "dataflow"
         },
         "Timing": {
           "Target": "10.00",
           "Uncertainty": "1.50",
-          "Estimate": "8.500"
+          "Estimate": "8.048"
         },
         "Area": {
-          "BRAM_18K": "88",
+          "BRAM_18K": "72",
           "AVAIL_BRAM": "288",
-          "UTIL_BRAM": "30",
-          "DSP": "47",
+          "UTIL_BRAM": "25",
+          "DSP": "46",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "3",
-          "FF": "12033",
+          "FF": "5207",
           "AVAIL_FF": "234240",
-          "UTIL_FF": "5",
-          "LUT": "21554",
+          "UTIL_FF": "2",
+          "LUT": "16188",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "18",
-          "URAM": "40",
+          "UTIL_LUT": "13",
+          "URAM": "20",
           "AVAIL_URAM": "64",
-          "UTIL_URAM": "62"
+          "UTIL_URAM": "31"
         }
       }
     }
@@ -2747,7 +1101,7 @@
   "GenerateBdFiles": "0",
   "GenData": {
     "DataVersion": "0.2",
-    "Time": "2025-10-30 15:57:28 +0100",
+    "Time": "2025-10-30 23:08:46 +0100",
     "ToolName": "vitis_hls",
     "ToolVersion": "2025.1"
   }
