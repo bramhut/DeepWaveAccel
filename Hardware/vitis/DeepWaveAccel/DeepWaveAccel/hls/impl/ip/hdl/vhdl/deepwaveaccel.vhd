@@ -10,7 +10,7 @@ use IEEE.numeric_std.all;
 
 entity deepwaveaccel is
 generic (
-    C_S_AXI_CTRL_BUS_ADDR_WIDTH : INTEGER := 7;
+    C_S_AXI_CTRL_BUS_ADDR_WIDTH : INTEGER := 9;
     C_S_AXI_CTRL_BUS_DATA_WIDTH : INTEGER := 32 );
 port (
     s_axi_CTRL_BUS_AWVALID : IN STD_LOGIC;
@@ -36,8 +36,6 @@ port (
     param_bp_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
     param_db_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
     out_r_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
-    out_r_TKEEP : OUT STD_LOGIC_VECTOR (3 downto 0);
-    out_r_TSTRB : OUT STD_LOGIC_VECTOR (3 downto 0);
     out_r_TLAST : OUT STD_LOGIC_VECTOR (0 downto 0);
     in_r_TVALID : IN STD_LOGIC;
     in_r_TREADY : OUT STD_LOGIC;
@@ -53,7 +51,7 @@ end;
 architecture behav of deepwaveaccel is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=8.047667,HLS_SYN_LAT=40,HLS_SYN_TPT=34,HLS_SYN_MEM=72,HLS_SYN_DSP=0,HLS_SYN_FF=5207,HLS_SYN_LUT=16188,HLS_VERSION=2025_1}";
+    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=8.047667,HLS_SYN_LAT=67,HLS_SYN_TPT=25,HLS_SYN_MEM=72,HLS_SYN_DSP=0,HLS_SYN_FF=7434,HLS_SYN_LUT=18511,HLS_VERSION=2025_1}";
     constant C_S_AXI_DATA_WIDTH : INTEGER := 32;
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
@@ -85,6 +83,14 @@ architecture behav of deepwaveaccel is
     signal goertzel_U0_in_r_TREADY : STD_LOGIC;
     signal goertzel_U0_s_goertzel_din : STD_LOGIC_VECTOR (35 downto 0);
     signal goertzel_U0_s_goertzel_write : STD_LOGIC;
+    signal goertzel_U0_status_gz_samples_in : STD_LOGIC_VECTOR (31 downto 0);
+    signal goertzel_U0_status_gz_samples_in_ap_vld : STD_LOGIC;
+    signal goertzel_U0_status_gz_sample_win : STD_LOGIC_VECTOR (31 downto 0);
+    signal goertzel_U0_status_gz_sample_win_ap_vld : STD_LOGIC;
+    signal goertzel_U0_status_gz_samples_out : STD_LOGIC_VECTOR (31 downto 0);
+    signal goertzel_U0_status_gz_samples_out_ap_vld : STD_LOGIC;
+    signal goertzel_U0_status_gz_samples_out_fifo : STD_LOGIC_VECTOR (31 downto 0);
+    signal goertzel_U0_status_gz_samples_out_fifo_ap_vld : STD_LOGIC;
     signal crosscor_U0_ap_start : STD_LOGIC;
     signal crosscor_U0_ap_done : STD_LOGIC;
     signal crosscor_U0_ap_continue : STD_LOGIC;
@@ -97,6 +103,22 @@ architecture behav of deepwaveaccel is
     signal crosscor_U0_s_xcor_write : STD_LOGIC;
     signal crosscor_U0_s_norm_din : STD_LOGIC_VECTOR (24 downto 0);
     signal crosscor_U0_s_norm_write : STD_LOGIC;
+    signal crosscor_U0_status_cc_state : STD_LOGIC_VECTOR (7 downto 0);
+    signal crosscor_U0_status_cc_state_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_samples_in : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_samples_in_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_samples_out : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_samples_out_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_sample_idx : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_sample_idx_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_current_norm : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_current_norm_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_norms_written : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_norms_written_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_out_fifo : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_out_fifo_ap_vld : STD_LOGIC;
+    signal crosscor_U0_status_cc_norms_fifo : STD_LOGIC_VECTOR (31 downto 0);
+    signal crosscor_U0_status_cc_norms_fifo_ap_vld : STD_LOGIC;
     signal backprojection_U0_ap_start : STD_LOGIC;
     signal backprojection_U0_ap_done : STD_LOGIC;
     signal backprojection_U0_ap_continue : STD_LOGIC;
@@ -106,6 +128,20 @@ architecture behav of deepwaveaccel is
     signal backprojection_U0_param_bp_TREADY : STD_LOGIC;
     signal backprojection_U0_s_bp_din : STD_LOGIC_VECTOR (17 downto 0);
     signal backprojection_U0_s_bp_write : STD_LOGIC;
+    signal backprojection_U0_status_bp_config_loaded : STD_LOGIC_VECTOR (0 downto 0);
+    signal backprojection_U0_status_bp_config_loaded_ap_vld : STD_LOGIC;
+    signal backprojection_U0_status_bp_fsm_state : STD_LOGIC_VECTOR (7 downto 0);
+    signal backprojection_U0_status_bp_fsm_state_ap_vld : STD_LOGIC;
+    signal backprojection_U0_status_bp_param_state : STD_LOGIC_VECTOR (7 downto 0);
+    signal backprojection_U0_status_bp_param_state_ap_vld : STD_LOGIC;
+    signal backprojection_U0_status_bp_idx : STD_LOGIC_VECTOR (15 downto 0);
+    signal backprojection_U0_status_bp_idx_ap_vld : STD_LOGIC;
+    signal backprojection_U0_status_bp_sigmas_in : STD_LOGIC_VECTOR (31 downto 0);
+    signal backprojection_U0_status_bp_sigmas_in_ap_vld : STD_LOGIC;
+    signal backprojection_U0_status_bp_pixels_out : STD_LOGIC_VECTOR (31 downto 0);
+    signal backprojection_U0_status_bp_pixels_out_ap_vld : STD_LOGIC;
+    signal backprojection_U0_status_bp_out_fifo_level : STD_LOGIC_VECTOR (15 downto 0);
+    signal backprojection_U0_status_bp_out_fifo_level_ap_vld : STD_LOGIC;
     signal deblur_U0_ap_start : STD_LOGIC;
     signal deblur_U0_ap_done : STD_LOGIC;
     signal deblur_U0_ap_continue : STD_LOGIC;
@@ -116,10 +152,20 @@ architecture behav of deepwaveaccel is
     signal deblur_U0_param_db_TREADY : STD_LOGIC;
     signal deblur_U0_out_r_TDATA : STD_LOGIC_VECTOR (31 downto 0);
     signal deblur_U0_out_r_TVALID : STD_LOGIC;
-    signal deblur_U0_out_r_TKEEP : STD_LOGIC_VECTOR (3 downto 0);
-    signal deblur_U0_out_r_TSTRB : STD_LOGIC_VECTOR (3 downto 0);
     signal deblur_U0_out_r_TLAST : STD_LOGIC_VECTOR (0 downto 0);
     signal deblur_U0_s_norm_read : STD_LOGIC;
+    signal deblur_U0_status_db_config_loaded : STD_LOGIC_VECTOR (0 downto 0);
+    signal deblur_U0_status_db_config_loaded_ap_vld : STD_LOGIC;
+    signal deblur_U0_status_db_fsm_state : STD_LOGIC_VECTOR (7 downto 0);
+    signal deblur_U0_status_db_fsm_state_ap_vld : STD_LOGIC;
+    signal deblur_U0_status_db_param_state : STD_LOGIC_VECTOR (7 downto 0);
+    signal deblur_U0_status_db_param_state_ap_vld : STD_LOGIC;
+    signal deblur_U0_status_db_idx : STD_LOGIC_VECTOR (15 downto 0);
+    signal deblur_U0_status_db_idx_ap_vld : STD_LOGIC;
+    signal deblur_U0_status_db_pixels_in : STD_LOGIC_VECTOR (31 downto 0);
+    signal deblur_U0_status_db_pixels_in_ap_vld : STD_LOGIC;
+    signal deblur_U0_status_db_pixels_out : STD_LOGIC_VECTOR (31 downto 0);
+    signal deblur_U0_status_db_pixels_out_ap_vld : STD_LOGIC;
     signal debl_cfg_c_full_n : STD_LOGIC;
     signal debl_cfg_c_dout : STD_LOGIC_VECTOR (7 downto 0);
     signal debl_cfg_c_empty_n : STD_LOGIC;
@@ -204,7 +250,15 @@ architecture behav of deepwaveaccel is
         s_goertzel_full_n : IN STD_LOGIC;
         s_goertzel_write : OUT STD_LOGIC;
         s_goertzel_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0) );
+        s_goertzel_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+        status_gz_samples_in : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_samples_in_ap_vld : OUT STD_LOGIC;
+        status_gz_sample_win : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_sample_win_ap_vld : OUT STD_LOGIC;
+        status_gz_samples_out : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_samples_out_ap_vld : OUT STD_LOGIC;
+        status_gz_samples_out_fifo : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_samples_out_fifo_ap_vld : OUT STD_LOGIC );
     end component;
 
 
@@ -234,7 +288,23 @@ architecture behav of deepwaveaccel is
         s_norm_full_n : IN STD_LOGIC;
         s_norm_write : OUT STD_LOGIC;
         s_norm_num_data_valid : IN STD_LOGIC_VECTOR (2 downto 0);
-        s_norm_fifo_cap : IN STD_LOGIC_VECTOR (2 downto 0) );
+        s_norm_fifo_cap : IN STD_LOGIC_VECTOR (2 downto 0);
+        status_cc_state : OUT STD_LOGIC_VECTOR (7 downto 0);
+        status_cc_state_ap_vld : OUT STD_LOGIC;
+        status_cc_samples_in : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_samples_in_ap_vld : OUT STD_LOGIC;
+        status_cc_samples_out : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_samples_out_ap_vld : OUT STD_LOGIC;
+        status_cc_sample_idx : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_sample_idx_ap_vld : OUT STD_LOGIC;
+        status_cc_current_norm : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_current_norm_ap_vld : OUT STD_LOGIC;
+        status_cc_norms_written : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_norms_written_ap_vld : OUT STD_LOGIC;
+        status_cc_out_fifo : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_out_fifo_ap_vld : OUT STD_LOGIC;
+        status_cc_norms_fifo : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_norms_fifo_ap_vld : OUT STD_LOGIC );
     end component;
 
 
@@ -259,7 +329,21 @@ architecture behav of deepwaveaccel is
         s_bp_full_n : IN STD_LOGIC;
         s_bp_write : OUT STD_LOGIC;
         s_bp_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0) );
+        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+        status_bp_config_loaded : OUT STD_LOGIC_VECTOR (0 downto 0);
+        status_bp_config_loaded_ap_vld : OUT STD_LOGIC;
+        status_bp_fsm_state : OUT STD_LOGIC_VECTOR (7 downto 0);
+        status_bp_fsm_state_ap_vld : OUT STD_LOGIC;
+        status_bp_param_state : OUT STD_LOGIC_VECTOR (7 downto 0);
+        status_bp_param_state_ap_vld : OUT STD_LOGIC;
+        status_bp_idx : OUT STD_LOGIC_VECTOR (15 downto 0);
+        status_bp_idx_ap_vld : OUT STD_LOGIC;
+        status_bp_sigmas_in : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_bp_sigmas_in_ap_vld : OUT STD_LOGIC;
+        status_bp_pixels_out : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_bp_pixels_out_ap_vld : OUT STD_LOGIC;
+        status_bp_out_fifo_level : OUT STD_LOGIC_VECTOR (15 downto 0);
+        status_bp_out_fifo_level_ap_vld : OUT STD_LOGIC );
     end component;
 
 
@@ -288,14 +372,24 @@ architecture behav of deepwaveaccel is
         out_r_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
         out_r_TVALID : OUT STD_LOGIC;
         out_r_TREADY : IN STD_LOGIC;
-        out_r_TKEEP : OUT STD_LOGIC_VECTOR (3 downto 0);
-        out_r_TSTRB : OUT STD_LOGIC_VECTOR (3 downto 0);
         out_r_TLAST : OUT STD_LOGIC_VECTOR (0 downto 0);
         s_norm_dout : IN STD_LOGIC_VECTOR (24 downto 0);
         s_norm_empty_n : IN STD_LOGIC;
         s_norm_read : OUT STD_LOGIC;
         s_norm_num_data_valid : IN STD_LOGIC_VECTOR (2 downto 0);
-        s_norm_fifo_cap : IN STD_LOGIC_VECTOR (2 downto 0) );
+        s_norm_fifo_cap : IN STD_LOGIC_VECTOR (2 downto 0);
+        status_db_config_loaded : OUT STD_LOGIC_VECTOR (0 downto 0);
+        status_db_config_loaded_ap_vld : OUT STD_LOGIC;
+        status_db_fsm_state : OUT STD_LOGIC_VECTOR (7 downto 0);
+        status_db_fsm_state_ap_vld : OUT STD_LOGIC;
+        status_db_param_state : OUT STD_LOGIC_VECTOR (7 downto 0);
+        status_db_param_state_ap_vld : OUT STD_LOGIC;
+        status_db_idx : OUT STD_LOGIC_VECTOR (15 downto 0);
+        status_db_idx_ap_vld : OUT STD_LOGIC;
+        status_db_pixels_in : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_db_pixels_in_ap_vld : OUT STD_LOGIC;
+        status_db_pixels_out : OUT STD_LOGIC_VECTOR (31 downto 0);
+        status_db_pixels_out_ap_vld : OUT STD_LOGIC );
     end component;
 
 
@@ -443,7 +537,57 @@ architecture behav of deepwaveaccel is
         goer_cfg_COS_OMEGA2_1 : OUT STD_LOGIC_VECTOR (17 downto 0);
         goer_cfg_SIN_OMEGA_0 : OUT STD_LOGIC_VECTOR (17 downto 0);
         goer_cfg_SIN_OMEGA_1 : OUT STD_LOGIC_VECTOR (17 downto 0);
-        debl_cfg : OUT STD_LOGIC_VECTOR (7 downto 0) );
+        debl_cfg : OUT STD_LOGIC_VECTOR (7 downto 0);
+        status_gz_samples_in : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_samples_in_ap_vld : IN STD_LOGIC;
+        status_gz_sample_win : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_sample_win_ap_vld : IN STD_LOGIC;
+        status_gz_samples_out : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_samples_out_ap_vld : IN STD_LOGIC;
+        status_gz_samples_out_fifo : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_gz_samples_out_fifo_ap_vld : IN STD_LOGIC;
+        status_cc_state : IN STD_LOGIC_VECTOR (7 downto 0);
+        status_cc_state_ap_vld : IN STD_LOGIC;
+        status_cc_samples_in : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_samples_in_ap_vld : IN STD_LOGIC;
+        status_cc_samples_out : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_samples_out_ap_vld : IN STD_LOGIC;
+        status_cc_sample_idx : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_sample_idx_ap_vld : IN STD_LOGIC;
+        status_cc_current_norm : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_current_norm_ap_vld : IN STD_LOGIC;
+        status_cc_norms_written : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_norms_written_ap_vld : IN STD_LOGIC;
+        status_cc_out_fifo : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_out_fifo_ap_vld : IN STD_LOGIC;
+        status_cc_norms_fifo : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_cc_norms_fifo_ap_vld : IN STD_LOGIC;
+        status_bp_config_loaded : IN STD_LOGIC_VECTOR (0 downto 0);
+        status_bp_config_loaded_ap_vld : IN STD_LOGIC;
+        status_bp_fsm_state : IN STD_LOGIC_VECTOR (7 downto 0);
+        status_bp_fsm_state_ap_vld : IN STD_LOGIC;
+        status_bp_param_state : IN STD_LOGIC_VECTOR (7 downto 0);
+        status_bp_param_state_ap_vld : IN STD_LOGIC;
+        status_bp_idx : IN STD_LOGIC_VECTOR (15 downto 0);
+        status_bp_idx_ap_vld : IN STD_LOGIC;
+        status_bp_sigmas_in : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_bp_sigmas_in_ap_vld : IN STD_LOGIC;
+        status_bp_pixels_out : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_bp_pixels_out_ap_vld : IN STD_LOGIC;
+        status_bp_out_fifo_level : IN STD_LOGIC_VECTOR (15 downto 0);
+        status_bp_out_fifo_level_ap_vld : IN STD_LOGIC;
+        status_db_config_loaded : IN STD_LOGIC_VECTOR (0 downto 0);
+        status_db_config_loaded_ap_vld : IN STD_LOGIC;
+        status_db_fsm_state : IN STD_LOGIC_VECTOR (7 downto 0);
+        status_db_fsm_state_ap_vld : IN STD_LOGIC;
+        status_db_param_state : IN STD_LOGIC_VECTOR (7 downto 0);
+        status_db_param_state_ap_vld : IN STD_LOGIC;
+        status_db_idx : IN STD_LOGIC_VECTOR (15 downto 0);
+        status_db_idx_ap_vld : IN STD_LOGIC;
+        status_db_pixels_in : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_db_pixels_in_ap_vld : IN STD_LOGIC;
+        status_db_pixels_out : IN STD_LOGIC_VECTOR (31 downto 0);
+        status_db_pixels_out_ap_vld : IN STD_LOGIC );
     end component;
 
 
@@ -480,7 +624,57 @@ begin
         goer_cfg_COS_OMEGA2_1 => goer_cfg_COS_OMEGA2_1,
         goer_cfg_SIN_OMEGA_0 => goer_cfg_SIN_OMEGA_0,
         goer_cfg_SIN_OMEGA_1 => goer_cfg_SIN_OMEGA_1,
-        debl_cfg => debl_cfg);
+        debl_cfg => debl_cfg,
+        status_gz_samples_in => goertzel_U0_status_gz_samples_in,
+        status_gz_samples_in_ap_vld => goertzel_U0_status_gz_samples_in_ap_vld,
+        status_gz_sample_win => goertzel_U0_status_gz_sample_win,
+        status_gz_sample_win_ap_vld => goertzel_U0_status_gz_sample_win_ap_vld,
+        status_gz_samples_out => goertzel_U0_status_gz_samples_out,
+        status_gz_samples_out_ap_vld => goertzel_U0_status_gz_samples_out_ap_vld,
+        status_gz_samples_out_fifo => goertzel_U0_status_gz_samples_out_fifo,
+        status_gz_samples_out_fifo_ap_vld => goertzel_U0_status_gz_samples_out_fifo_ap_vld,
+        status_cc_state => crosscor_U0_status_cc_state,
+        status_cc_state_ap_vld => crosscor_U0_status_cc_state_ap_vld,
+        status_cc_samples_in => crosscor_U0_status_cc_samples_in,
+        status_cc_samples_in_ap_vld => crosscor_U0_status_cc_samples_in_ap_vld,
+        status_cc_samples_out => crosscor_U0_status_cc_samples_out,
+        status_cc_samples_out_ap_vld => crosscor_U0_status_cc_samples_out_ap_vld,
+        status_cc_sample_idx => crosscor_U0_status_cc_sample_idx,
+        status_cc_sample_idx_ap_vld => crosscor_U0_status_cc_sample_idx_ap_vld,
+        status_cc_current_norm => crosscor_U0_status_cc_current_norm,
+        status_cc_current_norm_ap_vld => crosscor_U0_status_cc_current_norm_ap_vld,
+        status_cc_norms_written => crosscor_U0_status_cc_norms_written,
+        status_cc_norms_written_ap_vld => crosscor_U0_status_cc_norms_written_ap_vld,
+        status_cc_out_fifo => crosscor_U0_status_cc_out_fifo,
+        status_cc_out_fifo_ap_vld => crosscor_U0_status_cc_out_fifo_ap_vld,
+        status_cc_norms_fifo => crosscor_U0_status_cc_norms_fifo,
+        status_cc_norms_fifo_ap_vld => crosscor_U0_status_cc_norms_fifo_ap_vld,
+        status_bp_config_loaded => backprojection_U0_status_bp_config_loaded,
+        status_bp_config_loaded_ap_vld => backprojection_U0_status_bp_config_loaded_ap_vld,
+        status_bp_fsm_state => backprojection_U0_status_bp_fsm_state,
+        status_bp_fsm_state_ap_vld => backprojection_U0_status_bp_fsm_state_ap_vld,
+        status_bp_param_state => backprojection_U0_status_bp_param_state,
+        status_bp_param_state_ap_vld => backprojection_U0_status_bp_param_state_ap_vld,
+        status_bp_idx => backprojection_U0_status_bp_idx,
+        status_bp_idx_ap_vld => backprojection_U0_status_bp_idx_ap_vld,
+        status_bp_sigmas_in => backprojection_U0_status_bp_sigmas_in,
+        status_bp_sigmas_in_ap_vld => backprojection_U0_status_bp_sigmas_in_ap_vld,
+        status_bp_pixels_out => backprojection_U0_status_bp_pixels_out,
+        status_bp_pixels_out_ap_vld => backprojection_U0_status_bp_pixels_out_ap_vld,
+        status_bp_out_fifo_level => backprojection_U0_status_bp_out_fifo_level,
+        status_bp_out_fifo_level_ap_vld => backprojection_U0_status_bp_out_fifo_level_ap_vld,
+        status_db_config_loaded => deblur_U0_status_db_config_loaded,
+        status_db_config_loaded_ap_vld => deblur_U0_status_db_config_loaded_ap_vld,
+        status_db_fsm_state => deblur_U0_status_db_fsm_state,
+        status_db_fsm_state_ap_vld => deblur_U0_status_db_fsm_state_ap_vld,
+        status_db_param_state => deblur_U0_status_db_param_state,
+        status_db_param_state_ap_vld => deblur_U0_status_db_param_state_ap_vld,
+        status_db_idx => deblur_U0_status_db_idx,
+        status_db_idx_ap_vld => deblur_U0_status_db_idx_ap_vld,
+        status_db_pixels_in => deblur_U0_status_db_pixels_in,
+        status_db_pixels_in_ap_vld => deblur_U0_status_db_pixels_in_ap_vld,
+        status_db_pixels_out => deblur_U0_status_db_pixels_out,
+        status_db_pixels_out_ap_vld => deblur_U0_status_db_pixels_out_ap_vld);
 
     entry_proc_U0 : component deepwaveaccel_entry_proc
     port map (
@@ -526,7 +720,15 @@ begin
         s_goertzel_full_n => s_goertzel_full_n,
         s_goertzel_write => goertzel_U0_s_goertzel_write,
         s_goertzel_num_data_valid => s_goertzel_num_data_valid,
-        s_goertzel_fifo_cap => s_goertzel_fifo_cap);
+        s_goertzel_fifo_cap => s_goertzel_fifo_cap,
+        status_gz_samples_in => goertzel_U0_status_gz_samples_in,
+        status_gz_samples_in_ap_vld => goertzel_U0_status_gz_samples_in_ap_vld,
+        status_gz_sample_win => goertzel_U0_status_gz_sample_win,
+        status_gz_sample_win_ap_vld => goertzel_U0_status_gz_sample_win_ap_vld,
+        status_gz_samples_out => goertzel_U0_status_gz_samples_out,
+        status_gz_samples_out_ap_vld => goertzel_U0_status_gz_samples_out_ap_vld,
+        status_gz_samples_out_fifo => goertzel_U0_status_gz_samples_out_fifo,
+        status_gz_samples_out_fifo_ap_vld => goertzel_U0_status_gz_samples_out_fifo_ap_vld);
 
     crosscor_U0 : component deepwaveaccel_crosscor
     port map (
@@ -554,7 +756,23 @@ begin
         s_norm_full_n => s_norm_full_n,
         s_norm_write => crosscor_U0_s_norm_write,
         s_norm_num_data_valid => s_norm_num_data_valid,
-        s_norm_fifo_cap => s_norm_fifo_cap);
+        s_norm_fifo_cap => s_norm_fifo_cap,
+        status_cc_state => crosscor_U0_status_cc_state,
+        status_cc_state_ap_vld => crosscor_U0_status_cc_state_ap_vld,
+        status_cc_samples_in => crosscor_U0_status_cc_samples_in,
+        status_cc_samples_in_ap_vld => crosscor_U0_status_cc_samples_in_ap_vld,
+        status_cc_samples_out => crosscor_U0_status_cc_samples_out,
+        status_cc_samples_out_ap_vld => crosscor_U0_status_cc_samples_out_ap_vld,
+        status_cc_sample_idx => crosscor_U0_status_cc_sample_idx,
+        status_cc_sample_idx_ap_vld => crosscor_U0_status_cc_sample_idx_ap_vld,
+        status_cc_current_norm => crosscor_U0_status_cc_current_norm,
+        status_cc_current_norm_ap_vld => crosscor_U0_status_cc_current_norm_ap_vld,
+        status_cc_norms_written => crosscor_U0_status_cc_norms_written,
+        status_cc_norms_written_ap_vld => crosscor_U0_status_cc_norms_written_ap_vld,
+        status_cc_out_fifo => crosscor_U0_status_cc_out_fifo,
+        status_cc_out_fifo_ap_vld => crosscor_U0_status_cc_out_fifo_ap_vld,
+        status_cc_norms_fifo => crosscor_U0_status_cc_norms_fifo,
+        status_cc_norms_fifo_ap_vld => crosscor_U0_status_cc_norms_fifo_ap_vld);
 
     backprojection_U0 : component deepwaveaccel_backprojection
     port map (
@@ -577,7 +795,21 @@ begin
         s_bp_full_n => s_bp_full_n,
         s_bp_write => backprojection_U0_s_bp_write,
         s_bp_num_data_valid => s_bp_num_data_valid,
-        s_bp_fifo_cap => s_bp_fifo_cap);
+        s_bp_fifo_cap => s_bp_fifo_cap,
+        status_bp_config_loaded => backprojection_U0_status_bp_config_loaded,
+        status_bp_config_loaded_ap_vld => backprojection_U0_status_bp_config_loaded_ap_vld,
+        status_bp_fsm_state => backprojection_U0_status_bp_fsm_state,
+        status_bp_fsm_state_ap_vld => backprojection_U0_status_bp_fsm_state_ap_vld,
+        status_bp_param_state => backprojection_U0_status_bp_param_state,
+        status_bp_param_state_ap_vld => backprojection_U0_status_bp_param_state_ap_vld,
+        status_bp_idx => backprojection_U0_status_bp_idx,
+        status_bp_idx_ap_vld => backprojection_U0_status_bp_idx_ap_vld,
+        status_bp_sigmas_in => backprojection_U0_status_bp_sigmas_in,
+        status_bp_sigmas_in_ap_vld => backprojection_U0_status_bp_sigmas_in_ap_vld,
+        status_bp_pixels_out => backprojection_U0_status_bp_pixels_out,
+        status_bp_pixels_out_ap_vld => backprojection_U0_status_bp_pixels_out_ap_vld,
+        status_bp_out_fifo_level => backprojection_U0_status_bp_out_fifo_level,
+        status_bp_out_fifo_level_ap_vld => backprojection_U0_status_bp_out_fifo_level_ap_vld);
 
     deblur_U0 : component deepwaveaccel_deblur
     port map (
@@ -604,14 +836,24 @@ begin
         out_r_TDATA => deblur_U0_out_r_TDATA,
         out_r_TVALID => deblur_U0_out_r_TVALID,
         out_r_TREADY => out_r_TREADY,
-        out_r_TKEEP => deblur_U0_out_r_TKEEP,
-        out_r_TSTRB => deblur_U0_out_r_TSTRB,
         out_r_TLAST => deblur_U0_out_r_TLAST,
         s_norm_dout => s_norm_dout,
         s_norm_empty_n => s_norm_empty_n,
         s_norm_read => deblur_U0_s_norm_read,
         s_norm_num_data_valid => s_norm_num_data_valid,
-        s_norm_fifo_cap => s_norm_fifo_cap);
+        s_norm_fifo_cap => s_norm_fifo_cap,
+        status_db_config_loaded => deblur_U0_status_db_config_loaded,
+        status_db_config_loaded_ap_vld => deblur_U0_status_db_config_loaded_ap_vld,
+        status_db_fsm_state => deblur_U0_status_db_fsm_state,
+        status_db_fsm_state_ap_vld => deblur_U0_status_db_fsm_state_ap_vld,
+        status_db_param_state => deblur_U0_status_db_param_state,
+        status_db_param_state_ap_vld => deblur_U0_status_db_param_state_ap_vld,
+        status_db_idx => deblur_U0_status_db_idx,
+        status_db_idx_ap_vld => deblur_U0_status_db_idx_ap_vld,
+        status_db_pixels_in => deblur_U0_status_db_pixels_in,
+        status_db_pixels_in_ap_vld => deblur_U0_status_db_pixels_in_ap_vld,
+        status_db_pixels_out => deblur_U0_status_db_pixels_out,
+        status_db_pixels_out_ap_vld => deblur_U0_status_db_pixels_out_ap_vld);
 
     debl_cfg_c_U : component deepwaveaccel_fifo_w8_d5_S
     port map (
@@ -748,9 +990,7 @@ begin
     goertzel_U0_ap_start <= ap_const_logic_1;
     in_r_TREADY <= goertzel_U0_in_r_TREADY;
     out_r_TDATA <= deblur_U0_out_r_TDATA;
-    out_r_TKEEP <= deblur_U0_out_r_TKEEP;
     out_r_TLAST <= deblur_U0_out_r_TLAST;
-    out_r_TSTRB <= deblur_U0_out_r_TSTRB;
     out_r_TVALID <= deblur_U0_out_r_TVALID;
     param_bp_TREADY <= backprojection_U0_param_bp_TREADY;
     param_db_TREADY <= deblur_U0_param_db_TREADY;

@@ -11,12 +11,14 @@
 // ---------------------------------------------------------
 void crosscor(hls::stream<AxisWordDFTc> &in_stream,
               hls::stream<AxisWordDFTc> &out_stream,
-              hls::stream<norm_sum_t>   &norm_stream)
+              hls::stream<norm_sum_t>   &norm_stream,
+              status_cc_t               &status)
 {
     AP_CTRL_NONE;
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
     AXIS_IN_OUT(norm_stream);
+    AXIL_CFG(status)
 
     // ---------------- Persistent State ----------------
     enum State { COLLECT, CORRELATE, OUTPUT };
@@ -40,6 +42,10 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
     static int diag_i = 0;      // index over diagonal during PHASE_DIAG
     static int pair_idx = 0;    // index [0..NPAIR) during PHASE_UPPER/OUTPUT/CLEAR
 
+    static word_t samples_in = 0;
+    static word_t norms_written = 0;
+    static word_t samples_out = 0;
+
     // Power accumulation and scaling
     static power_accum_t power_acc = 0;          // sum of |u[i]|^2 over i
     static norm_inv_t scale = 0;              // 1 / corrected_reg
@@ -54,6 +60,8 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
     {
     case COLLECT:
         if (!in_stream.empty()) {
+            status.samples_in = ++samples_in;
+            status.sample_idx = v_count;
             AxisWordDFTc w = in_stream.read();
             u[v_count] = DFTc_t(w.re, w.im);
             v_count++;
@@ -86,6 +94,11 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
                     const norm_sum_t gain = (norm_sum_t)0.70710678118; // 1/sqrt(2)
                     norm_sum_t corrected = (norm_sum_t)power_acc * gain;
                     norm_stream.write(corrected);
+                    word_t norm_word;
+                    norm_word.range() = corrected.range();
+                    status.current_norm = norm_word;
+                    status.norms_written = ++norms_written;
+                    status.norms_fifo = norm_stream.size();
                     if (corrected < (norm_sum_t)1.0) corrected = (norm_sum_t)1.0; 
                     scale = (norm_inv_t)1.0 / corrected;
                     power_acc = 0;
@@ -134,6 +147,9 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
 
             out_stream.write(AxisWordDFTc(out_re, out_im));
 
+            status.samples_out = ++samples_out;
+            status.out_fifo = out_stream.size();
+
             pair_idx++;
             if (pair_idx == NPAIR) {
                 // Done streaming frame
@@ -142,17 +158,8 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
             }
         break;
     }
-
-    // case CLEAR:
-    //     // Zero R_flat sequentially
-        
-    //     pair_idx++;
-    //     if (pair_idx == NPAIR) {
-    //         pair_idx   = 0;
-    //         frames_acc = 0;
-    //         st         = COLLECT;
-    //     }
-    //     break;
-    // }
     }
+    // Update the state register
+    status.state = st; 
+
 }

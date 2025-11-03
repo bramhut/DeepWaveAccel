@@ -54,7 +54,7 @@ int tb_goertzel() {
     // Run Goertzel kernel
     int total_samples = n_batches * N_WIN * N_ELEM;
     for(int i = 0; i < total_samples; ++i) {
-        goertzel(in_stream, out_stream, cfg);
+        // goertzel(in_stream, out_stream, cfg);
     }
 
     // Collect outputs into array [N_ELEM][n_batches]

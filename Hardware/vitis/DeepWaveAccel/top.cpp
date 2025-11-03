@@ -11,7 +11,11 @@ void deepwaveaccel(
     hls::stream<word_t> &param_db,
     hls::stream<out_axis_t>   &out,
     goertzel_config           &goer_cfg,
-    deblur_config             &debl_cfg)
+    deblur_config             &debl_cfg,
+    status_gz_t               &status_gz,
+    status_cc_t               &status_cc,
+    status_bp_t               &status_bp,
+    status_db_t               &status_db)
 {
     AP_CTRL_NONE;
 
@@ -23,7 +27,17 @@ void deepwaveaccel(
 
     AXIL_CFG(goer_cfg);
     AXIL_CFG(debl_cfg);
+    AXIL_CFG(status_gz);
+    AXIL_CFG(status_cc);
+    AXIL_CFG(status_bp);
+    AXIL_CFG(status_db);
 
+    AXIL_NOAGGREGATE(goer_cfg);
+    AXIL_NOAGGREGATE(debl_cfg);
+    AXIL_NOAGGREGATE(status_gz);
+    AXIL_NOAGGREGATE(status_cc);
+    AXIL_NOAGGREGATE(status_bp);
+    AXIL_NOAGGREGATE(status_db);
 #pragma HLS DATAFLOW
 
     // Internal streams
@@ -37,9 +51,9 @@ void deepwaveaccel(
 #pragma HLS STREAM variable=s_bp       depth=64
 #pragma HLS STREAM variable=s_norm     depth=4
 
-    hls_thread_local hls::task goertzel_task (goertzel, in,         s_goertzel, goer_cfg);
-    hls_thread_local hls::task crosscor_task(crosscor, s_goertzel, s_xcor,     s_norm);
-    hls_thread_local hls::task backprojection_task(backprojection, s_xcor, param_bp, s_bp);
-    hls_thread_local hls::task deblur_task(deblur, s_bp, param_db, out, s_norm, debl_cfg);
+    hls_thread_local hls::task goertzel_task (goertzel, in,         s_goertzel, goer_cfg, status_gz);
+    hls_thread_local hls::task crosscor_task(crosscor, s_goertzel, s_xcor,     s_norm, status_cc);
+    hls_thread_local hls::task backprojection_task(backprojection, s_xcor, param_bp, s_bp, status_bp);
+    hls_thread_local hls::task deblur_task(deblur, s_bp, param_db, out, s_norm, debl_cfg, status_db);
 
 }

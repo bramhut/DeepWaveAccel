@@ -30,16 +30,25 @@ module deepwaveaccel_goertzel (
         s_goertzel_full_n,
         s_goertzel_write,
         s_goertzel_num_data_valid,
-        s_goertzel_fifo_cap
+        s_goertzel_fifo_cap,
+        status_gz_samples_in,
+        status_gz_samples_in_ap_vld,
+        status_gz_sample_win,
+        status_gz_sample_win_ap_vld,
+        status_gz_samples_out,
+        status_gz_samples_out_ap_vld,
+        status_gz_samples_out_fifo,
+        status_gz_samples_out_fifo_ap_vld
 );
 
-parameter    ap_ST_fsm_state1 = 7'd1;
-parameter    ap_ST_fsm_state2 = 7'd2;
-parameter    ap_ST_fsm_state3 = 7'd4;
-parameter    ap_ST_fsm_state4 = 7'd8;
-parameter    ap_ST_fsm_state5 = 7'd16;
-parameter    ap_ST_fsm_state6 = 7'd32;
-parameter    ap_ST_fsm_state7 = 7'd64;
+parameter    ap_ST_fsm_state1 = 8'd1;
+parameter    ap_ST_fsm_state2 = 8'd2;
+parameter    ap_ST_fsm_state3 = 8'd4;
+parameter    ap_ST_fsm_state4 = 8'd8;
+parameter    ap_ST_fsm_state5 = 8'd16;
+parameter    ap_ST_fsm_state6 = 8'd32;
+parameter    ap_ST_fsm_state7 = 8'd64;
+parameter    ap_ST_fsm_state8 = 8'd128;
 
 input   ap_clk;
 input   ap_rst;
@@ -65,111 +74,130 @@ input   s_goertzel_full_n;
 output   s_goertzel_write;
 input  [6:0] s_goertzel_num_data_valid;
 input  [6:0] s_goertzel_fifo_cap;
+output  [31:0] status_gz_samples_in;
+output   status_gz_samples_in_ap_vld;
+output  [31:0] status_gz_sample_win;
+output   status_gz_sample_win_ap_vld;
+output  [31:0] status_gz_samples_out;
+output   status_gz_samples_out_ap_vld;
+output  [31:0] status_gz_samples_out_fifo;
+output   status_gz_samples_out_fifo_ap_vld;
 
 reg ap_done;
 reg ap_idle;
 reg start_write;
 reg s_goertzel_write;
+reg[31:0] status_gz_samples_in;
+reg status_gz_samples_in_ap_vld;
+reg[31:0] status_gz_sample_win;
+reg status_gz_sample_win_ap_vld;
+reg[31:0] status_gz_samples_out;
+reg status_gz_samples_out_ap_vld;
+reg[31:0] status_gz_samples_out_fifo;
+reg status_gz_samples_out_fifo_ap_vld;
 
 reg    real_start;
 reg    start_once_reg;
 reg    ap_done_reg;
-(* fsm_encoding = "none" *) reg   [6:0] ap_CS_fsm;
+(* fsm_encoding = "none" *) reg   [7:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    internal_ap_ready;
+reg   [31:0] samples_in;
 reg   [31:0] sample;
 wire   [7:0] hann_window_address0;
 wire   [11:0] hann_window_q0;
-reg   [17:0] goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev_1;
-reg   [17:0] goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2_1;
-reg   [17:0] goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2;
-reg   [17:0] goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev;
-reg   [31:0] elem;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_1;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
+reg   [31:0] samples_out;
 reg    in_r_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
 reg    s_goertzel_blk_n;
 wire    ap_CS_fsm_state7;
-reg   [0:0] tmp_reg_606;
-reg   [0:0] icmp_ln78_reg_665;
-reg  signed [17:0] cosw_reg_586;
+reg  signed [17:0] cosw_reg_638;
 reg    ap_block_state1;
-reg  signed [17:0] cosw_1_reg_591;
-reg  signed [17:0] sinw_reg_596;
-reg  signed [17:0] sinw_1_reg_601;
-wire   [0:0] tmp_nbreadreq_fu_136_p3;
+reg  signed [17:0] cosw_1_reg_643;
+reg  signed [17:0] sinw_reg_648;
+reg  signed [17:0] sinw_1_reg_653;
+wire   [0:0] tmp_nbreadreq_fu_148_p3;
+reg   [0:0] tmp_reg_658;
 wire    ap_CS_fsm_state2;
-wire  signed [33:0] shl_i_i26_i224_i_fu_305_p1;
-wire  signed [17:0] trunc_ln_fu_326_p4;
+wire  signed [33:0] shl_i_i26_i244_i_fu_370_p1;
+wire  signed [17:0] trunc_ln_fu_391_p4;
 wire    ap_CS_fsm_state4;
-wire  signed [17:0] trunc_ln70_1_fu_353_p4;
-wire   [31:0] add_ln75_fu_363_p2;
-wire   [0:0] icmp_ln78_fu_368_p2;
-wire  signed [33:0] sext_ln83_fu_374_p1;
-reg   [17:0] tmp_5_reg_679;
-wire  signed [33:0] sext_ln83_2_fu_400_p1;
+wire  signed [17:0] trunc_ln75_1_fu_418_p4;
+wire   [31:0] add_ln80_fu_428_p2;
+wire   [0:0] icmp_ln83_fu_433_p2;
+reg   [0:0] icmp_ln83_reg_717;
+wire  signed [33:0] sext_ln88_fu_439_p1;
+reg   [17:0] tmp_6_reg_731;
+wire  signed [33:0] sext_ln88_2_fu_465_p1;
 wire    ap_CS_fsm_state6;
-reg   [31:0] ap_phi_mux_sample_new_0_phi_fu_173_p4;
-reg   [31:0] sample_new_0_reg_170;
-reg    ap_predicate_op99_write_state7;
-reg    ap_block_state7;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_phi_fu_183_p4;
-reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_reg_180;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_phi_fu_193_p4;
-reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_reg_190;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_phi_fu_203_p4;
-reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_reg_200;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_phi_fu_213_p4;
-reg   [17:0] goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_reg_210;
-wire   [63:0] zext_ln58_fu_248_p1;
-wire   [31:0] select_ln92_fu_426_p3;
+reg   [31:0] ap_phi_mux_sample_new_0_phi_fu_220_p4;
+reg   [31:0] sample_new_0_reg_217;
+wire    ap_CS_fsm_state8;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_phi_fu_230_p4;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_reg_227;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_reg_237;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257;
+wire   [63:0] zext_ln63_fu_313_p1;
+wire   [31:0] add_ln56_fu_271_p2;
+wire   [31:0] add_ln95_fu_479_p2;
+reg   [31:0] status_gz_samples_in_preg;
+reg   [31:0] status_gz_sample_win_preg;
+reg   [31:0] status_gz_samples_out_preg;
+reg   [31:0] status_gz_samples_out_fifo_preg;
 reg    hann_window_ce0_local;
-wire  signed [17:0] sext_ln70_1_fu_228_p0;
-wire  signed [17:0] sext_ln70_3_fu_240_p0;
-wire   [11:0] trunc_ln59_fu_253_p1;
-wire  signed [13:0] shl_ln_fu_257_p3;
-wire   [12:0] shl_ln59_1_fu_265_p3;
-wire   [12:0] mul_ln59_fu_281_p1;
-wire   [26:0] mul_ln59_fu_281_p2;
-wire   [13:0] xw_fu_287_p4;
-wire   [29:0] tmp_2_fu_297_p3;
-wire  signed [33:0] grp_fu_541_p3;
-wire   [33:0] shl_ln1_fu_313_p3;
-(* use_dsp48 = "no" *) wire   [33:0] sub_ln70_fu_321_p2;
-wire  signed [33:0] grp_fu_550_p3;
-wire   [33:0] shl_ln70_1_fu_340_p3;
-(* use_dsp48 = "no" *) wire   [33:0] sub_ln70_1_fu_348_p2;
-wire  signed [17:0] mul_ln84_fu_384_p0;
-wire   [33:0] mul_ln84_fu_384_p2;
-wire   [31:0] add_ln91_fu_414_p2;
-wire   [0:0] icmp_ln92_fu_420_p2;
-wire  signed [17:0] shl_ln2_fu_440_p1;
-wire  signed [17:0] shl_ln83_1_fu_454_p1;
-wire  signed [33:0] tmp_4_fu_461_p1;
-wire   [33:0] grp_fu_559_p3;
-wire   [17:0] tmp_4_fu_461_p4;
-wire   [33:0] and_ln_fu_470_p3;
-wire  signed [33:0] add_ln83_fu_478_p1;
-wire   [33:0] grp_fu_568_p3;
-(* use_dsp48 = "no" *) wire   [33:0] add_ln83_fu_478_p2;
-wire  signed [33:0] trunc_ln2_fu_493_p1;
-wire   [33:0] grp_fu_577_p3;
-wire   [17:0] trunc_ln2_fu_493_p4;
-wire   [17:0] trunc_ln1_fu_483_p4;
-wire  signed [29:0] grp_fu_541_p2;
-wire  signed [29:0] grp_fu_550_p2;
-wire  signed [17:0] grp_fu_559_p0;
-wire   [33:0] grp_fu_559_p2;
-wire  signed [17:0] grp_fu_568_p0;
-wire   [33:0] grp_fu_568_p2;
-wire  signed [17:0] grp_fu_577_p0;
-wire   [33:0] grp_fu_577_p2;
-reg    grp_fu_541_ce;
-reg    grp_fu_550_ce;
-reg    grp_fu_559_ce;
+wire  signed [17:0] sext_ln75_1_fu_292_p0;
+wire  signed [17:0] sext_ln75_3_fu_304_p0;
+wire   [11:0] trunc_ln64_fu_318_p1;
+wire  signed [13:0] shl_ln_fu_322_p3;
+wire   [12:0] shl_ln64_1_fu_330_p3;
+wire   [12:0] mul_ln64_fu_346_p1;
+wire   [26:0] mul_ln64_fu_346_p2;
+wire   [13:0] xw_fu_352_p4;
+wire   [29:0] tmp_2_fu_362_p3;
+wire  signed [33:0] grp_fu_593_p3;
+wire   [33:0] shl_ln1_fu_378_p3;
+(* use_dsp48 = "no" *) wire   [33:0] sub_ln75_fu_386_p2;
+wire  signed [33:0] grp_fu_602_p3;
+wire   [33:0] shl_ln75_1_fu_405_p3;
+(* use_dsp48 = "no" *) wire   [33:0] sub_ln75_1_fu_413_p2;
+wire  signed [17:0] mul_ln89_fu_449_p0;
+wire   [33:0] mul_ln89_fu_449_p2;
+wire  signed [17:0] shl_ln2_fu_492_p1;
+wire  signed [17:0] shl_ln88_1_fu_506_p1;
+wire  signed [33:0] tmp_5_fu_513_p1;
+wire   [33:0] grp_fu_611_p3;
+wire   [17:0] tmp_5_fu_513_p4;
+wire   [33:0] and_ln_fu_522_p3;
+wire  signed [33:0] add_ln88_fu_530_p1;
+wire   [33:0] grp_fu_620_p3;
+(* use_dsp48 = "no" *) wire   [33:0] add_ln88_fu_530_p2;
+wire  signed [33:0] trunc_ln2_fu_545_p1;
+wire   [33:0] grp_fu_629_p3;
+wire   [17:0] trunc_ln2_fu_545_p4;
+wire   [17:0] trunc_ln1_fu_535_p4;
+wire  signed [29:0] grp_fu_593_p2;
+wire  signed [29:0] grp_fu_602_p2;
+wire  signed [17:0] grp_fu_611_p0;
+wire   [33:0] grp_fu_611_p2;
+wire  signed [17:0] grp_fu_620_p0;
+wire   [33:0] grp_fu_620_p2;
+wire  signed [17:0] grp_fu_629_p0;
+wire   [33:0] grp_fu_629_p2;
+reg    grp_fu_593_ce;
+reg    grp_fu_602_ce;
+reg    grp_fu_611_ce;
 wire    ap_CS_fsm_state5;
-reg    grp_fu_568_ce;
-reg    grp_fu_577_ce;
-reg   [6:0] ap_NS_fsm;
+reg    grp_fu_620_ce;
+reg    grp_fu_629_ce;
+reg   [7:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
 wire    ap_ST_fsm_state2_blk;
 reg    ap_ST_fsm_state3_blk;
@@ -177,25 +205,31 @@ wire    ap_ST_fsm_state4_blk;
 wire    ap_ST_fsm_state5_blk;
 wire    ap_ST_fsm_state6_blk;
 reg    ap_ST_fsm_state7_blk;
+wire    ap_ST_fsm_state8_blk;
 wire    regslice_both_in_r_U_apdone_blk;
 wire   [31:0] in_r_TDATA_int_regslice;
 wire    in_r_TVALID_int_regslice;
 reg    in_r_TREADY_int_regslice;
 wire    regslice_both_in_r_U_ack_in;
-wire   [26:0] mul_ln59_fu_281_p10;
+wire   [26:0] mul_ln64_fu_346_p10;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
 #0 start_once_reg = 1'b0;
 #0 ap_done_reg = 1'b0;
-#0 ap_CS_fsm = 7'd1;
+#0 ap_CS_fsm = 8'd1;
+#0 samples_in = 32'd0;
 #0 sample = 32'd0;
-#0 goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev_1 = 18'd0;
-#0 goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2_1 = 18'd0;
-#0 goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2 = 18'd0;
-#0 goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev = 18'd0;
-#0 elem = 32'd0;
+#0 goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1 = 18'd0;
+#0 goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_1 = 18'd0;
+#0 goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2 = 18'd0;
+#0 goertzel_stream_stream_goertzel_config_status_gz_t_s_prev = 18'd0;
+#0 samples_out = 32'd0;
+#0 status_gz_samples_in_preg = 32'd0;
+#0 status_gz_sample_win_preg = 32'd0;
+#0 status_gz_samples_out_preg = 32'd0;
+#0 status_gz_samples_out_fifo_preg = 32'd0;
 end
 
 deepwaveaccel_goertzel_hann_window_ROM_1P_BRAM_1R #(
@@ -217,9 +251,9 @@ deepwaveaccel_mul_14s_13ns_27_1_1 #(
     .din1_WIDTH( 13 ),
     .dout_WIDTH( 27 ))
 mul_14s_13ns_27_1_1_U3(
-    .din0(shl_ln_fu_257_p3),
-    .din1(mul_ln59_fu_281_p1),
-    .dout(mul_ln59_fu_281_p2)
+    .din0(shl_ln_fu_322_p3),
+    .din1(mul_ln64_fu_346_p1),
+    .dout(mul_ln64_fu_346_p2)
 );
 
 deepwaveaccel_mul_18s_18s_34_1_1 #(
@@ -229,9 +263,9 @@ deepwaveaccel_mul_18s_18s_34_1_1 #(
     .din1_WIDTH( 18 ),
     .dout_WIDTH( 34 ))
 mul_18s_18s_34_1_1_U4(
-    .din0(mul_ln84_fu_384_p0),
-    .din1(sinw_reg_596),
-    .dout(mul_ln84_fu_384_p2)
+    .din0(mul_ln89_fu_449_p0),
+    .din1(sinw_reg_648),
+    .dout(mul_ln89_fu_449_p2)
 );
 
 deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1 #(
@@ -244,11 +278,11 @@ deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1 #(
 mac_muladd_18s_18s_30s_34_4_1_U5(
     .clk(ap_clk),
     .reset(ap_rst),
-    .din0(sext_ln70_1_fu_228_p0),
+    .din0(sext_ln75_1_fu_292_p0),
     .din1(goer_cfg_COS_OMEGA2_0),
-    .din2(grp_fu_541_p2),
-    .ce(grp_fu_541_ce),
-    .dout(grp_fu_541_p3)
+    .din2(grp_fu_593_p2),
+    .ce(grp_fu_593_ce),
+    .dout(grp_fu_593_p3)
 );
 
 deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1 #(
@@ -261,11 +295,11 @@ deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1 #(
 mac_muladd_18s_18s_30s_34_4_1_U6(
     .clk(ap_clk),
     .reset(ap_rst),
-    .din0(sext_ln70_3_fu_240_p0),
+    .din0(sext_ln75_3_fu_304_p0),
     .din1(goer_cfg_COS_OMEGA2_1),
-    .din2(grp_fu_550_p2),
-    .ce(grp_fu_550_ce),
-    .dout(grp_fu_550_p3)
+    .din2(grp_fu_602_p2),
+    .ce(grp_fu_602_ce),
+    .dout(grp_fu_602_p3)
 );
 
 deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1 #(
@@ -278,11 +312,11 @@ deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1 #(
 mac_mulsub_18s_18s_34ns_34_4_1_U7(
     .clk(ap_clk),
     .reset(ap_rst),
-    .din0(grp_fu_559_p0),
-    .din1(cosw_reg_586),
-    .din2(grp_fu_559_p2),
-    .ce(grp_fu_559_ce),
-    .dout(grp_fu_559_p3)
+    .din0(grp_fu_611_p0),
+    .din1(cosw_reg_638),
+    .din2(grp_fu_611_p2),
+    .ce(grp_fu_611_ce),
+    .dout(grp_fu_611_p3)
 );
 
 deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1 #(
@@ -295,11 +329,11 @@ deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1 #(
 mac_mulsub_18s_18s_34ns_34_4_1_U8(
     .clk(ap_clk),
     .reset(ap_rst),
-    .din0(grp_fu_568_p0),
-    .din1(cosw_1_reg_591),
-    .din2(grp_fu_568_p2),
-    .ce(grp_fu_568_ce),
-    .dout(grp_fu_568_p3)
+    .din0(grp_fu_620_p0),
+    .din1(cosw_1_reg_643),
+    .din2(grp_fu_620_p2),
+    .ce(grp_fu_620_ce),
+    .dout(grp_fu_620_p3)
 );
 
 deepwaveaccel_mac_muladd_18s_18s_34ns_34_4_1 #(
@@ -312,11 +346,11 @@ deepwaveaccel_mac_muladd_18s_18s_34ns_34_4_1 #(
 mac_muladd_18s_18s_34ns_34_4_1_U9(
     .clk(ap_clk),
     .reset(ap_rst),
-    .din0(grp_fu_577_p0),
-    .din1(sinw_1_reg_601),
-    .din2(grp_fu_577_p2),
-    .ce(grp_fu_577_ce),
-    .dout(grp_fu_577_p3)
+    .din0(grp_fu_629_p0),
+    .din1(sinw_1_reg_653),
+    .din2(grp_fu_629_p2),
+    .ce(grp_fu_629_ce),
+    .dout(grp_fu_629_p3)
 );
 
 deepwaveaccel_regslice_both #(
@@ -347,7 +381,7 @@ always @ (posedge ap_clk) begin
     end else begin
         if ((ap_continue == 1'b1)) begin
             ap_done_reg <= 1'b0;
-        end else if (((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7))) begin
+        end else if ((1'b1 == ap_CS_fsm_state8)) begin
             ap_done_reg <= 1'b1;
         end
     end
@@ -366,75 +400,121 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd0))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_reg_200 <= goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev;
-    end else if (((1'b0 == ap_block_state7) & (icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_reg_200 <= 18'd0;
+    if (ap_rst == 1'b1) begin
+        status_gz_sample_win_preg <= 32'd0;
+    end else begin
+        if ((1'b1 == ap_CS_fsm_state2)) begin
+            status_gz_sample_win_preg <= sample;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd0))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_reg_190 <= goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev_1;
-    end else if (((1'b0 == ap_block_state7) & (icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_reg_190 <= 18'd0;
+    if (ap_rst == 1'b1) begin
+        status_gz_samples_in_preg <= 32'd0;
+    end else begin
+        if (((1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_148_p3 == 1'd1) & (1'b0 == ap_block_state1))) begin
+            status_gz_samples_in_preg <= add_ln56_fu_271_p2;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd0))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_reg_210 <= {{sub_ln70_1_fu_348_p2[33:16]}};
-    end else if (((1'b0 == ap_block_state7) & (icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_reg_210 <= 18'd0;
+    if (ap_rst == 1'b1) begin
+        status_gz_samples_out_fifo_preg <= 32'd0;
+    end else begin
+        if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+            status_gz_samples_out_fifo_preg <= s_goertzel_num_data_valid;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd0))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_reg_180 <= {{sub_ln70_fu_321_p2[33:16]}};
-    end else if (((1'b0 == ap_block_state7) & (icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_reg_180 <= 18'd0;
+    if (ap_rst == 1'b1) begin
+        status_gz_samples_out_preg <= 32'd0;
+    end else begin
+        if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd1))) begin
+            status_gz_samples_out_preg <= add_ln95_fu_479_p2;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd0))) begin
-        sample_new_0_reg_170 <= add_ln75_fu_363_p2;
-    end else if (((1'b0 == ap_block_state7) & (icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        sample_new_0_reg_170 <= 32'd0;
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
+    end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 <= 18'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1))) begin
-        cosw_1_reg_591 <= goer_cfg_COS_OMEGA_1;
-        cosw_reg_586 <= goer_cfg_COS_OMEGA_0;
-        sinw_1_reg_601 <= goer_cfg_SIN_OMEGA_1;
-        sinw_reg_596 <= goer_cfg_SIN_OMEGA_0;
-        tmp_reg_606 <= tmp_nbreadreq_fu_136_p3;
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_reg_237 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1;
+    end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_reg_237 <= 18'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd1))) begin
-        elem <= select_ln92_fu_426_p3;
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 <= {{sub_ln75_1_fu_413_p2[33:16]}};
+    end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 <= 18'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state7) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_phi_fu_213_p4;
-        goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_phi_fu_203_p4;
-        goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2_1 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_phi_fu_193_p4;
-        goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev_1 <= ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_phi_fu_183_p4;
-        sample <= ap_phi_mux_sample_new_0_phi_fu_173_p4;
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_reg_227 <= {{sub_ln75_fu_386_p2[33:16]}};
+    end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_reg_227 <= 18'd0;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
+        sample_new_0_reg_217 <= add_ln80_fu_428_p2;
+    end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        sample_new_0_reg_217 <= 32'd0;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (1'b0 == ap_block_state1))) begin
+        cosw_1_reg_643 <= goer_cfg_COS_OMEGA_1;
+        cosw_reg_638 <= goer_cfg_COS_OMEGA_0;
+        sinw_1_reg_653 <= goer_cfg_SIN_OMEGA_1;
+        sinw_reg_648 <= goer_cfg_SIN_OMEGA_0;
+        tmp_reg_658 <= tmp_nbreadreq_fu_148_p3;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b1 == ap_CS_fsm_state8) & (tmp_reg_658 == 1'd1))) begin
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_1 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_phi_fu_230_p4;
+        sample <= ap_phi_mux_sample_new_0_phi_fu_220_p4;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        icmp_ln78_reg_665 <= icmp_ln78_fu_368_p2;
-        tmp_5_reg_679 <= {{mul_ln84_fu_384_p2[33:16]}};
+        icmp_ln83_reg_717 <= icmp_ln83_fu_433_p2;
+        tmp_6_reg_731 <= {{mul_ln89_fu_449_p2[33:16]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_148_p3 == 1'd1) & (1'b0 == ap_block_state1))) begin
+        samples_in <= add_ln56_fu_271_p2;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd1))) begin
+        samples_out <= add_ln95_fu_479_p2;
     end
 end
 
@@ -463,15 +543,17 @@ assign ap_ST_fsm_state5_blk = 1'b0;
 assign ap_ST_fsm_state6_blk = 1'b0;
 
 always @ (*) begin
-    if ((1'b1 == ap_block_state7)) begin
+    if ((s_goertzel_full_n == 1'b0)) begin
         ap_ST_fsm_state7_blk = 1'b1;
     end else begin
         ap_ST_fsm_state7_blk = 1'b0;
     end
 end
 
+assign ap_ST_fsm_state8_blk = 1'b0;
+
 always @ (*) begin
-    if (((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7))) begin
+    if ((1'b1 == ap_CS_fsm_state8)) begin
         ap_done = 1'b1;
     end else begin
         ap_done = ap_done_reg;
@@ -487,82 +569,82 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_phi_fu_203_p4 = 18'd0;
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_phi_fu_203_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_12_new_0_reg_200;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_phi_fu_193_p4 = 18'd0;
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_phi_fu_193_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev2_new_0_reg_190;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_reg_237;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_phi_fu_213_p4 = 18'd0;
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_phi_fu_213_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_11_new_0_reg_210;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_phi_fu_183_p4 = 18'd0;
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_phi_fu_230_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_phi_fu_183_p4 = goertzel_stream_stream_AxisWordDFTc_0_goertzel_config_s_prev_new_0_reg_180;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_phi_fu_230_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_reg_227;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_phi_mux_sample_new_0_phi_fu_173_p4 = 32'd0;
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        ap_phi_mux_sample_new_0_phi_fu_220_p4 = 32'd0;
     end else begin
-        ap_phi_mux_sample_new_0_phi_fu_173_p4 = sample_new_0_reg_170;
+        ap_phi_mux_sample_new_0_phi_fu_220_p4 = sample_new_0_reg_217;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((in_r_TVALID_int_regslice == 1'b1) & (1'b1 == ap_CS_fsm_state3)))) begin
-        grp_fu_541_ce = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((in_r_TVALID_int_regslice == 1'b1) & (1'b1 == ap_CS_fsm_state3)) | ((1'b1 == ap_CS_fsm_state1) & (1'b0 == ap_block_state1)))) begin
+        grp_fu_593_ce = 1'b1;
     end else begin
-        grp_fu_541_ce = 1'b0;
+        grp_fu_593_ce = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((in_r_TVALID_int_regslice == 1'b1) & (1'b1 == ap_CS_fsm_state3)))) begin
-        grp_fu_550_ce = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((in_r_TVALID_int_regslice == 1'b1) & (1'b1 == ap_CS_fsm_state3)) | ((1'b1 == ap_CS_fsm_state1) & (1'b0 == ap_block_state1)))) begin
+        grp_fu_602_ce = 1'b1;
     end else begin
-        grp_fu_550_ce = 1'b0;
+        grp_fu_602_ce = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | ((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7)))) begin
-        grp_fu_559_ce = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | ((s_goertzel_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state7)))) begin
+        grp_fu_611_ce = 1'b1;
     end else begin
-        grp_fu_559_ce = 1'b0;
+        grp_fu_611_ce = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | ((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7)))) begin
-        grp_fu_568_ce = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | ((s_goertzel_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state7)))) begin
+        grp_fu_620_ce = 1'b1;
     end else begin
-        grp_fu_568_ce = 1'b0;
+        grp_fu_620_ce = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | ((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7)))) begin
-        grp_fu_577_ce = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | ((s_goertzel_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state7)))) begin
+        grp_fu_629_ce = 1'b1;
     end else begin
-        grp_fu_577_ce = 1'b0;
+        grp_fu_629_ce = 1'b0;
     end
 end
 
@@ -591,7 +673,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7))) begin
+    if ((1'b1 == ap_CS_fsm_state8)) begin
         internal_ap_ready = 1'b1;
     end else begin
         internal_ap_ready = 1'b0;
@@ -607,7 +689,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
+    if ((1'b1 == ap_CS_fsm_state7)) begin
         s_goertzel_blk_n = s_goertzel_full_n;
     end else begin
         s_goertzel_blk_n = 1'b1;
@@ -615,7 +697,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7) & (ap_predicate_op99_write_state7 == 1'b1))) begin
+    if (((s_goertzel_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state7))) begin
         s_goertzel_write = 1'b1;
     end else begin
         s_goertzel_write = 1'b0;
@@ -631,11 +713,75 @@ always @ (*) begin
 end
 
 always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        status_gz_sample_win = sample;
+    end else begin
+        status_gz_sample_win = status_gz_sample_win_preg;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        status_gz_sample_win_ap_vld = 1'b1;
+    end else begin
+        status_gz_sample_win_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_148_p3 == 1'd1) & (1'b0 == ap_block_state1))) begin
+        status_gz_samples_in = add_ln56_fu_271_p2;
+    end else begin
+        status_gz_samples_in = status_gz_samples_in_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_148_p3 == 1'd1) & (1'b0 == ap_block_state1))) begin
+        status_gz_samples_in_ap_vld = 1'b1;
+    end else begin
+        status_gz_samples_in_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd1))) begin
+        status_gz_samples_out = add_ln95_fu_479_p2;
+    end else begin
+        status_gz_samples_out = status_gz_samples_out_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd1))) begin
+        status_gz_samples_out_ap_vld = 1'b1;
+    end else begin
+        status_gz_samples_out_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        status_gz_samples_out_fifo = s_goertzel_num_data_valid;
+    end else begin
+        status_gz_samples_out_fifo = status_gz_samples_out_fifo_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
+        status_gz_samples_out_fifo_ap_vld = 1'b1;
+    end else begin
+        status_gz_samples_out_fifo_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
-            if (((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_136_p3 == 1'd0))) begin
-                ap_NS_fsm = ap_ST_fsm_state7;
-            end else if (((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_136_p3 == 1'd1))) begin
+            if (((1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_148_p3 == 1'd0) & (1'b0 == ap_block_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state8;
+            end else if (((1'b1 == ap_CS_fsm_state1) & (tmp_nbreadreq_fu_148_p3 == 1'd1) & (1'b0 == ap_block_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state2;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state1;
@@ -652,8 +798,8 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state4 : begin
-            if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln78_fu_368_p2 == 1'd0))) begin
-                ap_NS_fsm = ap_ST_fsm_state7;
+            if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
+                ap_NS_fsm = ap_ST_fsm_state8;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state5;
             end
@@ -665,11 +811,14 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state7;
         end
         ap_ST_fsm_state7 : begin
-            if (((1'b0 == ap_block_state7) & (1'b1 == ap_CS_fsm_state7))) begin
-                ap_NS_fsm = ap_ST_fsm_state1;
+            if (((s_goertzel_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state7))) begin
+                ap_NS_fsm = ap_ST_fsm_state8;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state7;
             end
+        end
+        ap_ST_fsm_state8 : begin
+            ap_NS_fsm = ap_ST_fsm_state1;
         end
         default : begin
             ap_NS_fsm = 'bx;
@@ -677,15 +826,17 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln75_fu_363_p2 = (sample + 32'd1);
+assign add_ln56_fu_271_p2 = (samples_in + 32'd1);
 
-assign add_ln83_fu_478_p1 = grp_fu_568_p3;
+assign add_ln80_fu_428_p2 = (sample + 32'd1);
 
-assign add_ln83_fu_478_p2 = ($signed(and_ln_fu_470_p3) + $signed(add_ln83_fu_478_p1));
+assign add_ln88_fu_530_p1 = grp_fu_620_p3;
 
-assign add_ln91_fu_414_p2 = (elem + 32'd1);
+assign add_ln88_fu_530_p2 = ($signed(and_ln_fu_522_p3) + $signed(add_ln88_fu_530_p1));
 
-assign and_ln_fu_470_p3 = {{tmp_4_fu_461_p4}, {16'd0}};
+assign add_ln95_fu_479_p2 = (samples_out + 32'd1);
+
+assign and_ln_fu_522_p3 = {{tmp_5_fu_513_p4}, {16'd0}};
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -701,104 +852,94 @@ assign ap_CS_fsm_state6 = ap_CS_fsm[32'd5];
 
 assign ap_CS_fsm_state7 = ap_CS_fsm[32'd6];
 
+assign ap_CS_fsm_state8 = ap_CS_fsm[32'd7];
+
 always @ (*) begin
     ap_block_state1 = ((ap_done_reg == 1'b1) | (real_start == 1'b0));
 end
 
-always @ (*) begin
-    ap_block_state7 = ((s_goertzel_full_n == 1'b0) & (ap_predicate_op99_write_state7 == 1'b1));
-end
-
-always @ (*) begin
-    ap_predicate_op99_write_state7 = ((icmp_ln78_reg_665 == 1'd1) & (tmp_reg_606 == 1'd1));
-end
-
 assign ap_ready = internal_ap_ready;
 
-assign grp_fu_541_p2 = shl_i_i26_i224_i_fu_305_p1;
+assign grp_fu_593_p2 = shl_i_i26_i244_i_fu_370_p1;
 
-assign grp_fu_550_p2 = shl_i_i26_i224_i_fu_305_p1;
+assign grp_fu_602_p2 = shl_i_i26_i244_i_fu_370_p1;
 
-assign grp_fu_559_p0 = sext_ln83_fu_374_p1;
+assign grp_fu_611_p0 = sext_ln88_fu_439_p1;
 
-assign grp_fu_559_p2 = {{shl_ln2_fu_440_p1}, {16'd0}};
+assign grp_fu_611_p2 = {{shl_ln2_fu_492_p1}, {16'd0}};
 
-assign grp_fu_568_p0 = sext_ln83_2_fu_400_p1;
+assign grp_fu_620_p0 = sext_ln88_2_fu_465_p1;
 
-assign grp_fu_568_p2 = {{shl_ln83_1_fu_454_p1}, {16'd0}};
+assign grp_fu_620_p2 = {{shl_ln88_1_fu_506_p1}, {16'd0}};
 
-assign grp_fu_577_p0 = sext_ln83_2_fu_400_p1;
+assign grp_fu_629_p0 = sext_ln88_2_fu_465_p1;
 
-assign grp_fu_577_p2 = {{tmp_5_reg_679}, {16'd0}};
+assign grp_fu_629_p2 = {{tmp_6_reg_731}, {16'd0}};
 
-assign hann_window_address0 = zext_ln58_fu_248_p1;
+assign hann_window_address0 = zext_ln63_fu_313_p1;
 
-assign icmp_ln78_fu_368_p2 = ((add_ln75_fu_363_p2 == 32'd200) ? 1'b1 : 1'b0);
-
-assign icmp_ln92_fu_420_p2 = ((add_ln91_fu_414_p2 == 32'd48) ? 1'b1 : 1'b0);
+assign icmp_ln83_fu_433_p2 = ((add_ln80_fu_428_p2 == 32'd200) ? 1'b1 : 1'b0);
 
 assign in_r_TREADY = regslice_both_in_r_U_ack_in;
 
-assign mul_ln59_fu_281_p1 = mul_ln59_fu_281_p10;
+assign mul_ln64_fu_346_p1 = mul_ln64_fu_346_p10;
 
-assign mul_ln59_fu_281_p10 = shl_ln59_1_fu_265_p3;
+assign mul_ln64_fu_346_p10 = shl_ln64_1_fu_330_p3;
 
-assign mul_ln84_fu_384_p0 = sext_ln83_fu_374_p1;
+assign mul_ln89_fu_449_p0 = sext_ln88_fu_439_p1;
 
-assign s_goertzel_din = {{trunc_ln2_fu_493_p4}, {trunc_ln1_fu_483_p4}};
+assign s_goertzel_din = {{trunc_ln2_fu_545_p4}, {trunc_ln1_fu_535_p4}};
 
-assign select_ln92_fu_426_p3 = ((icmp_ln92_fu_420_p2[0:0] == 1'b1) ? 32'd0 : add_ln91_fu_414_p2);
+assign sext_ln75_1_fu_292_p0 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1;
 
-assign sext_ln70_1_fu_228_p0 = goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev_1;
+assign sext_ln75_3_fu_304_p0 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
 
-assign sext_ln70_3_fu_240_p0 = goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev;
+assign sext_ln88_2_fu_465_p1 = trunc_ln75_1_fu_418_p4;
 
-assign sext_ln83_2_fu_400_p1 = trunc_ln70_1_fu_353_p4;
+assign sext_ln88_fu_439_p1 = trunc_ln_fu_391_p4;
 
-assign sext_ln83_fu_374_p1 = trunc_ln_fu_326_p4;
+assign shl_i_i26_i244_i_fu_370_p1 = $signed(tmp_2_fu_362_p3);
 
-assign shl_i_i26_i224_i_fu_305_p1 = $signed(tmp_2_fu_297_p3);
+assign shl_ln1_fu_378_p3 = {{goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_1}, {16'd0}};
 
-assign shl_ln1_fu_313_p3 = {{goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2_1}, {16'd0}};
+assign shl_ln2_fu_492_p1 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1;
 
-assign shl_ln2_fu_440_p1 = goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev_1;
+assign shl_ln64_1_fu_330_p3 = {{hann_window_q0}, {1'd0}};
 
-assign shl_ln59_1_fu_265_p3 = {{hann_window_q0}, {1'd0}};
+assign shl_ln75_1_fu_405_p3 = {{goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2}, {16'd0}};
 
-assign shl_ln70_1_fu_340_p3 = {{goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev2}, {16'd0}};
+assign shl_ln88_1_fu_506_p1 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
 
-assign shl_ln83_1_fu_454_p1 = goertzel_stream_ap_uint_0_stream_AxisWordDFTc_0_goertzel_config_s_prev;
-
-assign shl_ln_fu_257_p3 = {{trunc_ln59_fu_253_p1}, {2'd0}};
+assign shl_ln_fu_322_p3 = {{trunc_ln64_fu_318_p1}, {2'd0}};
 
 assign start_out = real_start;
 
-assign sub_ln70_1_fu_348_p2 = ($signed(grp_fu_550_p3) - $signed(shl_ln70_1_fu_340_p3));
+assign sub_ln75_1_fu_413_p2 = ($signed(grp_fu_602_p3) - $signed(shl_ln75_1_fu_405_p3));
 
-assign sub_ln70_fu_321_p2 = ($signed(grp_fu_541_p3) - $signed(shl_ln1_fu_313_p3));
+assign sub_ln75_fu_386_p2 = ($signed(grp_fu_593_p3) - $signed(shl_ln1_fu_378_p3));
 
-assign tmp_2_fu_297_p3 = {{xw_fu_287_p4}, {16'd0}};
+assign tmp_2_fu_362_p3 = {{xw_fu_352_p4}, {16'd0}};
 
-assign tmp_4_fu_461_p1 = grp_fu_559_p3;
+assign tmp_5_fu_513_p1 = grp_fu_611_p3;
 
-assign tmp_4_fu_461_p4 = {{tmp_4_fu_461_p1[33:16]}};
+assign tmp_5_fu_513_p4 = {{tmp_5_fu_513_p1[33:16]}};
 
-assign tmp_nbreadreq_fu_136_p3 = in_r_TVALID_int_regslice;
+assign tmp_nbreadreq_fu_148_p3 = in_r_TVALID_int_regslice;
 
-assign trunc_ln1_fu_483_p4 = {{add_ln83_fu_478_p2[33:16]}};
+assign trunc_ln1_fu_535_p4 = {{add_ln88_fu_530_p2[33:16]}};
 
-assign trunc_ln2_fu_493_p1 = grp_fu_577_p3;
+assign trunc_ln2_fu_545_p1 = grp_fu_629_p3;
 
-assign trunc_ln2_fu_493_p4 = {{trunc_ln2_fu_493_p1[33:16]}};
+assign trunc_ln2_fu_545_p4 = {{trunc_ln2_fu_545_p1[33:16]}};
 
-assign trunc_ln59_fu_253_p1 = in_r_TDATA_int_regslice[11:0];
+assign trunc_ln64_fu_318_p1 = in_r_TDATA_int_regslice[11:0];
 
-assign trunc_ln70_1_fu_353_p4 = {{sub_ln70_1_fu_348_p2[33:16]}};
+assign trunc_ln75_1_fu_418_p4 = {{sub_ln75_1_fu_413_p2[33:16]}};
 
-assign trunc_ln_fu_326_p4 = {{sub_ln70_fu_321_p2[33:16]}};
+assign trunc_ln_fu_391_p4 = {{sub_ln75_fu_386_p2[33:16]}};
 
-assign xw_fu_287_p4 = {{mul_ln59_fu_281_p2[26:13]}};
+assign xw_fu_352_p4 = {{mul_ln64_fu_346_p2[26:13]}};
 
-assign zext_ln58_fu_248_p1 = sample;
+assign zext_ln63_fu_313_p1 = sample;
 
 endmodule //deepwaveaccel_goertzel

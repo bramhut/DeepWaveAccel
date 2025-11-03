@@ -13,5 +13,6 @@ using acc_cplx_t = std::complex<acc_fix_t>;
 // Top-level kernel declaration
 // -----------------------------------------------------------------------------
 void backprojection(hls::stream<AxisWordDFTc> &corr_stream,  // Σ upper-triangular
-                    hls::stream<word_t> &param_in,
-                    hls::stream<img_t>        &img_stream);             // output y_i - tau[i]
+                    hls::stream<word_t>       &param_in,
+                    hls::stream<img_t>        &img_stream,
+                    status_bp_t               &status);             // output y_i - tau[i]

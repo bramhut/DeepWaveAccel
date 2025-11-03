@@ -32,7 +32,7 @@ int main() {
 // -----------------------------------------------------------------------------
 int tb_deepwaveaccel() {
     // Settings
-    int max_frames = 2;  // -1 → process all
+    int max_frames = -1;  // -1 → process all
 
     // -------------------------------------------------------------------------
     // AXIS streams
@@ -45,6 +45,11 @@ int tb_deepwaveaccel() {
     goertzel_config goer_cfg;
     deblur_config   debl_cfg;
     debl_cfg.n_layers = 5;
+
+    status_gz_t status_gz;
+    status_cc_t status_cc;
+    status_bp_t status_bp;
+    status_db_t status_db;
 
     std::cout << "----------------------------------------------\n";
     std::cout << "     DeepWaveAccel full pipeline test\n";
@@ -248,6 +253,8 @@ int tb_deepwaveaccel() {
     }
 
     goertzel_prepare_config(goer_cfg, (double)samplerate, FF);
+    std::cout << "[Deepwave] Goertzel config bin0: COS_OMEGA[0]: " << goer_cfg.COS_OMEGA[0]  << " (" << goer_cfg.COS_OMEGA[0].range()  << "), COS_OMEGA2[0]: " << goer_cfg.COS_OMEGA2[0] << " (" << goer_cfg.COS_OMEGA2[0].range() << "), SIN_OMEGA[0]: " << goer_cfg.SIN_OMEGA[0] << " (" << goer_cfg.SIN_OMEGA[0].range() << ")" << std::endl;
+    std::cout << "[Deepwave] Goertzel config bin1: COS_OMEGA[1]: " << goer_cfg.COS_OMEGA[1]  << " (" << goer_cfg.COS_OMEGA[1].range()  << "), COS_OMEGA2[1]: " << goer_cfg.COS_OMEGA2[1] << " (" << goer_cfg.COS_OMEGA2[1].range() << "), SIN_OMEGA[1]: " << goer_cfg.SIN_OMEGA[1] << " (" << goer_cfg.SIN_OMEGA[1].range() << ")" << std::endl;
     int n_batches = n_sample / N_WIN;
     int n_batches_group_aligned = (n_batches / GROUP_FRAMES) * GROUP_FRAMES;
     int expected_frames = n_batches_group_aligned / GROUP_FRAMES;
@@ -277,11 +284,15 @@ int tb_deepwaveaccel() {
     while (true) {
         deepwaveaccel(
             in_stream,
-            param_bp_stream,   // <-- new AXIS parameter input
+            param_bp_stream,
             param_db_stream,
             out_stream,
             goer_cfg,
-            debl_cfg
+            debl_cfg,
+            status_gz,
+            status_cc,
+            status_bp,
+            status_db
         );
 
         int frames_done = (int)(out_stream.size() / (IMG_LEN + 1));
@@ -337,9 +348,6 @@ int tb_deepwaveaccel() {
             word_t w_pix = w_pix_axis.data;
             pix.range() = w_pix.range(img_t::width - 1, 0);
             image_out.push_back(pix);
-            if (i==IMG_LEN-1 && w_pix_axis.last!=1) {
-                std::cerr << "ERR: TLAST was not set on the last pixel!" << std::endl;
-            }
         }
     }
 

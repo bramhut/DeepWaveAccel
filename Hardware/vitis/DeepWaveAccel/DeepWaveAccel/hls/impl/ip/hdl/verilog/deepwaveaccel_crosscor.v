@@ -31,183 +31,157 @@ module deepwaveaccel_crosscor (
         s_norm_full_n,
         s_norm_write,
         s_norm_num_data_valid,
-        s_norm_fifo_cap
+        s_norm_fifo_cap,
+        status_cc_state,
+        status_cc_state_ap_vld,
+        status_cc_samples_in,
+        status_cc_samples_in_ap_vld,
+        status_cc_samples_out,
+        status_cc_samples_out_ap_vld,
+        status_cc_sample_idx,
+        status_cc_sample_idx_ap_vld,
+        status_cc_current_norm,
+        status_cc_current_norm_ap_vld,
+        status_cc_norms_written,
+        status_cc_norms_written_ap_vld,
+        status_cc_out_fifo,
+        status_cc_out_fifo_ap_vld,
+        status_cc_norms_fifo,
+        status_cc_norms_fifo_ap_vld
 );
 
-parameter    ap_ST_fsm_state1 = 174'd1;
-parameter    ap_ST_fsm_state2 = 174'd2;
-parameter    ap_ST_fsm_state3 = 174'd4;
-parameter    ap_ST_fsm_state4 = 174'd8;
-parameter    ap_ST_fsm_state5 = 174'd16;
-parameter    ap_ST_fsm_state6 = 174'd32;
-parameter    ap_ST_fsm_state7 = 174'd64;
-parameter    ap_ST_fsm_state8 = 174'd128;
-parameter    ap_ST_fsm_state9 = 174'd256;
-parameter    ap_ST_fsm_state10 = 174'd512;
-parameter    ap_ST_fsm_state11 = 174'd1024;
-parameter    ap_ST_fsm_state12 = 174'd2048;
-parameter    ap_ST_fsm_state13 = 174'd4096;
-parameter    ap_ST_fsm_state14 = 174'd8192;
-parameter    ap_ST_fsm_state15 = 174'd16384;
-parameter    ap_ST_fsm_state16 = 174'd32768;
-parameter    ap_ST_fsm_state17 = 174'd65536;
-parameter    ap_ST_fsm_state18 = 174'd131072;
-parameter    ap_ST_fsm_state19 = 174'd262144;
-parameter    ap_ST_fsm_state20 = 174'd524288;
-parameter    ap_ST_fsm_state21 = 174'd1048576;
-parameter    ap_ST_fsm_state22 = 174'd2097152;
-parameter    ap_ST_fsm_state23 = 174'd4194304;
-parameter    ap_ST_fsm_state24 = 174'd8388608;
-parameter    ap_ST_fsm_state25 = 174'd16777216;
-parameter    ap_ST_fsm_state26 = 174'd33554432;
-parameter    ap_ST_fsm_state27 = 174'd67108864;
-parameter    ap_ST_fsm_state28 = 174'd134217728;
-parameter    ap_ST_fsm_state29 = 174'd268435456;
-parameter    ap_ST_fsm_state30 = 174'd536870912;
-parameter    ap_ST_fsm_state31 = 174'd1073741824;
-parameter    ap_ST_fsm_state32 = 174'd2147483648;
-parameter    ap_ST_fsm_state33 = 174'd4294967296;
-parameter    ap_ST_fsm_state34 = 174'd8589934592;
-parameter    ap_ST_fsm_state35 = 174'd17179869184;
-parameter    ap_ST_fsm_state36 = 174'd34359738368;
-parameter    ap_ST_fsm_state37 = 174'd68719476736;
-parameter    ap_ST_fsm_state38 = 174'd137438953472;
-parameter    ap_ST_fsm_state39 = 174'd274877906944;
-parameter    ap_ST_fsm_state40 = 174'd549755813888;
-parameter    ap_ST_fsm_state41 = 174'd1099511627776;
-parameter    ap_ST_fsm_state42 = 174'd2199023255552;
-parameter    ap_ST_fsm_state43 = 174'd4398046511104;
-parameter    ap_ST_fsm_state44 = 174'd8796093022208;
-parameter    ap_ST_fsm_state45 = 174'd17592186044416;
-parameter    ap_ST_fsm_state46 = 174'd35184372088832;
-parameter    ap_ST_fsm_state47 = 174'd70368744177664;
-parameter    ap_ST_fsm_state48 = 174'd140737488355328;
-parameter    ap_ST_fsm_state49 = 174'd281474976710656;
-parameter    ap_ST_fsm_state50 = 174'd562949953421312;
-parameter    ap_ST_fsm_state51 = 174'd1125899906842624;
-parameter    ap_ST_fsm_state52 = 174'd2251799813685248;
-parameter    ap_ST_fsm_state53 = 174'd4503599627370496;
-parameter    ap_ST_fsm_state54 = 174'd9007199254740992;
-parameter    ap_ST_fsm_state55 = 174'd18014398509481984;
-parameter    ap_ST_fsm_state56 = 174'd36028797018963968;
-parameter    ap_ST_fsm_state57 = 174'd72057594037927936;
-parameter    ap_ST_fsm_state58 = 174'd144115188075855872;
-parameter    ap_ST_fsm_state59 = 174'd288230376151711744;
-parameter    ap_ST_fsm_state60 = 174'd576460752303423488;
-parameter    ap_ST_fsm_state61 = 174'd1152921504606846976;
-parameter    ap_ST_fsm_state62 = 174'd2305843009213693952;
-parameter    ap_ST_fsm_state63 = 174'd4611686018427387904;
-parameter    ap_ST_fsm_state64 = 174'd9223372036854775808;
-parameter    ap_ST_fsm_state65 = 174'd18446744073709551616;
-parameter    ap_ST_fsm_state66 = 174'd36893488147419103232;
-parameter    ap_ST_fsm_state67 = 174'd73786976294838206464;
-parameter    ap_ST_fsm_state68 = 174'd147573952589676412928;
-parameter    ap_ST_fsm_state69 = 174'd295147905179352825856;
-parameter    ap_ST_fsm_state70 = 174'd590295810358705651712;
-parameter    ap_ST_fsm_state71 = 174'd1180591620717411303424;
-parameter    ap_ST_fsm_state72 = 174'd2361183241434822606848;
-parameter    ap_ST_fsm_state73 = 174'd4722366482869645213696;
-parameter    ap_ST_fsm_state74 = 174'd9444732965739290427392;
-parameter    ap_ST_fsm_state75 = 174'd18889465931478580854784;
-parameter    ap_ST_fsm_state76 = 174'd37778931862957161709568;
-parameter    ap_ST_fsm_state77 = 174'd75557863725914323419136;
-parameter    ap_ST_fsm_state78 = 174'd151115727451828646838272;
-parameter    ap_ST_fsm_state79 = 174'd302231454903657293676544;
-parameter    ap_ST_fsm_state80 = 174'd604462909807314587353088;
-parameter    ap_ST_fsm_state81 = 174'd1208925819614629174706176;
-parameter    ap_ST_fsm_state82 = 174'd2417851639229258349412352;
-parameter    ap_ST_fsm_state83 = 174'd4835703278458516698824704;
-parameter    ap_ST_fsm_state84 = 174'd9671406556917033397649408;
-parameter    ap_ST_fsm_state85 = 174'd19342813113834066795298816;
-parameter    ap_ST_fsm_state86 = 174'd38685626227668133590597632;
-parameter    ap_ST_fsm_state87 = 174'd77371252455336267181195264;
-parameter    ap_ST_fsm_state88 = 174'd154742504910672534362390528;
-parameter    ap_ST_fsm_state89 = 174'd309485009821345068724781056;
-parameter    ap_ST_fsm_state90 = 174'd618970019642690137449562112;
-parameter    ap_ST_fsm_state91 = 174'd1237940039285380274899124224;
-parameter    ap_ST_fsm_state92 = 174'd2475880078570760549798248448;
-parameter    ap_ST_fsm_state93 = 174'd4951760157141521099596496896;
-parameter    ap_ST_fsm_state94 = 174'd9903520314283042199192993792;
-parameter    ap_ST_fsm_state95 = 174'd19807040628566084398385987584;
-parameter    ap_ST_fsm_state96 = 174'd39614081257132168796771975168;
-parameter    ap_ST_fsm_state97 = 174'd79228162514264337593543950336;
-parameter    ap_ST_fsm_state98 = 174'd158456325028528675187087900672;
-parameter    ap_ST_fsm_state99 = 174'd316912650057057350374175801344;
-parameter    ap_ST_fsm_state100 = 174'd633825300114114700748351602688;
-parameter    ap_ST_fsm_state101 = 174'd1267650600228229401496703205376;
-parameter    ap_ST_fsm_state102 = 174'd2535301200456458802993406410752;
-parameter    ap_ST_fsm_state103 = 174'd5070602400912917605986812821504;
-parameter    ap_ST_fsm_state104 = 174'd10141204801825835211973625643008;
-parameter    ap_ST_fsm_state105 = 174'd20282409603651670423947251286016;
-parameter    ap_ST_fsm_state106 = 174'd40564819207303340847894502572032;
-parameter    ap_ST_fsm_state107 = 174'd81129638414606681695789005144064;
-parameter    ap_ST_fsm_state108 = 174'd162259276829213363391578010288128;
-parameter    ap_ST_fsm_state109 = 174'd324518553658426726783156020576256;
-parameter    ap_ST_fsm_state110 = 174'd649037107316853453566312041152512;
-parameter    ap_ST_fsm_state111 = 174'd1298074214633706907132624082305024;
-parameter    ap_ST_fsm_state112 = 174'd2596148429267413814265248164610048;
-parameter    ap_ST_fsm_state113 = 174'd5192296858534827628530496329220096;
-parameter    ap_ST_fsm_state114 = 174'd10384593717069655257060992658440192;
-parameter    ap_ST_fsm_state115 = 174'd20769187434139310514121985316880384;
-parameter    ap_ST_fsm_state116 = 174'd41538374868278621028243970633760768;
-parameter    ap_ST_fsm_state117 = 174'd83076749736557242056487941267521536;
-parameter    ap_ST_fsm_state118 = 174'd166153499473114484112975882535043072;
-parameter    ap_ST_fsm_state119 = 174'd332306998946228968225951765070086144;
-parameter    ap_ST_fsm_state120 = 174'd664613997892457936451903530140172288;
-parameter    ap_ST_fsm_state121 = 174'd1329227995784915872903807060280344576;
-parameter    ap_ST_fsm_state122 = 174'd2658455991569831745807614120560689152;
-parameter    ap_ST_fsm_state123 = 174'd5316911983139663491615228241121378304;
-parameter    ap_ST_fsm_state124 = 174'd10633823966279326983230456482242756608;
-parameter    ap_ST_fsm_state125 = 174'd21267647932558653966460912964485513216;
-parameter    ap_ST_fsm_state126 = 174'd42535295865117307932921825928971026432;
-parameter    ap_ST_fsm_state127 = 174'd85070591730234615865843651857942052864;
-parameter    ap_ST_fsm_state128 = 174'd170141183460469231731687303715884105728;
-parameter    ap_ST_fsm_state129 = 174'd340282366920938463463374607431768211456;
-parameter    ap_ST_fsm_state130 = 174'd680564733841876926926749214863536422912;
-parameter    ap_ST_fsm_state131 = 174'd1361129467683753853853498429727072845824;
-parameter    ap_ST_fsm_state132 = 174'd2722258935367507707706996859454145691648;
-parameter    ap_ST_fsm_state133 = 174'd5444517870735015415413993718908291383296;
-parameter    ap_ST_fsm_state134 = 174'd10889035741470030830827987437816582766592;
-parameter    ap_ST_fsm_state135 = 174'd21778071482940061661655974875633165533184;
-parameter    ap_ST_fsm_state136 = 174'd43556142965880123323311949751266331066368;
-parameter    ap_ST_fsm_state137 = 174'd87112285931760246646623899502532662132736;
-parameter    ap_ST_fsm_state138 = 174'd174224571863520493293247799005065324265472;
-parameter    ap_ST_fsm_state139 = 174'd348449143727040986586495598010130648530944;
-parameter    ap_ST_fsm_state140 = 174'd696898287454081973172991196020261297061888;
-parameter    ap_ST_fsm_state141 = 174'd1393796574908163946345982392040522594123776;
-parameter    ap_ST_fsm_state142 = 174'd2787593149816327892691964784081045188247552;
-parameter    ap_ST_fsm_state143 = 174'd5575186299632655785383929568162090376495104;
-parameter    ap_ST_fsm_state144 = 174'd11150372599265311570767859136324180752990208;
-parameter    ap_ST_fsm_state145 = 174'd22300745198530623141535718272648361505980416;
-parameter    ap_ST_fsm_state146 = 174'd44601490397061246283071436545296723011960832;
-parameter    ap_ST_fsm_state147 = 174'd89202980794122492566142873090593446023921664;
-parameter    ap_ST_fsm_state148 = 174'd178405961588244985132285746181186892047843328;
-parameter    ap_ST_fsm_state149 = 174'd356811923176489970264571492362373784095686656;
-parameter    ap_ST_fsm_state150 = 174'd713623846352979940529142984724747568191373312;
-parameter    ap_ST_fsm_state151 = 174'd1427247692705959881058285969449495136382746624;
-parameter    ap_ST_fsm_state152 = 174'd2854495385411919762116571938898990272765493248;
-parameter    ap_ST_fsm_state153 = 174'd5708990770823839524233143877797980545530986496;
-parameter    ap_ST_fsm_state154 = 174'd11417981541647679048466287755595961091061972992;
-parameter    ap_ST_fsm_state155 = 174'd22835963083295358096932575511191922182123945984;
-parameter    ap_ST_fsm_state156 = 174'd45671926166590716193865151022383844364247891968;
-parameter    ap_ST_fsm_state157 = 174'd91343852333181432387730302044767688728495783936;
-parameter    ap_ST_fsm_state158 = 174'd182687704666362864775460604089535377456991567872;
-parameter    ap_ST_fsm_state159 = 174'd365375409332725729550921208179070754913983135744;
-parameter    ap_ST_fsm_state160 = 174'd730750818665451459101842416358141509827966271488;
-parameter    ap_ST_fsm_state161 = 174'd1461501637330902918203684832716283019655932542976;
-parameter    ap_ST_fsm_state162 = 174'd2923003274661805836407369665432566039311865085952;
-parameter    ap_ST_fsm_state163 = 174'd5846006549323611672814739330865132078623730171904;
-parameter    ap_ST_fsm_state164 = 174'd11692013098647223345629478661730264157247460343808;
-parameter    ap_ST_fsm_state165 = 174'd23384026197294446691258957323460528314494920687616;
-parameter    ap_ST_fsm_state166 = 174'd46768052394588893382517914646921056628989841375232;
-parameter    ap_ST_fsm_state167 = 174'd93536104789177786765035829293842113257979682750464;
-parameter    ap_ST_fsm_state168 = 174'd187072209578355573530071658587684226515959365500928;
-parameter    ap_ST_fsm_state169 = 174'd374144419156711147060143317175368453031918731001856;
-parameter    ap_ST_fsm_state170 = 174'd748288838313422294120286634350736906063837462003712;
-parameter    ap_ST_fsm_state171 = 174'd1496577676626844588240573268701473812127674924007424;
-parameter    ap_ST_fsm_state172 = 174'd2993155353253689176481146537402947624255349848014848;
-parameter    ap_ST_fsm_state173 = 174'd5986310706507378352962293074805895248510699696029696;
-parameter    ap_ST_fsm_state174 = 174'd11972621413014756705924586149611790497021399392059392;
+parameter    ap_ST_fsm_state1 = 132'd1;
+parameter    ap_ST_fsm_state2 = 132'd2;
+parameter    ap_ST_fsm_state3 = 132'd4;
+parameter    ap_ST_fsm_state4 = 132'd8;
+parameter    ap_ST_fsm_state5 = 132'd16;
+parameter    ap_ST_fsm_state6 = 132'd32;
+parameter    ap_ST_fsm_state7 = 132'd64;
+parameter    ap_ST_fsm_state8 = 132'd128;
+parameter    ap_ST_fsm_state9 = 132'd256;
+parameter    ap_ST_fsm_state10 = 132'd512;
+parameter    ap_ST_fsm_state11 = 132'd1024;
+parameter    ap_ST_fsm_state12 = 132'd2048;
+parameter    ap_ST_fsm_state13 = 132'd4096;
+parameter    ap_ST_fsm_state14 = 132'd8192;
+parameter    ap_ST_fsm_state15 = 132'd16384;
+parameter    ap_ST_fsm_state16 = 132'd32768;
+parameter    ap_ST_fsm_state17 = 132'd65536;
+parameter    ap_ST_fsm_state18 = 132'd131072;
+parameter    ap_ST_fsm_state19 = 132'd262144;
+parameter    ap_ST_fsm_state20 = 132'd524288;
+parameter    ap_ST_fsm_state21 = 132'd1048576;
+parameter    ap_ST_fsm_state22 = 132'd2097152;
+parameter    ap_ST_fsm_state23 = 132'd4194304;
+parameter    ap_ST_fsm_state24 = 132'd8388608;
+parameter    ap_ST_fsm_state25 = 132'd16777216;
+parameter    ap_ST_fsm_state26 = 132'd33554432;
+parameter    ap_ST_fsm_state27 = 132'd67108864;
+parameter    ap_ST_fsm_state28 = 132'd134217728;
+parameter    ap_ST_fsm_state29 = 132'd268435456;
+parameter    ap_ST_fsm_state30 = 132'd536870912;
+parameter    ap_ST_fsm_state31 = 132'd1073741824;
+parameter    ap_ST_fsm_state32 = 132'd2147483648;
+parameter    ap_ST_fsm_state33 = 132'd4294967296;
+parameter    ap_ST_fsm_state34 = 132'd8589934592;
+parameter    ap_ST_fsm_state35 = 132'd17179869184;
+parameter    ap_ST_fsm_state36 = 132'd34359738368;
+parameter    ap_ST_fsm_state37 = 132'd68719476736;
+parameter    ap_ST_fsm_state38 = 132'd137438953472;
+parameter    ap_ST_fsm_state39 = 132'd274877906944;
+parameter    ap_ST_fsm_state40 = 132'd549755813888;
+parameter    ap_ST_fsm_state41 = 132'd1099511627776;
+parameter    ap_ST_fsm_state42 = 132'd2199023255552;
+parameter    ap_ST_fsm_state43 = 132'd4398046511104;
+parameter    ap_ST_fsm_state44 = 132'd8796093022208;
+parameter    ap_ST_fsm_state45 = 132'd17592186044416;
+parameter    ap_ST_fsm_state46 = 132'd35184372088832;
+parameter    ap_ST_fsm_state47 = 132'd70368744177664;
+parameter    ap_ST_fsm_state48 = 132'd140737488355328;
+parameter    ap_ST_fsm_state49 = 132'd281474976710656;
+parameter    ap_ST_fsm_state50 = 132'd562949953421312;
+parameter    ap_ST_fsm_state51 = 132'd1125899906842624;
+parameter    ap_ST_fsm_state52 = 132'd2251799813685248;
+parameter    ap_ST_fsm_state53 = 132'd4503599627370496;
+parameter    ap_ST_fsm_state54 = 132'd9007199254740992;
+parameter    ap_ST_fsm_state55 = 132'd18014398509481984;
+parameter    ap_ST_fsm_state56 = 132'd36028797018963968;
+parameter    ap_ST_fsm_state57 = 132'd72057594037927936;
+parameter    ap_ST_fsm_state58 = 132'd144115188075855872;
+parameter    ap_ST_fsm_state59 = 132'd288230376151711744;
+parameter    ap_ST_fsm_state60 = 132'd576460752303423488;
+parameter    ap_ST_fsm_state61 = 132'd1152921504606846976;
+parameter    ap_ST_fsm_state62 = 132'd2305843009213693952;
+parameter    ap_ST_fsm_state63 = 132'd4611686018427387904;
+parameter    ap_ST_fsm_state64 = 132'd9223372036854775808;
+parameter    ap_ST_fsm_state65 = 132'd18446744073709551616;
+parameter    ap_ST_fsm_state66 = 132'd36893488147419103232;
+parameter    ap_ST_fsm_state67 = 132'd73786976294838206464;
+parameter    ap_ST_fsm_state68 = 132'd147573952589676412928;
+parameter    ap_ST_fsm_state69 = 132'd295147905179352825856;
+parameter    ap_ST_fsm_state70 = 132'd590295810358705651712;
+parameter    ap_ST_fsm_state71 = 132'd1180591620717411303424;
+parameter    ap_ST_fsm_state72 = 132'd2361183241434822606848;
+parameter    ap_ST_fsm_state73 = 132'd4722366482869645213696;
+parameter    ap_ST_fsm_state74 = 132'd9444732965739290427392;
+parameter    ap_ST_fsm_state75 = 132'd18889465931478580854784;
+parameter    ap_ST_fsm_state76 = 132'd37778931862957161709568;
+parameter    ap_ST_fsm_state77 = 132'd75557863725914323419136;
+parameter    ap_ST_fsm_state78 = 132'd151115727451828646838272;
+parameter    ap_ST_fsm_state79 = 132'd302231454903657293676544;
+parameter    ap_ST_fsm_state80 = 132'd604462909807314587353088;
+parameter    ap_ST_fsm_state81 = 132'd1208925819614629174706176;
+parameter    ap_ST_fsm_state82 = 132'd2417851639229258349412352;
+parameter    ap_ST_fsm_state83 = 132'd4835703278458516698824704;
+parameter    ap_ST_fsm_state84 = 132'd9671406556917033397649408;
+parameter    ap_ST_fsm_state85 = 132'd19342813113834066795298816;
+parameter    ap_ST_fsm_state86 = 132'd38685626227668133590597632;
+parameter    ap_ST_fsm_state87 = 132'd77371252455336267181195264;
+parameter    ap_ST_fsm_state88 = 132'd154742504910672534362390528;
+parameter    ap_ST_fsm_state89 = 132'd309485009821345068724781056;
+parameter    ap_ST_fsm_state90 = 132'd618970019642690137449562112;
+parameter    ap_ST_fsm_state91 = 132'd1237940039285380274899124224;
+parameter    ap_ST_fsm_state92 = 132'd2475880078570760549798248448;
+parameter    ap_ST_fsm_state93 = 132'd4951760157141521099596496896;
+parameter    ap_ST_fsm_state94 = 132'd9903520314283042199192993792;
+parameter    ap_ST_fsm_state95 = 132'd19807040628566084398385987584;
+parameter    ap_ST_fsm_state96 = 132'd39614081257132168796771975168;
+parameter    ap_ST_fsm_state97 = 132'd79228162514264337593543950336;
+parameter    ap_ST_fsm_state98 = 132'd158456325028528675187087900672;
+parameter    ap_ST_fsm_state99 = 132'd316912650057057350374175801344;
+parameter    ap_ST_fsm_state100 = 132'd633825300114114700748351602688;
+parameter    ap_ST_fsm_state101 = 132'd1267650600228229401496703205376;
+parameter    ap_ST_fsm_state102 = 132'd2535301200456458802993406410752;
+parameter    ap_ST_fsm_state103 = 132'd5070602400912917605986812821504;
+parameter    ap_ST_fsm_state104 = 132'd10141204801825835211973625643008;
+parameter    ap_ST_fsm_state105 = 132'd20282409603651670423947251286016;
+parameter    ap_ST_fsm_state106 = 132'd40564819207303340847894502572032;
+parameter    ap_ST_fsm_state107 = 132'd81129638414606681695789005144064;
+parameter    ap_ST_fsm_state108 = 132'd162259276829213363391578010288128;
+parameter    ap_ST_fsm_state109 = 132'd324518553658426726783156020576256;
+parameter    ap_ST_fsm_state110 = 132'd649037107316853453566312041152512;
+parameter    ap_ST_fsm_state111 = 132'd1298074214633706907132624082305024;
+parameter    ap_ST_fsm_state112 = 132'd2596148429267413814265248164610048;
+parameter    ap_ST_fsm_state113 = 132'd5192296858534827628530496329220096;
+parameter    ap_ST_fsm_state114 = 132'd10384593717069655257060992658440192;
+parameter    ap_ST_fsm_state115 = 132'd20769187434139310514121985316880384;
+parameter    ap_ST_fsm_state116 = 132'd41538374868278621028243970633760768;
+parameter    ap_ST_fsm_state117 = 132'd83076749736557242056487941267521536;
+parameter    ap_ST_fsm_state118 = 132'd166153499473114484112975882535043072;
+parameter    ap_ST_fsm_state119 = 132'd332306998946228968225951765070086144;
+parameter    ap_ST_fsm_state120 = 132'd664613997892457936451903530140172288;
+parameter    ap_ST_fsm_state121 = 132'd1329227995784915872903807060280344576;
+parameter    ap_ST_fsm_state122 = 132'd2658455991569831745807614120560689152;
+parameter    ap_ST_fsm_state123 = 132'd5316911983139663491615228241121378304;
+parameter    ap_ST_fsm_state124 = 132'd10633823966279326983230456482242756608;
+parameter    ap_ST_fsm_state125 = 132'd21267647932558653966460912964485513216;
+parameter    ap_ST_fsm_state126 = 132'd42535295865117307932921825928971026432;
+parameter    ap_ST_fsm_state127 = 132'd85070591730234615865843651857942052864;
+parameter    ap_ST_fsm_state128 = 132'd170141183460469231731687303715884105728;
+parameter    ap_ST_fsm_state129 = 132'd340282366920938463463374607431768211456;
+parameter    ap_ST_fsm_state130 = 132'd680564733841876926926749214863536422912;
+parameter    ap_ST_fsm_state131 = 132'd1361129467683753853853498429727072845824;
+parameter    ap_ST_fsm_state132 = 132'd2722258935367507707706996859454145691648;
 
 input   ap_clk;
 input   ap_rst;
@@ -234,6 +208,22 @@ input   s_norm_full_n;
 output   s_norm_write;
 input  [2:0] s_norm_num_data_valid;
 input  [2:0] s_norm_fifo_cap;
+output  [7:0] status_cc_state;
+output   status_cc_state_ap_vld;
+output  [31:0] status_cc_samples_in;
+output   status_cc_samples_in_ap_vld;
+output  [31:0] status_cc_samples_out;
+output   status_cc_samples_out_ap_vld;
+output  [31:0] status_cc_sample_idx;
+output   status_cc_sample_idx_ap_vld;
+output  [31:0] status_cc_current_norm;
+output   status_cc_current_norm_ap_vld;
+output  [31:0] status_cc_norms_written;
+output   status_cc_norms_written_ap_vld;
+output  [31:0] status_cc_out_fifo;
+output   status_cc_out_fifo_ap_vld;
+output  [31:0] status_cc_norms_fifo;
+output   status_cc_norms_fifo_ap_vld;
 
 reg ap_done;
 reg ap_idle;
@@ -241,15 +231,32 @@ reg start_write;
 reg s_goertzel_read;
 reg s_xcor_write;
 reg s_norm_write;
+reg[7:0] status_cc_state;
+reg status_cc_state_ap_vld;
+reg[31:0] status_cc_samples_in;
+reg status_cc_samples_in_ap_vld;
+reg[31:0] status_cc_samples_out;
+reg status_cc_samples_out_ap_vld;
+reg[31:0] status_cc_sample_idx;
+reg status_cc_sample_idx_ap_vld;
+reg[31:0] status_cc_current_norm;
+reg status_cc_current_norm_ap_vld;
+reg[31:0] status_cc_norms_written;
+reg status_cc_norms_written_ap_vld;
+reg[31:0] status_cc_out_fifo;
+reg status_cc_out_fifo_ap_vld;
+reg[31:0] status_cc_norms_fifo;
+reg status_cc_norms_fifo_ap_vld;
 
 reg    real_start;
 reg    start_once_reg;
 reg    ap_done_reg;
-(* fsm_encoding = "none" *) reg   [173:0] ap_CS_fsm;
+(* fsm_encoding = "none" *) reg   [131:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    internal_ap_ready;
 reg   [1:0] st_1;
 reg   [31:0] pair_idx;
+reg   [31:0] samples_in_1;
 reg   [31:0] v_count;
 wire   [17:0] u_M_real_q0;
 wire   [17:0] u_M_real_q1;
@@ -260,67 +267,85 @@ reg   [0:0] phase;
 reg   [31:0] diag_i;
 reg   [31:0] frames_acc;
 reg   [35:0] power_acc;
+reg   [31:0] norms_written;
 reg   [23:0] scale;
 wire   [35:0] R_flat_M_real_q1;
 wire   [35:0] R_flat_M_imag_q1;
+reg   [31:0] samples_out_1;
 reg    s_goertzel_blk_n;
-wire   [0:0] tmp_nbreadreq_fu_2492_p3;
+wire    ap_CS_fsm_state132;
 reg    s_xcor_blk_n;
 wire    ap_CS_fsm_state89;
 reg    s_norm_blk_n;
 wire    ap_CS_fsm_state3;
-reg   [1:0] st_1_load_reg_12369;
-reg    ap_predicate_op225_read_state1;
+wire   [1:0] st_1_load_load_fu_2974_p1;
+reg   [1:0] st_1_load_reg_12607;
 reg    ap_block_state1;
-reg   [31:0] pair_idx_load_reg_12373;
-wire   [0:0] phase_load_load_fu_2818_p1;
-reg   [0:0] phase_load_reg_12378;
-wire   [0:0] icmp_ln82_fu_2848_p2;
-reg   [0:0] icmp_ln82_reg_12395;
-reg   [10:0] R_flat_M_real_addr_1_reg_12419;
-reg   [10:0] R_flat_M_imag_addr_1_reg_12424;
-wire   [31:0] add_ln59_fu_11944_p2;
+reg   [31:0] pair_idx_load_reg_12611;
+wire   [0:0] phase_load_load_fu_2994_p1;
+reg   [0:0] phase_load_reg_12616;
+wire   [0:0] icmp_ln90_fu_3024_p2;
+reg   [0:0] icmp_ln90_reg_12633;
+reg   [10:0] R_flat_M_real_addr_1_reg_12657;
+reg   [10:0] R_flat_M_imag_addr_1_reg_12662;
 wire    ap_CS_fsm_state2;
-wire   [0:0] icmp_ln85_fu_12036_p2;
-reg   [0:0] icmp_ln85_reg_12456;
-reg  signed [24:0] trunc_ln1_reg_12460;
-wire   [31:0] grp_fu_2787_p2;
+wire   [0:0] icmp_ln93_fu_12173_p2;
+reg   [0:0] icmp_ln93_reg_12686;
+reg  signed [24:0] trunc_ln1_reg_12690;
+wire   [31:0] grp_fu_2963_p2;
 wire    ap_CS_fsm_state88;
-wire   [31:0] pair_idx_new_3_cast_cast_cast_fu_12288_p3;
+wire   [1:0] select_ln127_1_fu_12450_p3;
+wire   [31:0] pair_idx_new_1_cast_cast_cast_fu_12458_p3;
 wire    ap_CS_fsm_state131;
-reg   [35:0] ap_phi_mux_power_acc_new_0_phi_fu_2657_p4;
-reg   [35:0] power_acc_new_0_reg_2654;
+wire   [31:0] add_ln67_fu_12577_p2;
+reg   [35:0] ap_phi_mux_power_acc_new_0_phi_fu_2759_p4;
+reg   [35:0] power_acc_new_0_reg_2756;
 wire    ap_CS_fsm_state45;
-reg   [0:0] ap_phi_mux_pair_idx_flag_2_phi_fu_2668_p4;
-reg   [0:0] pair_idx_flag_2_reg_2664;
-reg   [35:0] ap_phi_mux_power_acc_new_1_phi_fu_2679_p4;
-reg   [35:0] power_acc_new_1_reg_2676;
-reg   [0:0] ap_phi_mux_pair_idx_flag_7_phi_fu_2691_p14;
-reg   [0:0] pair_idx_flag_7_reg_2686;
-wire   [0:0] grp_fu_2792_p2;
-wire    ap_CS_fsm_state174;
-reg   [31:0] ap_phi_mux_pair_idx_new_7_phi_fu_2717_p14;
-reg   [31:0] pair_idx_new_7_reg_2713;
-reg   [31:0] v_count_new_0_reg_2737;
-wire   [0:0] icmp_ln60_fu_11950_p2;
-reg   [0:0] pair_idx_flag_0_reg_2748;
-wire   [63:0] zext_ln77_fu_2830_p1;
-wire   [63:0] zext_ln102_fu_11900_p1;
-wire   [63:0] zext_ln104_fu_11906_p1;
-wire   [63:0] zext_ln100_fu_2854_p1;
-wire   [63:0] zext_ln129_fu_11912_p1;
-wire   [63:0] zext_ln58_fu_11938_p1;
-wire   [1:0] select_ln114_1_fu_12280_p3;
-wire    ap_CS_fsm_state132;
-wire   [31:0] add_ln81_fu_2836_p2;
-wire   [31:0] select_ln114_fu_12272_p3;
-wire   [23:0] trunc_ln90_fu_12115_p1;
+reg   [0:0] ap_phi_mux_pair_idx_flag_0_phi_fu_2770_p4;
+reg   [0:0] pair_idx_flag_0_reg_2766;
+reg   [35:0] ap_phi_mux_power_acc_new_1_phi_fu_2781_p4;
+reg   [35:0] power_acc_new_1_reg_2778;
+reg   [0:0] ap_phi_mux_v_count_flag_0_phi_fu_2793_p16;
+reg   [0:0] v_count_flag_0_reg_2788;
+wire   [0:0] icmp_ln68_fu_12583_p2;
+wire   [0:0] tmp_nbreadreq_fu_2531_p3;
+wire   [0:0] grp_fu_2968_p2;
+reg   [31:0] v_count_new_0_reg_2819;
+reg   [0:0] ap_phi_mux_pair_idx_flag_2_phi_fu_2854_p16;
+reg   [0:0] pair_idx_flag_2_reg_2849;
+reg   [31:0] ap_phi_mux_pair_idx_new_2_phi_fu_2885_p16;
+reg   [31:0] pair_idx_new_2_reg_2880;
+reg   [1:0] ap_phi_mux_empty_phi_fu_2914_p16;
+reg   [1:0] empty_reg_2908;
+wire   [63:0] zext_ln85_fu_3006_p1;
+wire   [63:0] zext_ln115_fu_12076_p1;
+wire   [63:0] zext_ln117_fu_12082_p1;
+wire   [63:0] zext_ln113_fu_3030_p1;
+wire   [63:0] zext_ln142_fu_12088_p1;
+wire   [63:0] zext_ln66_fu_12571_p1;
+wire   [31:0] add_ln63_fu_12537_p2;
+wire   [31:0] add_ln89_fu_3012_p2;
+wire   [31:0] select_ln127_fu_12442_p3;
+wire   [31:0] add_ln100_fu_12192_p2;
+wire   [23:0] trunc_ln103_fu_12274_p1;
+wire   [31:0] add_ln150_fu_12098_p2;
+reg   [31:0] status_cc_samples_out_preg;
+reg   [31:0] status_cc_norms_written_preg;
+wire   [24:0] corrected_2_fu_12214_p4;
+wire   [31:0] zext_ln98_fu_12235_p1;
+reg   [31:0] status_cc_current_norm_preg;
+reg   [31:0] status_cc_norms_fifo_preg;
+wire   [7:0] zext_ln163_fu_12296_p1;
+reg   [7:0] status_cc_state_preg;
+reg   [31:0] status_cc_out_fifo_preg;
+reg   [31:0] status_cc_samples_in_preg;
+reg   [31:0] status_cc_sample_idx_preg;
 reg    u_M_real_ce0_local;
 reg   [5:0] u_M_real_address0_local;
 reg    u_M_real_ce1_local;
 reg   [5:0] u_M_real_address1_local;
 reg    u_M_real_we1_local;
-wire   [17:0] w_re_fu_11918_p1;
+wire   [17:0] w_re_fu_12555_p1;
 reg    u_M_imag_ce0_local;
 reg   [5:0] u_M_imag_address0_local;
 reg    u_M_imag_ce1_local;
@@ -335,62 +360,62 @@ reg    R_flat_M_imag_ce1_local;
 reg   [10:0] R_flat_M_imag_address1_local;
 reg    R_flat_M_imag_we1_local;
 reg   [35:0] R_flat_M_imag_d1_local;
-reg  signed [30:0] grp_fu_2763_p0;
-wire  signed [61:0] sext_ln79_fu_11990_p1;
-wire  signed [61:0] sext_ln106_1_fu_12181_p1;
-reg  signed [30:0] grp_fu_2763_p1;
-wire  signed [61:0] sext_ln106_fu_12175_p1;
-reg  signed [30:0] grp_fu_2767_p0;
-wire  signed [61:0] sext_ln79_1_fu_11996_p1;
-wire  signed [61:0] sext_ln106_3_fu_12193_p1;
-reg  signed [30:0] grp_fu_2767_p1;
-wire  signed [61:0] sext_ln106_2_fu_12187_p1;
-wire   [23:0] mul_ln132_fu_2779_p1;
-wire   [53:0] zext_ln132_fu_12317_p1;
-wire   [23:0] mul_ln133_fu_2783_p1;
-wire   [5:0] j_s_fu_2860_p2257;
-wire   [10:0] trunc_ln53_fu_2806_p1;
-wire   [5:0] k_s_fu_7380_p2257;
-wire   [5:0] k_s_fu_7380_p2259;
-wire   [5:0] j_s_fu_2860_p2259;
-wire   [30:0] ur_fu_11974_p3;
-wire   [30:0] ui_fu_11982_p3;
-wire   [61:0] grp_fu_2763_p2;
-wire   [61:0] shl_ln9_fu_12006_p3;
-wire   [61:0] add_ln79_fu_12014_p2;
-wire   [61:0] grp_fu_2767_p2;
-wire   [61:0] add_ln79_1_fu_12020_p2;
-wire   [15:0] mul_ln87_fu_12054_p1;
-wire   [39:0] mul_ln87_fu_12054_p2;
-wire   [9:0] tmp_4_fu_12081_p4;
-wire   [0:0] icmp_ln89_fu_12091_p2;
-wire   [23:0] trunc_ln87_2_fu_12071_p4;
-wire   [23:0] corrected_1_fu_12097_p3;
-wire   [23:0] grp_fu_12109_p1;
-wire   [23:0] grp_fu_12109_p2;
-wire  signed [30:0] re1_fu_12143_p3;
-wire  signed [30:0] re2_fu_12159_p3;
-wire  signed [30:0] im1_fu_12151_p3;
-wire  signed [30:0] im2_fu_12167_p3;
-wire   [61:0] shl_ln_fu_12199_p3;
-wire   [61:0] add_ln106_fu_12207_p2;
-wire   [61:0] add_ln106_1_fu_12213_p2;
-wire   [61:0] mul_ln107_fu_2771_p2;
-wire   [61:0] mul_ln107_1_fu_2775_p2;
-wire   [61:0] sub_ln107_fu_12230_p2;
-wire   [61:0] shl_ln8_fu_12236_p3;
-wire   [61:0] add_ln107_fu_12244_p2;
-wire   [31:0] add_ln113_fu_12261_p2;
-wire   [0:0] icmp_ln114_fu_12266_p2;
-wire  signed [35:0] sext_ln132_fu_12308_p0;
-wire   [53:0] mul_ln132_fu_2779_p2;
-wire  signed [35:0] sext_ln133_fu_12333_p0;
-wire   [53:0] mul_ln133_fu_2783_p2;
-wire   [17:0] out_im_fu_12338_p4;
-wire   [17:0] out_re_fu_12323_p4;
-reg    grp_fu_12109_ap_start;
-wire    grp_fu_12109_ap_done;
-reg    grp_fu_12109_ce;
+reg  signed [30:0] grp_fu_2939_p0;
+wire  signed [61:0] sext_ln87_fu_12127_p1;
+wire  signed [61:0] sext_ln119_1_fu_12351_p1;
+reg  signed [30:0] grp_fu_2939_p1;
+wire  signed [61:0] sext_ln119_fu_12345_p1;
+reg  signed [30:0] grp_fu_2943_p0;
+wire  signed [61:0] sext_ln87_1_fu_12133_p1;
+wire  signed [61:0] sext_ln119_3_fu_12363_p1;
+reg  signed [30:0] grp_fu_2943_p1;
+wire  signed [61:0] sext_ln119_2_fu_12357_p1;
+wire   [23:0] mul_ln145_fu_2955_p1;
+wire   [53:0] zext_ln145_fu_12487_p1;
+wire   [23:0] mul_ln146_fu_2959_p1;
+wire   [5:0] j_s_fu_3036_p2257;
+wire   [10:0] trunc_ln59_fu_2982_p1;
+wire   [5:0] k_s_fu_7556_p2257;
+wire   [5:0] k_s_fu_7556_p2259;
+wire   [5:0] j_s_fu_3036_p2259;
+wire   [30:0] ur_fu_12111_p3;
+wire   [30:0] ui_fu_12119_p3;
+wire   [61:0] grp_fu_2939_p2;
+wire   [61:0] shl_ln1_fu_12143_p3;
+wire   [61:0] add_ln87_fu_12151_p2;
+wire   [61:0] grp_fu_2943_p2;
+wire   [61:0] add_ln87_1_fu_12157_p2;
+wire   [15:0] mul_ln95_fu_12208_p1;
+wire   [39:0] mul_ln95_fu_12208_p2;
+wire   [9:0] tmp_8_fu_12240_p4;
+wire   [0:0] icmp_ln102_fu_12250_p2;
+wire   [23:0] trunc_ln95_2_fu_12225_p4;
+wire   [23:0] corrected_fu_12256_p3;
+wire   [23:0] grp_fu_12268_p1;
+wire   [23:0] grp_fu_12268_p2;
+wire  signed [30:0] re1_fu_12313_p3;
+wire  signed [30:0] re2_fu_12329_p3;
+wire  signed [30:0] im1_fu_12321_p3;
+wire  signed [30:0] im2_fu_12337_p3;
+wire   [61:0] shl_ln_fu_12369_p3;
+wire   [61:0] add_ln119_fu_12377_p2;
+wire   [61:0] add_ln119_1_fu_12383_p2;
+wire   [61:0] mul_ln120_fu_2947_p2;
+wire   [61:0] mul_ln120_1_fu_2951_p2;
+wire   [61:0] sub_ln120_fu_12400_p2;
+wire   [61:0] shl_ln9_fu_12406_p3;
+wire   [61:0] add_ln120_fu_12414_p2;
+wire   [31:0] add_ln126_fu_12431_p2;
+wire   [0:0] icmp_ln127_fu_12436_p2;
+wire  signed [35:0] sext_ln145_fu_12478_p0;
+wire   [53:0] mul_ln145_fu_2955_p2;
+wire  signed [35:0] sext_ln146_fu_12503_p0;
+wire   [53:0] mul_ln146_fu_2959_p2;
+wire   [17:0] out_im_fu_12508_p4;
+wire   [17:0] out_re_fu_12493_p4;
+reg    grp_fu_12268_ap_start;
+wire    grp_fu_12268_ap_done;
+reg    grp_fu_12268_ce;
 wire    ap_CS_fsm_state4;
 wire    ap_CS_fsm_state5;
 wire    ap_CS_fsm_state6;
@@ -432,7 +457,7 @@ wire    ap_CS_fsm_state41;
 wire    ap_CS_fsm_state42;
 wire    ap_CS_fsm_state43;
 wire    ap_CS_fsm_state44;
-reg   [173:0] ap_NS_fsm;
+reg   [131:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
 wire    ap_ST_fsm_state2_blk;
 reg    ap_ST_fsm_state3_blk;
@@ -564,2325 +589,2291 @@ wire    ap_ST_fsm_state128_blk;
 wire    ap_ST_fsm_state129_blk;
 wire    ap_ST_fsm_state130_blk;
 wire    ap_ST_fsm_state131_blk;
-wire    ap_ST_fsm_state132_blk;
-wire    ap_ST_fsm_state133_blk;
-wire    ap_ST_fsm_state134_blk;
-wire    ap_ST_fsm_state135_blk;
-wire    ap_ST_fsm_state136_blk;
-wire    ap_ST_fsm_state137_blk;
-wire    ap_ST_fsm_state138_blk;
-wire    ap_ST_fsm_state139_blk;
-wire    ap_ST_fsm_state140_blk;
-wire    ap_ST_fsm_state141_blk;
-wire    ap_ST_fsm_state142_blk;
-wire    ap_ST_fsm_state143_blk;
-wire    ap_ST_fsm_state144_blk;
-wire    ap_ST_fsm_state145_blk;
-wire    ap_ST_fsm_state146_blk;
-wire    ap_ST_fsm_state147_blk;
-wire    ap_ST_fsm_state148_blk;
-wire    ap_ST_fsm_state149_blk;
-wire    ap_ST_fsm_state150_blk;
-wire    ap_ST_fsm_state151_blk;
-wire    ap_ST_fsm_state152_blk;
-wire    ap_ST_fsm_state153_blk;
-wire    ap_ST_fsm_state154_blk;
-wire    ap_ST_fsm_state155_blk;
-wire    ap_ST_fsm_state156_blk;
-wire    ap_ST_fsm_state157_blk;
-wire    ap_ST_fsm_state158_blk;
-wire    ap_ST_fsm_state159_blk;
-wire    ap_ST_fsm_state160_blk;
-wire    ap_ST_fsm_state161_blk;
-wire    ap_ST_fsm_state162_blk;
-wire    ap_ST_fsm_state163_blk;
-wire    ap_ST_fsm_state164_blk;
-wire    ap_ST_fsm_state165_blk;
-wire    ap_ST_fsm_state166_blk;
-wire    ap_ST_fsm_state167_blk;
-wire    ap_ST_fsm_state168_blk;
-wire    ap_ST_fsm_state169_blk;
-wire    ap_ST_fsm_state170_blk;
-wire    ap_ST_fsm_state171_blk;
-wire    ap_ST_fsm_state172_blk;
-wire    ap_ST_fsm_state173_blk;
-wire    ap_ST_fsm_state174_blk;
-wire   [38:0] grp_fu_12109_p10;
-reg    ap_condition_441;
-reg    ap_condition_511;
-reg    ap_condition_7752;
-reg    ap_condition_299;
-wire   [10:0] j_s_fu_2860_p1;
-wire   [10:0] j_s_fu_2860_p3;
-wire   [10:0] j_s_fu_2860_p5;
-wire   [10:0] j_s_fu_2860_p7;
-wire   [10:0] j_s_fu_2860_p9;
-wire   [10:0] j_s_fu_2860_p11;
-wire   [10:0] j_s_fu_2860_p13;
-wire   [10:0] j_s_fu_2860_p15;
-wire   [10:0] j_s_fu_2860_p17;
-wire   [10:0] j_s_fu_2860_p19;
-wire   [10:0] j_s_fu_2860_p21;
-wire   [10:0] j_s_fu_2860_p23;
-wire   [10:0] j_s_fu_2860_p25;
-wire   [10:0] j_s_fu_2860_p27;
-wire   [10:0] j_s_fu_2860_p29;
-wire   [10:0] j_s_fu_2860_p31;
-wire   [10:0] j_s_fu_2860_p33;
-wire   [10:0] j_s_fu_2860_p35;
-wire   [10:0] j_s_fu_2860_p37;
-wire   [10:0] j_s_fu_2860_p39;
-wire   [10:0] j_s_fu_2860_p41;
-wire   [10:0] j_s_fu_2860_p43;
-wire   [10:0] j_s_fu_2860_p45;
-wire   [10:0] j_s_fu_2860_p47;
-wire   [10:0] j_s_fu_2860_p49;
-wire   [10:0] j_s_fu_2860_p51;
-wire   [10:0] j_s_fu_2860_p53;
-wire   [10:0] j_s_fu_2860_p55;
-wire   [10:0] j_s_fu_2860_p57;
-wire   [10:0] j_s_fu_2860_p59;
-wire   [10:0] j_s_fu_2860_p61;
-wire   [10:0] j_s_fu_2860_p63;
-wire   [10:0] j_s_fu_2860_p65;
-wire   [10:0] j_s_fu_2860_p67;
-wire   [10:0] j_s_fu_2860_p69;
-wire   [10:0] j_s_fu_2860_p71;
-wire   [10:0] j_s_fu_2860_p73;
-wire   [10:0] j_s_fu_2860_p75;
-wire   [10:0] j_s_fu_2860_p77;
-wire   [10:0] j_s_fu_2860_p79;
-wire   [10:0] j_s_fu_2860_p81;
-wire   [10:0] j_s_fu_2860_p83;
-wire   [10:0] j_s_fu_2860_p85;
-wire   [10:0] j_s_fu_2860_p87;
-wire   [10:0] j_s_fu_2860_p89;
-wire   [10:0] j_s_fu_2860_p91;
-wire   [10:0] j_s_fu_2860_p93;
-wire   [10:0] j_s_fu_2860_p95;
-wire   [10:0] j_s_fu_2860_p97;
-wire   [10:0] j_s_fu_2860_p99;
-wire   [10:0] j_s_fu_2860_p101;
-wire   [10:0] j_s_fu_2860_p103;
-wire   [10:0] j_s_fu_2860_p105;
-wire   [10:0] j_s_fu_2860_p107;
-wire   [10:0] j_s_fu_2860_p109;
-wire   [10:0] j_s_fu_2860_p111;
-wire   [10:0] j_s_fu_2860_p113;
-wire   [10:0] j_s_fu_2860_p115;
-wire   [10:0] j_s_fu_2860_p117;
-wire   [10:0] j_s_fu_2860_p119;
-wire   [10:0] j_s_fu_2860_p121;
-wire   [10:0] j_s_fu_2860_p123;
-wire   [10:0] j_s_fu_2860_p125;
-wire   [10:0] j_s_fu_2860_p127;
-wire   [10:0] j_s_fu_2860_p129;
-wire   [10:0] j_s_fu_2860_p131;
-wire   [10:0] j_s_fu_2860_p133;
-wire   [10:0] j_s_fu_2860_p135;
-wire   [10:0] j_s_fu_2860_p137;
-wire   [10:0] j_s_fu_2860_p139;
-wire   [10:0] j_s_fu_2860_p141;
-wire   [10:0] j_s_fu_2860_p143;
-wire   [10:0] j_s_fu_2860_p145;
-wire   [10:0] j_s_fu_2860_p147;
-wire   [10:0] j_s_fu_2860_p149;
-wire   [10:0] j_s_fu_2860_p151;
-wire   [10:0] j_s_fu_2860_p153;
-wire   [10:0] j_s_fu_2860_p155;
-wire   [10:0] j_s_fu_2860_p157;
-wire   [10:0] j_s_fu_2860_p159;
-wire   [10:0] j_s_fu_2860_p161;
-wire   [10:0] j_s_fu_2860_p163;
-wire   [10:0] j_s_fu_2860_p165;
-wire   [10:0] j_s_fu_2860_p167;
-wire   [10:0] j_s_fu_2860_p169;
-wire   [10:0] j_s_fu_2860_p171;
-wire   [10:0] j_s_fu_2860_p173;
-wire   [10:0] j_s_fu_2860_p175;
-wire   [10:0] j_s_fu_2860_p177;
-wire   [10:0] j_s_fu_2860_p179;
-wire   [10:0] j_s_fu_2860_p181;
-wire   [10:0] j_s_fu_2860_p183;
-wire   [10:0] j_s_fu_2860_p185;
-wire   [10:0] j_s_fu_2860_p187;
-wire   [10:0] j_s_fu_2860_p189;
-wire   [10:0] j_s_fu_2860_p191;
-wire   [10:0] j_s_fu_2860_p193;
-wire   [10:0] j_s_fu_2860_p195;
-wire   [10:0] j_s_fu_2860_p197;
-wire   [10:0] j_s_fu_2860_p199;
-wire   [10:0] j_s_fu_2860_p201;
-wire   [10:0] j_s_fu_2860_p203;
-wire   [10:0] j_s_fu_2860_p205;
-wire   [10:0] j_s_fu_2860_p207;
-wire   [10:0] j_s_fu_2860_p209;
-wire   [10:0] j_s_fu_2860_p211;
-wire   [10:0] j_s_fu_2860_p213;
-wire   [10:0] j_s_fu_2860_p215;
-wire   [10:0] j_s_fu_2860_p217;
-wire   [10:0] j_s_fu_2860_p219;
-wire   [10:0] j_s_fu_2860_p221;
-wire   [10:0] j_s_fu_2860_p223;
-wire   [10:0] j_s_fu_2860_p225;
-wire   [10:0] j_s_fu_2860_p227;
-wire   [10:0] j_s_fu_2860_p229;
-wire   [10:0] j_s_fu_2860_p231;
-wire   [10:0] j_s_fu_2860_p233;
-wire   [10:0] j_s_fu_2860_p235;
-wire   [10:0] j_s_fu_2860_p237;
-wire   [10:0] j_s_fu_2860_p239;
-wire   [10:0] j_s_fu_2860_p241;
-wire   [10:0] j_s_fu_2860_p243;
-wire   [10:0] j_s_fu_2860_p245;
-wire   [10:0] j_s_fu_2860_p247;
-wire   [10:0] j_s_fu_2860_p249;
-wire   [10:0] j_s_fu_2860_p251;
-wire   [10:0] j_s_fu_2860_p253;
-wire   [10:0] j_s_fu_2860_p255;
-wire   [10:0] j_s_fu_2860_p257;
-wire   [10:0] j_s_fu_2860_p259;
-wire   [10:0] j_s_fu_2860_p261;
-wire   [10:0] j_s_fu_2860_p263;
-wire   [10:0] j_s_fu_2860_p265;
-wire   [10:0] j_s_fu_2860_p267;
-wire   [10:0] j_s_fu_2860_p269;
-wire   [10:0] j_s_fu_2860_p271;
-wire   [10:0] j_s_fu_2860_p273;
-wire   [10:0] j_s_fu_2860_p275;
-wire   [10:0] j_s_fu_2860_p277;
-wire   [10:0] j_s_fu_2860_p279;
-wire   [10:0] j_s_fu_2860_p281;
-wire   [10:0] j_s_fu_2860_p283;
-wire   [10:0] j_s_fu_2860_p285;
-wire   [10:0] j_s_fu_2860_p287;
-wire   [10:0] j_s_fu_2860_p289;
-wire   [10:0] j_s_fu_2860_p291;
-wire   [10:0] j_s_fu_2860_p293;
-wire   [10:0] j_s_fu_2860_p295;
-wire   [10:0] j_s_fu_2860_p297;
-wire   [10:0] j_s_fu_2860_p299;
-wire   [10:0] j_s_fu_2860_p301;
-wire   [10:0] j_s_fu_2860_p303;
-wire   [10:0] j_s_fu_2860_p305;
-wire   [10:0] j_s_fu_2860_p307;
-wire   [10:0] j_s_fu_2860_p309;
-wire   [10:0] j_s_fu_2860_p311;
-wire   [10:0] j_s_fu_2860_p313;
-wire   [10:0] j_s_fu_2860_p315;
-wire   [10:0] j_s_fu_2860_p317;
-wire   [10:0] j_s_fu_2860_p319;
-wire   [10:0] j_s_fu_2860_p321;
-wire   [10:0] j_s_fu_2860_p323;
-wire   [10:0] j_s_fu_2860_p325;
-wire   [10:0] j_s_fu_2860_p327;
-wire   [10:0] j_s_fu_2860_p329;
-wire   [10:0] j_s_fu_2860_p331;
-wire   [10:0] j_s_fu_2860_p333;
-wire   [10:0] j_s_fu_2860_p335;
-wire   [10:0] j_s_fu_2860_p337;
-wire   [10:0] j_s_fu_2860_p339;
-wire   [10:0] j_s_fu_2860_p341;
-wire   [10:0] j_s_fu_2860_p343;
-wire   [10:0] j_s_fu_2860_p345;
-wire   [10:0] j_s_fu_2860_p347;
-wire   [10:0] j_s_fu_2860_p349;
-wire   [10:0] j_s_fu_2860_p351;
-wire   [10:0] j_s_fu_2860_p353;
-wire   [10:0] j_s_fu_2860_p355;
-wire   [10:0] j_s_fu_2860_p357;
-wire   [10:0] j_s_fu_2860_p359;
-wire   [10:0] j_s_fu_2860_p361;
-wire   [10:0] j_s_fu_2860_p363;
-wire   [10:0] j_s_fu_2860_p365;
-wire   [10:0] j_s_fu_2860_p367;
-wire   [10:0] j_s_fu_2860_p369;
-wire   [10:0] j_s_fu_2860_p371;
-wire   [10:0] j_s_fu_2860_p373;
-wire   [10:0] j_s_fu_2860_p375;
-wire   [10:0] j_s_fu_2860_p377;
-wire   [10:0] j_s_fu_2860_p379;
-wire   [10:0] j_s_fu_2860_p381;
-wire   [10:0] j_s_fu_2860_p383;
-wire   [10:0] j_s_fu_2860_p385;
-wire   [10:0] j_s_fu_2860_p387;
-wire   [10:0] j_s_fu_2860_p389;
-wire   [10:0] j_s_fu_2860_p391;
-wire   [10:0] j_s_fu_2860_p393;
-wire   [10:0] j_s_fu_2860_p395;
-wire   [10:0] j_s_fu_2860_p397;
-wire   [10:0] j_s_fu_2860_p399;
-wire   [10:0] j_s_fu_2860_p401;
-wire   [10:0] j_s_fu_2860_p403;
-wire   [10:0] j_s_fu_2860_p405;
-wire   [10:0] j_s_fu_2860_p407;
-wire   [10:0] j_s_fu_2860_p409;
-wire   [10:0] j_s_fu_2860_p411;
-wire   [10:0] j_s_fu_2860_p413;
-wire   [10:0] j_s_fu_2860_p415;
-wire   [10:0] j_s_fu_2860_p417;
-wire   [10:0] j_s_fu_2860_p419;
-wire   [10:0] j_s_fu_2860_p421;
-wire   [10:0] j_s_fu_2860_p423;
-wire   [10:0] j_s_fu_2860_p425;
-wire   [10:0] j_s_fu_2860_p427;
-wire   [10:0] j_s_fu_2860_p429;
-wire   [10:0] j_s_fu_2860_p431;
-wire   [10:0] j_s_fu_2860_p433;
-wire   [10:0] j_s_fu_2860_p435;
-wire   [10:0] j_s_fu_2860_p437;
-wire   [10:0] j_s_fu_2860_p439;
-wire   [10:0] j_s_fu_2860_p441;
-wire   [10:0] j_s_fu_2860_p443;
-wire   [10:0] j_s_fu_2860_p445;
-wire   [10:0] j_s_fu_2860_p447;
-wire   [10:0] j_s_fu_2860_p449;
-wire   [10:0] j_s_fu_2860_p451;
-wire   [10:0] j_s_fu_2860_p453;
-wire   [10:0] j_s_fu_2860_p455;
-wire   [10:0] j_s_fu_2860_p457;
-wire   [10:0] j_s_fu_2860_p459;
-wire   [10:0] j_s_fu_2860_p461;
-wire   [10:0] j_s_fu_2860_p463;
-wire   [10:0] j_s_fu_2860_p465;
-wire   [10:0] j_s_fu_2860_p467;
-wire   [10:0] j_s_fu_2860_p469;
-wire   [10:0] j_s_fu_2860_p471;
-wire   [10:0] j_s_fu_2860_p473;
-wire   [10:0] j_s_fu_2860_p475;
-wire   [10:0] j_s_fu_2860_p477;
-wire   [10:0] j_s_fu_2860_p479;
-wire   [10:0] j_s_fu_2860_p481;
-wire   [10:0] j_s_fu_2860_p483;
-wire   [10:0] j_s_fu_2860_p485;
-wire   [10:0] j_s_fu_2860_p487;
-wire   [10:0] j_s_fu_2860_p489;
-wire   [10:0] j_s_fu_2860_p491;
-wire   [10:0] j_s_fu_2860_p493;
-wire   [10:0] j_s_fu_2860_p495;
-wire   [10:0] j_s_fu_2860_p497;
-wire   [10:0] j_s_fu_2860_p499;
-wire   [10:0] j_s_fu_2860_p501;
-wire   [10:0] j_s_fu_2860_p503;
-wire   [10:0] j_s_fu_2860_p505;
-wire   [10:0] j_s_fu_2860_p507;
-wire   [10:0] j_s_fu_2860_p509;
-wire   [10:0] j_s_fu_2860_p511;
-wire   [10:0] j_s_fu_2860_p513;
-wire   [10:0] j_s_fu_2860_p515;
-wire   [10:0] j_s_fu_2860_p517;
-wire   [10:0] j_s_fu_2860_p519;
-wire   [10:0] j_s_fu_2860_p521;
-wire   [10:0] j_s_fu_2860_p523;
-wire   [10:0] j_s_fu_2860_p525;
-wire   [10:0] j_s_fu_2860_p527;
-wire   [10:0] j_s_fu_2860_p529;
-wire   [10:0] j_s_fu_2860_p531;
-wire   [10:0] j_s_fu_2860_p533;
-wire   [10:0] j_s_fu_2860_p535;
-wire   [10:0] j_s_fu_2860_p537;
-wire   [10:0] j_s_fu_2860_p539;
-wire   [10:0] j_s_fu_2860_p541;
-wire   [10:0] j_s_fu_2860_p543;
-wire   [10:0] j_s_fu_2860_p545;
-wire   [10:0] j_s_fu_2860_p547;
-wire   [10:0] j_s_fu_2860_p549;
-wire   [10:0] j_s_fu_2860_p551;
-wire   [10:0] j_s_fu_2860_p553;
-wire   [10:0] j_s_fu_2860_p555;
-wire   [10:0] j_s_fu_2860_p557;
-wire   [10:0] j_s_fu_2860_p559;
-wire   [10:0] j_s_fu_2860_p561;
-wire   [10:0] j_s_fu_2860_p563;
-wire   [10:0] j_s_fu_2860_p565;
-wire   [10:0] j_s_fu_2860_p567;
-wire   [10:0] j_s_fu_2860_p569;
-wire   [10:0] j_s_fu_2860_p571;
-wire   [10:0] j_s_fu_2860_p573;
-wire   [10:0] j_s_fu_2860_p575;
-wire   [10:0] j_s_fu_2860_p577;
-wire   [10:0] j_s_fu_2860_p579;
-wire   [10:0] j_s_fu_2860_p581;
-wire   [10:0] j_s_fu_2860_p583;
-wire   [10:0] j_s_fu_2860_p585;
-wire   [10:0] j_s_fu_2860_p587;
-wire   [10:0] j_s_fu_2860_p589;
-wire   [10:0] j_s_fu_2860_p591;
-wire   [10:0] j_s_fu_2860_p593;
-wire   [10:0] j_s_fu_2860_p595;
-wire   [10:0] j_s_fu_2860_p597;
-wire   [10:0] j_s_fu_2860_p599;
-wire   [10:0] j_s_fu_2860_p601;
-wire   [10:0] j_s_fu_2860_p603;
-wire   [10:0] j_s_fu_2860_p605;
-wire   [10:0] j_s_fu_2860_p607;
-wire   [10:0] j_s_fu_2860_p609;
-wire   [10:0] j_s_fu_2860_p611;
-wire   [10:0] j_s_fu_2860_p613;
-wire   [10:0] j_s_fu_2860_p615;
-wire   [10:0] j_s_fu_2860_p617;
-wire   [10:0] j_s_fu_2860_p619;
-wire   [10:0] j_s_fu_2860_p621;
-wire   [10:0] j_s_fu_2860_p623;
-wire   [10:0] j_s_fu_2860_p625;
-wire   [10:0] j_s_fu_2860_p627;
-wire   [10:0] j_s_fu_2860_p629;
-wire   [10:0] j_s_fu_2860_p631;
-wire   [10:0] j_s_fu_2860_p633;
-wire   [10:0] j_s_fu_2860_p635;
-wire   [10:0] j_s_fu_2860_p637;
-wire   [10:0] j_s_fu_2860_p639;
-wire   [10:0] j_s_fu_2860_p641;
-wire   [10:0] j_s_fu_2860_p643;
-wire   [10:0] j_s_fu_2860_p645;
-wire   [10:0] j_s_fu_2860_p647;
-wire   [10:0] j_s_fu_2860_p649;
-wire   [10:0] j_s_fu_2860_p651;
-wire   [10:0] j_s_fu_2860_p653;
-wire   [10:0] j_s_fu_2860_p655;
-wire   [10:0] j_s_fu_2860_p657;
-wire   [10:0] j_s_fu_2860_p659;
-wire   [10:0] j_s_fu_2860_p661;
-wire   [10:0] j_s_fu_2860_p663;
-wire   [10:0] j_s_fu_2860_p665;
-wire   [10:0] j_s_fu_2860_p667;
-wire   [10:0] j_s_fu_2860_p669;
-wire   [10:0] j_s_fu_2860_p671;
-wire   [10:0] j_s_fu_2860_p673;
-wire   [10:0] j_s_fu_2860_p675;
-wire   [10:0] j_s_fu_2860_p677;
-wire   [10:0] j_s_fu_2860_p679;
-wire   [10:0] j_s_fu_2860_p681;
-wire   [10:0] j_s_fu_2860_p683;
-wire   [10:0] j_s_fu_2860_p685;
-wire   [10:0] j_s_fu_2860_p687;
-wire   [10:0] j_s_fu_2860_p689;
-wire   [10:0] j_s_fu_2860_p691;
-wire   [10:0] j_s_fu_2860_p693;
-wire   [10:0] j_s_fu_2860_p695;
-wire   [10:0] j_s_fu_2860_p697;
-wire   [10:0] j_s_fu_2860_p699;
-wire   [10:0] j_s_fu_2860_p701;
-wire   [10:0] j_s_fu_2860_p703;
-wire   [10:0] j_s_fu_2860_p705;
-wire   [10:0] j_s_fu_2860_p707;
-wire   [10:0] j_s_fu_2860_p709;
-wire   [10:0] j_s_fu_2860_p711;
-wire   [10:0] j_s_fu_2860_p713;
-wire   [10:0] j_s_fu_2860_p715;
-wire   [10:0] j_s_fu_2860_p717;
-wire   [10:0] j_s_fu_2860_p719;
-wire   [10:0] j_s_fu_2860_p721;
-wire   [10:0] j_s_fu_2860_p723;
-wire   [10:0] j_s_fu_2860_p725;
-wire   [10:0] j_s_fu_2860_p727;
-wire   [10:0] j_s_fu_2860_p729;
-wire   [10:0] j_s_fu_2860_p731;
-wire   [10:0] j_s_fu_2860_p733;
-wire   [10:0] j_s_fu_2860_p735;
-wire   [10:0] j_s_fu_2860_p737;
-wire   [10:0] j_s_fu_2860_p739;
-wire   [10:0] j_s_fu_2860_p741;
-wire   [10:0] j_s_fu_2860_p743;
-wire   [10:0] j_s_fu_2860_p745;
-wire   [10:0] j_s_fu_2860_p747;
-wire   [10:0] j_s_fu_2860_p749;
-wire   [10:0] j_s_fu_2860_p751;
-wire   [10:0] j_s_fu_2860_p753;
-wire   [10:0] j_s_fu_2860_p755;
-wire   [10:0] j_s_fu_2860_p757;
-wire   [10:0] j_s_fu_2860_p759;
-wire   [10:0] j_s_fu_2860_p761;
-wire   [10:0] j_s_fu_2860_p763;
-wire   [10:0] j_s_fu_2860_p765;
-wire   [10:0] j_s_fu_2860_p767;
-wire   [10:0] j_s_fu_2860_p769;
-wire   [10:0] j_s_fu_2860_p771;
-wire   [10:0] j_s_fu_2860_p773;
-wire   [10:0] j_s_fu_2860_p775;
-wire   [10:0] j_s_fu_2860_p777;
-wire   [10:0] j_s_fu_2860_p779;
-wire   [10:0] j_s_fu_2860_p781;
-wire   [10:0] j_s_fu_2860_p783;
-wire   [10:0] j_s_fu_2860_p785;
-wire   [10:0] j_s_fu_2860_p787;
-wire   [10:0] j_s_fu_2860_p789;
-wire   [10:0] j_s_fu_2860_p791;
-wire   [10:0] j_s_fu_2860_p793;
-wire   [10:0] j_s_fu_2860_p795;
-wire   [10:0] j_s_fu_2860_p797;
-wire   [10:0] j_s_fu_2860_p799;
-wire   [10:0] j_s_fu_2860_p801;
-wire   [10:0] j_s_fu_2860_p803;
-wire   [10:0] j_s_fu_2860_p805;
-wire   [10:0] j_s_fu_2860_p807;
-wire   [10:0] j_s_fu_2860_p809;
-wire   [10:0] j_s_fu_2860_p811;
-wire   [10:0] j_s_fu_2860_p813;
-wire   [10:0] j_s_fu_2860_p815;
-wire   [10:0] j_s_fu_2860_p817;
-wire   [10:0] j_s_fu_2860_p819;
-wire   [10:0] j_s_fu_2860_p821;
-wire   [10:0] j_s_fu_2860_p823;
-wire   [10:0] j_s_fu_2860_p825;
-wire   [10:0] j_s_fu_2860_p827;
-wire   [10:0] j_s_fu_2860_p829;
-wire   [10:0] j_s_fu_2860_p831;
-wire   [10:0] j_s_fu_2860_p833;
-wire   [10:0] j_s_fu_2860_p835;
-wire   [10:0] j_s_fu_2860_p837;
-wire   [10:0] j_s_fu_2860_p839;
-wire   [10:0] j_s_fu_2860_p841;
-wire   [10:0] j_s_fu_2860_p843;
-wire   [10:0] j_s_fu_2860_p845;
-wire   [10:0] j_s_fu_2860_p847;
-wire   [10:0] j_s_fu_2860_p849;
-wire   [10:0] j_s_fu_2860_p851;
-wire   [10:0] j_s_fu_2860_p853;
-wire   [10:0] j_s_fu_2860_p855;
-wire   [10:0] j_s_fu_2860_p857;
-wire   [10:0] j_s_fu_2860_p859;
-wire   [10:0] j_s_fu_2860_p861;
-wire   [10:0] j_s_fu_2860_p863;
-wire   [10:0] j_s_fu_2860_p865;
-wire   [10:0] j_s_fu_2860_p867;
-wire   [10:0] j_s_fu_2860_p869;
-wire   [10:0] j_s_fu_2860_p871;
-wire   [10:0] j_s_fu_2860_p873;
-wire   [10:0] j_s_fu_2860_p875;
-wire   [10:0] j_s_fu_2860_p877;
-wire   [10:0] j_s_fu_2860_p879;
-wire   [10:0] j_s_fu_2860_p881;
-wire   [10:0] j_s_fu_2860_p883;
-wire   [10:0] j_s_fu_2860_p885;
-wire   [10:0] j_s_fu_2860_p887;
-wire   [10:0] j_s_fu_2860_p889;
-wire   [10:0] j_s_fu_2860_p891;
-wire   [10:0] j_s_fu_2860_p893;
-wire   [10:0] j_s_fu_2860_p895;
-wire   [10:0] j_s_fu_2860_p897;
-wire   [10:0] j_s_fu_2860_p899;
-wire   [10:0] j_s_fu_2860_p901;
-wire   [10:0] j_s_fu_2860_p903;
-wire   [10:0] j_s_fu_2860_p905;
-wire   [10:0] j_s_fu_2860_p907;
-wire   [10:0] j_s_fu_2860_p909;
-wire   [10:0] j_s_fu_2860_p911;
-wire   [10:0] j_s_fu_2860_p913;
-wire   [10:0] j_s_fu_2860_p915;
-wire   [10:0] j_s_fu_2860_p917;
-wire   [10:0] j_s_fu_2860_p919;
-wire   [10:0] j_s_fu_2860_p921;
-wire   [10:0] j_s_fu_2860_p923;
-wire   [10:0] j_s_fu_2860_p925;
-wire   [10:0] j_s_fu_2860_p927;
-wire   [10:0] j_s_fu_2860_p929;
-wire   [10:0] j_s_fu_2860_p931;
-wire   [10:0] j_s_fu_2860_p933;
-wire   [10:0] j_s_fu_2860_p935;
-wire   [10:0] j_s_fu_2860_p937;
-wire   [10:0] j_s_fu_2860_p939;
-wire   [10:0] j_s_fu_2860_p941;
-wire   [10:0] j_s_fu_2860_p943;
-wire   [10:0] j_s_fu_2860_p945;
-wire   [10:0] j_s_fu_2860_p947;
-wire   [10:0] j_s_fu_2860_p949;
-wire   [10:0] j_s_fu_2860_p951;
-wire   [10:0] j_s_fu_2860_p953;
-wire   [10:0] j_s_fu_2860_p955;
-wire   [10:0] j_s_fu_2860_p957;
-wire   [10:0] j_s_fu_2860_p959;
-wire   [10:0] j_s_fu_2860_p961;
-wire   [10:0] j_s_fu_2860_p963;
-wire   [10:0] j_s_fu_2860_p965;
-wire   [10:0] j_s_fu_2860_p967;
-wire   [10:0] j_s_fu_2860_p969;
-wire   [10:0] j_s_fu_2860_p971;
-wire   [10:0] j_s_fu_2860_p973;
-wire   [10:0] j_s_fu_2860_p975;
-wire   [10:0] j_s_fu_2860_p977;
-wire   [10:0] j_s_fu_2860_p979;
-wire   [10:0] j_s_fu_2860_p981;
-wire   [10:0] j_s_fu_2860_p983;
-wire   [10:0] j_s_fu_2860_p985;
-wire   [10:0] j_s_fu_2860_p987;
-wire   [10:0] j_s_fu_2860_p989;
-wire   [10:0] j_s_fu_2860_p991;
-wire   [10:0] j_s_fu_2860_p993;
-wire   [10:0] j_s_fu_2860_p995;
-wire   [10:0] j_s_fu_2860_p997;
-wire   [10:0] j_s_fu_2860_p999;
-wire   [10:0] j_s_fu_2860_p1001;
-wire   [10:0] j_s_fu_2860_p1003;
-wire   [10:0] j_s_fu_2860_p1005;
-wire   [10:0] j_s_fu_2860_p1007;
-wire   [10:0] j_s_fu_2860_p1009;
-wire   [10:0] j_s_fu_2860_p1011;
-wire   [10:0] j_s_fu_2860_p1013;
-wire   [10:0] j_s_fu_2860_p1015;
-wire   [10:0] j_s_fu_2860_p1017;
-wire   [10:0] j_s_fu_2860_p1019;
-wire   [10:0] j_s_fu_2860_p1021;
-wire   [10:0] j_s_fu_2860_p1023;
-wire   [10:0] j_s_fu_2860_p1025;
-wire   [10:0] j_s_fu_2860_p1027;
-wire   [10:0] j_s_fu_2860_p1029;
-wire   [10:0] j_s_fu_2860_p1031;
-wire   [10:0] j_s_fu_2860_p1033;
-wire   [10:0] j_s_fu_2860_p1035;
-wire   [10:0] j_s_fu_2860_p1037;
-wire   [10:0] j_s_fu_2860_p1039;
-wire   [10:0] j_s_fu_2860_p1041;
-wire   [10:0] j_s_fu_2860_p1043;
-wire   [10:0] j_s_fu_2860_p1045;
-wire   [10:0] j_s_fu_2860_p1047;
-wire   [10:0] j_s_fu_2860_p1049;
-wire   [10:0] j_s_fu_2860_p1051;
-wire   [10:0] j_s_fu_2860_p1053;
-wire   [10:0] j_s_fu_2860_p1055;
-wire   [10:0] j_s_fu_2860_p1057;
-wire   [10:0] j_s_fu_2860_p1059;
-wire   [10:0] j_s_fu_2860_p1061;
-wire   [10:0] j_s_fu_2860_p1063;
-wire   [10:0] j_s_fu_2860_p1065;
-wire   [10:0] j_s_fu_2860_p1067;
-wire   [10:0] j_s_fu_2860_p1069;
-wire   [10:0] j_s_fu_2860_p1071;
-wire   [10:0] j_s_fu_2860_p1073;
-wire   [10:0] j_s_fu_2860_p1075;
-wire   [10:0] j_s_fu_2860_p1077;
-wire   [10:0] j_s_fu_2860_p1079;
-wire   [10:0] j_s_fu_2860_p1081;
-wire   [10:0] j_s_fu_2860_p1083;
-wire   [10:0] j_s_fu_2860_p1085;
-wire   [10:0] j_s_fu_2860_p1087;
-wire   [10:0] j_s_fu_2860_p1089;
-wire   [10:0] j_s_fu_2860_p1091;
-wire   [10:0] j_s_fu_2860_p1093;
-wire   [10:0] j_s_fu_2860_p1095;
-wire   [10:0] j_s_fu_2860_p1097;
-wire   [10:0] j_s_fu_2860_p1099;
-wire   [10:0] j_s_fu_2860_p1101;
-wire   [10:0] j_s_fu_2860_p1103;
-wire   [10:0] j_s_fu_2860_p1105;
-wire   [10:0] j_s_fu_2860_p1107;
-wire   [10:0] j_s_fu_2860_p1109;
-wire   [10:0] j_s_fu_2860_p1111;
-wire   [10:0] j_s_fu_2860_p1113;
-wire   [10:0] j_s_fu_2860_p1115;
-wire   [10:0] j_s_fu_2860_p1117;
-wire   [10:0] j_s_fu_2860_p1119;
-wire   [10:0] j_s_fu_2860_p1121;
-wire   [10:0] j_s_fu_2860_p1123;
-wire   [10:0] j_s_fu_2860_p1125;
-wire   [10:0] j_s_fu_2860_p1127;
-wire   [10:0] j_s_fu_2860_p1129;
-wire   [10:0] j_s_fu_2860_p1131;
-wire   [10:0] j_s_fu_2860_p1133;
-wire   [10:0] j_s_fu_2860_p1135;
-wire   [10:0] j_s_fu_2860_p1137;
-wire   [10:0] j_s_fu_2860_p1139;
-wire   [10:0] j_s_fu_2860_p1141;
-wire   [10:0] j_s_fu_2860_p1143;
-wire   [10:0] j_s_fu_2860_p1145;
-wire   [10:0] j_s_fu_2860_p1147;
-wire   [10:0] j_s_fu_2860_p1149;
-wire   [10:0] j_s_fu_2860_p1151;
-wire   [10:0] j_s_fu_2860_p1153;
-wire   [10:0] j_s_fu_2860_p1155;
-wire   [10:0] j_s_fu_2860_p1157;
-wire   [10:0] j_s_fu_2860_p1159;
-wire   [10:0] j_s_fu_2860_p1161;
-wire   [10:0] j_s_fu_2860_p1163;
-wire   [10:0] j_s_fu_2860_p1165;
-wire   [10:0] j_s_fu_2860_p1167;
-wire   [10:0] j_s_fu_2860_p1169;
-wire   [10:0] j_s_fu_2860_p1171;
-wire   [10:0] j_s_fu_2860_p1173;
-wire   [10:0] j_s_fu_2860_p1175;
-wire   [10:0] j_s_fu_2860_p1177;
-wire   [10:0] j_s_fu_2860_p1179;
-wire   [10:0] j_s_fu_2860_p1181;
-wire   [10:0] j_s_fu_2860_p1183;
-wire   [10:0] j_s_fu_2860_p1185;
-wire   [10:0] j_s_fu_2860_p1187;
-wire   [10:0] j_s_fu_2860_p1189;
-wire   [10:0] j_s_fu_2860_p1191;
-wire   [10:0] j_s_fu_2860_p1193;
-wire   [10:0] j_s_fu_2860_p1195;
-wire   [10:0] j_s_fu_2860_p1197;
-wire   [10:0] j_s_fu_2860_p1199;
-wire   [10:0] j_s_fu_2860_p1201;
-wire   [10:0] j_s_fu_2860_p1203;
-wire   [10:0] j_s_fu_2860_p1205;
-wire   [10:0] j_s_fu_2860_p1207;
-wire   [10:0] j_s_fu_2860_p1209;
-wire   [10:0] j_s_fu_2860_p1211;
-wire   [10:0] j_s_fu_2860_p1213;
-wire   [10:0] j_s_fu_2860_p1215;
-wire   [10:0] j_s_fu_2860_p1217;
-wire   [10:0] j_s_fu_2860_p1219;
-wire   [10:0] j_s_fu_2860_p1221;
-wire   [10:0] j_s_fu_2860_p1223;
-wire   [10:0] j_s_fu_2860_p1225;
-wire   [10:0] j_s_fu_2860_p1227;
-wire   [10:0] j_s_fu_2860_p1229;
-wire   [10:0] j_s_fu_2860_p1231;
-wire   [10:0] j_s_fu_2860_p1233;
-wire   [10:0] j_s_fu_2860_p1235;
-wire   [10:0] j_s_fu_2860_p1237;
-wire   [10:0] j_s_fu_2860_p1239;
-wire   [10:0] j_s_fu_2860_p1241;
-wire   [10:0] j_s_fu_2860_p1243;
-wire   [10:0] j_s_fu_2860_p1245;
-wire   [10:0] j_s_fu_2860_p1247;
-wire   [10:0] j_s_fu_2860_p1249;
-wire   [10:0] j_s_fu_2860_p1251;
-wire   [10:0] j_s_fu_2860_p1253;
-wire   [10:0] j_s_fu_2860_p1255;
-wire   [10:0] j_s_fu_2860_p1257;
-wire   [10:0] j_s_fu_2860_p1259;
-wire   [10:0] j_s_fu_2860_p1261;
-wire   [10:0] j_s_fu_2860_p1263;
-wire   [10:0] j_s_fu_2860_p1265;
-wire   [10:0] j_s_fu_2860_p1267;
-wire   [10:0] j_s_fu_2860_p1269;
-wire   [10:0] j_s_fu_2860_p1271;
-wire   [10:0] j_s_fu_2860_p1273;
-wire   [10:0] j_s_fu_2860_p1275;
-wire   [10:0] j_s_fu_2860_p1277;
-wire   [10:0] j_s_fu_2860_p1279;
-wire   [10:0] j_s_fu_2860_p1281;
-wire   [10:0] j_s_fu_2860_p1283;
-wire   [10:0] j_s_fu_2860_p1285;
-wire   [10:0] j_s_fu_2860_p1287;
-wire   [10:0] j_s_fu_2860_p1289;
-wire   [10:0] j_s_fu_2860_p1291;
-wire   [10:0] j_s_fu_2860_p1293;
-wire   [10:0] j_s_fu_2860_p1295;
-wire   [10:0] j_s_fu_2860_p1297;
-wire   [10:0] j_s_fu_2860_p1299;
-wire   [10:0] j_s_fu_2860_p1301;
-wire   [10:0] j_s_fu_2860_p1303;
-wire   [10:0] j_s_fu_2860_p1305;
-wire   [10:0] j_s_fu_2860_p1307;
-wire   [10:0] j_s_fu_2860_p1309;
-wire   [10:0] j_s_fu_2860_p1311;
-wire   [10:0] j_s_fu_2860_p1313;
-wire   [10:0] j_s_fu_2860_p1315;
-wire   [10:0] j_s_fu_2860_p1317;
-wire   [10:0] j_s_fu_2860_p1319;
-wire   [10:0] j_s_fu_2860_p1321;
-wire   [10:0] j_s_fu_2860_p1323;
-wire   [10:0] j_s_fu_2860_p1325;
-wire   [10:0] j_s_fu_2860_p1327;
-wire   [10:0] j_s_fu_2860_p1329;
-wire   [10:0] j_s_fu_2860_p1331;
-wire   [10:0] j_s_fu_2860_p1333;
-wire   [10:0] j_s_fu_2860_p1335;
-wire   [10:0] j_s_fu_2860_p1337;
-wire   [10:0] j_s_fu_2860_p1339;
-wire   [10:0] j_s_fu_2860_p1341;
-wire   [10:0] j_s_fu_2860_p1343;
-wire   [10:0] j_s_fu_2860_p1345;
-wire   [10:0] j_s_fu_2860_p1347;
-wire   [10:0] j_s_fu_2860_p1349;
-wire   [10:0] j_s_fu_2860_p1351;
-wire   [10:0] j_s_fu_2860_p1353;
-wire   [10:0] j_s_fu_2860_p1355;
-wire   [10:0] j_s_fu_2860_p1357;
-wire   [10:0] j_s_fu_2860_p1359;
-wire   [10:0] j_s_fu_2860_p1361;
-wire   [10:0] j_s_fu_2860_p1363;
-wire   [10:0] j_s_fu_2860_p1365;
-wire   [10:0] j_s_fu_2860_p1367;
-wire   [10:0] j_s_fu_2860_p1369;
-wire   [10:0] j_s_fu_2860_p1371;
-wire   [10:0] j_s_fu_2860_p1373;
-wire   [10:0] j_s_fu_2860_p1375;
-wire   [10:0] j_s_fu_2860_p1377;
-wire   [10:0] j_s_fu_2860_p1379;
-wire   [10:0] j_s_fu_2860_p1381;
-wire   [10:0] j_s_fu_2860_p1383;
-wire   [10:0] j_s_fu_2860_p1385;
-wire   [10:0] j_s_fu_2860_p1387;
-wire   [10:0] j_s_fu_2860_p1389;
-wire   [10:0] j_s_fu_2860_p1391;
-wire   [10:0] j_s_fu_2860_p1393;
-wire   [10:0] j_s_fu_2860_p1395;
-wire   [10:0] j_s_fu_2860_p1397;
-wire   [10:0] j_s_fu_2860_p1399;
-wire   [10:0] j_s_fu_2860_p1401;
-wire   [10:0] j_s_fu_2860_p1403;
-wire   [10:0] j_s_fu_2860_p1405;
-wire   [10:0] j_s_fu_2860_p1407;
-wire   [10:0] j_s_fu_2860_p1409;
-wire   [10:0] j_s_fu_2860_p1411;
-wire   [10:0] j_s_fu_2860_p1413;
-wire   [10:0] j_s_fu_2860_p1415;
-wire   [10:0] j_s_fu_2860_p1417;
-wire   [10:0] j_s_fu_2860_p1419;
-wire   [10:0] j_s_fu_2860_p1421;
-wire   [10:0] j_s_fu_2860_p1423;
-wire   [10:0] j_s_fu_2860_p1425;
-wire   [10:0] j_s_fu_2860_p1427;
-wire   [10:0] j_s_fu_2860_p1429;
-wire   [10:0] j_s_fu_2860_p1431;
-wire   [10:0] j_s_fu_2860_p1433;
-wire   [10:0] j_s_fu_2860_p1435;
-wire   [10:0] j_s_fu_2860_p1437;
-wire   [10:0] j_s_fu_2860_p1439;
-wire   [10:0] j_s_fu_2860_p1441;
-wire   [10:0] j_s_fu_2860_p1443;
-wire   [10:0] j_s_fu_2860_p1445;
-wire   [10:0] j_s_fu_2860_p1447;
-wire   [10:0] j_s_fu_2860_p1449;
-wire   [10:0] j_s_fu_2860_p1451;
-wire   [10:0] j_s_fu_2860_p1453;
-wire   [10:0] j_s_fu_2860_p1455;
-wire   [10:0] j_s_fu_2860_p1457;
-wire   [10:0] j_s_fu_2860_p1459;
-wire   [10:0] j_s_fu_2860_p1461;
-wire   [10:0] j_s_fu_2860_p1463;
-wire   [10:0] j_s_fu_2860_p1465;
-wire   [10:0] j_s_fu_2860_p1467;
-wire   [10:0] j_s_fu_2860_p1469;
-wire   [10:0] j_s_fu_2860_p1471;
-wire   [10:0] j_s_fu_2860_p1473;
-wire   [10:0] j_s_fu_2860_p1475;
-wire   [10:0] j_s_fu_2860_p1477;
-wire   [10:0] j_s_fu_2860_p1479;
-wire   [10:0] j_s_fu_2860_p1481;
-wire   [10:0] j_s_fu_2860_p1483;
-wire   [10:0] j_s_fu_2860_p1485;
-wire   [10:0] j_s_fu_2860_p1487;
-wire   [10:0] j_s_fu_2860_p1489;
-wire   [10:0] j_s_fu_2860_p1491;
-wire   [10:0] j_s_fu_2860_p1493;
-wire   [10:0] j_s_fu_2860_p1495;
-wire   [10:0] j_s_fu_2860_p1497;
-wire   [10:0] j_s_fu_2860_p1499;
-wire   [10:0] j_s_fu_2860_p1501;
-wire   [10:0] j_s_fu_2860_p1503;
-wire   [10:0] j_s_fu_2860_p1505;
-wire   [10:0] j_s_fu_2860_p1507;
-wire   [10:0] j_s_fu_2860_p1509;
-wire   [10:0] j_s_fu_2860_p1511;
-wire   [10:0] j_s_fu_2860_p1513;
-wire   [10:0] j_s_fu_2860_p1515;
-wire   [10:0] j_s_fu_2860_p1517;
-wire   [10:0] j_s_fu_2860_p1519;
-wire   [10:0] j_s_fu_2860_p1521;
-wire   [10:0] j_s_fu_2860_p1523;
-wire   [10:0] j_s_fu_2860_p1525;
-wire   [10:0] j_s_fu_2860_p1527;
-wire   [10:0] j_s_fu_2860_p1529;
-wire   [10:0] j_s_fu_2860_p1531;
-wire   [10:0] j_s_fu_2860_p1533;
-wire   [10:0] j_s_fu_2860_p1535;
-wire   [10:0] j_s_fu_2860_p1537;
-wire   [10:0] j_s_fu_2860_p1539;
-wire   [10:0] j_s_fu_2860_p1541;
-wire   [10:0] j_s_fu_2860_p1543;
-wire   [10:0] j_s_fu_2860_p1545;
-wire   [10:0] j_s_fu_2860_p1547;
-wire   [10:0] j_s_fu_2860_p1549;
-wire   [10:0] j_s_fu_2860_p1551;
-wire   [10:0] j_s_fu_2860_p1553;
-wire   [10:0] j_s_fu_2860_p1555;
-wire   [10:0] j_s_fu_2860_p1557;
-wire   [10:0] j_s_fu_2860_p1559;
-wire   [10:0] j_s_fu_2860_p1561;
-wire   [10:0] j_s_fu_2860_p1563;
-wire   [10:0] j_s_fu_2860_p1565;
-wire   [10:0] j_s_fu_2860_p1567;
-wire   [10:0] j_s_fu_2860_p1569;
-wire   [10:0] j_s_fu_2860_p1571;
-wire   [10:0] j_s_fu_2860_p1573;
-wire   [10:0] j_s_fu_2860_p1575;
-wire   [10:0] j_s_fu_2860_p1577;
-wire   [10:0] j_s_fu_2860_p1579;
-wire   [10:0] j_s_fu_2860_p1581;
-wire   [10:0] j_s_fu_2860_p1583;
-wire   [10:0] j_s_fu_2860_p1585;
-wire   [10:0] j_s_fu_2860_p1587;
-wire   [10:0] j_s_fu_2860_p1589;
-wire   [10:0] j_s_fu_2860_p1591;
-wire   [10:0] j_s_fu_2860_p1593;
-wire   [10:0] j_s_fu_2860_p1595;
-wire   [10:0] j_s_fu_2860_p1597;
-wire   [10:0] j_s_fu_2860_p1599;
-wire   [10:0] j_s_fu_2860_p1601;
-wire   [10:0] j_s_fu_2860_p1603;
-wire   [10:0] j_s_fu_2860_p1605;
-wire   [10:0] j_s_fu_2860_p1607;
-wire   [10:0] j_s_fu_2860_p1609;
-wire   [10:0] j_s_fu_2860_p1611;
-wire   [10:0] j_s_fu_2860_p1613;
-wire   [10:0] j_s_fu_2860_p1615;
-wire   [10:0] j_s_fu_2860_p1617;
-wire   [10:0] j_s_fu_2860_p1619;
-wire   [10:0] j_s_fu_2860_p1621;
-wire   [10:0] j_s_fu_2860_p1623;
-wire   [10:0] j_s_fu_2860_p1625;
-wire   [10:0] j_s_fu_2860_p1627;
-wire   [10:0] j_s_fu_2860_p1629;
-wire   [10:0] j_s_fu_2860_p1631;
-wire   [10:0] j_s_fu_2860_p1633;
-wire   [10:0] j_s_fu_2860_p1635;
-wire   [10:0] j_s_fu_2860_p1637;
-wire   [10:0] j_s_fu_2860_p1639;
-wire   [10:0] j_s_fu_2860_p1641;
-wire   [10:0] j_s_fu_2860_p1643;
-wire   [10:0] j_s_fu_2860_p1645;
-wire   [10:0] j_s_fu_2860_p1647;
-wire   [10:0] j_s_fu_2860_p1649;
-wire   [10:0] j_s_fu_2860_p1651;
-wire   [10:0] j_s_fu_2860_p1653;
-wire   [10:0] j_s_fu_2860_p1655;
-wire   [10:0] j_s_fu_2860_p1657;
-wire   [10:0] j_s_fu_2860_p1659;
-wire   [10:0] j_s_fu_2860_p1661;
-wire   [10:0] j_s_fu_2860_p1663;
-wire   [10:0] j_s_fu_2860_p1665;
-wire   [10:0] j_s_fu_2860_p1667;
-wire   [10:0] j_s_fu_2860_p1669;
-wire   [10:0] j_s_fu_2860_p1671;
-wire   [10:0] j_s_fu_2860_p1673;
-wire   [10:0] j_s_fu_2860_p1675;
-wire   [10:0] j_s_fu_2860_p1677;
-wire   [10:0] j_s_fu_2860_p1679;
-wire   [10:0] j_s_fu_2860_p1681;
-wire   [10:0] j_s_fu_2860_p1683;
-wire   [10:0] j_s_fu_2860_p1685;
-wire   [10:0] j_s_fu_2860_p1687;
-wire   [10:0] j_s_fu_2860_p1689;
-wire   [10:0] j_s_fu_2860_p1691;
-wire   [10:0] j_s_fu_2860_p1693;
-wire   [10:0] j_s_fu_2860_p1695;
-wire   [10:0] j_s_fu_2860_p1697;
-wire   [10:0] j_s_fu_2860_p1699;
-wire   [10:0] j_s_fu_2860_p1701;
-wire   [10:0] j_s_fu_2860_p1703;
-wire   [10:0] j_s_fu_2860_p1705;
-wire   [10:0] j_s_fu_2860_p1707;
-wire   [10:0] j_s_fu_2860_p1709;
-wire   [10:0] j_s_fu_2860_p1711;
-wire   [10:0] j_s_fu_2860_p1713;
-wire   [10:0] j_s_fu_2860_p1715;
-wire   [10:0] j_s_fu_2860_p1717;
-wire   [10:0] j_s_fu_2860_p1719;
-wire   [10:0] j_s_fu_2860_p1721;
-wire   [10:0] j_s_fu_2860_p1723;
-wire   [10:0] j_s_fu_2860_p1725;
-wire   [10:0] j_s_fu_2860_p1727;
-wire   [10:0] j_s_fu_2860_p1729;
-wire   [10:0] j_s_fu_2860_p1731;
-wire   [10:0] j_s_fu_2860_p1733;
-wire   [10:0] j_s_fu_2860_p1735;
-wire   [10:0] j_s_fu_2860_p1737;
-wire   [10:0] j_s_fu_2860_p1739;
-wire   [10:0] j_s_fu_2860_p1741;
-wire   [10:0] j_s_fu_2860_p1743;
-wire   [10:0] j_s_fu_2860_p1745;
-wire   [10:0] j_s_fu_2860_p1747;
-wire   [10:0] j_s_fu_2860_p1749;
-wire   [10:0] j_s_fu_2860_p1751;
-wire   [10:0] j_s_fu_2860_p1753;
-wire   [10:0] j_s_fu_2860_p1755;
-wire   [10:0] j_s_fu_2860_p1757;
-wire   [10:0] j_s_fu_2860_p1759;
-wire   [10:0] j_s_fu_2860_p1761;
-wire   [10:0] j_s_fu_2860_p1763;
-wire   [10:0] j_s_fu_2860_p1765;
-wire   [10:0] j_s_fu_2860_p1767;
-wire   [10:0] j_s_fu_2860_p1769;
-wire   [10:0] j_s_fu_2860_p1771;
-wire   [10:0] j_s_fu_2860_p1773;
-wire   [10:0] j_s_fu_2860_p1775;
-wire   [10:0] j_s_fu_2860_p1777;
-wire   [10:0] j_s_fu_2860_p1779;
-wire   [10:0] j_s_fu_2860_p1781;
-wire   [10:0] j_s_fu_2860_p1783;
-wire   [10:0] j_s_fu_2860_p1785;
-wire   [10:0] j_s_fu_2860_p1787;
-wire   [10:0] j_s_fu_2860_p1789;
-wire   [10:0] j_s_fu_2860_p1791;
-wire   [10:0] j_s_fu_2860_p1793;
-wire   [10:0] j_s_fu_2860_p1795;
-wire   [10:0] j_s_fu_2860_p1797;
-wire   [10:0] j_s_fu_2860_p1799;
-wire   [10:0] j_s_fu_2860_p1801;
-wire   [10:0] j_s_fu_2860_p1803;
-wire   [10:0] j_s_fu_2860_p1805;
-wire   [10:0] j_s_fu_2860_p1807;
-wire   [10:0] j_s_fu_2860_p1809;
-wire   [10:0] j_s_fu_2860_p1811;
-wire   [10:0] j_s_fu_2860_p1813;
-wire   [10:0] j_s_fu_2860_p1815;
-wire   [10:0] j_s_fu_2860_p1817;
-wire   [10:0] j_s_fu_2860_p1819;
-wire   [10:0] j_s_fu_2860_p1821;
-wire   [10:0] j_s_fu_2860_p1823;
-wire   [10:0] j_s_fu_2860_p1825;
-wire   [10:0] j_s_fu_2860_p1827;
-wire   [10:0] j_s_fu_2860_p1829;
-wire   [10:0] j_s_fu_2860_p1831;
-wire   [10:0] j_s_fu_2860_p1833;
-wire   [10:0] j_s_fu_2860_p1835;
-wire   [10:0] j_s_fu_2860_p1837;
-wire   [10:0] j_s_fu_2860_p1839;
-wire   [10:0] j_s_fu_2860_p1841;
-wire   [10:0] j_s_fu_2860_p1843;
-wire   [10:0] j_s_fu_2860_p1845;
-wire   [10:0] j_s_fu_2860_p1847;
-wire   [10:0] j_s_fu_2860_p1849;
-wire   [10:0] j_s_fu_2860_p1851;
-wire   [10:0] j_s_fu_2860_p1853;
-wire   [10:0] j_s_fu_2860_p1855;
-wire   [10:0] j_s_fu_2860_p1857;
-wire   [10:0] j_s_fu_2860_p1859;
-wire   [10:0] j_s_fu_2860_p1861;
-wire   [10:0] j_s_fu_2860_p1863;
-wire   [10:0] j_s_fu_2860_p1865;
-wire   [10:0] j_s_fu_2860_p1867;
-wire   [10:0] j_s_fu_2860_p1869;
-wire   [10:0] j_s_fu_2860_p1871;
-wire   [10:0] j_s_fu_2860_p1873;
-wire   [10:0] j_s_fu_2860_p1875;
-wire   [10:0] j_s_fu_2860_p1877;
-wire   [10:0] j_s_fu_2860_p1879;
-wire   [10:0] j_s_fu_2860_p1881;
-wire   [10:0] j_s_fu_2860_p1883;
-wire   [10:0] j_s_fu_2860_p1885;
-wire   [10:0] j_s_fu_2860_p1887;
-wire   [10:0] j_s_fu_2860_p1889;
-wire   [10:0] j_s_fu_2860_p1891;
-wire   [10:0] j_s_fu_2860_p1893;
-wire   [10:0] j_s_fu_2860_p1895;
-wire   [10:0] j_s_fu_2860_p1897;
-wire   [10:0] j_s_fu_2860_p1899;
-wire   [10:0] j_s_fu_2860_p1901;
-wire   [10:0] j_s_fu_2860_p1903;
-wire   [10:0] j_s_fu_2860_p1905;
-wire   [10:0] j_s_fu_2860_p1907;
-wire   [10:0] j_s_fu_2860_p1909;
-wire   [10:0] j_s_fu_2860_p1911;
-wire   [10:0] j_s_fu_2860_p1913;
-wire   [10:0] j_s_fu_2860_p1915;
-wire   [10:0] j_s_fu_2860_p1917;
-wire   [10:0] j_s_fu_2860_p1919;
-wire   [10:0] j_s_fu_2860_p1921;
-wire   [10:0] j_s_fu_2860_p1923;
-wire   [10:0] j_s_fu_2860_p1925;
-wire   [10:0] j_s_fu_2860_p1927;
-wire   [10:0] j_s_fu_2860_p1929;
-wire   [10:0] j_s_fu_2860_p1931;
-wire   [10:0] j_s_fu_2860_p1933;
-wire   [10:0] j_s_fu_2860_p1935;
-wire   [10:0] j_s_fu_2860_p1937;
-wire   [10:0] j_s_fu_2860_p1939;
-wire   [10:0] j_s_fu_2860_p1941;
-wire   [10:0] j_s_fu_2860_p1943;
-wire   [10:0] j_s_fu_2860_p1945;
-wire   [10:0] j_s_fu_2860_p1947;
-wire   [10:0] j_s_fu_2860_p1949;
-wire   [10:0] j_s_fu_2860_p1951;
-wire   [10:0] j_s_fu_2860_p1953;
-wire   [10:0] j_s_fu_2860_p1955;
-wire   [10:0] j_s_fu_2860_p1957;
-wire   [10:0] j_s_fu_2860_p1959;
-wire   [10:0] j_s_fu_2860_p1961;
-wire   [10:0] j_s_fu_2860_p1963;
-wire   [10:0] j_s_fu_2860_p1965;
-wire   [10:0] j_s_fu_2860_p1967;
-wire   [10:0] j_s_fu_2860_p1969;
-wire   [10:0] j_s_fu_2860_p1971;
-wire   [10:0] j_s_fu_2860_p1973;
-wire   [10:0] j_s_fu_2860_p1975;
-wire   [10:0] j_s_fu_2860_p1977;
-wire   [10:0] j_s_fu_2860_p1979;
-wire   [10:0] j_s_fu_2860_p1981;
-wire   [10:0] j_s_fu_2860_p1983;
-wire   [10:0] j_s_fu_2860_p1985;
-wire   [10:0] j_s_fu_2860_p1987;
-wire   [10:0] j_s_fu_2860_p1989;
-wire   [10:0] j_s_fu_2860_p1991;
-wire   [10:0] j_s_fu_2860_p1993;
-wire   [10:0] j_s_fu_2860_p1995;
-wire   [10:0] j_s_fu_2860_p1997;
-wire   [10:0] j_s_fu_2860_p1999;
-wire   [10:0] j_s_fu_2860_p2001;
-wire   [10:0] j_s_fu_2860_p2003;
-wire   [10:0] j_s_fu_2860_p2005;
-wire   [10:0] j_s_fu_2860_p2007;
-wire   [10:0] j_s_fu_2860_p2009;
-wire   [10:0] j_s_fu_2860_p2011;
-wire   [10:0] j_s_fu_2860_p2013;
-wire   [10:0] j_s_fu_2860_p2015;
-wire   [10:0] j_s_fu_2860_p2017;
-wire   [10:0] j_s_fu_2860_p2019;
-wire   [10:0] j_s_fu_2860_p2021;
-wire   [10:0] j_s_fu_2860_p2023;
-wire   [10:0] j_s_fu_2860_p2025;
-wire   [10:0] j_s_fu_2860_p2027;
-wire   [10:0] j_s_fu_2860_p2029;
-wire   [10:0] j_s_fu_2860_p2031;
-wire   [10:0] j_s_fu_2860_p2033;
-wire   [10:0] j_s_fu_2860_p2035;
-wire   [10:0] j_s_fu_2860_p2037;
-wire   [10:0] j_s_fu_2860_p2039;
-wire   [10:0] j_s_fu_2860_p2041;
-wire   [10:0] j_s_fu_2860_p2043;
-wire   [10:0] j_s_fu_2860_p2045;
-wire   [10:0] j_s_fu_2860_p2047;
-wire  signed [10:0] j_s_fu_2860_p2049;
-wire  signed [10:0] j_s_fu_2860_p2051;
-wire  signed [10:0] j_s_fu_2860_p2053;
-wire  signed [10:0] j_s_fu_2860_p2055;
-wire  signed [10:0] j_s_fu_2860_p2057;
-wire  signed [10:0] j_s_fu_2860_p2059;
-wire  signed [10:0] j_s_fu_2860_p2061;
-wire  signed [10:0] j_s_fu_2860_p2063;
-wire  signed [10:0] j_s_fu_2860_p2065;
-wire  signed [10:0] j_s_fu_2860_p2067;
-wire  signed [10:0] j_s_fu_2860_p2069;
-wire  signed [10:0] j_s_fu_2860_p2071;
-wire  signed [10:0] j_s_fu_2860_p2073;
-wire  signed [10:0] j_s_fu_2860_p2075;
-wire  signed [10:0] j_s_fu_2860_p2077;
-wire  signed [10:0] j_s_fu_2860_p2079;
-wire  signed [10:0] j_s_fu_2860_p2081;
-wire  signed [10:0] j_s_fu_2860_p2083;
-wire  signed [10:0] j_s_fu_2860_p2085;
-wire  signed [10:0] j_s_fu_2860_p2087;
-wire  signed [10:0] j_s_fu_2860_p2089;
-wire  signed [10:0] j_s_fu_2860_p2091;
-wire  signed [10:0] j_s_fu_2860_p2093;
-wire  signed [10:0] j_s_fu_2860_p2095;
-wire  signed [10:0] j_s_fu_2860_p2097;
-wire  signed [10:0] j_s_fu_2860_p2099;
-wire  signed [10:0] j_s_fu_2860_p2101;
-wire  signed [10:0] j_s_fu_2860_p2103;
-wire  signed [10:0] j_s_fu_2860_p2105;
-wire  signed [10:0] j_s_fu_2860_p2107;
-wire  signed [10:0] j_s_fu_2860_p2109;
-wire  signed [10:0] j_s_fu_2860_p2111;
-wire  signed [10:0] j_s_fu_2860_p2113;
-wire  signed [10:0] j_s_fu_2860_p2115;
-wire  signed [10:0] j_s_fu_2860_p2117;
-wire  signed [10:0] j_s_fu_2860_p2119;
-wire  signed [10:0] j_s_fu_2860_p2121;
-wire  signed [10:0] j_s_fu_2860_p2123;
-wire  signed [10:0] j_s_fu_2860_p2125;
-wire  signed [10:0] j_s_fu_2860_p2127;
-wire  signed [10:0] j_s_fu_2860_p2129;
-wire  signed [10:0] j_s_fu_2860_p2131;
-wire  signed [10:0] j_s_fu_2860_p2133;
-wire  signed [10:0] j_s_fu_2860_p2135;
-wire  signed [10:0] j_s_fu_2860_p2137;
-wire  signed [10:0] j_s_fu_2860_p2139;
-wire  signed [10:0] j_s_fu_2860_p2141;
-wire  signed [10:0] j_s_fu_2860_p2143;
-wire  signed [10:0] j_s_fu_2860_p2145;
-wire  signed [10:0] j_s_fu_2860_p2147;
-wire  signed [10:0] j_s_fu_2860_p2149;
-wire  signed [10:0] j_s_fu_2860_p2151;
-wire  signed [10:0] j_s_fu_2860_p2153;
-wire  signed [10:0] j_s_fu_2860_p2155;
-wire  signed [10:0] j_s_fu_2860_p2157;
-wire  signed [10:0] j_s_fu_2860_p2159;
-wire  signed [10:0] j_s_fu_2860_p2161;
-wire  signed [10:0] j_s_fu_2860_p2163;
-wire  signed [10:0] j_s_fu_2860_p2165;
-wire  signed [10:0] j_s_fu_2860_p2167;
-wire  signed [10:0] j_s_fu_2860_p2169;
-wire  signed [10:0] j_s_fu_2860_p2171;
-wire  signed [10:0] j_s_fu_2860_p2173;
-wire  signed [10:0] j_s_fu_2860_p2175;
-wire  signed [10:0] j_s_fu_2860_p2177;
-wire  signed [10:0] j_s_fu_2860_p2179;
-wire  signed [10:0] j_s_fu_2860_p2181;
-wire  signed [10:0] j_s_fu_2860_p2183;
-wire  signed [10:0] j_s_fu_2860_p2185;
-wire  signed [10:0] j_s_fu_2860_p2187;
-wire  signed [10:0] j_s_fu_2860_p2189;
-wire  signed [10:0] j_s_fu_2860_p2191;
-wire  signed [10:0] j_s_fu_2860_p2193;
-wire  signed [10:0] j_s_fu_2860_p2195;
-wire  signed [10:0] j_s_fu_2860_p2197;
-wire  signed [10:0] j_s_fu_2860_p2199;
-wire  signed [10:0] j_s_fu_2860_p2201;
-wire  signed [10:0] j_s_fu_2860_p2203;
-wire  signed [10:0] j_s_fu_2860_p2205;
-wire  signed [10:0] j_s_fu_2860_p2207;
-wire  signed [10:0] j_s_fu_2860_p2209;
-wire  signed [10:0] j_s_fu_2860_p2211;
-wire  signed [10:0] j_s_fu_2860_p2213;
-wire  signed [10:0] j_s_fu_2860_p2215;
-wire  signed [10:0] j_s_fu_2860_p2217;
-wire  signed [10:0] j_s_fu_2860_p2219;
-wire  signed [10:0] j_s_fu_2860_p2221;
-wire  signed [10:0] j_s_fu_2860_p2223;
-wire  signed [10:0] j_s_fu_2860_p2225;
-wire  signed [10:0] j_s_fu_2860_p2227;
-wire  signed [10:0] j_s_fu_2860_p2229;
-wire  signed [10:0] j_s_fu_2860_p2231;
-wire  signed [10:0] j_s_fu_2860_p2233;
-wire  signed [10:0] j_s_fu_2860_p2235;
-wire  signed [10:0] j_s_fu_2860_p2237;
-wire  signed [10:0] j_s_fu_2860_p2239;
-wire  signed [10:0] j_s_fu_2860_p2241;
-wire  signed [10:0] j_s_fu_2860_p2243;
-wire  signed [10:0] j_s_fu_2860_p2245;
-wire  signed [10:0] j_s_fu_2860_p2247;
-wire  signed [10:0] j_s_fu_2860_p2249;
-wire  signed [10:0] j_s_fu_2860_p2251;
-wire  signed [10:0] j_s_fu_2860_p2253;
-wire  signed [10:0] j_s_fu_2860_p2255;
-wire   [10:0] k_s_fu_7380_p1;
-wire   [10:0] k_s_fu_7380_p3;
-wire   [10:0] k_s_fu_7380_p5;
-wire   [10:0] k_s_fu_7380_p7;
-wire   [10:0] k_s_fu_7380_p9;
-wire   [10:0] k_s_fu_7380_p11;
-wire   [10:0] k_s_fu_7380_p13;
-wire   [10:0] k_s_fu_7380_p15;
-wire   [10:0] k_s_fu_7380_p17;
-wire   [10:0] k_s_fu_7380_p19;
-wire   [10:0] k_s_fu_7380_p21;
-wire   [10:0] k_s_fu_7380_p23;
-wire   [10:0] k_s_fu_7380_p25;
-wire   [10:0] k_s_fu_7380_p27;
-wire   [10:0] k_s_fu_7380_p29;
-wire   [10:0] k_s_fu_7380_p31;
-wire   [10:0] k_s_fu_7380_p33;
-wire   [10:0] k_s_fu_7380_p35;
-wire   [10:0] k_s_fu_7380_p37;
-wire   [10:0] k_s_fu_7380_p39;
-wire   [10:0] k_s_fu_7380_p41;
-wire   [10:0] k_s_fu_7380_p43;
-wire   [10:0] k_s_fu_7380_p45;
-wire   [10:0] k_s_fu_7380_p47;
-wire   [10:0] k_s_fu_7380_p49;
-wire   [10:0] k_s_fu_7380_p51;
-wire   [10:0] k_s_fu_7380_p53;
-wire   [10:0] k_s_fu_7380_p55;
-wire   [10:0] k_s_fu_7380_p57;
-wire   [10:0] k_s_fu_7380_p59;
-wire   [10:0] k_s_fu_7380_p61;
-wire   [10:0] k_s_fu_7380_p63;
-wire   [10:0] k_s_fu_7380_p65;
-wire   [10:0] k_s_fu_7380_p67;
-wire   [10:0] k_s_fu_7380_p69;
-wire   [10:0] k_s_fu_7380_p71;
-wire   [10:0] k_s_fu_7380_p73;
-wire   [10:0] k_s_fu_7380_p75;
-wire   [10:0] k_s_fu_7380_p77;
-wire   [10:0] k_s_fu_7380_p79;
-wire   [10:0] k_s_fu_7380_p81;
-wire   [10:0] k_s_fu_7380_p83;
-wire   [10:0] k_s_fu_7380_p85;
-wire   [10:0] k_s_fu_7380_p87;
-wire   [10:0] k_s_fu_7380_p89;
-wire   [10:0] k_s_fu_7380_p91;
-wire   [10:0] k_s_fu_7380_p93;
-wire   [10:0] k_s_fu_7380_p95;
-wire   [10:0] k_s_fu_7380_p97;
-wire   [10:0] k_s_fu_7380_p99;
-wire   [10:0] k_s_fu_7380_p101;
-wire   [10:0] k_s_fu_7380_p103;
-wire   [10:0] k_s_fu_7380_p105;
-wire   [10:0] k_s_fu_7380_p107;
-wire   [10:0] k_s_fu_7380_p109;
-wire   [10:0] k_s_fu_7380_p111;
-wire   [10:0] k_s_fu_7380_p113;
-wire   [10:0] k_s_fu_7380_p115;
-wire   [10:0] k_s_fu_7380_p117;
-wire   [10:0] k_s_fu_7380_p119;
-wire   [10:0] k_s_fu_7380_p121;
-wire   [10:0] k_s_fu_7380_p123;
-wire   [10:0] k_s_fu_7380_p125;
-wire   [10:0] k_s_fu_7380_p127;
-wire   [10:0] k_s_fu_7380_p129;
-wire   [10:0] k_s_fu_7380_p131;
-wire   [10:0] k_s_fu_7380_p133;
-wire   [10:0] k_s_fu_7380_p135;
-wire   [10:0] k_s_fu_7380_p137;
-wire   [10:0] k_s_fu_7380_p139;
-wire   [10:0] k_s_fu_7380_p141;
-wire   [10:0] k_s_fu_7380_p143;
-wire   [10:0] k_s_fu_7380_p145;
-wire   [10:0] k_s_fu_7380_p147;
-wire   [10:0] k_s_fu_7380_p149;
-wire   [10:0] k_s_fu_7380_p151;
-wire   [10:0] k_s_fu_7380_p153;
-wire   [10:0] k_s_fu_7380_p155;
-wire   [10:0] k_s_fu_7380_p157;
-wire   [10:0] k_s_fu_7380_p159;
-wire   [10:0] k_s_fu_7380_p161;
-wire   [10:0] k_s_fu_7380_p163;
-wire   [10:0] k_s_fu_7380_p165;
-wire   [10:0] k_s_fu_7380_p167;
-wire   [10:0] k_s_fu_7380_p169;
-wire   [10:0] k_s_fu_7380_p171;
-wire   [10:0] k_s_fu_7380_p173;
-wire   [10:0] k_s_fu_7380_p175;
-wire   [10:0] k_s_fu_7380_p177;
-wire   [10:0] k_s_fu_7380_p179;
-wire   [10:0] k_s_fu_7380_p181;
-wire   [10:0] k_s_fu_7380_p183;
-wire   [10:0] k_s_fu_7380_p185;
-wire   [10:0] k_s_fu_7380_p187;
-wire   [10:0] k_s_fu_7380_p189;
-wire   [10:0] k_s_fu_7380_p191;
-wire   [10:0] k_s_fu_7380_p193;
-wire   [10:0] k_s_fu_7380_p195;
-wire   [10:0] k_s_fu_7380_p197;
-wire   [10:0] k_s_fu_7380_p199;
-wire   [10:0] k_s_fu_7380_p201;
-wire   [10:0] k_s_fu_7380_p203;
-wire   [10:0] k_s_fu_7380_p205;
-wire   [10:0] k_s_fu_7380_p207;
-wire   [10:0] k_s_fu_7380_p209;
-wire   [10:0] k_s_fu_7380_p211;
-wire   [10:0] k_s_fu_7380_p213;
-wire   [10:0] k_s_fu_7380_p215;
-wire   [10:0] k_s_fu_7380_p217;
-wire   [10:0] k_s_fu_7380_p219;
-wire   [10:0] k_s_fu_7380_p221;
-wire   [10:0] k_s_fu_7380_p223;
-wire   [10:0] k_s_fu_7380_p225;
-wire   [10:0] k_s_fu_7380_p227;
-wire   [10:0] k_s_fu_7380_p229;
-wire   [10:0] k_s_fu_7380_p231;
-wire   [10:0] k_s_fu_7380_p233;
-wire   [10:0] k_s_fu_7380_p235;
-wire   [10:0] k_s_fu_7380_p237;
-wire   [10:0] k_s_fu_7380_p239;
-wire   [10:0] k_s_fu_7380_p241;
-wire   [10:0] k_s_fu_7380_p243;
-wire   [10:0] k_s_fu_7380_p245;
-wire   [10:0] k_s_fu_7380_p247;
-wire   [10:0] k_s_fu_7380_p249;
-wire   [10:0] k_s_fu_7380_p251;
-wire   [10:0] k_s_fu_7380_p253;
-wire   [10:0] k_s_fu_7380_p255;
-wire   [10:0] k_s_fu_7380_p257;
-wire   [10:0] k_s_fu_7380_p259;
-wire   [10:0] k_s_fu_7380_p261;
-wire   [10:0] k_s_fu_7380_p263;
-wire   [10:0] k_s_fu_7380_p265;
-wire   [10:0] k_s_fu_7380_p267;
-wire   [10:0] k_s_fu_7380_p269;
-wire   [10:0] k_s_fu_7380_p271;
-wire   [10:0] k_s_fu_7380_p273;
-wire   [10:0] k_s_fu_7380_p275;
-wire   [10:0] k_s_fu_7380_p277;
-wire   [10:0] k_s_fu_7380_p279;
-wire   [10:0] k_s_fu_7380_p281;
-wire   [10:0] k_s_fu_7380_p283;
-wire   [10:0] k_s_fu_7380_p285;
-wire   [10:0] k_s_fu_7380_p287;
-wire   [10:0] k_s_fu_7380_p289;
-wire   [10:0] k_s_fu_7380_p291;
-wire   [10:0] k_s_fu_7380_p293;
-wire   [10:0] k_s_fu_7380_p295;
-wire   [10:0] k_s_fu_7380_p297;
-wire   [10:0] k_s_fu_7380_p299;
-wire   [10:0] k_s_fu_7380_p301;
-wire   [10:0] k_s_fu_7380_p303;
-wire   [10:0] k_s_fu_7380_p305;
-wire   [10:0] k_s_fu_7380_p307;
-wire   [10:0] k_s_fu_7380_p309;
-wire   [10:0] k_s_fu_7380_p311;
-wire   [10:0] k_s_fu_7380_p313;
-wire   [10:0] k_s_fu_7380_p315;
-wire   [10:0] k_s_fu_7380_p317;
-wire   [10:0] k_s_fu_7380_p319;
-wire   [10:0] k_s_fu_7380_p321;
-wire   [10:0] k_s_fu_7380_p323;
-wire   [10:0] k_s_fu_7380_p325;
-wire   [10:0] k_s_fu_7380_p327;
-wire   [10:0] k_s_fu_7380_p329;
-wire   [10:0] k_s_fu_7380_p331;
-wire   [10:0] k_s_fu_7380_p333;
-wire   [10:0] k_s_fu_7380_p335;
-wire   [10:0] k_s_fu_7380_p337;
-wire   [10:0] k_s_fu_7380_p339;
-wire   [10:0] k_s_fu_7380_p341;
-wire   [10:0] k_s_fu_7380_p343;
-wire   [10:0] k_s_fu_7380_p345;
-wire   [10:0] k_s_fu_7380_p347;
-wire   [10:0] k_s_fu_7380_p349;
-wire   [10:0] k_s_fu_7380_p351;
-wire   [10:0] k_s_fu_7380_p353;
-wire   [10:0] k_s_fu_7380_p355;
-wire   [10:0] k_s_fu_7380_p357;
-wire   [10:0] k_s_fu_7380_p359;
-wire   [10:0] k_s_fu_7380_p361;
-wire   [10:0] k_s_fu_7380_p363;
-wire   [10:0] k_s_fu_7380_p365;
-wire   [10:0] k_s_fu_7380_p367;
-wire   [10:0] k_s_fu_7380_p369;
-wire   [10:0] k_s_fu_7380_p371;
-wire   [10:0] k_s_fu_7380_p373;
-wire   [10:0] k_s_fu_7380_p375;
-wire   [10:0] k_s_fu_7380_p377;
-wire   [10:0] k_s_fu_7380_p379;
-wire   [10:0] k_s_fu_7380_p381;
-wire   [10:0] k_s_fu_7380_p383;
-wire   [10:0] k_s_fu_7380_p385;
-wire   [10:0] k_s_fu_7380_p387;
-wire   [10:0] k_s_fu_7380_p389;
-wire   [10:0] k_s_fu_7380_p391;
-wire   [10:0] k_s_fu_7380_p393;
-wire   [10:0] k_s_fu_7380_p395;
-wire   [10:0] k_s_fu_7380_p397;
-wire   [10:0] k_s_fu_7380_p399;
-wire   [10:0] k_s_fu_7380_p401;
-wire   [10:0] k_s_fu_7380_p403;
-wire   [10:0] k_s_fu_7380_p405;
-wire   [10:0] k_s_fu_7380_p407;
-wire   [10:0] k_s_fu_7380_p409;
-wire   [10:0] k_s_fu_7380_p411;
-wire   [10:0] k_s_fu_7380_p413;
-wire   [10:0] k_s_fu_7380_p415;
-wire   [10:0] k_s_fu_7380_p417;
-wire   [10:0] k_s_fu_7380_p419;
-wire   [10:0] k_s_fu_7380_p421;
-wire   [10:0] k_s_fu_7380_p423;
-wire   [10:0] k_s_fu_7380_p425;
-wire   [10:0] k_s_fu_7380_p427;
-wire   [10:0] k_s_fu_7380_p429;
-wire   [10:0] k_s_fu_7380_p431;
-wire   [10:0] k_s_fu_7380_p433;
-wire   [10:0] k_s_fu_7380_p435;
-wire   [10:0] k_s_fu_7380_p437;
-wire   [10:0] k_s_fu_7380_p439;
-wire   [10:0] k_s_fu_7380_p441;
-wire   [10:0] k_s_fu_7380_p443;
-wire   [10:0] k_s_fu_7380_p445;
-wire   [10:0] k_s_fu_7380_p447;
-wire   [10:0] k_s_fu_7380_p449;
-wire   [10:0] k_s_fu_7380_p451;
-wire   [10:0] k_s_fu_7380_p453;
-wire   [10:0] k_s_fu_7380_p455;
-wire   [10:0] k_s_fu_7380_p457;
-wire   [10:0] k_s_fu_7380_p459;
-wire   [10:0] k_s_fu_7380_p461;
-wire   [10:0] k_s_fu_7380_p463;
-wire   [10:0] k_s_fu_7380_p465;
-wire   [10:0] k_s_fu_7380_p467;
-wire   [10:0] k_s_fu_7380_p469;
-wire   [10:0] k_s_fu_7380_p471;
-wire   [10:0] k_s_fu_7380_p473;
-wire   [10:0] k_s_fu_7380_p475;
-wire   [10:0] k_s_fu_7380_p477;
-wire   [10:0] k_s_fu_7380_p479;
-wire   [10:0] k_s_fu_7380_p481;
-wire   [10:0] k_s_fu_7380_p483;
-wire   [10:0] k_s_fu_7380_p485;
-wire   [10:0] k_s_fu_7380_p487;
-wire   [10:0] k_s_fu_7380_p489;
-wire   [10:0] k_s_fu_7380_p491;
-wire   [10:0] k_s_fu_7380_p493;
-wire   [10:0] k_s_fu_7380_p495;
-wire   [10:0] k_s_fu_7380_p497;
-wire   [10:0] k_s_fu_7380_p499;
-wire   [10:0] k_s_fu_7380_p501;
-wire   [10:0] k_s_fu_7380_p503;
-wire   [10:0] k_s_fu_7380_p505;
-wire   [10:0] k_s_fu_7380_p507;
-wire   [10:0] k_s_fu_7380_p509;
-wire   [10:0] k_s_fu_7380_p511;
-wire   [10:0] k_s_fu_7380_p513;
-wire   [10:0] k_s_fu_7380_p515;
-wire   [10:0] k_s_fu_7380_p517;
-wire   [10:0] k_s_fu_7380_p519;
-wire   [10:0] k_s_fu_7380_p521;
-wire   [10:0] k_s_fu_7380_p523;
-wire   [10:0] k_s_fu_7380_p525;
-wire   [10:0] k_s_fu_7380_p527;
-wire   [10:0] k_s_fu_7380_p529;
-wire   [10:0] k_s_fu_7380_p531;
-wire   [10:0] k_s_fu_7380_p533;
-wire   [10:0] k_s_fu_7380_p535;
-wire   [10:0] k_s_fu_7380_p537;
-wire   [10:0] k_s_fu_7380_p539;
-wire   [10:0] k_s_fu_7380_p541;
-wire   [10:0] k_s_fu_7380_p543;
-wire   [10:0] k_s_fu_7380_p545;
-wire   [10:0] k_s_fu_7380_p547;
-wire   [10:0] k_s_fu_7380_p549;
-wire   [10:0] k_s_fu_7380_p551;
-wire   [10:0] k_s_fu_7380_p553;
-wire   [10:0] k_s_fu_7380_p555;
-wire   [10:0] k_s_fu_7380_p557;
-wire   [10:0] k_s_fu_7380_p559;
-wire   [10:0] k_s_fu_7380_p561;
-wire   [10:0] k_s_fu_7380_p563;
-wire   [10:0] k_s_fu_7380_p565;
-wire   [10:0] k_s_fu_7380_p567;
-wire   [10:0] k_s_fu_7380_p569;
-wire   [10:0] k_s_fu_7380_p571;
-wire   [10:0] k_s_fu_7380_p573;
-wire   [10:0] k_s_fu_7380_p575;
-wire   [10:0] k_s_fu_7380_p577;
-wire   [10:0] k_s_fu_7380_p579;
-wire   [10:0] k_s_fu_7380_p581;
-wire   [10:0] k_s_fu_7380_p583;
-wire   [10:0] k_s_fu_7380_p585;
-wire   [10:0] k_s_fu_7380_p587;
-wire   [10:0] k_s_fu_7380_p589;
-wire   [10:0] k_s_fu_7380_p591;
-wire   [10:0] k_s_fu_7380_p593;
-wire   [10:0] k_s_fu_7380_p595;
-wire   [10:0] k_s_fu_7380_p597;
-wire   [10:0] k_s_fu_7380_p599;
-wire   [10:0] k_s_fu_7380_p601;
-wire   [10:0] k_s_fu_7380_p603;
-wire   [10:0] k_s_fu_7380_p605;
-wire   [10:0] k_s_fu_7380_p607;
-wire   [10:0] k_s_fu_7380_p609;
-wire   [10:0] k_s_fu_7380_p611;
-wire   [10:0] k_s_fu_7380_p613;
-wire   [10:0] k_s_fu_7380_p615;
-wire   [10:0] k_s_fu_7380_p617;
-wire   [10:0] k_s_fu_7380_p619;
-wire   [10:0] k_s_fu_7380_p621;
-wire   [10:0] k_s_fu_7380_p623;
-wire   [10:0] k_s_fu_7380_p625;
-wire   [10:0] k_s_fu_7380_p627;
-wire   [10:0] k_s_fu_7380_p629;
-wire   [10:0] k_s_fu_7380_p631;
-wire   [10:0] k_s_fu_7380_p633;
-wire   [10:0] k_s_fu_7380_p635;
-wire   [10:0] k_s_fu_7380_p637;
-wire   [10:0] k_s_fu_7380_p639;
-wire   [10:0] k_s_fu_7380_p641;
-wire   [10:0] k_s_fu_7380_p643;
-wire   [10:0] k_s_fu_7380_p645;
-wire   [10:0] k_s_fu_7380_p647;
-wire   [10:0] k_s_fu_7380_p649;
-wire   [10:0] k_s_fu_7380_p651;
-wire   [10:0] k_s_fu_7380_p653;
-wire   [10:0] k_s_fu_7380_p655;
-wire   [10:0] k_s_fu_7380_p657;
-wire   [10:0] k_s_fu_7380_p659;
-wire   [10:0] k_s_fu_7380_p661;
-wire   [10:0] k_s_fu_7380_p663;
-wire   [10:0] k_s_fu_7380_p665;
-wire   [10:0] k_s_fu_7380_p667;
-wire   [10:0] k_s_fu_7380_p669;
-wire   [10:0] k_s_fu_7380_p671;
-wire   [10:0] k_s_fu_7380_p673;
-wire   [10:0] k_s_fu_7380_p675;
-wire   [10:0] k_s_fu_7380_p677;
-wire   [10:0] k_s_fu_7380_p679;
-wire   [10:0] k_s_fu_7380_p681;
-wire   [10:0] k_s_fu_7380_p683;
-wire   [10:0] k_s_fu_7380_p685;
-wire   [10:0] k_s_fu_7380_p687;
-wire   [10:0] k_s_fu_7380_p689;
-wire   [10:0] k_s_fu_7380_p691;
-wire   [10:0] k_s_fu_7380_p693;
-wire   [10:0] k_s_fu_7380_p695;
-wire   [10:0] k_s_fu_7380_p697;
-wire   [10:0] k_s_fu_7380_p699;
-wire   [10:0] k_s_fu_7380_p701;
-wire   [10:0] k_s_fu_7380_p703;
-wire   [10:0] k_s_fu_7380_p705;
-wire   [10:0] k_s_fu_7380_p707;
-wire   [10:0] k_s_fu_7380_p709;
-wire   [10:0] k_s_fu_7380_p711;
-wire   [10:0] k_s_fu_7380_p713;
-wire   [10:0] k_s_fu_7380_p715;
-wire   [10:0] k_s_fu_7380_p717;
-wire   [10:0] k_s_fu_7380_p719;
-wire   [10:0] k_s_fu_7380_p721;
-wire   [10:0] k_s_fu_7380_p723;
-wire   [10:0] k_s_fu_7380_p725;
-wire   [10:0] k_s_fu_7380_p727;
-wire   [10:0] k_s_fu_7380_p729;
-wire   [10:0] k_s_fu_7380_p731;
-wire   [10:0] k_s_fu_7380_p733;
-wire   [10:0] k_s_fu_7380_p735;
-wire   [10:0] k_s_fu_7380_p737;
-wire   [10:0] k_s_fu_7380_p739;
-wire   [10:0] k_s_fu_7380_p741;
-wire   [10:0] k_s_fu_7380_p743;
-wire   [10:0] k_s_fu_7380_p745;
-wire   [10:0] k_s_fu_7380_p747;
-wire   [10:0] k_s_fu_7380_p749;
-wire   [10:0] k_s_fu_7380_p751;
-wire   [10:0] k_s_fu_7380_p753;
-wire   [10:0] k_s_fu_7380_p755;
-wire   [10:0] k_s_fu_7380_p757;
-wire   [10:0] k_s_fu_7380_p759;
-wire   [10:0] k_s_fu_7380_p761;
-wire   [10:0] k_s_fu_7380_p763;
-wire   [10:0] k_s_fu_7380_p765;
-wire   [10:0] k_s_fu_7380_p767;
-wire   [10:0] k_s_fu_7380_p769;
-wire   [10:0] k_s_fu_7380_p771;
-wire   [10:0] k_s_fu_7380_p773;
-wire   [10:0] k_s_fu_7380_p775;
-wire   [10:0] k_s_fu_7380_p777;
-wire   [10:0] k_s_fu_7380_p779;
-wire   [10:0] k_s_fu_7380_p781;
-wire   [10:0] k_s_fu_7380_p783;
-wire   [10:0] k_s_fu_7380_p785;
-wire   [10:0] k_s_fu_7380_p787;
-wire   [10:0] k_s_fu_7380_p789;
-wire   [10:0] k_s_fu_7380_p791;
-wire   [10:0] k_s_fu_7380_p793;
-wire   [10:0] k_s_fu_7380_p795;
-wire   [10:0] k_s_fu_7380_p797;
-wire   [10:0] k_s_fu_7380_p799;
-wire   [10:0] k_s_fu_7380_p801;
-wire   [10:0] k_s_fu_7380_p803;
-wire   [10:0] k_s_fu_7380_p805;
-wire   [10:0] k_s_fu_7380_p807;
-wire   [10:0] k_s_fu_7380_p809;
-wire   [10:0] k_s_fu_7380_p811;
-wire   [10:0] k_s_fu_7380_p813;
-wire   [10:0] k_s_fu_7380_p815;
-wire   [10:0] k_s_fu_7380_p817;
-wire   [10:0] k_s_fu_7380_p819;
-wire   [10:0] k_s_fu_7380_p821;
-wire   [10:0] k_s_fu_7380_p823;
-wire   [10:0] k_s_fu_7380_p825;
-wire   [10:0] k_s_fu_7380_p827;
-wire   [10:0] k_s_fu_7380_p829;
-wire   [10:0] k_s_fu_7380_p831;
-wire   [10:0] k_s_fu_7380_p833;
-wire   [10:0] k_s_fu_7380_p835;
-wire   [10:0] k_s_fu_7380_p837;
-wire   [10:0] k_s_fu_7380_p839;
-wire   [10:0] k_s_fu_7380_p841;
-wire   [10:0] k_s_fu_7380_p843;
-wire   [10:0] k_s_fu_7380_p845;
-wire   [10:0] k_s_fu_7380_p847;
-wire   [10:0] k_s_fu_7380_p849;
-wire   [10:0] k_s_fu_7380_p851;
-wire   [10:0] k_s_fu_7380_p853;
-wire   [10:0] k_s_fu_7380_p855;
-wire   [10:0] k_s_fu_7380_p857;
-wire   [10:0] k_s_fu_7380_p859;
-wire   [10:0] k_s_fu_7380_p861;
-wire   [10:0] k_s_fu_7380_p863;
-wire   [10:0] k_s_fu_7380_p865;
-wire   [10:0] k_s_fu_7380_p867;
-wire   [10:0] k_s_fu_7380_p869;
-wire   [10:0] k_s_fu_7380_p871;
-wire   [10:0] k_s_fu_7380_p873;
-wire   [10:0] k_s_fu_7380_p875;
-wire   [10:0] k_s_fu_7380_p877;
-wire   [10:0] k_s_fu_7380_p879;
-wire   [10:0] k_s_fu_7380_p881;
-wire   [10:0] k_s_fu_7380_p883;
-wire   [10:0] k_s_fu_7380_p885;
-wire   [10:0] k_s_fu_7380_p887;
-wire   [10:0] k_s_fu_7380_p889;
-wire   [10:0] k_s_fu_7380_p891;
-wire   [10:0] k_s_fu_7380_p893;
-wire   [10:0] k_s_fu_7380_p895;
-wire   [10:0] k_s_fu_7380_p897;
-wire   [10:0] k_s_fu_7380_p899;
-wire   [10:0] k_s_fu_7380_p901;
-wire   [10:0] k_s_fu_7380_p903;
-wire   [10:0] k_s_fu_7380_p905;
-wire   [10:0] k_s_fu_7380_p907;
-wire   [10:0] k_s_fu_7380_p909;
-wire   [10:0] k_s_fu_7380_p911;
-wire   [10:0] k_s_fu_7380_p913;
-wire   [10:0] k_s_fu_7380_p915;
-wire   [10:0] k_s_fu_7380_p917;
-wire   [10:0] k_s_fu_7380_p919;
-wire   [10:0] k_s_fu_7380_p921;
-wire   [10:0] k_s_fu_7380_p923;
-wire   [10:0] k_s_fu_7380_p925;
-wire   [10:0] k_s_fu_7380_p927;
-wire   [10:0] k_s_fu_7380_p929;
-wire   [10:0] k_s_fu_7380_p931;
-wire   [10:0] k_s_fu_7380_p933;
-wire   [10:0] k_s_fu_7380_p935;
-wire   [10:0] k_s_fu_7380_p937;
-wire   [10:0] k_s_fu_7380_p939;
-wire   [10:0] k_s_fu_7380_p941;
-wire   [10:0] k_s_fu_7380_p943;
-wire   [10:0] k_s_fu_7380_p945;
-wire   [10:0] k_s_fu_7380_p947;
-wire   [10:0] k_s_fu_7380_p949;
-wire   [10:0] k_s_fu_7380_p951;
-wire   [10:0] k_s_fu_7380_p953;
-wire   [10:0] k_s_fu_7380_p955;
-wire   [10:0] k_s_fu_7380_p957;
-wire   [10:0] k_s_fu_7380_p959;
-wire   [10:0] k_s_fu_7380_p961;
-wire   [10:0] k_s_fu_7380_p963;
-wire   [10:0] k_s_fu_7380_p965;
-wire   [10:0] k_s_fu_7380_p967;
-wire   [10:0] k_s_fu_7380_p969;
-wire   [10:0] k_s_fu_7380_p971;
-wire   [10:0] k_s_fu_7380_p973;
-wire   [10:0] k_s_fu_7380_p975;
-wire   [10:0] k_s_fu_7380_p977;
-wire   [10:0] k_s_fu_7380_p979;
-wire   [10:0] k_s_fu_7380_p981;
-wire   [10:0] k_s_fu_7380_p983;
-wire   [10:0] k_s_fu_7380_p985;
-wire   [10:0] k_s_fu_7380_p987;
-wire   [10:0] k_s_fu_7380_p989;
-wire   [10:0] k_s_fu_7380_p991;
-wire   [10:0] k_s_fu_7380_p993;
-wire   [10:0] k_s_fu_7380_p995;
-wire   [10:0] k_s_fu_7380_p997;
-wire   [10:0] k_s_fu_7380_p999;
-wire   [10:0] k_s_fu_7380_p1001;
-wire   [10:0] k_s_fu_7380_p1003;
-wire   [10:0] k_s_fu_7380_p1005;
-wire   [10:0] k_s_fu_7380_p1007;
-wire   [10:0] k_s_fu_7380_p1009;
-wire   [10:0] k_s_fu_7380_p1011;
-wire   [10:0] k_s_fu_7380_p1013;
-wire   [10:0] k_s_fu_7380_p1015;
-wire   [10:0] k_s_fu_7380_p1017;
-wire   [10:0] k_s_fu_7380_p1019;
-wire   [10:0] k_s_fu_7380_p1021;
-wire   [10:0] k_s_fu_7380_p1023;
-wire   [10:0] k_s_fu_7380_p1025;
-wire   [10:0] k_s_fu_7380_p1027;
-wire   [10:0] k_s_fu_7380_p1029;
-wire   [10:0] k_s_fu_7380_p1031;
-wire   [10:0] k_s_fu_7380_p1033;
-wire   [10:0] k_s_fu_7380_p1035;
-wire   [10:0] k_s_fu_7380_p1037;
-wire   [10:0] k_s_fu_7380_p1039;
-wire   [10:0] k_s_fu_7380_p1041;
-wire   [10:0] k_s_fu_7380_p1043;
-wire   [10:0] k_s_fu_7380_p1045;
-wire   [10:0] k_s_fu_7380_p1047;
-wire   [10:0] k_s_fu_7380_p1049;
-wire   [10:0] k_s_fu_7380_p1051;
-wire   [10:0] k_s_fu_7380_p1053;
-wire   [10:0] k_s_fu_7380_p1055;
-wire   [10:0] k_s_fu_7380_p1057;
-wire   [10:0] k_s_fu_7380_p1059;
-wire   [10:0] k_s_fu_7380_p1061;
-wire   [10:0] k_s_fu_7380_p1063;
-wire   [10:0] k_s_fu_7380_p1065;
-wire   [10:0] k_s_fu_7380_p1067;
-wire   [10:0] k_s_fu_7380_p1069;
-wire   [10:0] k_s_fu_7380_p1071;
-wire   [10:0] k_s_fu_7380_p1073;
-wire   [10:0] k_s_fu_7380_p1075;
-wire   [10:0] k_s_fu_7380_p1077;
-wire   [10:0] k_s_fu_7380_p1079;
-wire   [10:0] k_s_fu_7380_p1081;
-wire   [10:0] k_s_fu_7380_p1083;
-wire   [10:0] k_s_fu_7380_p1085;
-wire   [10:0] k_s_fu_7380_p1087;
-wire   [10:0] k_s_fu_7380_p1089;
-wire   [10:0] k_s_fu_7380_p1091;
-wire   [10:0] k_s_fu_7380_p1093;
-wire   [10:0] k_s_fu_7380_p1095;
-wire   [10:0] k_s_fu_7380_p1097;
-wire   [10:0] k_s_fu_7380_p1099;
-wire   [10:0] k_s_fu_7380_p1101;
-wire   [10:0] k_s_fu_7380_p1103;
-wire   [10:0] k_s_fu_7380_p1105;
-wire   [10:0] k_s_fu_7380_p1107;
-wire   [10:0] k_s_fu_7380_p1109;
-wire   [10:0] k_s_fu_7380_p1111;
-wire   [10:0] k_s_fu_7380_p1113;
-wire   [10:0] k_s_fu_7380_p1115;
-wire   [10:0] k_s_fu_7380_p1117;
-wire   [10:0] k_s_fu_7380_p1119;
-wire   [10:0] k_s_fu_7380_p1121;
-wire   [10:0] k_s_fu_7380_p1123;
-wire   [10:0] k_s_fu_7380_p1125;
-wire   [10:0] k_s_fu_7380_p1127;
-wire   [10:0] k_s_fu_7380_p1129;
-wire   [10:0] k_s_fu_7380_p1131;
-wire   [10:0] k_s_fu_7380_p1133;
-wire   [10:0] k_s_fu_7380_p1135;
-wire   [10:0] k_s_fu_7380_p1137;
-wire   [10:0] k_s_fu_7380_p1139;
-wire   [10:0] k_s_fu_7380_p1141;
-wire   [10:0] k_s_fu_7380_p1143;
-wire   [10:0] k_s_fu_7380_p1145;
-wire   [10:0] k_s_fu_7380_p1147;
-wire   [10:0] k_s_fu_7380_p1149;
-wire   [10:0] k_s_fu_7380_p1151;
-wire   [10:0] k_s_fu_7380_p1153;
-wire   [10:0] k_s_fu_7380_p1155;
-wire   [10:0] k_s_fu_7380_p1157;
-wire   [10:0] k_s_fu_7380_p1159;
-wire   [10:0] k_s_fu_7380_p1161;
-wire   [10:0] k_s_fu_7380_p1163;
-wire   [10:0] k_s_fu_7380_p1165;
-wire   [10:0] k_s_fu_7380_p1167;
-wire   [10:0] k_s_fu_7380_p1169;
-wire   [10:0] k_s_fu_7380_p1171;
-wire   [10:0] k_s_fu_7380_p1173;
-wire   [10:0] k_s_fu_7380_p1175;
-wire   [10:0] k_s_fu_7380_p1177;
-wire   [10:0] k_s_fu_7380_p1179;
-wire   [10:0] k_s_fu_7380_p1181;
-wire   [10:0] k_s_fu_7380_p1183;
-wire   [10:0] k_s_fu_7380_p1185;
-wire   [10:0] k_s_fu_7380_p1187;
-wire   [10:0] k_s_fu_7380_p1189;
-wire   [10:0] k_s_fu_7380_p1191;
-wire   [10:0] k_s_fu_7380_p1193;
-wire   [10:0] k_s_fu_7380_p1195;
-wire   [10:0] k_s_fu_7380_p1197;
-wire   [10:0] k_s_fu_7380_p1199;
-wire   [10:0] k_s_fu_7380_p1201;
-wire   [10:0] k_s_fu_7380_p1203;
-wire   [10:0] k_s_fu_7380_p1205;
-wire   [10:0] k_s_fu_7380_p1207;
-wire   [10:0] k_s_fu_7380_p1209;
-wire   [10:0] k_s_fu_7380_p1211;
-wire   [10:0] k_s_fu_7380_p1213;
-wire   [10:0] k_s_fu_7380_p1215;
-wire   [10:0] k_s_fu_7380_p1217;
-wire   [10:0] k_s_fu_7380_p1219;
-wire   [10:0] k_s_fu_7380_p1221;
-wire   [10:0] k_s_fu_7380_p1223;
-wire   [10:0] k_s_fu_7380_p1225;
-wire   [10:0] k_s_fu_7380_p1227;
-wire   [10:0] k_s_fu_7380_p1229;
-wire   [10:0] k_s_fu_7380_p1231;
-wire   [10:0] k_s_fu_7380_p1233;
-wire   [10:0] k_s_fu_7380_p1235;
-wire   [10:0] k_s_fu_7380_p1237;
-wire   [10:0] k_s_fu_7380_p1239;
-wire   [10:0] k_s_fu_7380_p1241;
-wire   [10:0] k_s_fu_7380_p1243;
-wire   [10:0] k_s_fu_7380_p1245;
-wire   [10:0] k_s_fu_7380_p1247;
-wire   [10:0] k_s_fu_7380_p1249;
-wire   [10:0] k_s_fu_7380_p1251;
-wire   [10:0] k_s_fu_7380_p1253;
-wire   [10:0] k_s_fu_7380_p1255;
-wire   [10:0] k_s_fu_7380_p1257;
-wire   [10:0] k_s_fu_7380_p1259;
-wire   [10:0] k_s_fu_7380_p1261;
-wire   [10:0] k_s_fu_7380_p1263;
-wire   [10:0] k_s_fu_7380_p1265;
-wire   [10:0] k_s_fu_7380_p1267;
-wire   [10:0] k_s_fu_7380_p1269;
-wire   [10:0] k_s_fu_7380_p1271;
-wire   [10:0] k_s_fu_7380_p1273;
-wire   [10:0] k_s_fu_7380_p1275;
-wire   [10:0] k_s_fu_7380_p1277;
-wire   [10:0] k_s_fu_7380_p1279;
-wire   [10:0] k_s_fu_7380_p1281;
-wire   [10:0] k_s_fu_7380_p1283;
-wire   [10:0] k_s_fu_7380_p1285;
-wire   [10:0] k_s_fu_7380_p1287;
-wire   [10:0] k_s_fu_7380_p1289;
-wire   [10:0] k_s_fu_7380_p1291;
-wire   [10:0] k_s_fu_7380_p1293;
-wire   [10:0] k_s_fu_7380_p1295;
-wire   [10:0] k_s_fu_7380_p1297;
-wire   [10:0] k_s_fu_7380_p1299;
-wire   [10:0] k_s_fu_7380_p1301;
-wire   [10:0] k_s_fu_7380_p1303;
-wire   [10:0] k_s_fu_7380_p1305;
-wire   [10:0] k_s_fu_7380_p1307;
-wire   [10:0] k_s_fu_7380_p1309;
-wire   [10:0] k_s_fu_7380_p1311;
-wire   [10:0] k_s_fu_7380_p1313;
-wire   [10:0] k_s_fu_7380_p1315;
-wire   [10:0] k_s_fu_7380_p1317;
-wire   [10:0] k_s_fu_7380_p1319;
-wire   [10:0] k_s_fu_7380_p1321;
-wire   [10:0] k_s_fu_7380_p1323;
-wire   [10:0] k_s_fu_7380_p1325;
-wire   [10:0] k_s_fu_7380_p1327;
-wire   [10:0] k_s_fu_7380_p1329;
-wire   [10:0] k_s_fu_7380_p1331;
-wire   [10:0] k_s_fu_7380_p1333;
-wire   [10:0] k_s_fu_7380_p1335;
-wire   [10:0] k_s_fu_7380_p1337;
-wire   [10:0] k_s_fu_7380_p1339;
-wire   [10:0] k_s_fu_7380_p1341;
-wire   [10:0] k_s_fu_7380_p1343;
-wire   [10:0] k_s_fu_7380_p1345;
-wire   [10:0] k_s_fu_7380_p1347;
-wire   [10:0] k_s_fu_7380_p1349;
-wire   [10:0] k_s_fu_7380_p1351;
-wire   [10:0] k_s_fu_7380_p1353;
-wire   [10:0] k_s_fu_7380_p1355;
-wire   [10:0] k_s_fu_7380_p1357;
-wire   [10:0] k_s_fu_7380_p1359;
-wire   [10:0] k_s_fu_7380_p1361;
-wire   [10:0] k_s_fu_7380_p1363;
-wire   [10:0] k_s_fu_7380_p1365;
-wire   [10:0] k_s_fu_7380_p1367;
-wire   [10:0] k_s_fu_7380_p1369;
-wire   [10:0] k_s_fu_7380_p1371;
-wire   [10:0] k_s_fu_7380_p1373;
-wire   [10:0] k_s_fu_7380_p1375;
-wire   [10:0] k_s_fu_7380_p1377;
-wire   [10:0] k_s_fu_7380_p1379;
-wire   [10:0] k_s_fu_7380_p1381;
-wire   [10:0] k_s_fu_7380_p1383;
-wire   [10:0] k_s_fu_7380_p1385;
-wire   [10:0] k_s_fu_7380_p1387;
-wire   [10:0] k_s_fu_7380_p1389;
-wire   [10:0] k_s_fu_7380_p1391;
-wire   [10:0] k_s_fu_7380_p1393;
-wire   [10:0] k_s_fu_7380_p1395;
-wire   [10:0] k_s_fu_7380_p1397;
-wire   [10:0] k_s_fu_7380_p1399;
-wire   [10:0] k_s_fu_7380_p1401;
-wire   [10:0] k_s_fu_7380_p1403;
-wire   [10:0] k_s_fu_7380_p1405;
-wire   [10:0] k_s_fu_7380_p1407;
-wire   [10:0] k_s_fu_7380_p1409;
-wire   [10:0] k_s_fu_7380_p1411;
-wire   [10:0] k_s_fu_7380_p1413;
-wire   [10:0] k_s_fu_7380_p1415;
-wire   [10:0] k_s_fu_7380_p1417;
-wire   [10:0] k_s_fu_7380_p1419;
-wire   [10:0] k_s_fu_7380_p1421;
-wire   [10:0] k_s_fu_7380_p1423;
-wire   [10:0] k_s_fu_7380_p1425;
-wire   [10:0] k_s_fu_7380_p1427;
-wire   [10:0] k_s_fu_7380_p1429;
-wire   [10:0] k_s_fu_7380_p1431;
-wire   [10:0] k_s_fu_7380_p1433;
-wire   [10:0] k_s_fu_7380_p1435;
-wire   [10:0] k_s_fu_7380_p1437;
-wire   [10:0] k_s_fu_7380_p1439;
-wire   [10:0] k_s_fu_7380_p1441;
-wire   [10:0] k_s_fu_7380_p1443;
-wire   [10:0] k_s_fu_7380_p1445;
-wire   [10:0] k_s_fu_7380_p1447;
-wire   [10:0] k_s_fu_7380_p1449;
-wire   [10:0] k_s_fu_7380_p1451;
-wire   [10:0] k_s_fu_7380_p1453;
-wire   [10:0] k_s_fu_7380_p1455;
-wire   [10:0] k_s_fu_7380_p1457;
-wire   [10:0] k_s_fu_7380_p1459;
-wire   [10:0] k_s_fu_7380_p1461;
-wire   [10:0] k_s_fu_7380_p1463;
-wire   [10:0] k_s_fu_7380_p1465;
-wire   [10:0] k_s_fu_7380_p1467;
-wire   [10:0] k_s_fu_7380_p1469;
-wire   [10:0] k_s_fu_7380_p1471;
-wire   [10:0] k_s_fu_7380_p1473;
-wire   [10:0] k_s_fu_7380_p1475;
-wire   [10:0] k_s_fu_7380_p1477;
-wire   [10:0] k_s_fu_7380_p1479;
-wire   [10:0] k_s_fu_7380_p1481;
-wire   [10:0] k_s_fu_7380_p1483;
-wire   [10:0] k_s_fu_7380_p1485;
-wire   [10:0] k_s_fu_7380_p1487;
-wire   [10:0] k_s_fu_7380_p1489;
-wire   [10:0] k_s_fu_7380_p1491;
-wire   [10:0] k_s_fu_7380_p1493;
-wire   [10:0] k_s_fu_7380_p1495;
-wire   [10:0] k_s_fu_7380_p1497;
-wire   [10:0] k_s_fu_7380_p1499;
-wire   [10:0] k_s_fu_7380_p1501;
-wire   [10:0] k_s_fu_7380_p1503;
-wire   [10:0] k_s_fu_7380_p1505;
-wire   [10:0] k_s_fu_7380_p1507;
-wire   [10:0] k_s_fu_7380_p1509;
-wire   [10:0] k_s_fu_7380_p1511;
-wire   [10:0] k_s_fu_7380_p1513;
-wire   [10:0] k_s_fu_7380_p1515;
-wire   [10:0] k_s_fu_7380_p1517;
-wire   [10:0] k_s_fu_7380_p1519;
-wire   [10:0] k_s_fu_7380_p1521;
-wire   [10:0] k_s_fu_7380_p1523;
-wire   [10:0] k_s_fu_7380_p1525;
-wire   [10:0] k_s_fu_7380_p1527;
-wire   [10:0] k_s_fu_7380_p1529;
-wire   [10:0] k_s_fu_7380_p1531;
-wire   [10:0] k_s_fu_7380_p1533;
-wire   [10:0] k_s_fu_7380_p1535;
-wire   [10:0] k_s_fu_7380_p1537;
-wire   [10:0] k_s_fu_7380_p1539;
-wire   [10:0] k_s_fu_7380_p1541;
-wire   [10:0] k_s_fu_7380_p1543;
-wire   [10:0] k_s_fu_7380_p1545;
-wire   [10:0] k_s_fu_7380_p1547;
-wire   [10:0] k_s_fu_7380_p1549;
-wire   [10:0] k_s_fu_7380_p1551;
-wire   [10:0] k_s_fu_7380_p1553;
-wire   [10:0] k_s_fu_7380_p1555;
-wire   [10:0] k_s_fu_7380_p1557;
-wire   [10:0] k_s_fu_7380_p1559;
-wire   [10:0] k_s_fu_7380_p1561;
-wire   [10:0] k_s_fu_7380_p1563;
-wire   [10:0] k_s_fu_7380_p1565;
-wire   [10:0] k_s_fu_7380_p1567;
-wire   [10:0] k_s_fu_7380_p1569;
-wire   [10:0] k_s_fu_7380_p1571;
-wire   [10:0] k_s_fu_7380_p1573;
-wire   [10:0] k_s_fu_7380_p1575;
-wire   [10:0] k_s_fu_7380_p1577;
-wire   [10:0] k_s_fu_7380_p1579;
-wire   [10:0] k_s_fu_7380_p1581;
-wire   [10:0] k_s_fu_7380_p1583;
-wire   [10:0] k_s_fu_7380_p1585;
-wire   [10:0] k_s_fu_7380_p1587;
-wire   [10:0] k_s_fu_7380_p1589;
-wire   [10:0] k_s_fu_7380_p1591;
-wire   [10:0] k_s_fu_7380_p1593;
-wire   [10:0] k_s_fu_7380_p1595;
-wire   [10:0] k_s_fu_7380_p1597;
-wire   [10:0] k_s_fu_7380_p1599;
-wire   [10:0] k_s_fu_7380_p1601;
-wire   [10:0] k_s_fu_7380_p1603;
-wire   [10:0] k_s_fu_7380_p1605;
-wire   [10:0] k_s_fu_7380_p1607;
-wire   [10:0] k_s_fu_7380_p1609;
-wire   [10:0] k_s_fu_7380_p1611;
-wire   [10:0] k_s_fu_7380_p1613;
-wire   [10:0] k_s_fu_7380_p1615;
-wire   [10:0] k_s_fu_7380_p1617;
-wire   [10:0] k_s_fu_7380_p1619;
-wire   [10:0] k_s_fu_7380_p1621;
-wire   [10:0] k_s_fu_7380_p1623;
-wire   [10:0] k_s_fu_7380_p1625;
-wire   [10:0] k_s_fu_7380_p1627;
-wire   [10:0] k_s_fu_7380_p1629;
-wire   [10:0] k_s_fu_7380_p1631;
-wire   [10:0] k_s_fu_7380_p1633;
-wire   [10:0] k_s_fu_7380_p1635;
-wire   [10:0] k_s_fu_7380_p1637;
-wire   [10:0] k_s_fu_7380_p1639;
-wire   [10:0] k_s_fu_7380_p1641;
-wire   [10:0] k_s_fu_7380_p1643;
-wire   [10:0] k_s_fu_7380_p1645;
-wire   [10:0] k_s_fu_7380_p1647;
-wire   [10:0] k_s_fu_7380_p1649;
-wire   [10:0] k_s_fu_7380_p1651;
-wire   [10:0] k_s_fu_7380_p1653;
-wire   [10:0] k_s_fu_7380_p1655;
-wire   [10:0] k_s_fu_7380_p1657;
-wire   [10:0] k_s_fu_7380_p1659;
-wire   [10:0] k_s_fu_7380_p1661;
-wire   [10:0] k_s_fu_7380_p1663;
-wire   [10:0] k_s_fu_7380_p1665;
-wire   [10:0] k_s_fu_7380_p1667;
-wire   [10:0] k_s_fu_7380_p1669;
-wire   [10:0] k_s_fu_7380_p1671;
-wire   [10:0] k_s_fu_7380_p1673;
-wire   [10:0] k_s_fu_7380_p1675;
-wire   [10:0] k_s_fu_7380_p1677;
-wire   [10:0] k_s_fu_7380_p1679;
-wire   [10:0] k_s_fu_7380_p1681;
-wire   [10:0] k_s_fu_7380_p1683;
-wire   [10:0] k_s_fu_7380_p1685;
-wire   [10:0] k_s_fu_7380_p1687;
-wire   [10:0] k_s_fu_7380_p1689;
-wire   [10:0] k_s_fu_7380_p1691;
-wire   [10:0] k_s_fu_7380_p1693;
-wire   [10:0] k_s_fu_7380_p1695;
-wire   [10:0] k_s_fu_7380_p1697;
-wire   [10:0] k_s_fu_7380_p1699;
-wire   [10:0] k_s_fu_7380_p1701;
-wire   [10:0] k_s_fu_7380_p1703;
-wire   [10:0] k_s_fu_7380_p1705;
-wire   [10:0] k_s_fu_7380_p1707;
-wire   [10:0] k_s_fu_7380_p1709;
-wire   [10:0] k_s_fu_7380_p1711;
-wire   [10:0] k_s_fu_7380_p1713;
-wire   [10:0] k_s_fu_7380_p1715;
-wire   [10:0] k_s_fu_7380_p1717;
-wire   [10:0] k_s_fu_7380_p1719;
-wire   [10:0] k_s_fu_7380_p1721;
-wire   [10:0] k_s_fu_7380_p1723;
-wire   [10:0] k_s_fu_7380_p1725;
-wire   [10:0] k_s_fu_7380_p1727;
-wire   [10:0] k_s_fu_7380_p1729;
-wire   [10:0] k_s_fu_7380_p1731;
-wire   [10:0] k_s_fu_7380_p1733;
-wire   [10:0] k_s_fu_7380_p1735;
-wire   [10:0] k_s_fu_7380_p1737;
-wire   [10:0] k_s_fu_7380_p1739;
-wire   [10:0] k_s_fu_7380_p1741;
-wire   [10:0] k_s_fu_7380_p1743;
-wire   [10:0] k_s_fu_7380_p1745;
-wire   [10:0] k_s_fu_7380_p1747;
-wire   [10:0] k_s_fu_7380_p1749;
-wire   [10:0] k_s_fu_7380_p1751;
-wire   [10:0] k_s_fu_7380_p1753;
-wire   [10:0] k_s_fu_7380_p1755;
-wire   [10:0] k_s_fu_7380_p1757;
-wire   [10:0] k_s_fu_7380_p1759;
-wire   [10:0] k_s_fu_7380_p1761;
-wire   [10:0] k_s_fu_7380_p1763;
-wire   [10:0] k_s_fu_7380_p1765;
-wire   [10:0] k_s_fu_7380_p1767;
-wire   [10:0] k_s_fu_7380_p1769;
-wire   [10:0] k_s_fu_7380_p1771;
-wire   [10:0] k_s_fu_7380_p1773;
-wire   [10:0] k_s_fu_7380_p1775;
-wire   [10:0] k_s_fu_7380_p1777;
-wire   [10:0] k_s_fu_7380_p1779;
-wire   [10:0] k_s_fu_7380_p1781;
-wire   [10:0] k_s_fu_7380_p1783;
-wire   [10:0] k_s_fu_7380_p1785;
-wire   [10:0] k_s_fu_7380_p1787;
-wire   [10:0] k_s_fu_7380_p1789;
-wire   [10:0] k_s_fu_7380_p1791;
-wire   [10:0] k_s_fu_7380_p1793;
-wire   [10:0] k_s_fu_7380_p1795;
-wire   [10:0] k_s_fu_7380_p1797;
-wire   [10:0] k_s_fu_7380_p1799;
-wire   [10:0] k_s_fu_7380_p1801;
-wire   [10:0] k_s_fu_7380_p1803;
-wire   [10:0] k_s_fu_7380_p1805;
-wire   [10:0] k_s_fu_7380_p1807;
-wire   [10:0] k_s_fu_7380_p1809;
-wire   [10:0] k_s_fu_7380_p1811;
-wire   [10:0] k_s_fu_7380_p1813;
-wire   [10:0] k_s_fu_7380_p1815;
-wire   [10:0] k_s_fu_7380_p1817;
-wire   [10:0] k_s_fu_7380_p1819;
-wire   [10:0] k_s_fu_7380_p1821;
-wire   [10:0] k_s_fu_7380_p1823;
-wire   [10:0] k_s_fu_7380_p1825;
-wire   [10:0] k_s_fu_7380_p1827;
-wire   [10:0] k_s_fu_7380_p1829;
-wire   [10:0] k_s_fu_7380_p1831;
-wire   [10:0] k_s_fu_7380_p1833;
-wire   [10:0] k_s_fu_7380_p1835;
-wire   [10:0] k_s_fu_7380_p1837;
-wire   [10:0] k_s_fu_7380_p1839;
-wire   [10:0] k_s_fu_7380_p1841;
-wire   [10:0] k_s_fu_7380_p1843;
-wire   [10:0] k_s_fu_7380_p1845;
-wire   [10:0] k_s_fu_7380_p1847;
-wire   [10:0] k_s_fu_7380_p1849;
-wire   [10:0] k_s_fu_7380_p1851;
-wire   [10:0] k_s_fu_7380_p1853;
-wire   [10:0] k_s_fu_7380_p1855;
-wire   [10:0] k_s_fu_7380_p1857;
-wire   [10:0] k_s_fu_7380_p1859;
-wire   [10:0] k_s_fu_7380_p1861;
-wire   [10:0] k_s_fu_7380_p1863;
-wire   [10:0] k_s_fu_7380_p1865;
-wire   [10:0] k_s_fu_7380_p1867;
-wire   [10:0] k_s_fu_7380_p1869;
-wire   [10:0] k_s_fu_7380_p1871;
-wire   [10:0] k_s_fu_7380_p1873;
-wire   [10:0] k_s_fu_7380_p1875;
-wire   [10:0] k_s_fu_7380_p1877;
-wire   [10:0] k_s_fu_7380_p1879;
-wire   [10:0] k_s_fu_7380_p1881;
-wire   [10:0] k_s_fu_7380_p1883;
-wire   [10:0] k_s_fu_7380_p1885;
-wire   [10:0] k_s_fu_7380_p1887;
-wire   [10:0] k_s_fu_7380_p1889;
-wire   [10:0] k_s_fu_7380_p1891;
-wire   [10:0] k_s_fu_7380_p1893;
-wire   [10:0] k_s_fu_7380_p1895;
-wire   [10:0] k_s_fu_7380_p1897;
-wire   [10:0] k_s_fu_7380_p1899;
-wire   [10:0] k_s_fu_7380_p1901;
-wire   [10:0] k_s_fu_7380_p1903;
-wire   [10:0] k_s_fu_7380_p1905;
-wire   [10:0] k_s_fu_7380_p1907;
-wire   [10:0] k_s_fu_7380_p1909;
-wire   [10:0] k_s_fu_7380_p1911;
-wire   [10:0] k_s_fu_7380_p1913;
-wire   [10:0] k_s_fu_7380_p1915;
-wire   [10:0] k_s_fu_7380_p1917;
-wire   [10:0] k_s_fu_7380_p1919;
-wire   [10:0] k_s_fu_7380_p1921;
-wire   [10:0] k_s_fu_7380_p1923;
-wire   [10:0] k_s_fu_7380_p1925;
-wire   [10:0] k_s_fu_7380_p1927;
-wire   [10:0] k_s_fu_7380_p1929;
-wire   [10:0] k_s_fu_7380_p1931;
-wire   [10:0] k_s_fu_7380_p1933;
-wire   [10:0] k_s_fu_7380_p1935;
-wire   [10:0] k_s_fu_7380_p1937;
-wire   [10:0] k_s_fu_7380_p1939;
-wire   [10:0] k_s_fu_7380_p1941;
-wire   [10:0] k_s_fu_7380_p1943;
-wire   [10:0] k_s_fu_7380_p1945;
-wire   [10:0] k_s_fu_7380_p1947;
-wire   [10:0] k_s_fu_7380_p1949;
-wire   [10:0] k_s_fu_7380_p1951;
-wire   [10:0] k_s_fu_7380_p1953;
-wire   [10:0] k_s_fu_7380_p1955;
-wire   [10:0] k_s_fu_7380_p1957;
-wire   [10:0] k_s_fu_7380_p1959;
-wire   [10:0] k_s_fu_7380_p1961;
-wire   [10:0] k_s_fu_7380_p1963;
-wire   [10:0] k_s_fu_7380_p1965;
-wire   [10:0] k_s_fu_7380_p1967;
-wire   [10:0] k_s_fu_7380_p1969;
-wire   [10:0] k_s_fu_7380_p1971;
-wire   [10:0] k_s_fu_7380_p1973;
-wire   [10:0] k_s_fu_7380_p1975;
-wire   [10:0] k_s_fu_7380_p1977;
-wire   [10:0] k_s_fu_7380_p1979;
-wire   [10:0] k_s_fu_7380_p1981;
-wire   [10:0] k_s_fu_7380_p1983;
-wire   [10:0] k_s_fu_7380_p1985;
-wire   [10:0] k_s_fu_7380_p1987;
-wire   [10:0] k_s_fu_7380_p1989;
-wire   [10:0] k_s_fu_7380_p1991;
-wire   [10:0] k_s_fu_7380_p1993;
-wire   [10:0] k_s_fu_7380_p1995;
-wire   [10:0] k_s_fu_7380_p1997;
-wire   [10:0] k_s_fu_7380_p1999;
-wire   [10:0] k_s_fu_7380_p2001;
-wire   [10:0] k_s_fu_7380_p2003;
-wire   [10:0] k_s_fu_7380_p2005;
-wire   [10:0] k_s_fu_7380_p2007;
-wire   [10:0] k_s_fu_7380_p2009;
-wire   [10:0] k_s_fu_7380_p2011;
-wire   [10:0] k_s_fu_7380_p2013;
-wire   [10:0] k_s_fu_7380_p2015;
-wire   [10:0] k_s_fu_7380_p2017;
-wire   [10:0] k_s_fu_7380_p2019;
-wire   [10:0] k_s_fu_7380_p2021;
-wire   [10:0] k_s_fu_7380_p2023;
-wire   [10:0] k_s_fu_7380_p2025;
-wire   [10:0] k_s_fu_7380_p2027;
-wire   [10:0] k_s_fu_7380_p2029;
-wire   [10:0] k_s_fu_7380_p2031;
-wire   [10:0] k_s_fu_7380_p2033;
-wire   [10:0] k_s_fu_7380_p2035;
-wire   [10:0] k_s_fu_7380_p2037;
-wire   [10:0] k_s_fu_7380_p2039;
-wire   [10:0] k_s_fu_7380_p2041;
-wire   [10:0] k_s_fu_7380_p2043;
-wire   [10:0] k_s_fu_7380_p2045;
-wire   [10:0] k_s_fu_7380_p2047;
-wire  signed [10:0] k_s_fu_7380_p2049;
-wire  signed [10:0] k_s_fu_7380_p2051;
-wire  signed [10:0] k_s_fu_7380_p2053;
-wire  signed [10:0] k_s_fu_7380_p2055;
-wire  signed [10:0] k_s_fu_7380_p2057;
-wire  signed [10:0] k_s_fu_7380_p2059;
-wire  signed [10:0] k_s_fu_7380_p2061;
-wire  signed [10:0] k_s_fu_7380_p2063;
-wire  signed [10:0] k_s_fu_7380_p2065;
-wire  signed [10:0] k_s_fu_7380_p2067;
-wire  signed [10:0] k_s_fu_7380_p2069;
-wire  signed [10:0] k_s_fu_7380_p2071;
-wire  signed [10:0] k_s_fu_7380_p2073;
-wire  signed [10:0] k_s_fu_7380_p2075;
-wire  signed [10:0] k_s_fu_7380_p2077;
-wire  signed [10:0] k_s_fu_7380_p2079;
-wire  signed [10:0] k_s_fu_7380_p2081;
-wire  signed [10:0] k_s_fu_7380_p2083;
-wire  signed [10:0] k_s_fu_7380_p2085;
-wire  signed [10:0] k_s_fu_7380_p2087;
-wire  signed [10:0] k_s_fu_7380_p2089;
-wire  signed [10:0] k_s_fu_7380_p2091;
-wire  signed [10:0] k_s_fu_7380_p2093;
-wire  signed [10:0] k_s_fu_7380_p2095;
-wire  signed [10:0] k_s_fu_7380_p2097;
-wire  signed [10:0] k_s_fu_7380_p2099;
-wire  signed [10:0] k_s_fu_7380_p2101;
-wire  signed [10:0] k_s_fu_7380_p2103;
-wire  signed [10:0] k_s_fu_7380_p2105;
-wire  signed [10:0] k_s_fu_7380_p2107;
-wire  signed [10:0] k_s_fu_7380_p2109;
-wire  signed [10:0] k_s_fu_7380_p2111;
-wire  signed [10:0] k_s_fu_7380_p2113;
-wire  signed [10:0] k_s_fu_7380_p2115;
-wire  signed [10:0] k_s_fu_7380_p2117;
-wire  signed [10:0] k_s_fu_7380_p2119;
-wire  signed [10:0] k_s_fu_7380_p2121;
-wire  signed [10:0] k_s_fu_7380_p2123;
-wire  signed [10:0] k_s_fu_7380_p2125;
-wire  signed [10:0] k_s_fu_7380_p2127;
-wire  signed [10:0] k_s_fu_7380_p2129;
-wire  signed [10:0] k_s_fu_7380_p2131;
-wire  signed [10:0] k_s_fu_7380_p2133;
-wire  signed [10:0] k_s_fu_7380_p2135;
-wire  signed [10:0] k_s_fu_7380_p2137;
-wire  signed [10:0] k_s_fu_7380_p2139;
-wire  signed [10:0] k_s_fu_7380_p2141;
-wire  signed [10:0] k_s_fu_7380_p2143;
-wire  signed [10:0] k_s_fu_7380_p2145;
-wire  signed [10:0] k_s_fu_7380_p2147;
-wire  signed [10:0] k_s_fu_7380_p2149;
-wire  signed [10:0] k_s_fu_7380_p2151;
-wire  signed [10:0] k_s_fu_7380_p2153;
-wire  signed [10:0] k_s_fu_7380_p2155;
-wire  signed [10:0] k_s_fu_7380_p2157;
-wire  signed [10:0] k_s_fu_7380_p2159;
-wire  signed [10:0] k_s_fu_7380_p2161;
-wire  signed [10:0] k_s_fu_7380_p2163;
-wire  signed [10:0] k_s_fu_7380_p2165;
-wire  signed [10:0] k_s_fu_7380_p2167;
-wire  signed [10:0] k_s_fu_7380_p2169;
-wire  signed [10:0] k_s_fu_7380_p2171;
-wire  signed [10:0] k_s_fu_7380_p2173;
-wire  signed [10:0] k_s_fu_7380_p2175;
-wire  signed [10:0] k_s_fu_7380_p2177;
-wire  signed [10:0] k_s_fu_7380_p2179;
-wire  signed [10:0] k_s_fu_7380_p2181;
-wire  signed [10:0] k_s_fu_7380_p2183;
-wire  signed [10:0] k_s_fu_7380_p2185;
-wire  signed [10:0] k_s_fu_7380_p2187;
-wire  signed [10:0] k_s_fu_7380_p2189;
-wire  signed [10:0] k_s_fu_7380_p2191;
-wire  signed [10:0] k_s_fu_7380_p2193;
-wire  signed [10:0] k_s_fu_7380_p2195;
-wire  signed [10:0] k_s_fu_7380_p2197;
-wire  signed [10:0] k_s_fu_7380_p2199;
-wire  signed [10:0] k_s_fu_7380_p2201;
-wire  signed [10:0] k_s_fu_7380_p2203;
-wire  signed [10:0] k_s_fu_7380_p2205;
-wire  signed [10:0] k_s_fu_7380_p2207;
-wire  signed [10:0] k_s_fu_7380_p2209;
-wire  signed [10:0] k_s_fu_7380_p2211;
-wire  signed [10:0] k_s_fu_7380_p2213;
-wire  signed [10:0] k_s_fu_7380_p2215;
-wire  signed [10:0] k_s_fu_7380_p2217;
-wire  signed [10:0] k_s_fu_7380_p2219;
-wire  signed [10:0] k_s_fu_7380_p2221;
-wire  signed [10:0] k_s_fu_7380_p2223;
-wire  signed [10:0] k_s_fu_7380_p2225;
-wire  signed [10:0] k_s_fu_7380_p2227;
-wire  signed [10:0] k_s_fu_7380_p2229;
-wire  signed [10:0] k_s_fu_7380_p2231;
-wire  signed [10:0] k_s_fu_7380_p2233;
-wire  signed [10:0] k_s_fu_7380_p2235;
-wire  signed [10:0] k_s_fu_7380_p2237;
-wire  signed [10:0] k_s_fu_7380_p2239;
-wire  signed [10:0] k_s_fu_7380_p2241;
-wire  signed [10:0] k_s_fu_7380_p2243;
-wire  signed [10:0] k_s_fu_7380_p2245;
-wire  signed [10:0] k_s_fu_7380_p2247;
-wire  signed [10:0] k_s_fu_7380_p2249;
-wire  signed [10:0] k_s_fu_7380_p2251;
-wire  signed [10:0] k_s_fu_7380_p2253;
-wire  signed [10:0] k_s_fu_7380_p2255;
+reg    ap_ST_fsm_state132_blk;
+wire   [38:0] grp_fu_12268_p10;
+reg    ap_condition_7470;
+wire   [10:0] j_s_fu_3036_p1;
+wire   [10:0] j_s_fu_3036_p3;
+wire   [10:0] j_s_fu_3036_p5;
+wire   [10:0] j_s_fu_3036_p7;
+wire   [10:0] j_s_fu_3036_p9;
+wire   [10:0] j_s_fu_3036_p11;
+wire   [10:0] j_s_fu_3036_p13;
+wire   [10:0] j_s_fu_3036_p15;
+wire   [10:0] j_s_fu_3036_p17;
+wire   [10:0] j_s_fu_3036_p19;
+wire   [10:0] j_s_fu_3036_p21;
+wire   [10:0] j_s_fu_3036_p23;
+wire   [10:0] j_s_fu_3036_p25;
+wire   [10:0] j_s_fu_3036_p27;
+wire   [10:0] j_s_fu_3036_p29;
+wire   [10:0] j_s_fu_3036_p31;
+wire   [10:0] j_s_fu_3036_p33;
+wire   [10:0] j_s_fu_3036_p35;
+wire   [10:0] j_s_fu_3036_p37;
+wire   [10:0] j_s_fu_3036_p39;
+wire   [10:0] j_s_fu_3036_p41;
+wire   [10:0] j_s_fu_3036_p43;
+wire   [10:0] j_s_fu_3036_p45;
+wire   [10:0] j_s_fu_3036_p47;
+wire   [10:0] j_s_fu_3036_p49;
+wire   [10:0] j_s_fu_3036_p51;
+wire   [10:0] j_s_fu_3036_p53;
+wire   [10:0] j_s_fu_3036_p55;
+wire   [10:0] j_s_fu_3036_p57;
+wire   [10:0] j_s_fu_3036_p59;
+wire   [10:0] j_s_fu_3036_p61;
+wire   [10:0] j_s_fu_3036_p63;
+wire   [10:0] j_s_fu_3036_p65;
+wire   [10:0] j_s_fu_3036_p67;
+wire   [10:0] j_s_fu_3036_p69;
+wire   [10:0] j_s_fu_3036_p71;
+wire   [10:0] j_s_fu_3036_p73;
+wire   [10:0] j_s_fu_3036_p75;
+wire   [10:0] j_s_fu_3036_p77;
+wire   [10:0] j_s_fu_3036_p79;
+wire   [10:0] j_s_fu_3036_p81;
+wire   [10:0] j_s_fu_3036_p83;
+wire   [10:0] j_s_fu_3036_p85;
+wire   [10:0] j_s_fu_3036_p87;
+wire   [10:0] j_s_fu_3036_p89;
+wire   [10:0] j_s_fu_3036_p91;
+wire   [10:0] j_s_fu_3036_p93;
+wire   [10:0] j_s_fu_3036_p95;
+wire   [10:0] j_s_fu_3036_p97;
+wire   [10:0] j_s_fu_3036_p99;
+wire   [10:0] j_s_fu_3036_p101;
+wire   [10:0] j_s_fu_3036_p103;
+wire   [10:0] j_s_fu_3036_p105;
+wire   [10:0] j_s_fu_3036_p107;
+wire   [10:0] j_s_fu_3036_p109;
+wire   [10:0] j_s_fu_3036_p111;
+wire   [10:0] j_s_fu_3036_p113;
+wire   [10:0] j_s_fu_3036_p115;
+wire   [10:0] j_s_fu_3036_p117;
+wire   [10:0] j_s_fu_3036_p119;
+wire   [10:0] j_s_fu_3036_p121;
+wire   [10:0] j_s_fu_3036_p123;
+wire   [10:0] j_s_fu_3036_p125;
+wire   [10:0] j_s_fu_3036_p127;
+wire   [10:0] j_s_fu_3036_p129;
+wire   [10:0] j_s_fu_3036_p131;
+wire   [10:0] j_s_fu_3036_p133;
+wire   [10:0] j_s_fu_3036_p135;
+wire   [10:0] j_s_fu_3036_p137;
+wire   [10:0] j_s_fu_3036_p139;
+wire   [10:0] j_s_fu_3036_p141;
+wire   [10:0] j_s_fu_3036_p143;
+wire   [10:0] j_s_fu_3036_p145;
+wire   [10:0] j_s_fu_3036_p147;
+wire   [10:0] j_s_fu_3036_p149;
+wire   [10:0] j_s_fu_3036_p151;
+wire   [10:0] j_s_fu_3036_p153;
+wire   [10:0] j_s_fu_3036_p155;
+wire   [10:0] j_s_fu_3036_p157;
+wire   [10:0] j_s_fu_3036_p159;
+wire   [10:0] j_s_fu_3036_p161;
+wire   [10:0] j_s_fu_3036_p163;
+wire   [10:0] j_s_fu_3036_p165;
+wire   [10:0] j_s_fu_3036_p167;
+wire   [10:0] j_s_fu_3036_p169;
+wire   [10:0] j_s_fu_3036_p171;
+wire   [10:0] j_s_fu_3036_p173;
+wire   [10:0] j_s_fu_3036_p175;
+wire   [10:0] j_s_fu_3036_p177;
+wire   [10:0] j_s_fu_3036_p179;
+wire   [10:0] j_s_fu_3036_p181;
+wire   [10:0] j_s_fu_3036_p183;
+wire   [10:0] j_s_fu_3036_p185;
+wire   [10:0] j_s_fu_3036_p187;
+wire   [10:0] j_s_fu_3036_p189;
+wire   [10:0] j_s_fu_3036_p191;
+wire   [10:0] j_s_fu_3036_p193;
+wire   [10:0] j_s_fu_3036_p195;
+wire   [10:0] j_s_fu_3036_p197;
+wire   [10:0] j_s_fu_3036_p199;
+wire   [10:0] j_s_fu_3036_p201;
+wire   [10:0] j_s_fu_3036_p203;
+wire   [10:0] j_s_fu_3036_p205;
+wire   [10:0] j_s_fu_3036_p207;
+wire   [10:0] j_s_fu_3036_p209;
+wire   [10:0] j_s_fu_3036_p211;
+wire   [10:0] j_s_fu_3036_p213;
+wire   [10:0] j_s_fu_3036_p215;
+wire   [10:0] j_s_fu_3036_p217;
+wire   [10:0] j_s_fu_3036_p219;
+wire   [10:0] j_s_fu_3036_p221;
+wire   [10:0] j_s_fu_3036_p223;
+wire   [10:0] j_s_fu_3036_p225;
+wire   [10:0] j_s_fu_3036_p227;
+wire   [10:0] j_s_fu_3036_p229;
+wire   [10:0] j_s_fu_3036_p231;
+wire   [10:0] j_s_fu_3036_p233;
+wire   [10:0] j_s_fu_3036_p235;
+wire   [10:0] j_s_fu_3036_p237;
+wire   [10:0] j_s_fu_3036_p239;
+wire   [10:0] j_s_fu_3036_p241;
+wire   [10:0] j_s_fu_3036_p243;
+wire   [10:0] j_s_fu_3036_p245;
+wire   [10:0] j_s_fu_3036_p247;
+wire   [10:0] j_s_fu_3036_p249;
+wire   [10:0] j_s_fu_3036_p251;
+wire   [10:0] j_s_fu_3036_p253;
+wire   [10:0] j_s_fu_3036_p255;
+wire   [10:0] j_s_fu_3036_p257;
+wire   [10:0] j_s_fu_3036_p259;
+wire   [10:0] j_s_fu_3036_p261;
+wire   [10:0] j_s_fu_3036_p263;
+wire   [10:0] j_s_fu_3036_p265;
+wire   [10:0] j_s_fu_3036_p267;
+wire   [10:0] j_s_fu_3036_p269;
+wire   [10:0] j_s_fu_3036_p271;
+wire   [10:0] j_s_fu_3036_p273;
+wire   [10:0] j_s_fu_3036_p275;
+wire   [10:0] j_s_fu_3036_p277;
+wire   [10:0] j_s_fu_3036_p279;
+wire   [10:0] j_s_fu_3036_p281;
+wire   [10:0] j_s_fu_3036_p283;
+wire   [10:0] j_s_fu_3036_p285;
+wire   [10:0] j_s_fu_3036_p287;
+wire   [10:0] j_s_fu_3036_p289;
+wire   [10:0] j_s_fu_3036_p291;
+wire   [10:0] j_s_fu_3036_p293;
+wire   [10:0] j_s_fu_3036_p295;
+wire   [10:0] j_s_fu_3036_p297;
+wire   [10:0] j_s_fu_3036_p299;
+wire   [10:0] j_s_fu_3036_p301;
+wire   [10:0] j_s_fu_3036_p303;
+wire   [10:0] j_s_fu_3036_p305;
+wire   [10:0] j_s_fu_3036_p307;
+wire   [10:0] j_s_fu_3036_p309;
+wire   [10:0] j_s_fu_3036_p311;
+wire   [10:0] j_s_fu_3036_p313;
+wire   [10:0] j_s_fu_3036_p315;
+wire   [10:0] j_s_fu_3036_p317;
+wire   [10:0] j_s_fu_3036_p319;
+wire   [10:0] j_s_fu_3036_p321;
+wire   [10:0] j_s_fu_3036_p323;
+wire   [10:0] j_s_fu_3036_p325;
+wire   [10:0] j_s_fu_3036_p327;
+wire   [10:0] j_s_fu_3036_p329;
+wire   [10:0] j_s_fu_3036_p331;
+wire   [10:0] j_s_fu_3036_p333;
+wire   [10:0] j_s_fu_3036_p335;
+wire   [10:0] j_s_fu_3036_p337;
+wire   [10:0] j_s_fu_3036_p339;
+wire   [10:0] j_s_fu_3036_p341;
+wire   [10:0] j_s_fu_3036_p343;
+wire   [10:0] j_s_fu_3036_p345;
+wire   [10:0] j_s_fu_3036_p347;
+wire   [10:0] j_s_fu_3036_p349;
+wire   [10:0] j_s_fu_3036_p351;
+wire   [10:0] j_s_fu_3036_p353;
+wire   [10:0] j_s_fu_3036_p355;
+wire   [10:0] j_s_fu_3036_p357;
+wire   [10:0] j_s_fu_3036_p359;
+wire   [10:0] j_s_fu_3036_p361;
+wire   [10:0] j_s_fu_3036_p363;
+wire   [10:0] j_s_fu_3036_p365;
+wire   [10:0] j_s_fu_3036_p367;
+wire   [10:0] j_s_fu_3036_p369;
+wire   [10:0] j_s_fu_3036_p371;
+wire   [10:0] j_s_fu_3036_p373;
+wire   [10:0] j_s_fu_3036_p375;
+wire   [10:0] j_s_fu_3036_p377;
+wire   [10:0] j_s_fu_3036_p379;
+wire   [10:0] j_s_fu_3036_p381;
+wire   [10:0] j_s_fu_3036_p383;
+wire   [10:0] j_s_fu_3036_p385;
+wire   [10:0] j_s_fu_3036_p387;
+wire   [10:0] j_s_fu_3036_p389;
+wire   [10:0] j_s_fu_3036_p391;
+wire   [10:0] j_s_fu_3036_p393;
+wire   [10:0] j_s_fu_3036_p395;
+wire   [10:0] j_s_fu_3036_p397;
+wire   [10:0] j_s_fu_3036_p399;
+wire   [10:0] j_s_fu_3036_p401;
+wire   [10:0] j_s_fu_3036_p403;
+wire   [10:0] j_s_fu_3036_p405;
+wire   [10:0] j_s_fu_3036_p407;
+wire   [10:0] j_s_fu_3036_p409;
+wire   [10:0] j_s_fu_3036_p411;
+wire   [10:0] j_s_fu_3036_p413;
+wire   [10:0] j_s_fu_3036_p415;
+wire   [10:0] j_s_fu_3036_p417;
+wire   [10:0] j_s_fu_3036_p419;
+wire   [10:0] j_s_fu_3036_p421;
+wire   [10:0] j_s_fu_3036_p423;
+wire   [10:0] j_s_fu_3036_p425;
+wire   [10:0] j_s_fu_3036_p427;
+wire   [10:0] j_s_fu_3036_p429;
+wire   [10:0] j_s_fu_3036_p431;
+wire   [10:0] j_s_fu_3036_p433;
+wire   [10:0] j_s_fu_3036_p435;
+wire   [10:0] j_s_fu_3036_p437;
+wire   [10:0] j_s_fu_3036_p439;
+wire   [10:0] j_s_fu_3036_p441;
+wire   [10:0] j_s_fu_3036_p443;
+wire   [10:0] j_s_fu_3036_p445;
+wire   [10:0] j_s_fu_3036_p447;
+wire   [10:0] j_s_fu_3036_p449;
+wire   [10:0] j_s_fu_3036_p451;
+wire   [10:0] j_s_fu_3036_p453;
+wire   [10:0] j_s_fu_3036_p455;
+wire   [10:0] j_s_fu_3036_p457;
+wire   [10:0] j_s_fu_3036_p459;
+wire   [10:0] j_s_fu_3036_p461;
+wire   [10:0] j_s_fu_3036_p463;
+wire   [10:0] j_s_fu_3036_p465;
+wire   [10:0] j_s_fu_3036_p467;
+wire   [10:0] j_s_fu_3036_p469;
+wire   [10:0] j_s_fu_3036_p471;
+wire   [10:0] j_s_fu_3036_p473;
+wire   [10:0] j_s_fu_3036_p475;
+wire   [10:0] j_s_fu_3036_p477;
+wire   [10:0] j_s_fu_3036_p479;
+wire   [10:0] j_s_fu_3036_p481;
+wire   [10:0] j_s_fu_3036_p483;
+wire   [10:0] j_s_fu_3036_p485;
+wire   [10:0] j_s_fu_3036_p487;
+wire   [10:0] j_s_fu_3036_p489;
+wire   [10:0] j_s_fu_3036_p491;
+wire   [10:0] j_s_fu_3036_p493;
+wire   [10:0] j_s_fu_3036_p495;
+wire   [10:0] j_s_fu_3036_p497;
+wire   [10:0] j_s_fu_3036_p499;
+wire   [10:0] j_s_fu_3036_p501;
+wire   [10:0] j_s_fu_3036_p503;
+wire   [10:0] j_s_fu_3036_p505;
+wire   [10:0] j_s_fu_3036_p507;
+wire   [10:0] j_s_fu_3036_p509;
+wire   [10:0] j_s_fu_3036_p511;
+wire   [10:0] j_s_fu_3036_p513;
+wire   [10:0] j_s_fu_3036_p515;
+wire   [10:0] j_s_fu_3036_p517;
+wire   [10:0] j_s_fu_3036_p519;
+wire   [10:0] j_s_fu_3036_p521;
+wire   [10:0] j_s_fu_3036_p523;
+wire   [10:0] j_s_fu_3036_p525;
+wire   [10:0] j_s_fu_3036_p527;
+wire   [10:0] j_s_fu_3036_p529;
+wire   [10:0] j_s_fu_3036_p531;
+wire   [10:0] j_s_fu_3036_p533;
+wire   [10:0] j_s_fu_3036_p535;
+wire   [10:0] j_s_fu_3036_p537;
+wire   [10:0] j_s_fu_3036_p539;
+wire   [10:0] j_s_fu_3036_p541;
+wire   [10:0] j_s_fu_3036_p543;
+wire   [10:0] j_s_fu_3036_p545;
+wire   [10:0] j_s_fu_3036_p547;
+wire   [10:0] j_s_fu_3036_p549;
+wire   [10:0] j_s_fu_3036_p551;
+wire   [10:0] j_s_fu_3036_p553;
+wire   [10:0] j_s_fu_3036_p555;
+wire   [10:0] j_s_fu_3036_p557;
+wire   [10:0] j_s_fu_3036_p559;
+wire   [10:0] j_s_fu_3036_p561;
+wire   [10:0] j_s_fu_3036_p563;
+wire   [10:0] j_s_fu_3036_p565;
+wire   [10:0] j_s_fu_3036_p567;
+wire   [10:0] j_s_fu_3036_p569;
+wire   [10:0] j_s_fu_3036_p571;
+wire   [10:0] j_s_fu_3036_p573;
+wire   [10:0] j_s_fu_3036_p575;
+wire   [10:0] j_s_fu_3036_p577;
+wire   [10:0] j_s_fu_3036_p579;
+wire   [10:0] j_s_fu_3036_p581;
+wire   [10:0] j_s_fu_3036_p583;
+wire   [10:0] j_s_fu_3036_p585;
+wire   [10:0] j_s_fu_3036_p587;
+wire   [10:0] j_s_fu_3036_p589;
+wire   [10:0] j_s_fu_3036_p591;
+wire   [10:0] j_s_fu_3036_p593;
+wire   [10:0] j_s_fu_3036_p595;
+wire   [10:0] j_s_fu_3036_p597;
+wire   [10:0] j_s_fu_3036_p599;
+wire   [10:0] j_s_fu_3036_p601;
+wire   [10:0] j_s_fu_3036_p603;
+wire   [10:0] j_s_fu_3036_p605;
+wire   [10:0] j_s_fu_3036_p607;
+wire   [10:0] j_s_fu_3036_p609;
+wire   [10:0] j_s_fu_3036_p611;
+wire   [10:0] j_s_fu_3036_p613;
+wire   [10:0] j_s_fu_3036_p615;
+wire   [10:0] j_s_fu_3036_p617;
+wire   [10:0] j_s_fu_3036_p619;
+wire   [10:0] j_s_fu_3036_p621;
+wire   [10:0] j_s_fu_3036_p623;
+wire   [10:0] j_s_fu_3036_p625;
+wire   [10:0] j_s_fu_3036_p627;
+wire   [10:0] j_s_fu_3036_p629;
+wire   [10:0] j_s_fu_3036_p631;
+wire   [10:0] j_s_fu_3036_p633;
+wire   [10:0] j_s_fu_3036_p635;
+wire   [10:0] j_s_fu_3036_p637;
+wire   [10:0] j_s_fu_3036_p639;
+wire   [10:0] j_s_fu_3036_p641;
+wire   [10:0] j_s_fu_3036_p643;
+wire   [10:0] j_s_fu_3036_p645;
+wire   [10:0] j_s_fu_3036_p647;
+wire   [10:0] j_s_fu_3036_p649;
+wire   [10:0] j_s_fu_3036_p651;
+wire   [10:0] j_s_fu_3036_p653;
+wire   [10:0] j_s_fu_3036_p655;
+wire   [10:0] j_s_fu_3036_p657;
+wire   [10:0] j_s_fu_3036_p659;
+wire   [10:0] j_s_fu_3036_p661;
+wire   [10:0] j_s_fu_3036_p663;
+wire   [10:0] j_s_fu_3036_p665;
+wire   [10:0] j_s_fu_3036_p667;
+wire   [10:0] j_s_fu_3036_p669;
+wire   [10:0] j_s_fu_3036_p671;
+wire   [10:0] j_s_fu_3036_p673;
+wire   [10:0] j_s_fu_3036_p675;
+wire   [10:0] j_s_fu_3036_p677;
+wire   [10:0] j_s_fu_3036_p679;
+wire   [10:0] j_s_fu_3036_p681;
+wire   [10:0] j_s_fu_3036_p683;
+wire   [10:0] j_s_fu_3036_p685;
+wire   [10:0] j_s_fu_3036_p687;
+wire   [10:0] j_s_fu_3036_p689;
+wire   [10:0] j_s_fu_3036_p691;
+wire   [10:0] j_s_fu_3036_p693;
+wire   [10:0] j_s_fu_3036_p695;
+wire   [10:0] j_s_fu_3036_p697;
+wire   [10:0] j_s_fu_3036_p699;
+wire   [10:0] j_s_fu_3036_p701;
+wire   [10:0] j_s_fu_3036_p703;
+wire   [10:0] j_s_fu_3036_p705;
+wire   [10:0] j_s_fu_3036_p707;
+wire   [10:0] j_s_fu_3036_p709;
+wire   [10:0] j_s_fu_3036_p711;
+wire   [10:0] j_s_fu_3036_p713;
+wire   [10:0] j_s_fu_3036_p715;
+wire   [10:0] j_s_fu_3036_p717;
+wire   [10:0] j_s_fu_3036_p719;
+wire   [10:0] j_s_fu_3036_p721;
+wire   [10:0] j_s_fu_3036_p723;
+wire   [10:0] j_s_fu_3036_p725;
+wire   [10:0] j_s_fu_3036_p727;
+wire   [10:0] j_s_fu_3036_p729;
+wire   [10:0] j_s_fu_3036_p731;
+wire   [10:0] j_s_fu_3036_p733;
+wire   [10:0] j_s_fu_3036_p735;
+wire   [10:0] j_s_fu_3036_p737;
+wire   [10:0] j_s_fu_3036_p739;
+wire   [10:0] j_s_fu_3036_p741;
+wire   [10:0] j_s_fu_3036_p743;
+wire   [10:0] j_s_fu_3036_p745;
+wire   [10:0] j_s_fu_3036_p747;
+wire   [10:0] j_s_fu_3036_p749;
+wire   [10:0] j_s_fu_3036_p751;
+wire   [10:0] j_s_fu_3036_p753;
+wire   [10:0] j_s_fu_3036_p755;
+wire   [10:0] j_s_fu_3036_p757;
+wire   [10:0] j_s_fu_3036_p759;
+wire   [10:0] j_s_fu_3036_p761;
+wire   [10:0] j_s_fu_3036_p763;
+wire   [10:0] j_s_fu_3036_p765;
+wire   [10:0] j_s_fu_3036_p767;
+wire   [10:0] j_s_fu_3036_p769;
+wire   [10:0] j_s_fu_3036_p771;
+wire   [10:0] j_s_fu_3036_p773;
+wire   [10:0] j_s_fu_3036_p775;
+wire   [10:0] j_s_fu_3036_p777;
+wire   [10:0] j_s_fu_3036_p779;
+wire   [10:0] j_s_fu_3036_p781;
+wire   [10:0] j_s_fu_3036_p783;
+wire   [10:0] j_s_fu_3036_p785;
+wire   [10:0] j_s_fu_3036_p787;
+wire   [10:0] j_s_fu_3036_p789;
+wire   [10:0] j_s_fu_3036_p791;
+wire   [10:0] j_s_fu_3036_p793;
+wire   [10:0] j_s_fu_3036_p795;
+wire   [10:0] j_s_fu_3036_p797;
+wire   [10:0] j_s_fu_3036_p799;
+wire   [10:0] j_s_fu_3036_p801;
+wire   [10:0] j_s_fu_3036_p803;
+wire   [10:0] j_s_fu_3036_p805;
+wire   [10:0] j_s_fu_3036_p807;
+wire   [10:0] j_s_fu_3036_p809;
+wire   [10:0] j_s_fu_3036_p811;
+wire   [10:0] j_s_fu_3036_p813;
+wire   [10:0] j_s_fu_3036_p815;
+wire   [10:0] j_s_fu_3036_p817;
+wire   [10:0] j_s_fu_3036_p819;
+wire   [10:0] j_s_fu_3036_p821;
+wire   [10:0] j_s_fu_3036_p823;
+wire   [10:0] j_s_fu_3036_p825;
+wire   [10:0] j_s_fu_3036_p827;
+wire   [10:0] j_s_fu_3036_p829;
+wire   [10:0] j_s_fu_3036_p831;
+wire   [10:0] j_s_fu_3036_p833;
+wire   [10:0] j_s_fu_3036_p835;
+wire   [10:0] j_s_fu_3036_p837;
+wire   [10:0] j_s_fu_3036_p839;
+wire   [10:0] j_s_fu_3036_p841;
+wire   [10:0] j_s_fu_3036_p843;
+wire   [10:0] j_s_fu_3036_p845;
+wire   [10:0] j_s_fu_3036_p847;
+wire   [10:0] j_s_fu_3036_p849;
+wire   [10:0] j_s_fu_3036_p851;
+wire   [10:0] j_s_fu_3036_p853;
+wire   [10:0] j_s_fu_3036_p855;
+wire   [10:0] j_s_fu_3036_p857;
+wire   [10:0] j_s_fu_3036_p859;
+wire   [10:0] j_s_fu_3036_p861;
+wire   [10:0] j_s_fu_3036_p863;
+wire   [10:0] j_s_fu_3036_p865;
+wire   [10:0] j_s_fu_3036_p867;
+wire   [10:0] j_s_fu_3036_p869;
+wire   [10:0] j_s_fu_3036_p871;
+wire   [10:0] j_s_fu_3036_p873;
+wire   [10:0] j_s_fu_3036_p875;
+wire   [10:0] j_s_fu_3036_p877;
+wire   [10:0] j_s_fu_3036_p879;
+wire   [10:0] j_s_fu_3036_p881;
+wire   [10:0] j_s_fu_3036_p883;
+wire   [10:0] j_s_fu_3036_p885;
+wire   [10:0] j_s_fu_3036_p887;
+wire   [10:0] j_s_fu_3036_p889;
+wire   [10:0] j_s_fu_3036_p891;
+wire   [10:0] j_s_fu_3036_p893;
+wire   [10:0] j_s_fu_3036_p895;
+wire   [10:0] j_s_fu_3036_p897;
+wire   [10:0] j_s_fu_3036_p899;
+wire   [10:0] j_s_fu_3036_p901;
+wire   [10:0] j_s_fu_3036_p903;
+wire   [10:0] j_s_fu_3036_p905;
+wire   [10:0] j_s_fu_3036_p907;
+wire   [10:0] j_s_fu_3036_p909;
+wire   [10:0] j_s_fu_3036_p911;
+wire   [10:0] j_s_fu_3036_p913;
+wire   [10:0] j_s_fu_3036_p915;
+wire   [10:0] j_s_fu_3036_p917;
+wire   [10:0] j_s_fu_3036_p919;
+wire   [10:0] j_s_fu_3036_p921;
+wire   [10:0] j_s_fu_3036_p923;
+wire   [10:0] j_s_fu_3036_p925;
+wire   [10:0] j_s_fu_3036_p927;
+wire   [10:0] j_s_fu_3036_p929;
+wire   [10:0] j_s_fu_3036_p931;
+wire   [10:0] j_s_fu_3036_p933;
+wire   [10:0] j_s_fu_3036_p935;
+wire   [10:0] j_s_fu_3036_p937;
+wire   [10:0] j_s_fu_3036_p939;
+wire   [10:0] j_s_fu_3036_p941;
+wire   [10:0] j_s_fu_3036_p943;
+wire   [10:0] j_s_fu_3036_p945;
+wire   [10:0] j_s_fu_3036_p947;
+wire   [10:0] j_s_fu_3036_p949;
+wire   [10:0] j_s_fu_3036_p951;
+wire   [10:0] j_s_fu_3036_p953;
+wire   [10:0] j_s_fu_3036_p955;
+wire   [10:0] j_s_fu_3036_p957;
+wire   [10:0] j_s_fu_3036_p959;
+wire   [10:0] j_s_fu_3036_p961;
+wire   [10:0] j_s_fu_3036_p963;
+wire   [10:0] j_s_fu_3036_p965;
+wire   [10:0] j_s_fu_3036_p967;
+wire   [10:0] j_s_fu_3036_p969;
+wire   [10:0] j_s_fu_3036_p971;
+wire   [10:0] j_s_fu_3036_p973;
+wire   [10:0] j_s_fu_3036_p975;
+wire   [10:0] j_s_fu_3036_p977;
+wire   [10:0] j_s_fu_3036_p979;
+wire   [10:0] j_s_fu_3036_p981;
+wire   [10:0] j_s_fu_3036_p983;
+wire   [10:0] j_s_fu_3036_p985;
+wire   [10:0] j_s_fu_3036_p987;
+wire   [10:0] j_s_fu_3036_p989;
+wire   [10:0] j_s_fu_3036_p991;
+wire   [10:0] j_s_fu_3036_p993;
+wire   [10:0] j_s_fu_3036_p995;
+wire   [10:0] j_s_fu_3036_p997;
+wire   [10:0] j_s_fu_3036_p999;
+wire   [10:0] j_s_fu_3036_p1001;
+wire   [10:0] j_s_fu_3036_p1003;
+wire   [10:0] j_s_fu_3036_p1005;
+wire   [10:0] j_s_fu_3036_p1007;
+wire   [10:0] j_s_fu_3036_p1009;
+wire   [10:0] j_s_fu_3036_p1011;
+wire   [10:0] j_s_fu_3036_p1013;
+wire   [10:0] j_s_fu_3036_p1015;
+wire   [10:0] j_s_fu_3036_p1017;
+wire   [10:0] j_s_fu_3036_p1019;
+wire   [10:0] j_s_fu_3036_p1021;
+wire   [10:0] j_s_fu_3036_p1023;
+wire   [10:0] j_s_fu_3036_p1025;
+wire   [10:0] j_s_fu_3036_p1027;
+wire   [10:0] j_s_fu_3036_p1029;
+wire   [10:0] j_s_fu_3036_p1031;
+wire   [10:0] j_s_fu_3036_p1033;
+wire   [10:0] j_s_fu_3036_p1035;
+wire   [10:0] j_s_fu_3036_p1037;
+wire   [10:0] j_s_fu_3036_p1039;
+wire   [10:0] j_s_fu_3036_p1041;
+wire   [10:0] j_s_fu_3036_p1043;
+wire   [10:0] j_s_fu_3036_p1045;
+wire   [10:0] j_s_fu_3036_p1047;
+wire   [10:0] j_s_fu_3036_p1049;
+wire   [10:0] j_s_fu_3036_p1051;
+wire   [10:0] j_s_fu_3036_p1053;
+wire   [10:0] j_s_fu_3036_p1055;
+wire   [10:0] j_s_fu_3036_p1057;
+wire   [10:0] j_s_fu_3036_p1059;
+wire   [10:0] j_s_fu_3036_p1061;
+wire   [10:0] j_s_fu_3036_p1063;
+wire   [10:0] j_s_fu_3036_p1065;
+wire   [10:0] j_s_fu_3036_p1067;
+wire   [10:0] j_s_fu_3036_p1069;
+wire   [10:0] j_s_fu_3036_p1071;
+wire   [10:0] j_s_fu_3036_p1073;
+wire   [10:0] j_s_fu_3036_p1075;
+wire   [10:0] j_s_fu_3036_p1077;
+wire   [10:0] j_s_fu_3036_p1079;
+wire   [10:0] j_s_fu_3036_p1081;
+wire   [10:0] j_s_fu_3036_p1083;
+wire   [10:0] j_s_fu_3036_p1085;
+wire   [10:0] j_s_fu_3036_p1087;
+wire   [10:0] j_s_fu_3036_p1089;
+wire   [10:0] j_s_fu_3036_p1091;
+wire   [10:0] j_s_fu_3036_p1093;
+wire   [10:0] j_s_fu_3036_p1095;
+wire   [10:0] j_s_fu_3036_p1097;
+wire   [10:0] j_s_fu_3036_p1099;
+wire   [10:0] j_s_fu_3036_p1101;
+wire   [10:0] j_s_fu_3036_p1103;
+wire   [10:0] j_s_fu_3036_p1105;
+wire   [10:0] j_s_fu_3036_p1107;
+wire   [10:0] j_s_fu_3036_p1109;
+wire   [10:0] j_s_fu_3036_p1111;
+wire   [10:0] j_s_fu_3036_p1113;
+wire   [10:0] j_s_fu_3036_p1115;
+wire   [10:0] j_s_fu_3036_p1117;
+wire   [10:0] j_s_fu_3036_p1119;
+wire   [10:0] j_s_fu_3036_p1121;
+wire   [10:0] j_s_fu_3036_p1123;
+wire   [10:0] j_s_fu_3036_p1125;
+wire   [10:0] j_s_fu_3036_p1127;
+wire   [10:0] j_s_fu_3036_p1129;
+wire   [10:0] j_s_fu_3036_p1131;
+wire   [10:0] j_s_fu_3036_p1133;
+wire   [10:0] j_s_fu_3036_p1135;
+wire   [10:0] j_s_fu_3036_p1137;
+wire   [10:0] j_s_fu_3036_p1139;
+wire   [10:0] j_s_fu_3036_p1141;
+wire   [10:0] j_s_fu_3036_p1143;
+wire   [10:0] j_s_fu_3036_p1145;
+wire   [10:0] j_s_fu_3036_p1147;
+wire   [10:0] j_s_fu_3036_p1149;
+wire   [10:0] j_s_fu_3036_p1151;
+wire   [10:0] j_s_fu_3036_p1153;
+wire   [10:0] j_s_fu_3036_p1155;
+wire   [10:0] j_s_fu_3036_p1157;
+wire   [10:0] j_s_fu_3036_p1159;
+wire   [10:0] j_s_fu_3036_p1161;
+wire   [10:0] j_s_fu_3036_p1163;
+wire   [10:0] j_s_fu_3036_p1165;
+wire   [10:0] j_s_fu_3036_p1167;
+wire   [10:0] j_s_fu_3036_p1169;
+wire   [10:0] j_s_fu_3036_p1171;
+wire   [10:0] j_s_fu_3036_p1173;
+wire   [10:0] j_s_fu_3036_p1175;
+wire   [10:0] j_s_fu_3036_p1177;
+wire   [10:0] j_s_fu_3036_p1179;
+wire   [10:0] j_s_fu_3036_p1181;
+wire   [10:0] j_s_fu_3036_p1183;
+wire   [10:0] j_s_fu_3036_p1185;
+wire   [10:0] j_s_fu_3036_p1187;
+wire   [10:0] j_s_fu_3036_p1189;
+wire   [10:0] j_s_fu_3036_p1191;
+wire   [10:0] j_s_fu_3036_p1193;
+wire   [10:0] j_s_fu_3036_p1195;
+wire   [10:0] j_s_fu_3036_p1197;
+wire   [10:0] j_s_fu_3036_p1199;
+wire   [10:0] j_s_fu_3036_p1201;
+wire   [10:0] j_s_fu_3036_p1203;
+wire   [10:0] j_s_fu_3036_p1205;
+wire   [10:0] j_s_fu_3036_p1207;
+wire   [10:0] j_s_fu_3036_p1209;
+wire   [10:0] j_s_fu_3036_p1211;
+wire   [10:0] j_s_fu_3036_p1213;
+wire   [10:0] j_s_fu_3036_p1215;
+wire   [10:0] j_s_fu_3036_p1217;
+wire   [10:0] j_s_fu_3036_p1219;
+wire   [10:0] j_s_fu_3036_p1221;
+wire   [10:0] j_s_fu_3036_p1223;
+wire   [10:0] j_s_fu_3036_p1225;
+wire   [10:0] j_s_fu_3036_p1227;
+wire   [10:0] j_s_fu_3036_p1229;
+wire   [10:0] j_s_fu_3036_p1231;
+wire   [10:0] j_s_fu_3036_p1233;
+wire   [10:0] j_s_fu_3036_p1235;
+wire   [10:0] j_s_fu_3036_p1237;
+wire   [10:0] j_s_fu_3036_p1239;
+wire   [10:0] j_s_fu_3036_p1241;
+wire   [10:0] j_s_fu_3036_p1243;
+wire   [10:0] j_s_fu_3036_p1245;
+wire   [10:0] j_s_fu_3036_p1247;
+wire   [10:0] j_s_fu_3036_p1249;
+wire   [10:0] j_s_fu_3036_p1251;
+wire   [10:0] j_s_fu_3036_p1253;
+wire   [10:0] j_s_fu_3036_p1255;
+wire   [10:0] j_s_fu_3036_p1257;
+wire   [10:0] j_s_fu_3036_p1259;
+wire   [10:0] j_s_fu_3036_p1261;
+wire   [10:0] j_s_fu_3036_p1263;
+wire   [10:0] j_s_fu_3036_p1265;
+wire   [10:0] j_s_fu_3036_p1267;
+wire   [10:0] j_s_fu_3036_p1269;
+wire   [10:0] j_s_fu_3036_p1271;
+wire   [10:0] j_s_fu_3036_p1273;
+wire   [10:0] j_s_fu_3036_p1275;
+wire   [10:0] j_s_fu_3036_p1277;
+wire   [10:0] j_s_fu_3036_p1279;
+wire   [10:0] j_s_fu_3036_p1281;
+wire   [10:0] j_s_fu_3036_p1283;
+wire   [10:0] j_s_fu_3036_p1285;
+wire   [10:0] j_s_fu_3036_p1287;
+wire   [10:0] j_s_fu_3036_p1289;
+wire   [10:0] j_s_fu_3036_p1291;
+wire   [10:0] j_s_fu_3036_p1293;
+wire   [10:0] j_s_fu_3036_p1295;
+wire   [10:0] j_s_fu_3036_p1297;
+wire   [10:0] j_s_fu_3036_p1299;
+wire   [10:0] j_s_fu_3036_p1301;
+wire   [10:0] j_s_fu_3036_p1303;
+wire   [10:0] j_s_fu_3036_p1305;
+wire   [10:0] j_s_fu_3036_p1307;
+wire   [10:0] j_s_fu_3036_p1309;
+wire   [10:0] j_s_fu_3036_p1311;
+wire   [10:0] j_s_fu_3036_p1313;
+wire   [10:0] j_s_fu_3036_p1315;
+wire   [10:0] j_s_fu_3036_p1317;
+wire   [10:0] j_s_fu_3036_p1319;
+wire   [10:0] j_s_fu_3036_p1321;
+wire   [10:0] j_s_fu_3036_p1323;
+wire   [10:0] j_s_fu_3036_p1325;
+wire   [10:0] j_s_fu_3036_p1327;
+wire   [10:0] j_s_fu_3036_p1329;
+wire   [10:0] j_s_fu_3036_p1331;
+wire   [10:0] j_s_fu_3036_p1333;
+wire   [10:0] j_s_fu_3036_p1335;
+wire   [10:0] j_s_fu_3036_p1337;
+wire   [10:0] j_s_fu_3036_p1339;
+wire   [10:0] j_s_fu_3036_p1341;
+wire   [10:0] j_s_fu_3036_p1343;
+wire   [10:0] j_s_fu_3036_p1345;
+wire   [10:0] j_s_fu_3036_p1347;
+wire   [10:0] j_s_fu_3036_p1349;
+wire   [10:0] j_s_fu_3036_p1351;
+wire   [10:0] j_s_fu_3036_p1353;
+wire   [10:0] j_s_fu_3036_p1355;
+wire   [10:0] j_s_fu_3036_p1357;
+wire   [10:0] j_s_fu_3036_p1359;
+wire   [10:0] j_s_fu_3036_p1361;
+wire   [10:0] j_s_fu_3036_p1363;
+wire   [10:0] j_s_fu_3036_p1365;
+wire   [10:0] j_s_fu_3036_p1367;
+wire   [10:0] j_s_fu_3036_p1369;
+wire   [10:0] j_s_fu_3036_p1371;
+wire   [10:0] j_s_fu_3036_p1373;
+wire   [10:0] j_s_fu_3036_p1375;
+wire   [10:0] j_s_fu_3036_p1377;
+wire   [10:0] j_s_fu_3036_p1379;
+wire   [10:0] j_s_fu_3036_p1381;
+wire   [10:0] j_s_fu_3036_p1383;
+wire   [10:0] j_s_fu_3036_p1385;
+wire   [10:0] j_s_fu_3036_p1387;
+wire   [10:0] j_s_fu_3036_p1389;
+wire   [10:0] j_s_fu_3036_p1391;
+wire   [10:0] j_s_fu_3036_p1393;
+wire   [10:0] j_s_fu_3036_p1395;
+wire   [10:0] j_s_fu_3036_p1397;
+wire   [10:0] j_s_fu_3036_p1399;
+wire   [10:0] j_s_fu_3036_p1401;
+wire   [10:0] j_s_fu_3036_p1403;
+wire   [10:0] j_s_fu_3036_p1405;
+wire   [10:0] j_s_fu_3036_p1407;
+wire   [10:0] j_s_fu_3036_p1409;
+wire   [10:0] j_s_fu_3036_p1411;
+wire   [10:0] j_s_fu_3036_p1413;
+wire   [10:0] j_s_fu_3036_p1415;
+wire   [10:0] j_s_fu_3036_p1417;
+wire   [10:0] j_s_fu_3036_p1419;
+wire   [10:0] j_s_fu_3036_p1421;
+wire   [10:0] j_s_fu_3036_p1423;
+wire   [10:0] j_s_fu_3036_p1425;
+wire   [10:0] j_s_fu_3036_p1427;
+wire   [10:0] j_s_fu_3036_p1429;
+wire   [10:0] j_s_fu_3036_p1431;
+wire   [10:0] j_s_fu_3036_p1433;
+wire   [10:0] j_s_fu_3036_p1435;
+wire   [10:0] j_s_fu_3036_p1437;
+wire   [10:0] j_s_fu_3036_p1439;
+wire   [10:0] j_s_fu_3036_p1441;
+wire   [10:0] j_s_fu_3036_p1443;
+wire   [10:0] j_s_fu_3036_p1445;
+wire   [10:0] j_s_fu_3036_p1447;
+wire   [10:0] j_s_fu_3036_p1449;
+wire   [10:0] j_s_fu_3036_p1451;
+wire   [10:0] j_s_fu_3036_p1453;
+wire   [10:0] j_s_fu_3036_p1455;
+wire   [10:0] j_s_fu_3036_p1457;
+wire   [10:0] j_s_fu_3036_p1459;
+wire   [10:0] j_s_fu_3036_p1461;
+wire   [10:0] j_s_fu_3036_p1463;
+wire   [10:0] j_s_fu_3036_p1465;
+wire   [10:0] j_s_fu_3036_p1467;
+wire   [10:0] j_s_fu_3036_p1469;
+wire   [10:0] j_s_fu_3036_p1471;
+wire   [10:0] j_s_fu_3036_p1473;
+wire   [10:0] j_s_fu_3036_p1475;
+wire   [10:0] j_s_fu_3036_p1477;
+wire   [10:0] j_s_fu_3036_p1479;
+wire   [10:0] j_s_fu_3036_p1481;
+wire   [10:0] j_s_fu_3036_p1483;
+wire   [10:0] j_s_fu_3036_p1485;
+wire   [10:0] j_s_fu_3036_p1487;
+wire   [10:0] j_s_fu_3036_p1489;
+wire   [10:0] j_s_fu_3036_p1491;
+wire   [10:0] j_s_fu_3036_p1493;
+wire   [10:0] j_s_fu_3036_p1495;
+wire   [10:0] j_s_fu_3036_p1497;
+wire   [10:0] j_s_fu_3036_p1499;
+wire   [10:0] j_s_fu_3036_p1501;
+wire   [10:0] j_s_fu_3036_p1503;
+wire   [10:0] j_s_fu_3036_p1505;
+wire   [10:0] j_s_fu_3036_p1507;
+wire   [10:0] j_s_fu_3036_p1509;
+wire   [10:0] j_s_fu_3036_p1511;
+wire   [10:0] j_s_fu_3036_p1513;
+wire   [10:0] j_s_fu_3036_p1515;
+wire   [10:0] j_s_fu_3036_p1517;
+wire   [10:0] j_s_fu_3036_p1519;
+wire   [10:0] j_s_fu_3036_p1521;
+wire   [10:0] j_s_fu_3036_p1523;
+wire   [10:0] j_s_fu_3036_p1525;
+wire   [10:0] j_s_fu_3036_p1527;
+wire   [10:0] j_s_fu_3036_p1529;
+wire   [10:0] j_s_fu_3036_p1531;
+wire   [10:0] j_s_fu_3036_p1533;
+wire   [10:0] j_s_fu_3036_p1535;
+wire   [10:0] j_s_fu_3036_p1537;
+wire   [10:0] j_s_fu_3036_p1539;
+wire   [10:0] j_s_fu_3036_p1541;
+wire   [10:0] j_s_fu_3036_p1543;
+wire   [10:0] j_s_fu_3036_p1545;
+wire   [10:0] j_s_fu_3036_p1547;
+wire   [10:0] j_s_fu_3036_p1549;
+wire   [10:0] j_s_fu_3036_p1551;
+wire   [10:0] j_s_fu_3036_p1553;
+wire   [10:0] j_s_fu_3036_p1555;
+wire   [10:0] j_s_fu_3036_p1557;
+wire   [10:0] j_s_fu_3036_p1559;
+wire   [10:0] j_s_fu_3036_p1561;
+wire   [10:0] j_s_fu_3036_p1563;
+wire   [10:0] j_s_fu_3036_p1565;
+wire   [10:0] j_s_fu_3036_p1567;
+wire   [10:0] j_s_fu_3036_p1569;
+wire   [10:0] j_s_fu_3036_p1571;
+wire   [10:0] j_s_fu_3036_p1573;
+wire   [10:0] j_s_fu_3036_p1575;
+wire   [10:0] j_s_fu_3036_p1577;
+wire   [10:0] j_s_fu_3036_p1579;
+wire   [10:0] j_s_fu_3036_p1581;
+wire   [10:0] j_s_fu_3036_p1583;
+wire   [10:0] j_s_fu_3036_p1585;
+wire   [10:0] j_s_fu_3036_p1587;
+wire   [10:0] j_s_fu_3036_p1589;
+wire   [10:0] j_s_fu_3036_p1591;
+wire   [10:0] j_s_fu_3036_p1593;
+wire   [10:0] j_s_fu_3036_p1595;
+wire   [10:0] j_s_fu_3036_p1597;
+wire   [10:0] j_s_fu_3036_p1599;
+wire   [10:0] j_s_fu_3036_p1601;
+wire   [10:0] j_s_fu_3036_p1603;
+wire   [10:0] j_s_fu_3036_p1605;
+wire   [10:0] j_s_fu_3036_p1607;
+wire   [10:0] j_s_fu_3036_p1609;
+wire   [10:0] j_s_fu_3036_p1611;
+wire   [10:0] j_s_fu_3036_p1613;
+wire   [10:0] j_s_fu_3036_p1615;
+wire   [10:0] j_s_fu_3036_p1617;
+wire   [10:0] j_s_fu_3036_p1619;
+wire   [10:0] j_s_fu_3036_p1621;
+wire   [10:0] j_s_fu_3036_p1623;
+wire   [10:0] j_s_fu_3036_p1625;
+wire   [10:0] j_s_fu_3036_p1627;
+wire   [10:0] j_s_fu_3036_p1629;
+wire   [10:0] j_s_fu_3036_p1631;
+wire   [10:0] j_s_fu_3036_p1633;
+wire   [10:0] j_s_fu_3036_p1635;
+wire   [10:0] j_s_fu_3036_p1637;
+wire   [10:0] j_s_fu_3036_p1639;
+wire   [10:0] j_s_fu_3036_p1641;
+wire   [10:0] j_s_fu_3036_p1643;
+wire   [10:0] j_s_fu_3036_p1645;
+wire   [10:0] j_s_fu_3036_p1647;
+wire   [10:0] j_s_fu_3036_p1649;
+wire   [10:0] j_s_fu_3036_p1651;
+wire   [10:0] j_s_fu_3036_p1653;
+wire   [10:0] j_s_fu_3036_p1655;
+wire   [10:0] j_s_fu_3036_p1657;
+wire   [10:0] j_s_fu_3036_p1659;
+wire   [10:0] j_s_fu_3036_p1661;
+wire   [10:0] j_s_fu_3036_p1663;
+wire   [10:0] j_s_fu_3036_p1665;
+wire   [10:0] j_s_fu_3036_p1667;
+wire   [10:0] j_s_fu_3036_p1669;
+wire   [10:0] j_s_fu_3036_p1671;
+wire   [10:0] j_s_fu_3036_p1673;
+wire   [10:0] j_s_fu_3036_p1675;
+wire   [10:0] j_s_fu_3036_p1677;
+wire   [10:0] j_s_fu_3036_p1679;
+wire   [10:0] j_s_fu_3036_p1681;
+wire   [10:0] j_s_fu_3036_p1683;
+wire   [10:0] j_s_fu_3036_p1685;
+wire   [10:0] j_s_fu_3036_p1687;
+wire   [10:0] j_s_fu_3036_p1689;
+wire   [10:0] j_s_fu_3036_p1691;
+wire   [10:0] j_s_fu_3036_p1693;
+wire   [10:0] j_s_fu_3036_p1695;
+wire   [10:0] j_s_fu_3036_p1697;
+wire   [10:0] j_s_fu_3036_p1699;
+wire   [10:0] j_s_fu_3036_p1701;
+wire   [10:0] j_s_fu_3036_p1703;
+wire   [10:0] j_s_fu_3036_p1705;
+wire   [10:0] j_s_fu_3036_p1707;
+wire   [10:0] j_s_fu_3036_p1709;
+wire   [10:0] j_s_fu_3036_p1711;
+wire   [10:0] j_s_fu_3036_p1713;
+wire   [10:0] j_s_fu_3036_p1715;
+wire   [10:0] j_s_fu_3036_p1717;
+wire   [10:0] j_s_fu_3036_p1719;
+wire   [10:0] j_s_fu_3036_p1721;
+wire   [10:0] j_s_fu_3036_p1723;
+wire   [10:0] j_s_fu_3036_p1725;
+wire   [10:0] j_s_fu_3036_p1727;
+wire   [10:0] j_s_fu_3036_p1729;
+wire   [10:0] j_s_fu_3036_p1731;
+wire   [10:0] j_s_fu_3036_p1733;
+wire   [10:0] j_s_fu_3036_p1735;
+wire   [10:0] j_s_fu_3036_p1737;
+wire   [10:0] j_s_fu_3036_p1739;
+wire   [10:0] j_s_fu_3036_p1741;
+wire   [10:0] j_s_fu_3036_p1743;
+wire   [10:0] j_s_fu_3036_p1745;
+wire   [10:0] j_s_fu_3036_p1747;
+wire   [10:0] j_s_fu_3036_p1749;
+wire   [10:0] j_s_fu_3036_p1751;
+wire   [10:0] j_s_fu_3036_p1753;
+wire   [10:0] j_s_fu_3036_p1755;
+wire   [10:0] j_s_fu_3036_p1757;
+wire   [10:0] j_s_fu_3036_p1759;
+wire   [10:0] j_s_fu_3036_p1761;
+wire   [10:0] j_s_fu_3036_p1763;
+wire   [10:0] j_s_fu_3036_p1765;
+wire   [10:0] j_s_fu_3036_p1767;
+wire   [10:0] j_s_fu_3036_p1769;
+wire   [10:0] j_s_fu_3036_p1771;
+wire   [10:0] j_s_fu_3036_p1773;
+wire   [10:0] j_s_fu_3036_p1775;
+wire   [10:0] j_s_fu_3036_p1777;
+wire   [10:0] j_s_fu_3036_p1779;
+wire   [10:0] j_s_fu_3036_p1781;
+wire   [10:0] j_s_fu_3036_p1783;
+wire   [10:0] j_s_fu_3036_p1785;
+wire   [10:0] j_s_fu_3036_p1787;
+wire   [10:0] j_s_fu_3036_p1789;
+wire   [10:0] j_s_fu_3036_p1791;
+wire   [10:0] j_s_fu_3036_p1793;
+wire   [10:0] j_s_fu_3036_p1795;
+wire   [10:0] j_s_fu_3036_p1797;
+wire   [10:0] j_s_fu_3036_p1799;
+wire   [10:0] j_s_fu_3036_p1801;
+wire   [10:0] j_s_fu_3036_p1803;
+wire   [10:0] j_s_fu_3036_p1805;
+wire   [10:0] j_s_fu_3036_p1807;
+wire   [10:0] j_s_fu_3036_p1809;
+wire   [10:0] j_s_fu_3036_p1811;
+wire   [10:0] j_s_fu_3036_p1813;
+wire   [10:0] j_s_fu_3036_p1815;
+wire   [10:0] j_s_fu_3036_p1817;
+wire   [10:0] j_s_fu_3036_p1819;
+wire   [10:0] j_s_fu_3036_p1821;
+wire   [10:0] j_s_fu_3036_p1823;
+wire   [10:0] j_s_fu_3036_p1825;
+wire   [10:0] j_s_fu_3036_p1827;
+wire   [10:0] j_s_fu_3036_p1829;
+wire   [10:0] j_s_fu_3036_p1831;
+wire   [10:0] j_s_fu_3036_p1833;
+wire   [10:0] j_s_fu_3036_p1835;
+wire   [10:0] j_s_fu_3036_p1837;
+wire   [10:0] j_s_fu_3036_p1839;
+wire   [10:0] j_s_fu_3036_p1841;
+wire   [10:0] j_s_fu_3036_p1843;
+wire   [10:0] j_s_fu_3036_p1845;
+wire   [10:0] j_s_fu_3036_p1847;
+wire   [10:0] j_s_fu_3036_p1849;
+wire   [10:0] j_s_fu_3036_p1851;
+wire   [10:0] j_s_fu_3036_p1853;
+wire   [10:0] j_s_fu_3036_p1855;
+wire   [10:0] j_s_fu_3036_p1857;
+wire   [10:0] j_s_fu_3036_p1859;
+wire   [10:0] j_s_fu_3036_p1861;
+wire   [10:0] j_s_fu_3036_p1863;
+wire   [10:0] j_s_fu_3036_p1865;
+wire   [10:0] j_s_fu_3036_p1867;
+wire   [10:0] j_s_fu_3036_p1869;
+wire   [10:0] j_s_fu_3036_p1871;
+wire   [10:0] j_s_fu_3036_p1873;
+wire   [10:0] j_s_fu_3036_p1875;
+wire   [10:0] j_s_fu_3036_p1877;
+wire   [10:0] j_s_fu_3036_p1879;
+wire   [10:0] j_s_fu_3036_p1881;
+wire   [10:0] j_s_fu_3036_p1883;
+wire   [10:0] j_s_fu_3036_p1885;
+wire   [10:0] j_s_fu_3036_p1887;
+wire   [10:0] j_s_fu_3036_p1889;
+wire   [10:0] j_s_fu_3036_p1891;
+wire   [10:0] j_s_fu_3036_p1893;
+wire   [10:0] j_s_fu_3036_p1895;
+wire   [10:0] j_s_fu_3036_p1897;
+wire   [10:0] j_s_fu_3036_p1899;
+wire   [10:0] j_s_fu_3036_p1901;
+wire   [10:0] j_s_fu_3036_p1903;
+wire   [10:0] j_s_fu_3036_p1905;
+wire   [10:0] j_s_fu_3036_p1907;
+wire   [10:0] j_s_fu_3036_p1909;
+wire   [10:0] j_s_fu_3036_p1911;
+wire   [10:0] j_s_fu_3036_p1913;
+wire   [10:0] j_s_fu_3036_p1915;
+wire   [10:0] j_s_fu_3036_p1917;
+wire   [10:0] j_s_fu_3036_p1919;
+wire   [10:0] j_s_fu_3036_p1921;
+wire   [10:0] j_s_fu_3036_p1923;
+wire   [10:0] j_s_fu_3036_p1925;
+wire   [10:0] j_s_fu_3036_p1927;
+wire   [10:0] j_s_fu_3036_p1929;
+wire   [10:0] j_s_fu_3036_p1931;
+wire   [10:0] j_s_fu_3036_p1933;
+wire   [10:0] j_s_fu_3036_p1935;
+wire   [10:0] j_s_fu_3036_p1937;
+wire   [10:0] j_s_fu_3036_p1939;
+wire   [10:0] j_s_fu_3036_p1941;
+wire   [10:0] j_s_fu_3036_p1943;
+wire   [10:0] j_s_fu_3036_p1945;
+wire   [10:0] j_s_fu_3036_p1947;
+wire   [10:0] j_s_fu_3036_p1949;
+wire   [10:0] j_s_fu_3036_p1951;
+wire   [10:0] j_s_fu_3036_p1953;
+wire   [10:0] j_s_fu_3036_p1955;
+wire   [10:0] j_s_fu_3036_p1957;
+wire   [10:0] j_s_fu_3036_p1959;
+wire   [10:0] j_s_fu_3036_p1961;
+wire   [10:0] j_s_fu_3036_p1963;
+wire   [10:0] j_s_fu_3036_p1965;
+wire   [10:0] j_s_fu_3036_p1967;
+wire   [10:0] j_s_fu_3036_p1969;
+wire   [10:0] j_s_fu_3036_p1971;
+wire   [10:0] j_s_fu_3036_p1973;
+wire   [10:0] j_s_fu_3036_p1975;
+wire   [10:0] j_s_fu_3036_p1977;
+wire   [10:0] j_s_fu_3036_p1979;
+wire   [10:0] j_s_fu_3036_p1981;
+wire   [10:0] j_s_fu_3036_p1983;
+wire   [10:0] j_s_fu_3036_p1985;
+wire   [10:0] j_s_fu_3036_p1987;
+wire   [10:0] j_s_fu_3036_p1989;
+wire   [10:0] j_s_fu_3036_p1991;
+wire   [10:0] j_s_fu_3036_p1993;
+wire   [10:0] j_s_fu_3036_p1995;
+wire   [10:0] j_s_fu_3036_p1997;
+wire   [10:0] j_s_fu_3036_p1999;
+wire   [10:0] j_s_fu_3036_p2001;
+wire   [10:0] j_s_fu_3036_p2003;
+wire   [10:0] j_s_fu_3036_p2005;
+wire   [10:0] j_s_fu_3036_p2007;
+wire   [10:0] j_s_fu_3036_p2009;
+wire   [10:0] j_s_fu_3036_p2011;
+wire   [10:0] j_s_fu_3036_p2013;
+wire   [10:0] j_s_fu_3036_p2015;
+wire   [10:0] j_s_fu_3036_p2017;
+wire   [10:0] j_s_fu_3036_p2019;
+wire   [10:0] j_s_fu_3036_p2021;
+wire   [10:0] j_s_fu_3036_p2023;
+wire   [10:0] j_s_fu_3036_p2025;
+wire   [10:0] j_s_fu_3036_p2027;
+wire   [10:0] j_s_fu_3036_p2029;
+wire   [10:0] j_s_fu_3036_p2031;
+wire   [10:0] j_s_fu_3036_p2033;
+wire   [10:0] j_s_fu_3036_p2035;
+wire   [10:0] j_s_fu_3036_p2037;
+wire   [10:0] j_s_fu_3036_p2039;
+wire   [10:0] j_s_fu_3036_p2041;
+wire   [10:0] j_s_fu_3036_p2043;
+wire   [10:0] j_s_fu_3036_p2045;
+wire   [10:0] j_s_fu_3036_p2047;
+wire  signed [10:0] j_s_fu_3036_p2049;
+wire  signed [10:0] j_s_fu_3036_p2051;
+wire  signed [10:0] j_s_fu_3036_p2053;
+wire  signed [10:0] j_s_fu_3036_p2055;
+wire  signed [10:0] j_s_fu_3036_p2057;
+wire  signed [10:0] j_s_fu_3036_p2059;
+wire  signed [10:0] j_s_fu_3036_p2061;
+wire  signed [10:0] j_s_fu_3036_p2063;
+wire  signed [10:0] j_s_fu_3036_p2065;
+wire  signed [10:0] j_s_fu_3036_p2067;
+wire  signed [10:0] j_s_fu_3036_p2069;
+wire  signed [10:0] j_s_fu_3036_p2071;
+wire  signed [10:0] j_s_fu_3036_p2073;
+wire  signed [10:0] j_s_fu_3036_p2075;
+wire  signed [10:0] j_s_fu_3036_p2077;
+wire  signed [10:0] j_s_fu_3036_p2079;
+wire  signed [10:0] j_s_fu_3036_p2081;
+wire  signed [10:0] j_s_fu_3036_p2083;
+wire  signed [10:0] j_s_fu_3036_p2085;
+wire  signed [10:0] j_s_fu_3036_p2087;
+wire  signed [10:0] j_s_fu_3036_p2089;
+wire  signed [10:0] j_s_fu_3036_p2091;
+wire  signed [10:0] j_s_fu_3036_p2093;
+wire  signed [10:0] j_s_fu_3036_p2095;
+wire  signed [10:0] j_s_fu_3036_p2097;
+wire  signed [10:0] j_s_fu_3036_p2099;
+wire  signed [10:0] j_s_fu_3036_p2101;
+wire  signed [10:0] j_s_fu_3036_p2103;
+wire  signed [10:0] j_s_fu_3036_p2105;
+wire  signed [10:0] j_s_fu_3036_p2107;
+wire  signed [10:0] j_s_fu_3036_p2109;
+wire  signed [10:0] j_s_fu_3036_p2111;
+wire  signed [10:0] j_s_fu_3036_p2113;
+wire  signed [10:0] j_s_fu_3036_p2115;
+wire  signed [10:0] j_s_fu_3036_p2117;
+wire  signed [10:0] j_s_fu_3036_p2119;
+wire  signed [10:0] j_s_fu_3036_p2121;
+wire  signed [10:0] j_s_fu_3036_p2123;
+wire  signed [10:0] j_s_fu_3036_p2125;
+wire  signed [10:0] j_s_fu_3036_p2127;
+wire  signed [10:0] j_s_fu_3036_p2129;
+wire  signed [10:0] j_s_fu_3036_p2131;
+wire  signed [10:0] j_s_fu_3036_p2133;
+wire  signed [10:0] j_s_fu_3036_p2135;
+wire  signed [10:0] j_s_fu_3036_p2137;
+wire  signed [10:0] j_s_fu_3036_p2139;
+wire  signed [10:0] j_s_fu_3036_p2141;
+wire  signed [10:0] j_s_fu_3036_p2143;
+wire  signed [10:0] j_s_fu_3036_p2145;
+wire  signed [10:0] j_s_fu_3036_p2147;
+wire  signed [10:0] j_s_fu_3036_p2149;
+wire  signed [10:0] j_s_fu_3036_p2151;
+wire  signed [10:0] j_s_fu_3036_p2153;
+wire  signed [10:0] j_s_fu_3036_p2155;
+wire  signed [10:0] j_s_fu_3036_p2157;
+wire  signed [10:0] j_s_fu_3036_p2159;
+wire  signed [10:0] j_s_fu_3036_p2161;
+wire  signed [10:0] j_s_fu_3036_p2163;
+wire  signed [10:0] j_s_fu_3036_p2165;
+wire  signed [10:0] j_s_fu_3036_p2167;
+wire  signed [10:0] j_s_fu_3036_p2169;
+wire  signed [10:0] j_s_fu_3036_p2171;
+wire  signed [10:0] j_s_fu_3036_p2173;
+wire  signed [10:0] j_s_fu_3036_p2175;
+wire  signed [10:0] j_s_fu_3036_p2177;
+wire  signed [10:0] j_s_fu_3036_p2179;
+wire  signed [10:0] j_s_fu_3036_p2181;
+wire  signed [10:0] j_s_fu_3036_p2183;
+wire  signed [10:0] j_s_fu_3036_p2185;
+wire  signed [10:0] j_s_fu_3036_p2187;
+wire  signed [10:0] j_s_fu_3036_p2189;
+wire  signed [10:0] j_s_fu_3036_p2191;
+wire  signed [10:0] j_s_fu_3036_p2193;
+wire  signed [10:0] j_s_fu_3036_p2195;
+wire  signed [10:0] j_s_fu_3036_p2197;
+wire  signed [10:0] j_s_fu_3036_p2199;
+wire  signed [10:0] j_s_fu_3036_p2201;
+wire  signed [10:0] j_s_fu_3036_p2203;
+wire  signed [10:0] j_s_fu_3036_p2205;
+wire  signed [10:0] j_s_fu_3036_p2207;
+wire  signed [10:0] j_s_fu_3036_p2209;
+wire  signed [10:0] j_s_fu_3036_p2211;
+wire  signed [10:0] j_s_fu_3036_p2213;
+wire  signed [10:0] j_s_fu_3036_p2215;
+wire  signed [10:0] j_s_fu_3036_p2217;
+wire  signed [10:0] j_s_fu_3036_p2219;
+wire  signed [10:0] j_s_fu_3036_p2221;
+wire  signed [10:0] j_s_fu_3036_p2223;
+wire  signed [10:0] j_s_fu_3036_p2225;
+wire  signed [10:0] j_s_fu_3036_p2227;
+wire  signed [10:0] j_s_fu_3036_p2229;
+wire  signed [10:0] j_s_fu_3036_p2231;
+wire  signed [10:0] j_s_fu_3036_p2233;
+wire  signed [10:0] j_s_fu_3036_p2235;
+wire  signed [10:0] j_s_fu_3036_p2237;
+wire  signed [10:0] j_s_fu_3036_p2239;
+wire  signed [10:0] j_s_fu_3036_p2241;
+wire  signed [10:0] j_s_fu_3036_p2243;
+wire  signed [10:0] j_s_fu_3036_p2245;
+wire  signed [10:0] j_s_fu_3036_p2247;
+wire  signed [10:0] j_s_fu_3036_p2249;
+wire  signed [10:0] j_s_fu_3036_p2251;
+wire  signed [10:0] j_s_fu_3036_p2253;
+wire  signed [10:0] j_s_fu_3036_p2255;
+wire   [10:0] k_s_fu_7556_p1;
+wire   [10:0] k_s_fu_7556_p3;
+wire   [10:0] k_s_fu_7556_p5;
+wire   [10:0] k_s_fu_7556_p7;
+wire   [10:0] k_s_fu_7556_p9;
+wire   [10:0] k_s_fu_7556_p11;
+wire   [10:0] k_s_fu_7556_p13;
+wire   [10:0] k_s_fu_7556_p15;
+wire   [10:0] k_s_fu_7556_p17;
+wire   [10:0] k_s_fu_7556_p19;
+wire   [10:0] k_s_fu_7556_p21;
+wire   [10:0] k_s_fu_7556_p23;
+wire   [10:0] k_s_fu_7556_p25;
+wire   [10:0] k_s_fu_7556_p27;
+wire   [10:0] k_s_fu_7556_p29;
+wire   [10:0] k_s_fu_7556_p31;
+wire   [10:0] k_s_fu_7556_p33;
+wire   [10:0] k_s_fu_7556_p35;
+wire   [10:0] k_s_fu_7556_p37;
+wire   [10:0] k_s_fu_7556_p39;
+wire   [10:0] k_s_fu_7556_p41;
+wire   [10:0] k_s_fu_7556_p43;
+wire   [10:0] k_s_fu_7556_p45;
+wire   [10:0] k_s_fu_7556_p47;
+wire   [10:0] k_s_fu_7556_p49;
+wire   [10:0] k_s_fu_7556_p51;
+wire   [10:0] k_s_fu_7556_p53;
+wire   [10:0] k_s_fu_7556_p55;
+wire   [10:0] k_s_fu_7556_p57;
+wire   [10:0] k_s_fu_7556_p59;
+wire   [10:0] k_s_fu_7556_p61;
+wire   [10:0] k_s_fu_7556_p63;
+wire   [10:0] k_s_fu_7556_p65;
+wire   [10:0] k_s_fu_7556_p67;
+wire   [10:0] k_s_fu_7556_p69;
+wire   [10:0] k_s_fu_7556_p71;
+wire   [10:0] k_s_fu_7556_p73;
+wire   [10:0] k_s_fu_7556_p75;
+wire   [10:0] k_s_fu_7556_p77;
+wire   [10:0] k_s_fu_7556_p79;
+wire   [10:0] k_s_fu_7556_p81;
+wire   [10:0] k_s_fu_7556_p83;
+wire   [10:0] k_s_fu_7556_p85;
+wire   [10:0] k_s_fu_7556_p87;
+wire   [10:0] k_s_fu_7556_p89;
+wire   [10:0] k_s_fu_7556_p91;
+wire   [10:0] k_s_fu_7556_p93;
+wire   [10:0] k_s_fu_7556_p95;
+wire   [10:0] k_s_fu_7556_p97;
+wire   [10:0] k_s_fu_7556_p99;
+wire   [10:0] k_s_fu_7556_p101;
+wire   [10:0] k_s_fu_7556_p103;
+wire   [10:0] k_s_fu_7556_p105;
+wire   [10:0] k_s_fu_7556_p107;
+wire   [10:0] k_s_fu_7556_p109;
+wire   [10:0] k_s_fu_7556_p111;
+wire   [10:0] k_s_fu_7556_p113;
+wire   [10:0] k_s_fu_7556_p115;
+wire   [10:0] k_s_fu_7556_p117;
+wire   [10:0] k_s_fu_7556_p119;
+wire   [10:0] k_s_fu_7556_p121;
+wire   [10:0] k_s_fu_7556_p123;
+wire   [10:0] k_s_fu_7556_p125;
+wire   [10:0] k_s_fu_7556_p127;
+wire   [10:0] k_s_fu_7556_p129;
+wire   [10:0] k_s_fu_7556_p131;
+wire   [10:0] k_s_fu_7556_p133;
+wire   [10:0] k_s_fu_7556_p135;
+wire   [10:0] k_s_fu_7556_p137;
+wire   [10:0] k_s_fu_7556_p139;
+wire   [10:0] k_s_fu_7556_p141;
+wire   [10:0] k_s_fu_7556_p143;
+wire   [10:0] k_s_fu_7556_p145;
+wire   [10:0] k_s_fu_7556_p147;
+wire   [10:0] k_s_fu_7556_p149;
+wire   [10:0] k_s_fu_7556_p151;
+wire   [10:0] k_s_fu_7556_p153;
+wire   [10:0] k_s_fu_7556_p155;
+wire   [10:0] k_s_fu_7556_p157;
+wire   [10:0] k_s_fu_7556_p159;
+wire   [10:0] k_s_fu_7556_p161;
+wire   [10:0] k_s_fu_7556_p163;
+wire   [10:0] k_s_fu_7556_p165;
+wire   [10:0] k_s_fu_7556_p167;
+wire   [10:0] k_s_fu_7556_p169;
+wire   [10:0] k_s_fu_7556_p171;
+wire   [10:0] k_s_fu_7556_p173;
+wire   [10:0] k_s_fu_7556_p175;
+wire   [10:0] k_s_fu_7556_p177;
+wire   [10:0] k_s_fu_7556_p179;
+wire   [10:0] k_s_fu_7556_p181;
+wire   [10:0] k_s_fu_7556_p183;
+wire   [10:0] k_s_fu_7556_p185;
+wire   [10:0] k_s_fu_7556_p187;
+wire   [10:0] k_s_fu_7556_p189;
+wire   [10:0] k_s_fu_7556_p191;
+wire   [10:0] k_s_fu_7556_p193;
+wire   [10:0] k_s_fu_7556_p195;
+wire   [10:0] k_s_fu_7556_p197;
+wire   [10:0] k_s_fu_7556_p199;
+wire   [10:0] k_s_fu_7556_p201;
+wire   [10:0] k_s_fu_7556_p203;
+wire   [10:0] k_s_fu_7556_p205;
+wire   [10:0] k_s_fu_7556_p207;
+wire   [10:0] k_s_fu_7556_p209;
+wire   [10:0] k_s_fu_7556_p211;
+wire   [10:0] k_s_fu_7556_p213;
+wire   [10:0] k_s_fu_7556_p215;
+wire   [10:0] k_s_fu_7556_p217;
+wire   [10:0] k_s_fu_7556_p219;
+wire   [10:0] k_s_fu_7556_p221;
+wire   [10:0] k_s_fu_7556_p223;
+wire   [10:0] k_s_fu_7556_p225;
+wire   [10:0] k_s_fu_7556_p227;
+wire   [10:0] k_s_fu_7556_p229;
+wire   [10:0] k_s_fu_7556_p231;
+wire   [10:0] k_s_fu_7556_p233;
+wire   [10:0] k_s_fu_7556_p235;
+wire   [10:0] k_s_fu_7556_p237;
+wire   [10:0] k_s_fu_7556_p239;
+wire   [10:0] k_s_fu_7556_p241;
+wire   [10:0] k_s_fu_7556_p243;
+wire   [10:0] k_s_fu_7556_p245;
+wire   [10:0] k_s_fu_7556_p247;
+wire   [10:0] k_s_fu_7556_p249;
+wire   [10:0] k_s_fu_7556_p251;
+wire   [10:0] k_s_fu_7556_p253;
+wire   [10:0] k_s_fu_7556_p255;
+wire   [10:0] k_s_fu_7556_p257;
+wire   [10:0] k_s_fu_7556_p259;
+wire   [10:0] k_s_fu_7556_p261;
+wire   [10:0] k_s_fu_7556_p263;
+wire   [10:0] k_s_fu_7556_p265;
+wire   [10:0] k_s_fu_7556_p267;
+wire   [10:0] k_s_fu_7556_p269;
+wire   [10:0] k_s_fu_7556_p271;
+wire   [10:0] k_s_fu_7556_p273;
+wire   [10:0] k_s_fu_7556_p275;
+wire   [10:0] k_s_fu_7556_p277;
+wire   [10:0] k_s_fu_7556_p279;
+wire   [10:0] k_s_fu_7556_p281;
+wire   [10:0] k_s_fu_7556_p283;
+wire   [10:0] k_s_fu_7556_p285;
+wire   [10:0] k_s_fu_7556_p287;
+wire   [10:0] k_s_fu_7556_p289;
+wire   [10:0] k_s_fu_7556_p291;
+wire   [10:0] k_s_fu_7556_p293;
+wire   [10:0] k_s_fu_7556_p295;
+wire   [10:0] k_s_fu_7556_p297;
+wire   [10:0] k_s_fu_7556_p299;
+wire   [10:0] k_s_fu_7556_p301;
+wire   [10:0] k_s_fu_7556_p303;
+wire   [10:0] k_s_fu_7556_p305;
+wire   [10:0] k_s_fu_7556_p307;
+wire   [10:0] k_s_fu_7556_p309;
+wire   [10:0] k_s_fu_7556_p311;
+wire   [10:0] k_s_fu_7556_p313;
+wire   [10:0] k_s_fu_7556_p315;
+wire   [10:0] k_s_fu_7556_p317;
+wire   [10:0] k_s_fu_7556_p319;
+wire   [10:0] k_s_fu_7556_p321;
+wire   [10:0] k_s_fu_7556_p323;
+wire   [10:0] k_s_fu_7556_p325;
+wire   [10:0] k_s_fu_7556_p327;
+wire   [10:0] k_s_fu_7556_p329;
+wire   [10:0] k_s_fu_7556_p331;
+wire   [10:0] k_s_fu_7556_p333;
+wire   [10:0] k_s_fu_7556_p335;
+wire   [10:0] k_s_fu_7556_p337;
+wire   [10:0] k_s_fu_7556_p339;
+wire   [10:0] k_s_fu_7556_p341;
+wire   [10:0] k_s_fu_7556_p343;
+wire   [10:0] k_s_fu_7556_p345;
+wire   [10:0] k_s_fu_7556_p347;
+wire   [10:0] k_s_fu_7556_p349;
+wire   [10:0] k_s_fu_7556_p351;
+wire   [10:0] k_s_fu_7556_p353;
+wire   [10:0] k_s_fu_7556_p355;
+wire   [10:0] k_s_fu_7556_p357;
+wire   [10:0] k_s_fu_7556_p359;
+wire   [10:0] k_s_fu_7556_p361;
+wire   [10:0] k_s_fu_7556_p363;
+wire   [10:0] k_s_fu_7556_p365;
+wire   [10:0] k_s_fu_7556_p367;
+wire   [10:0] k_s_fu_7556_p369;
+wire   [10:0] k_s_fu_7556_p371;
+wire   [10:0] k_s_fu_7556_p373;
+wire   [10:0] k_s_fu_7556_p375;
+wire   [10:0] k_s_fu_7556_p377;
+wire   [10:0] k_s_fu_7556_p379;
+wire   [10:0] k_s_fu_7556_p381;
+wire   [10:0] k_s_fu_7556_p383;
+wire   [10:0] k_s_fu_7556_p385;
+wire   [10:0] k_s_fu_7556_p387;
+wire   [10:0] k_s_fu_7556_p389;
+wire   [10:0] k_s_fu_7556_p391;
+wire   [10:0] k_s_fu_7556_p393;
+wire   [10:0] k_s_fu_7556_p395;
+wire   [10:0] k_s_fu_7556_p397;
+wire   [10:0] k_s_fu_7556_p399;
+wire   [10:0] k_s_fu_7556_p401;
+wire   [10:0] k_s_fu_7556_p403;
+wire   [10:0] k_s_fu_7556_p405;
+wire   [10:0] k_s_fu_7556_p407;
+wire   [10:0] k_s_fu_7556_p409;
+wire   [10:0] k_s_fu_7556_p411;
+wire   [10:0] k_s_fu_7556_p413;
+wire   [10:0] k_s_fu_7556_p415;
+wire   [10:0] k_s_fu_7556_p417;
+wire   [10:0] k_s_fu_7556_p419;
+wire   [10:0] k_s_fu_7556_p421;
+wire   [10:0] k_s_fu_7556_p423;
+wire   [10:0] k_s_fu_7556_p425;
+wire   [10:0] k_s_fu_7556_p427;
+wire   [10:0] k_s_fu_7556_p429;
+wire   [10:0] k_s_fu_7556_p431;
+wire   [10:0] k_s_fu_7556_p433;
+wire   [10:0] k_s_fu_7556_p435;
+wire   [10:0] k_s_fu_7556_p437;
+wire   [10:0] k_s_fu_7556_p439;
+wire   [10:0] k_s_fu_7556_p441;
+wire   [10:0] k_s_fu_7556_p443;
+wire   [10:0] k_s_fu_7556_p445;
+wire   [10:0] k_s_fu_7556_p447;
+wire   [10:0] k_s_fu_7556_p449;
+wire   [10:0] k_s_fu_7556_p451;
+wire   [10:0] k_s_fu_7556_p453;
+wire   [10:0] k_s_fu_7556_p455;
+wire   [10:0] k_s_fu_7556_p457;
+wire   [10:0] k_s_fu_7556_p459;
+wire   [10:0] k_s_fu_7556_p461;
+wire   [10:0] k_s_fu_7556_p463;
+wire   [10:0] k_s_fu_7556_p465;
+wire   [10:0] k_s_fu_7556_p467;
+wire   [10:0] k_s_fu_7556_p469;
+wire   [10:0] k_s_fu_7556_p471;
+wire   [10:0] k_s_fu_7556_p473;
+wire   [10:0] k_s_fu_7556_p475;
+wire   [10:0] k_s_fu_7556_p477;
+wire   [10:0] k_s_fu_7556_p479;
+wire   [10:0] k_s_fu_7556_p481;
+wire   [10:0] k_s_fu_7556_p483;
+wire   [10:0] k_s_fu_7556_p485;
+wire   [10:0] k_s_fu_7556_p487;
+wire   [10:0] k_s_fu_7556_p489;
+wire   [10:0] k_s_fu_7556_p491;
+wire   [10:0] k_s_fu_7556_p493;
+wire   [10:0] k_s_fu_7556_p495;
+wire   [10:0] k_s_fu_7556_p497;
+wire   [10:0] k_s_fu_7556_p499;
+wire   [10:0] k_s_fu_7556_p501;
+wire   [10:0] k_s_fu_7556_p503;
+wire   [10:0] k_s_fu_7556_p505;
+wire   [10:0] k_s_fu_7556_p507;
+wire   [10:0] k_s_fu_7556_p509;
+wire   [10:0] k_s_fu_7556_p511;
+wire   [10:0] k_s_fu_7556_p513;
+wire   [10:0] k_s_fu_7556_p515;
+wire   [10:0] k_s_fu_7556_p517;
+wire   [10:0] k_s_fu_7556_p519;
+wire   [10:0] k_s_fu_7556_p521;
+wire   [10:0] k_s_fu_7556_p523;
+wire   [10:0] k_s_fu_7556_p525;
+wire   [10:0] k_s_fu_7556_p527;
+wire   [10:0] k_s_fu_7556_p529;
+wire   [10:0] k_s_fu_7556_p531;
+wire   [10:0] k_s_fu_7556_p533;
+wire   [10:0] k_s_fu_7556_p535;
+wire   [10:0] k_s_fu_7556_p537;
+wire   [10:0] k_s_fu_7556_p539;
+wire   [10:0] k_s_fu_7556_p541;
+wire   [10:0] k_s_fu_7556_p543;
+wire   [10:0] k_s_fu_7556_p545;
+wire   [10:0] k_s_fu_7556_p547;
+wire   [10:0] k_s_fu_7556_p549;
+wire   [10:0] k_s_fu_7556_p551;
+wire   [10:0] k_s_fu_7556_p553;
+wire   [10:0] k_s_fu_7556_p555;
+wire   [10:0] k_s_fu_7556_p557;
+wire   [10:0] k_s_fu_7556_p559;
+wire   [10:0] k_s_fu_7556_p561;
+wire   [10:0] k_s_fu_7556_p563;
+wire   [10:0] k_s_fu_7556_p565;
+wire   [10:0] k_s_fu_7556_p567;
+wire   [10:0] k_s_fu_7556_p569;
+wire   [10:0] k_s_fu_7556_p571;
+wire   [10:0] k_s_fu_7556_p573;
+wire   [10:0] k_s_fu_7556_p575;
+wire   [10:0] k_s_fu_7556_p577;
+wire   [10:0] k_s_fu_7556_p579;
+wire   [10:0] k_s_fu_7556_p581;
+wire   [10:0] k_s_fu_7556_p583;
+wire   [10:0] k_s_fu_7556_p585;
+wire   [10:0] k_s_fu_7556_p587;
+wire   [10:0] k_s_fu_7556_p589;
+wire   [10:0] k_s_fu_7556_p591;
+wire   [10:0] k_s_fu_7556_p593;
+wire   [10:0] k_s_fu_7556_p595;
+wire   [10:0] k_s_fu_7556_p597;
+wire   [10:0] k_s_fu_7556_p599;
+wire   [10:0] k_s_fu_7556_p601;
+wire   [10:0] k_s_fu_7556_p603;
+wire   [10:0] k_s_fu_7556_p605;
+wire   [10:0] k_s_fu_7556_p607;
+wire   [10:0] k_s_fu_7556_p609;
+wire   [10:0] k_s_fu_7556_p611;
+wire   [10:0] k_s_fu_7556_p613;
+wire   [10:0] k_s_fu_7556_p615;
+wire   [10:0] k_s_fu_7556_p617;
+wire   [10:0] k_s_fu_7556_p619;
+wire   [10:0] k_s_fu_7556_p621;
+wire   [10:0] k_s_fu_7556_p623;
+wire   [10:0] k_s_fu_7556_p625;
+wire   [10:0] k_s_fu_7556_p627;
+wire   [10:0] k_s_fu_7556_p629;
+wire   [10:0] k_s_fu_7556_p631;
+wire   [10:0] k_s_fu_7556_p633;
+wire   [10:0] k_s_fu_7556_p635;
+wire   [10:0] k_s_fu_7556_p637;
+wire   [10:0] k_s_fu_7556_p639;
+wire   [10:0] k_s_fu_7556_p641;
+wire   [10:0] k_s_fu_7556_p643;
+wire   [10:0] k_s_fu_7556_p645;
+wire   [10:0] k_s_fu_7556_p647;
+wire   [10:0] k_s_fu_7556_p649;
+wire   [10:0] k_s_fu_7556_p651;
+wire   [10:0] k_s_fu_7556_p653;
+wire   [10:0] k_s_fu_7556_p655;
+wire   [10:0] k_s_fu_7556_p657;
+wire   [10:0] k_s_fu_7556_p659;
+wire   [10:0] k_s_fu_7556_p661;
+wire   [10:0] k_s_fu_7556_p663;
+wire   [10:0] k_s_fu_7556_p665;
+wire   [10:0] k_s_fu_7556_p667;
+wire   [10:0] k_s_fu_7556_p669;
+wire   [10:0] k_s_fu_7556_p671;
+wire   [10:0] k_s_fu_7556_p673;
+wire   [10:0] k_s_fu_7556_p675;
+wire   [10:0] k_s_fu_7556_p677;
+wire   [10:0] k_s_fu_7556_p679;
+wire   [10:0] k_s_fu_7556_p681;
+wire   [10:0] k_s_fu_7556_p683;
+wire   [10:0] k_s_fu_7556_p685;
+wire   [10:0] k_s_fu_7556_p687;
+wire   [10:0] k_s_fu_7556_p689;
+wire   [10:0] k_s_fu_7556_p691;
+wire   [10:0] k_s_fu_7556_p693;
+wire   [10:0] k_s_fu_7556_p695;
+wire   [10:0] k_s_fu_7556_p697;
+wire   [10:0] k_s_fu_7556_p699;
+wire   [10:0] k_s_fu_7556_p701;
+wire   [10:0] k_s_fu_7556_p703;
+wire   [10:0] k_s_fu_7556_p705;
+wire   [10:0] k_s_fu_7556_p707;
+wire   [10:0] k_s_fu_7556_p709;
+wire   [10:0] k_s_fu_7556_p711;
+wire   [10:0] k_s_fu_7556_p713;
+wire   [10:0] k_s_fu_7556_p715;
+wire   [10:0] k_s_fu_7556_p717;
+wire   [10:0] k_s_fu_7556_p719;
+wire   [10:0] k_s_fu_7556_p721;
+wire   [10:0] k_s_fu_7556_p723;
+wire   [10:0] k_s_fu_7556_p725;
+wire   [10:0] k_s_fu_7556_p727;
+wire   [10:0] k_s_fu_7556_p729;
+wire   [10:0] k_s_fu_7556_p731;
+wire   [10:0] k_s_fu_7556_p733;
+wire   [10:0] k_s_fu_7556_p735;
+wire   [10:0] k_s_fu_7556_p737;
+wire   [10:0] k_s_fu_7556_p739;
+wire   [10:0] k_s_fu_7556_p741;
+wire   [10:0] k_s_fu_7556_p743;
+wire   [10:0] k_s_fu_7556_p745;
+wire   [10:0] k_s_fu_7556_p747;
+wire   [10:0] k_s_fu_7556_p749;
+wire   [10:0] k_s_fu_7556_p751;
+wire   [10:0] k_s_fu_7556_p753;
+wire   [10:0] k_s_fu_7556_p755;
+wire   [10:0] k_s_fu_7556_p757;
+wire   [10:0] k_s_fu_7556_p759;
+wire   [10:0] k_s_fu_7556_p761;
+wire   [10:0] k_s_fu_7556_p763;
+wire   [10:0] k_s_fu_7556_p765;
+wire   [10:0] k_s_fu_7556_p767;
+wire   [10:0] k_s_fu_7556_p769;
+wire   [10:0] k_s_fu_7556_p771;
+wire   [10:0] k_s_fu_7556_p773;
+wire   [10:0] k_s_fu_7556_p775;
+wire   [10:0] k_s_fu_7556_p777;
+wire   [10:0] k_s_fu_7556_p779;
+wire   [10:0] k_s_fu_7556_p781;
+wire   [10:0] k_s_fu_7556_p783;
+wire   [10:0] k_s_fu_7556_p785;
+wire   [10:0] k_s_fu_7556_p787;
+wire   [10:0] k_s_fu_7556_p789;
+wire   [10:0] k_s_fu_7556_p791;
+wire   [10:0] k_s_fu_7556_p793;
+wire   [10:0] k_s_fu_7556_p795;
+wire   [10:0] k_s_fu_7556_p797;
+wire   [10:0] k_s_fu_7556_p799;
+wire   [10:0] k_s_fu_7556_p801;
+wire   [10:0] k_s_fu_7556_p803;
+wire   [10:0] k_s_fu_7556_p805;
+wire   [10:0] k_s_fu_7556_p807;
+wire   [10:0] k_s_fu_7556_p809;
+wire   [10:0] k_s_fu_7556_p811;
+wire   [10:0] k_s_fu_7556_p813;
+wire   [10:0] k_s_fu_7556_p815;
+wire   [10:0] k_s_fu_7556_p817;
+wire   [10:0] k_s_fu_7556_p819;
+wire   [10:0] k_s_fu_7556_p821;
+wire   [10:0] k_s_fu_7556_p823;
+wire   [10:0] k_s_fu_7556_p825;
+wire   [10:0] k_s_fu_7556_p827;
+wire   [10:0] k_s_fu_7556_p829;
+wire   [10:0] k_s_fu_7556_p831;
+wire   [10:0] k_s_fu_7556_p833;
+wire   [10:0] k_s_fu_7556_p835;
+wire   [10:0] k_s_fu_7556_p837;
+wire   [10:0] k_s_fu_7556_p839;
+wire   [10:0] k_s_fu_7556_p841;
+wire   [10:0] k_s_fu_7556_p843;
+wire   [10:0] k_s_fu_7556_p845;
+wire   [10:0] k_s_fu_7556_p847;
+wire   [10:0] k_s_fu_7556_p849;
+wire   [10:0] k_s_fu_7556_p851;
+wire   [10:0] k_s_fu_7556_p853;
+wire   [10:0] k_s_fu_7556_p855;
+wire   [10:0] k_s_fu_7556_p857;
+wire   [10:0] k_s_fu_7556_p859;
+wire   [10:0] k_s_fu_7556_p861;
+wire   [10:0] k_s_fu_7556_p863;
+wire   [10:0] k_s_fu_7556_p865;
+wire   [10:0] k_s_fu_7556_p867;
+wire   [10:0] k_s_fu_7556_p869;
+wire   [10:0] k_s_fu_7556_p871;
+wire   [10:0] k_s_fu_7556_p873;
+wire   [10:0] k_s_fu_7556_p875;
+wire   [10:0] k_s_fu_7556_p877;
+wire   [10:0] k_s_fu_7556_p879;
+wire   [10:0] k_s_fu_7556_p881;
+wire   [10:0] k_s_fu_7556_p883;
+wire   [10:0] k_s_fu_7556_p885;
+wire   [10:0] k_s_fu_7556_p887;
+wire   [10:0] k_s_fu_7556_p889;
+wire   [10:0] k_s_fu_7556_p891;
+wire   [10:0] k_s_fu_7556_p893;
+wire   [10:0] k_s_fu_7556_p895;
+wire   [10:0] k_s_fu_7556_p897;
+wire   [10:0] k_s_fu_7556_p899;
+wire   [10:0] k_s_fu_7556_p901;
+wire   [10:0] k_s_fu_7556_p903;
+wire   [10:0] k_s_fu_7556_p905;
+wire   [10:0] k_s_fu_7556_p907;
+wire   [10:0] k_s_fu_7556_p909;
+wire   [10:0] k_s_fu_7556_p911;
+wire   [10:0] k_s_fu_7556_p913;
+wire   [10:0] k_s_fu_7556_p915;
+wire   [10:0] k_s_fu_7556_p917;
+wire   [10:0] k_s_fu_7556_p919;
+wire   [10:0] k_s_fu_7556_p921;
+wire   [10:0] k_s_fu_7556_p923;
+wire   [10:0] k_s_fu_7556_p925;
+wire   [10:0] k_s_fu_7556_p927;
+wire   [10:0] k_s_fu_7556_p929;
+wire   [10:0] k_s_fu_7556_p931;
+wire   [10:0] k_s_fu_7556_p933;
+wire   [10:0] k_s_fu_7556_p935;
+wire   [10:0] k_s_fu_7556_p937;
+wire   [10:0] k_s_fu_7556_p939;
+wire   [10:0] k_s_fu_7556_p941;
+wire   [10:0] k_s_fu_7556_p943;
+wire   [10:0] k_s_fu_7556_p945;
+wire   [10:0] k_s_fu_7556_p947;
+wire   [10:0] k_s_fu_7556_p949;
+wire   [10:0] k_s_fu_7556_p951;
+wire   [10:0] k_s_fu_7556_p953;
+wire   [10:0] k_s_fu_7556_p955;
+wire   [10:0] k_s_fu_7556_p957;
+wire   [10:0] k_s_fu_7556_p959;
+wire   [10:0] k_s_fu_7556_p961;
+wire   [10:0] k_s_fu_7556_p963;
+wire   [10:0] k_s_fu_7556_p965;
+wire   [10:0] k_s_fu_7556_p967;
+wire   [10:0] k_s_fu_7556_p969;
+wire   [10:0] k_s_fu_7556_p971;
+wire   [10:0] k_s_fu_7556_p973;
+wire   [10:0] k_s_fu_7556_p975;
+wire   [10:0] k_s_fu_7556_p977;
+wire   [10:0] k_s_fu_7556_p979;
+wire   [10:0] k_s_fu_7556_p981;
+wire   [10:0] k_s_fu_7556_p983;
+wire   [10:0] k_s_fu_7556_p985;
+wire   [10:0] k_s_fu_7556_p987;
+wire   [10:0] k_s_fu_7556_p989;
+wire   [10:0] k_s_fu_7556_p991;
+wire   [10:0] k_s_fu_7556_p993;
+wire   [10:0] k_s_fu_7556_p995;
+wire   [10:0] k_s_fu_7556_p997;
+wire   [10:0] k_s_fu_7556_p999;
+wire   [10:0] k_s_fu_7556_p1001;
+wire   [10:0] k_s_fu_7556_p1003;
+wire   [10:0] k_s_fu_7556_p1005;
+wire   [10:0] k_s_fu_7556_p1007;
+wire   [10:0] k_s_fu_7556_p1009;
+wire   [10:0] k_s_fu_7556_p1011;
+wire   [10:0] k_s_fu_7556_p1013;
+wire   [10:0] k_s_fu_7556_p1015;
+wire   [10:0] k_s_fu_7556_p1017;
+wire   [10:0] k_s_fu_7556_p1019;
+wire   [10:0] k_s_fu_7556_p1021;
+wire   [10:0] k_s_fu_7556_p1023;
+wire   [10:0] k_s_fu_7556_p1025;
+wire   [10:0] k_s_fu_7556_p1027;
+wire   [10:0] k_s_fu_7556_p1029;
+wire   [10:0] k_s_fu_7556_p1031;
+wire   [10:0] k_s_fu_7556_p1033;
+wire   [10:0] k_s_fu_7556_p1035;
+wire   [10:0] k_s_fu_7556_p1037;
+wire   [10:0] k_s_fu_7556_p1039;
+wire   [10:0] k_s_fu_7556_p1041;
+wire   [10:0] k_s_fu_7556_p1043;
+wire   [10:0] k_s_fu_7556_p1045;
+wire   [10:0] k_s_fu_7556_p1047;
+wire   [10:0] k_s_fu_7556_p1049;
+wire   [10:0] k_s_fu_7556_p1051;
+wire   [10:0] k_s_fu_7556_p1053;
+wire   [10:0] k_s_fu_7556_p1055;
+wire   [10:0] k_s_fu_7556_p1057;
+wire   [10:0] k_s_fu_7556_p1059;
+wire   [10:0] k_s_fu_7556_p1061;
+wire   [10:0] k_s_fu_7556_p1063;
+wire   [10:0] k_s_fu_7556_p1065;
+wire   [10:0] k_s_fu_7556_p1067;
+wire   [10:0] k_s_fu_7556_p1069;
+wire   [10:0] k_s_fu_7556_p1071;
+wire   [10:0] k_s_fu_7556_p1073;
+wire   [10:0] k_s_fu_7556_p1075;
+wire   [10:0] k_s_fu_7556_p1077;
+wire   [10:0] k_s_fu_7556_p1079;
+wire   [10:0] k_s_fu_7556_p1081;
+wire   [10:0] k_s_fu_7556_p1083;
+wire   [10:0] k_s_fu_7556_p1085;
+wire   [10:0] k_s_fu_7556_p1087;
+wire   [10:0] k_s_fu_7556_p1089;
+wire   [10:0] k_s_fu_7556_p1091;
+wire   [10:0] k_s_fu_7556_p1093;
+wire   [10:0] k_s_fu_7556_p1095;
+wire   [10:0] k_s_fu_7556_p1097;
+wire   [10:0] k_s_fu_7556_p1099;
+wire   [10:0] k_s_fu_7556_p1101;
+wire   [10:0] k_s_fu_7556_p1103;
+wire   [10:0] k_s_fu_7556_p1105;
+wire   [10:0] k_s_fu_7556_p1107;
+wire   [10:0] k_s_fu_7556_p1109;
+wire   [10:0] k_s_fu_7556_p1111;
+wire   [10:0] k_s_fu_7556_p1113;
+wire   [10:0] k_s_fu_7556_p1115;
+wire   [10:0] k_s_fu_7556_p1117;
+wire   [10:0] k_s_fu_7556_p1119;
+wire   [10:0] k_s_fu_7556_p1121;
+wire   [10:0] k_s_fu_7556_p1123;
+wire   [10:0] k_s_fu_7556_p1125;
+wire   [10:0] k_s_fu_7556_p1127;
+wire   [10:0] k_s_fu_7556_p1129;
+wire   [10:0] k_s_fu_7556_p1131;
+wire   [10:0] k_s_fu_7556_p1133;
+wire   [10:0] k_s_fu_7556_p1135;
+wire   [10:0] k_s_fu_7556_p1137;
+wire   [10:0] k_s_fu_7556_p1139;
+wire   [10:0] k_s_fu_7556_p1141;
+wire   [10:0] k_s_fu_7556_p1143;
+wire   [10:0] k_s_fu_7556_p1145;
+wire   [10:0] k_s_fu_7556_p1147;
+wire   [10:0] k_s_fu_7556_p1149;
+wire   [10:0] k_s_fu_7556_p1151;
+wire   [10:0] k_s_fu_7556_p1153;
+wire   [10:0] k_s_fu_7556_p1155;
+wire   [10:0] k_s_fu_7556_p1157;
+wire   [10:0] k_s_fu_7556_p1159;
+wire   [10:0] k_s_fu_7556_p1161;
+wire   [10:0] k_s_fu_7556_p1163;
+wire   [10:0] k_s_fu_7556_p1165;
+wire   [10:0] k_s_fu_7556_p1167;
+wire   [10:0] k_s_fu_7556_p1169;
+wire   [10:0] k_s_fu_7556_p1171;
+wire   [10:0] k_s_fu_7556_p1173;
+wire   [10:0] k_s_fu_7556_p1175;
+wire   [10:0] k_s_fu_7556_p1177;
+wire   [10:0] k_s_fu_7556_p1179;
+wire   [10:0] k_s_fu_7556_p1181;
+wire   [10:0] k_s_fu_7556_p1183;
+wire   [10:0] k_s_fu_7556_p1185;
+wire   [10:0] k_s_fu_7556_p1187;
+wire   [10:0] k_s_fu_7556_p1189;
+wire   [10:0] k_s_fu_7556_p1191;
+wire   [10:0] k_s_fu_7556_p1193;
+wire   [10:0] k_s_fu_7556_p1195;
+wire   [10:0] k_s_fu_7556_p1197;
+wire   [10:0] k_s_fu_7556_p1199;
+wire   [10:0] k_s_fu_7556_p1201;
+wire   [10:0] k_s_fu_7556_p1203;
+wire   [10:0] k_s_fu_7556_p1205;
+wire   [10:0] k_s_fu_7556_p1207;
+wire   [10:0] k_s_fu_7556_p1209;
+wire   [10:0] k_s_fu_7556_p1211;
+wire   [10:0] k_s_fu_7556_p1213;
+wire   [10:0] k_s_fu_7556_p1215;
+wire   [10:0] k_s_fu_7556_p1217;
+wire   [10:0] k_s_fu_7556_p1219;
+wire   [10:0] k_s_fu_7556_p1221;
+wire   [10:0] k_s_fu_7556_p1223;
+wire   [10:0] k_s_fu_7556_p1225;
+wire   [10:0] k_s_fu_7556_p1227;
+wire   [10:0] k_s_fu_7556_p1229;
+wire   [10:0] k_s_fu_7556_p1231;
+wire   [10:0] k_s_fu_7556_p1233;
+wire   [10:0] k_s_fu_7556_p1235;
+wire   [10:0] k_s_fu_7556_p1237;
+wire   [10:0] k_s_fu_7556_p1239;
+wire   [10:0] k_s_fu_7556_p1241;
+wire   [10:0] k_s_fu_7556_p1243;
+wire   [10:0] k_s_fu_7556_p1245;
+wire   [10:0] k_s_fu_7556_p1247;
+wire   [10:0] k_s_fu_7556_p1249;
+wire   [10:0] k_s_fu_7556_p1251;
+wire   [10:0] k_s_fu_7556_p1253;
+wire   [10:0] k_s_fu_7556_p1255;
+wire   [10:0] k_s_fu_7556_p1257;
+wire   [10:0] k_s_fu_7556_p1259;
+wire   [10:0] k_s_fu_7556_p1261;
+wire   [10:0] k_s_fu_7556_p1263;
+wire   [10:0] k_s_fu_7556_p1265;
+wire   [10:0] k_s_fu_7556_p1267;
+wire   [10:0] k_s_fu_7556_p1269;
+wire   [10:0] k_s_fu_7556_p1271;
+wire   [10:0] k_s_fu_7556_p1273;
+wire   [10:0] k_s_fu_7556_p1275;
+wire   [10:0] k_s_fu_7556_p1277;
+wire   [10:0] k_s_fu_7556_p1279;
+wire   [10:0] k_s_fu_7556_p1281;
+wire   [10:0] k_s_fu_7556_p1283;
+wire   [10:0] k_s_fu_7556_p1285;
+wire   [10:0] k_s_fu_7556_p1287;
+wire   [10:0] k_s_fu_7556_p1289;
+wire   [10:0] k_s_fu_7556_p1291;
+wire   [10:0] k_s_fu_7556_p1293;
+wire   [10:0] k_s_fu_7556_p1295;
+wire   [10:0] k_s_fu_7556_p1297;
+wire   [10:0] k_s_fu_7556_p1299;
+wire   [10:0] k_s_fu_7556_p1301;
+wire   [10:0] k_s_fu_7556_p1303;
+wire   [10:0] k_s_fu_7556_p1305;
+wire   [10:0] k_s_fu_7556_p1307;
+wire   [10:0] k_s_fu_7556_p1309;
+wire   [10:0] k_s_fu_7556_p1311;
+wire   [10:0] k_s_fu_7556_p1313;
+wire   [10:0] k_s_fu_7556_p1315;
+wire   [10:0] k_s_fu_7556_p1317;
+wire   [10:0] k_s_fu_7556_p1319;
+wire   [10:0] k_s_fu_7556_p1321;
+wire   [10:0] k_s_fu_7556_p1323;
+wire   [10:0] k_s_fu_7556_p1325;
+wire   [10:0] k_s_fu_7556_p1327;
+wire   [10:0] k_s_fu_7556_p1329;
+wire   [10:0] k_s_fu_7556_p1331;
+wire   [10:0] k_s_fu_7556_p1333;
+wire   [10:0] k_s_fu_7556_p1335;
+wire   [10:0] k_s_fu_7556_p1337;
+wire   [10:0] k_s_fu_7556_p1339;
+wire   [10:0] k_s_fu_7556_p1341;
+wire   [10:0] k_s_fu_7556_p1343;
+wire   [10:0] k_s_fu_7556_p1345;
+wire   [10:0] k_s_fu_7556_p1347;
+wire   [10:0] k_s_fu_7556_p1349;
+wire   [10:0] k_s_fu_7556_p1351;
+wire   [10:0] k_s_fu_7556_p1353;
+wire   [10:0] k_s_fu_7556_p1355;
+wire   [10:0] k_s_fu_7556_p1357;
+wire   [10:0] k_s_fu_7556_p1359;
+wire   [10:0] k_s_fu_7556_p1361;
+wire   [10:0] k_s_fu_7556_p1363;
+wire   [10:0] k_s_fu_7556_p1365;
+wire   [10:0] k_s_fu_7556_p1367;
+wire   [10:0] k_s_fu_7556_p1369;
+wire   [10:0] k_s_fu_7556_p1371;
+wire   [10:0] k_s_fu_7556_p1373;
+wire   [10:0] k_s_fu_7556_p1375;
+wire   [10:0] k_s_fu_7556_p1377;
+wire   [10:0] k_s_fu_7556_p1379;
+wire   [10:0] k_s_fu_7556_p1381;
+wire   [10:0] k_s_fu_7556_p1383;
+wire   [10:0] k_s_fu_7556_p1385;
+wire   [10:0] k_s_fu_7556_p1387;
+wire   [10:0] k_s_fu_7556_p1389;
+wire   [10:0] k_s_fu_7556_p1391;
+wire   [10:0] k_s_fu_7556_p1393;
+wire   [10:0] k_s_fu_7556_p1395;
+wire   [10:0] k_s_fu_7556_p1397;
+wire   [10:0] k_s_fu_7556_p1399;
+wire   [10:0] k_s_fu_7556_p1401;
+wire   [10:0] k_s_fu_7556_p1403;
+wire   [10:0] k_s_fu_7556_p1405;
+wire   [10:0] k_s_fu_7556_p1407;
+wire   [10:0] k_s_fu_7556_p1409;
+wire   [10:0] k_s_fu_7556_p1411;
+wire   [10:0] k_s_fu_7556_p1413;
+wire   [10:0] k_s_fu_7556_p1415;
+wire   [10:0] k_s_fu_7556_p1417;
+wire   [10:0] k_s_fu_7556_p1419;
+wire   [10:0] k_s_fu_7556_p1421;
+wire   [10:0] k_s_fu_7556_p1423;
+wire   [10:0] k_s_fu_7556_p1425;
+wire   [10:0] k_s_fu_7556_p1427;
+wire   [10:0] k_s_fu_7556_p1429;
+wire   [10:0] k_s_fu_7556_p1431;
+wire   [10:0] k_s_fu_7556_p1433;
+wire   [10:0] k_s_fu_7556_p1435;
+wire   [10:0] k_s_fu_7556_p1437;
+wire   [10:0] k_s_fu_7556_p1439;
+wire   [10:0] k_s_fu_7556_p1441;
+wire   [10:0] k_s_fu_7556_p1443;
+wire   [10:0] k_s_fu_7556_p1445;
+wire   [10:0] k_s_fu_7556_p1447;
+wire   [10:0] k_s_fu_7556_p1449;
+wire   [10:0] k_s_fu_7556_p1451;
+wire   [10:0] k_s_fu_7556_p1453;
+wire   [10:0] k_s_fu_7556_p1455;
+wire   [10:0] k_s_fu_7556_p1457;
+wire   [10:0] k_s_fu_7556_p1459;
+wire   [10:0] k_s_fu_7556_p1461;
+wire   [10:0] k_s_fu_7556_p1463;
+wire   [10:0] k_s_fu_7556_p1465;
+wire   [10:0] k_s_fu_7556_p1467;
+wire   [10:0] k_s_fu_7556_p1469;
+wire   [10:0] k_s_fu_7556_p1471;
+wire   [10:0] k_s_fu_7556_p1473;
+wire   [10:0] k_s_fu_7556_p1475;
+wire   [10:0] k_s_fu_7556_p1477;
+wire   [10:0] k_s_fu_7556_p1479;
+wire   [10:0] k_s_fu_7556_p1481;
+wire   [10:0] k_s_fu_7556_p1483;
+wire   [10:0] k_s_fu_7556_p1485;
+wire   [10:0] k_s_fu_7556_p1487;
+wire   [10:0] k_s_fu_7556_p1489;
+wire   [10:0] k_s_fu_7556_p1491;
+wire   [10:0] k_s_fu_7556_p1493;
+wire   [10:0] k_s_fu_7556_p1495;
+wire   [10:0] k_s_fu_7556_p1497;
+wire   [10:0] k_s_fu_7556_p1499;
+wire   [10:0] k_s_fu_7556_p1501;
+wire   [10:0] k_s_fu_7556_p1503;
+wire   [10:0] k_s_fu_7556_p1505;
+wire   [10:0] k_s_fu_7556_p1507;
+wire   [10:0] k_s_fu_7556_p1509;
+wire   [10:0] k_s_fu_7556_p1511;
+wire   [10:0] k_s_fu_7556_p1513;
+wire   [10:0] k_s_fu_7556_p1515;
+wire   [10:0] k_s_fu_7556_p1517;
+wire   [10:0] k_s_fu_7556_p1519;
+wire   [10:0] k_s_fu_7556_p1521;
+wire   [10:0] k_s_fu_7556_p1523;
+wire   [10:0] k_s_fu_7556_p1525;
+wire   [10:0] k_s_fu_7556_p1527;
+wire   [10:0] k_s_fu_7556_p1529;
+wire   [10:0] k_s_fu_7556_p1531;
+wire   [10:0] k_s_fu_7556_p1533;
+wire   [10:0] k_s_fu_7556_p1535;
+wire   [10:0] k_s_fu_7556_p1537;
+wire   [10:0] k_s_fu_7556_p1539;
+wire   [10:0] k_s_fu_7556_p1541;
+wire   [10:0] k_s_fu_7556_p1543;
+wire   [10:0] k_s_fu_7556_p1545;
+wire   [10:0] k_s_fu_7556_p1547;
+wire   [10:0] k_s_fu_7556_p1549;
+wire   [10:0] k_s_fu_7556_p1551;
+wire   [10:0] k_s_fu_7556_p1553;
+wire   [10:0] k_s_fu_7556_p1555;
+wire   [10:0] k_s_fu_7556_p1557;
+wire   [10:0] k_s_fu_7556_p1559;
+wire   [10:0] k_s_fu_7556_p1561;
+wire   [10:0] k_s_fu_7556_p1563;
+wire   [10:0] k_s_fu_7556_p1565;
+wire   [10:0] k_s_fu_7556_p1567;
+wire   [10:0] k_s_fu_7556_p1569;
+wire   [10:0] k_s_fu_7556_p1571;
+wire   [10:0] k_s_fu_7556_p1573;
+wire   [10:0] k_s_fu_7556_p1575;
+wire   [10:0] k_s_fu_7556_p1577;
+wire   [10:0] k_s_fu_7556_p1579;
+wire   [10:0] k_s_fu_7556_p1581;
+wire   [10:0] k_s_fu_7556_p1583;
+wire   [10:0] k_s_fu_7556_p1585;
+wire   [10:0] k_s_fu_7556_p1587;
+wire   [10:0] k_s_fu_7556_p1589;
+wire   [10:0] k_s_fu_7556_p1591;
+wire   [10:0] k_s_fu_7556_p1593;
+wire   [10:0] k_s_fu_7556_p1595;
+wire   [10:0] k_s_fu_7556_p1597;
+wire   [10:0] k_s_fu_7556_p1599;
+wire   [10:0] k_s_fu_7556_p1601;
+wire   [10:0] k_s_fu_7556_p1603;
+wire   [10:0] k_s_fu_7556_p1605;
+wire   [10:0] k_s_fu_7556_p1607;
+wire   [10:0] k_s_fu_7556_p1609;
+wire   [10:0] k_s_fu_7556_p1611;
+wire   [10:0] k_s_fu_7556_p1613;
+wire   [10:0] k_s_fu_7556_p1615;
+wire   [10:0] k_s_fu_7556_p1617;
+wire   [10:0] k_s_fu_7556_p1619;
+wire   [10:0] k_s_fu_7556_p1621;
+wire   [10:0] k_s_fu_7556_p1623;
+wire   [10:0] k_s_fu_7556_p1625;
+wire   [10:0] k_s_fu_7556_p1627;
+wire   [10:0] k_s_fu_7556_p1629;
+wire   [10:0] k_s_fu_7556_p1631;
+wire   [10:0] k_s_fu_7556_p1633;
+wire   [10:0] k_s_fu_7556_p1635;
+wire   [10:0] k_s_fu_7556_p1637;
+wire   [10:0] k_s_fu_7556_p1639;
+wire   [10:0] k_s_fu_7556_p1641;
+wire   [10:0] k_s_fu_7556_p1643;
+wire   [10:0] k_s_fu_7556_p1645;
+wire   [10:0] k_s_fu_7556_p1647;
+wire   [10:0] k_s_fu_7556_p1649;
+wire   [10:0] k_s_fu_7556_p1651;
+wire   [10:0] k_s_fu_7556_p1653;
+wire   [10:0] k_s_fu_7556_p1655;
+wire   [10:0] k_s_fu_7556_p1657;
+wire   [10:0] k_s_fu_7556_p1659;
+wire   [10:0] k_s_fu_7556_p1661;
+wire   [10:0] k_s_fu_7556_p1663;
+wire   [10:0] k_s_fu_7556_p1665;
+wire   [10:0] k_s_fu_7556_p1667;
+wire   [10:0] k_s_fu_7556_p1669;
+wire   [10:0] k_s_fu_7556_p1671;
+wire   [10:0] k_s_fu_7556_p1673;
+wire   [10:0] k_s_fu_7556_p1675;
+wire   [10:0] k_s_fu_7556_p1677;
+wire   [10:0] k_s_fu_7556_p1679;
+wire   [10:0] k_s_fu_7556_p1681;
+wire   [10:0] k_s_fu_7556_p1683;
+wire   [10:0] k_s_fu_7556_p1685;
+wire   [10:0] k_s_fu_7556_p1687;
+wire   [10:0] k_s_fu_7556_p1689;
+wire   [10:0] k_s_fu_7556_p1691;
+wire   [10:0] k_s_fu_7556_p1693;
+wire   [10:0] k_s_fu_7556_p1695;
+wire   [10:0] k_s_fu_7556_p1697;
+wire   [10:0] k_s_fu_7556_p1699;
+wire   [10:0] k_s_fu_7556_p1701;
+wire   [10:0] k_s_fu_7556_p1703;
+wire   [10:0] k_s_fu_7556_p1705;
+wire   [10:0] k_s_fu_7556_p1707;
+wire   [10:0] k_s_fu_7556_p1709;
+wire   [10:0] k_s_fu_7556_p1711;
+wire   [10:0] k_s_fu_7556_p1713;
+wire   [10:0] k_s_fu_7556_p1715;
+wire   [10:0] k_s_fu_7556_p1717;
+wire   [10:0] k_s_fu_7556_p1719;
+wire   [10:0] k_s_fu_7556_p1721;
+wire   [10:0] k_s_fu_7556_p1723;
+wire   [10:0] k_s_fu_7556_p1725;
+wire   [10:0] k_s_fu_7556_p1727;
+wire   [10:0] k_s_fu_7556_p1729;
+wire   [10:0] k_s_fu_7556_p1731;
+wire   [10:0] k_s_fu_7556_p1733;
+wire   [10:0] k_s_fu_7556_p1735;
+wire   [10:0] k_s_fu_7556_p1737;
+wire   [10:0] k_s_fu_7556_p1739;
+wire   [10:0] k_s_fu_7556_p1741;
+wire   [10:0] k_s_fu_7556_p1743;
+wire   [10:0] k_s_fu_7556_p1745;
+wire   [10:0] k_s_fu_7556_p1747;
+wire   [10:0] k_s_fu_7556_p1749;
+wire   [10:0] k_s_fu_7556_p1751;
+wire   [10:0] k_s_fu_7556_p1753;
+wire   [10:0] k_s_fu_7556_p1755;
+wire   [10:0] k_s_fu_7556_p1757;
+wire   [10:0] k_s_fu_7556_p1759;
+wire   [10:0] k_s_fu_7556_p1761;
+wire   [10:0] k_s_fu_7556_p1763;
+wire   [10:0] k_s_fu_7556_p1765;
+wire   [10:0] k_s_fu_7556_p1767;
+wire   [10:0] k_s_fu_7556_p1769;
+wire   [10:0] k_s_fu_7556_p1771;
+wire   [10:0] k_s_fu_7556_p1773;
+wire   [10:0] k_s_fu_7556_p1775;
+wire   [10:0] k_s_fu_7556_p1777;
+wire   [10:0] k_s_fu_7556_p1779;
+wire   [10:0] k_s_fu_7556_p1781;
+wire   [10:0] k_s_fu_7556_p1783;
+wire   [10:0] k_s_fu_7556_p1785;
+wire   [10:0] k_s_fu_7556_p1787;
+wire   [10:0] k_s_fu_7556_p1789;
+wire   [10:0] k_s_fu_7556_p1791;
+wire   [10:0] k_s_fu_7556_p1793;
+wire   [10:0] k_s_fu_7556_p1795;
+wire   [10:0] k_s_fu_7556_p1797;
+wire   [10:0] k_s_fu_7556_p1799;
+wire   [10:0] k_s_fu_7556_p1801;
+wire   [10:0] k_s_fu_7556_p1803;
+wire   [10:0] k_s_fu_7556_p1805;
+wire   [10:0] k_s_fu_7556_p1807;
+wire   [10:0] k_s_fu_7556_p1809;
+wire   [10:0] k_s_fu_7556_p1811;
+wire   [10:0] k_s_fu_7556_p1813;
+wire   [10:0] k_s_fu_7556_p1815;
+wire   [10:0] k_s_fu_7556_p1817;
+wire   [10:0] k_s_fu_7556_p1819;
+wire   [10:0] k_s_fu_7556_p1821;
+wire   [10:0] k_s_fu_7556_p1823;
+wire   [10:0] k_s_fu_7556_p1825;
+wire   [10:0] k_s_fu_7556_p1827;
+wire   [10:0] k_s_fu_7556_p1829;
+wire   [10:0] k_s_fu_7556_p1831;
+wire   [10:0] k_s_fu_7556_p1833;
+wire   [10:0] k_s_fu_7556_p1835;
+wire   [10:0] k_s_fu_7556_p1837;
+wire   [10:0] k_s_fu_7556_p1839;
+wire   [10:0] k_s_fu_7556_p1841;
+wire   [10:0] k_s_fu_7556_p1843;
+wire   [10:0] k_s_fu_7556_p1845;
+wire   [10:0] k_s_fu_7556_p1847;
+wire   [10:0] k_s_fu_7556_p1849;
+wire   [10:0] k_s_fu_7556_p1851;
+wire   [10:0] k_s_fu_7556_p1853;
+wire   [10:0] k_s_fu_7556_p1855;
+wire   [10:0] k_s_fu_7556_p1857;
+wire   [10:0] k_s_fu_7556_p1859;
+wire   [10:0] k_s_fu_7556_p1861;
+wire   [10:0] k_s_fu_7556_p1863;
+wire   [10:0] k_s_fu_7556_p1865;
+wire   [10:0] k_s_fu_7556_p1867;
+wire   [10:0] k_s_fu_7556_p1869;
+wire   [10:0] k_s_fu_7556_p1871;
+wire   [10:0] k_s_fu_7556_p1873;
+wire   [10:0] k_s_fu_7556_p1875;
+wire   [10:0] k_s_fu_7556_p1877;
+wire   [10:0] k_s_fu_7556_p1879;
+wire   [10:0] k_s_fu_7556_p1881;
+wire   [10:0] k_s_fu_7556_p1883;
+wire   [10:0] k_s_fu_7556_p1885;
+wire   [10:0] k_s_fu_7556_p1887;
+wire   [10:0] k_s_fu_7556_p1889;
+wire   [10:0] k_s_fu_7556_p1891;
+wire   [10:0] k_s_fu_7556_p1893;
+wire   [10:0] k_s_fu_7556_p1895;
+wire   [10:0] k_s_fu_7556_p1897;
+wire   [10:0] k_s_fu_7556_p1899;
+wire   [10:0] k_s_fu_7556_p1901;
+wire   [10:0] k_s_fu_7556_p1903;
+wire   [10:0] k_s_fu_7556_p1905;
+wire   [10:0] k_s_fu_7556_p1907;
+wire   [10:0] k_s_fu_7556_p1909;
+wire   [10:0] k_s_fu_7556_p1911;
+wire   [10:0] k_s_fu_7556_p1913;
+wire   [10:0] k_s_fu_7556_p1915;
+wire   [10:0] k_s_fu_7556_p1917;
+wire   [10:0] k_s_fu_7556_p1919;
+wire   [10:0] k_s_fu_7556_p1921;
+wire   [10:0] k_s_fu_7556_p1923;
+wire   [10:0] k_s_fu_7556_p1925;
+wire   [10:0] k_s_fu_7556_p1927;
+wire   [10:0] k_s_fu_7556_p1929;
+wire   [10:0] k_s_fu_7556_p1931;
+wire   [10:0] k_s_fu_7556_p1933;
+wire   [10:0] k_s_fu_7556_p1935;
+wire   [10:0] k_s_fu_7556_p1937;
+wire   [10:0] k_s_fu_7556_p1939;
+wire   [10:0] k_s_fu_7556_p1941;
+wire   [10:0] k_s_fu_7556_p1943;
+wire   [10:0] k_s_fu_7556_p1945;
+wire   [10:0] k_s_fu_7556_p1947;
+wire   [10:0] k_s_fu_7556_p1949;
+wire   [10:0] k_s_fu_7556_p1951;
+wire   [10:0] k_s_fu_7556_p1953;
+wire   [10:0] k_s_fu_7556_p1955;
+wire   [10:0] k_s_fu_7556_p1957;
+wire   [10:0] k_s_fu_7556_p1959;
+wire   [10:0] k_s_fu_7556_p1961;
+wire   [10:0] k_s_fu_7556_p1963;
+wire   [10:0] k_s_fu_7556_p1965;
+wire   [10:0] k_s_fu_7556_p1967;
+wire   [10:0] k_s_fu_7556_p1969;
+wire   [10:0] k_s_fu_7556_p1971;
+wire   [10:0] k_s_fu_7556_p1973;
+wire   [10:0] k_s_fu_7556_p1975;
+wire   [10:0] k_s_fu_7556_p1977;
+wire   [10:0] k_s_fu_7556_p1979;
+wire   [10:0] k_s_fu_7556_p1981;
+wire   [10:0] k_s_fu_7556_p1983;
+wire   [10:0] k_s_fu_7556_p1985;
+wire   [10:0] k_s_fu_7556_p1987;
+wire   [10:0] k_s_fu_7556_p1989;
+wire   [10:0] k_s_fu_7556_p1991;
+wire   [10:0] k_s_fu_7556_p1993;
+wire   [10:0] k_s_fu_7556_p1995;
+wire   [10:0] k_s_fu_7556_p1997;
+wire   [10:0] k_s_fu_7556_p1999;
+wire   [10:0] k_s_fu_7556_p2001;
+wire   [10:0] k_s_fu_7556_p2003;
+wire   [10:0] k_s_fu_7556_p2005;
+wire   [10:0] k_s_fu_7556_p2007;
+wire   [10:0] k_s_fu_7556_p2009;
+wire   [10:0] k_s_fu_7556_p2011;
+wire   [10:0] k_s_fu_7556_p2013;
+wire   [10:0] k_s_fu_7556_p2015;
+wire   [10:0] k_s_fu_7556_p2017;
+wire   [10:0] k_s_fu_7556_p2019;
+wire   [10:0] k_s_fu_7556_p2021;
+wire   [10:0] k_s_fu_7556_p2023;
+wire   [10:0] k_s_fu_7556_p2025;
+wire   [10:0] k_s_fu_7556_p2027;
+wire   [10:0] k_s_fu_7556_p2029;
+wire   [10:0] k_s_fu_7556_p2031;
+wire   [10:0] k_s_fu_7556_p2033;
+wire   [10:0] k_s_fu_7556_p2035;
+wire   [10:0] k_s_fu_7556_p2037;
+wire   [10:0] k_s_fu_7556_p2039;
+wire   [10:0] k_s_fu_7556_p2041;
+wire   [10:0] k_s_fu_7556_p2043;
+wire   [10:0] k_s_fu_7556_p2045;
+wire   [10:0] k_s_fu_7556_p2047;
+wire  signed [10:0] k_s_fu_7556_p2049;
+wire  signed [10:0] k_s_fu_7556_p2051;
+wire  signed [10:0] k_s_fu_7556_p2053;
+wire  signed [10:0] k_s_fu_7556_p2055;
+wire  signed [10:0] k_s_fu_7556_p2057;
+wire  signed [10:0] k_s_fu_7556_p2059;
+wire  signed [10:0] k_s_fu_7556_p2061;
+wire  signed [10:0] k_s_fu_7556_p2063;
+wire  signed [10:0] k_s_fu_7556_p2065;
+wire  signed [10:0] k_s_fu_7556_p2067;
+wire  signed [10:0] k_s_fu_7556_p2069;
+wire  signed [10:0] k_s_fu_7556_p2071;
+wire  signed [10:0] k_s_fu_7556_p2073;
+wire  signed [10:0] k_s_fu_7556_p2075;
+wire  signed [10:0] k_s_fu_7556_p2077;
+wire  signed [10:0] k_s_fu_7556_p2079;
+wire  signed [10:0] k_s_fu_7556_p2081;
+wire  signed [10:0] k_s_fu_7556_p2083;
+wire  signed [10:0] k_s_fu_7556_p2085;
+wire  signed [10:0] k_s_fu_7556_p2087;
+wire  signed [10:0] k_s_fu_7556_p2089;
+wire  signed [10:0] k_s_fu_7556_p2091;
+wire  signed [10:0] k_s_fu_7556_p2093;
+wire  signed [10:0] k_s_fu_7556_p2095;
+wire  signed [10:0] k_s_fu_7556_p2097;
+wire  signed [10:0] k_s_fu_7556_p2099;
+wire  signed [10:0] k_s_fu_7556_p2101;
+wire  signed [10:0] k_s_fu_7556_p2103;
+wire  signed [10:0] k_s_fu_7556_p2105;
+wire  signed [10:0] k_s_fu_7556_p2107;
+wire  signed [10:0] k_s_fu_7556_p2109;
+wire  signed [10:0] k_s_fu_7556_p2111;
+wire  signed [10:0] k_s_fu_7556_p2113;
+wire  signed [10:0] k_s_fu_7556_p2115;
+wire  signed [10:0] k_s_fu_7556_p2117;
+wire  signed [10:0] k_s_fu_7556_p2119;
+wire  signed [10:0] k_s_fu_7556_p2121;
+wire  signed [10:0] k_s_fu_7556_p2123;
+wire  signed [10:0] k_s_fu_7556_p2125;
+wire  signed [10:0] k_s_fu_7556_p2127;
+wire  signed [10:0] k_s_fu_7556_p2129;
+wire  signed [10:0] k_s_fu_7556_p2131;
+wire  signed [10:0] k_s_fu_7556_p2133;
+wire  signed [10:0] k_s_fu_7556_p2135;
+wire  signed [10:0] k_s_fu_7556_p2137;
+wire  signed [10:0] k_s_fu_7556_p2139;
+wire  signed [10:0] k_s_fu_7556_p2141;
+wire  signed [10:0] k_s_fu_7556_p2143;
+wire  signed [10:0] k_s_fu_7556_p2145;
+wire  signed [10:0] k_s_fu_7556_p2147;
+wire  signed [10:0] k_s_fu_7556_p2149;
+wire  signed [10:0] k_s_fu_7556_p2151;
+wire  signed [10:0] k_s_fu_7556_p2153;
+wire  signed [10:0] k_s_fu_7556_p2155;
+wire  signed [10:0] k_s_fu_7556_p2157;
+wire  signed [10:0] k_s_fu_7556_p2159;
+wire  signed [10:0] k_s_fu_7556_p2161;
+wire  signed [10:0] k_s_fu_7556_p2163;
+wire  signed [10:0] k_s_fu_7556_p2165;
+wire  signed [10:0] k_s_fu_7556_p2167;
+wire  signed [10:0] k_s_fu_7556_p2169;
+wire  signed [10:0] k_s_fu_7556_p2171;
+wire  signed [10:0] k_s_fu_7556_p2173;
+wire  signed [10:0] k_s_fu_7556_p2175;
+wire  signed [10:0] k_s_fu_7556_p2177;
+wire  signed [10:0] k_s_fu_7556_p2179;
+wire  signed [10:0] k_s_fu_7556_p2181;
+wire  signed [10:0] k_s_fu_7556_p2183;
+wire  signed [10:0] k_s_fu_7556_p2185;
+wire  signed [10:0] k_s_fu_7556_p2187;
+wire  signed [10:0] k_s_fu_7556_p2189;
+wire  signed [10:0] k_s_fu_7556_p2191;
+wire  signed [10:0] k_s_fu_7556_p2193;
+wire  signed [10:0] k_s_fu_7556_p2195;
+wire  signed [10:0] k_s_fu_7556_p2197;
+wire  signed [10:0] k_s_fu_7556_p2199;
+wire  signed [10:0] k_s_fu_7556_p2201;
+wire  signed [10:0] k_s_fu_7556_p2203;
+wire  signed [10:0] k_s_fu_7556_p2205;
+wire  signed [10:0] k_s_fu_7556_p2207;
+wire  signed [10:0] k_s_fu_7556_p2209;
+wire  signed [10:0] k_s_fu_7556_p2211;
+wire  signed [10:0] k_s_fu_7556_p2213;
+wire  signed [10:0] k_s_fu_7556_p2215;
+wire  signed [10:0] k_s_fu_7556_p2217;
+wire  signed [10:0] k_s_fu_7556_p2219;
+wire  signed [10:0] k_s_fu_7556_p2221;
+wire  signed [10:0] k_s_fu_7556_p2223;
+wire  signed [10:0] k_s_fu_7556_p2225;
+wire  signed [10:0] k_s_fu_7556_p2227;
+wire  signed [10:0] k_s_fu_7556_p2229;
+wire  signed [10:0] k_s_fu_7556_p2231;
+wire  signed [10:0] k_s_fu_7556_p2233;
+wire  signed [10:0] k_s_fu_7556_p2235;
+wire  signed [10:0] k_s_fu_7556_p2237;
+wire  signed [10:0] k_s_fu_7556_p2239;
+wire  signed [10:0] k_s_fu_7556_p2241;
+wire  signed [10:0] k_s_fu_7556_p2243;
+wire  signed [10:0] k_s_fu_7556_p2245;
+wire  signed [10:0] k_s_fu_7556_p2247;
+wire  signed [10:0] k_s_fu_7556_p2249;
+wire  signed [10:0] k_s_fu_7556_p2251;
+wire  signed [10:0] k_s_fu_7556_p2253;
+wire  signed [10:0] k_s_fu_7556_p2255;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
 #0 start_once_reg = 1'b0;
 #0 ap_done_reg = 1'b0;
-#0 ap_CS_fsm = 174'd1;
+#0 ap_CS_fsm = 132'd1;
 #0 st_1 = 2'd0;
 #0 pair_idx = 32'd0;
+#0 samples_in_1 = 32'd0;
 #0 v_count = 32'd0;
 #0 phase = 1'd0;
 #0 diag_i = 32'd0;
 #0 frames_acc = 32'd0;
 #0 power_acc = 36'd0;
+#0 norms_written = 32'd0;
 #0 scale = 24'd0;
+#0 samples_out_1 = 32'd0;
+#0 status_cc_samples_out_preg = 32'd0;
+#0 status_cc_norms_written_preg = 32'd0;
+#0 status_cc_current_norm_preg = 32'd0;
+#0 status_cc_norms_fifo_preg = 32'd0;
+#0 status_cc_state_preg = 8'd0;
+#0 status_cc_out_fifo_preg = 32'd0;
+#0 status_cc_samples_in_preg = 32'd0;
+#0 status_cc_sample_idx_preg = 32'd0;
 end
 
 deepwaveaccel_crosscor_u_M_real_RAM_2P_BRAM_1R1W #(
@@ -2898,7 +2889,7 @@ u_M_real_U(
     .address1(u_M_real_address1_local),
     .ce1(u_M_real_ce1_local),
     .we1(u_M_real_we1_local),
-    .d1(w_re_fu_11918_p1),
+    .d1(w_re_fu_12555_p1),
     .q1(u_M_real_q1)
 );
 
@@ -2953,10 +2944,10 @@ deepwaveaccel_mul_31s_31s_62_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 62 ))
-mul_31s_31s_62_1_1_U25(
-    .din0(grp_fu_2763_p0),
-    .din1(grp_fu_2763_p1),
-    .dout(grp_fu_2763_p2)
+mul_31s_31s_62_1_1_U29(
+    .din0(grp_fu_2939_p0),
+    .din1(grp_fu_2939_p1),
+    .dout(grp_fu_2939_p2)
 );
 
 deepwaveaccel_mul_31s_31s_62_1_1 #(
@@ -2965,10 +2956,10 @@ deepwaveaccel_mul_31s_31s_62_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 62 ))
-mul_31s_31s_62_1_1_U26(
-    .din0(grp_fu_2767_p0),
-    .din1(grp_fu_2767_p1),
-    .dout(grp_fu_2767_p2)
+mul_31s_31s_62_1_1_U30(
+    .din0(grp_fu_2943_p0),
+    .din1(grp_fu_2943_p1),
+    .dout(grp_fu_2943_p2)
 );
 
 deepwaveaccel_mul_31s_31s_62_1_1 #(
@@ -2977,10 +2968,10 @@ deepwaveaccel_mul_31s_31s_62_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 62 ))
-mul_31s_31s_62_1_1_U27(
-    .din0(im2_fu_12167_p3),
-    .din1(re1_fu_12143_p3),
-    .dout(mul_ln107_fu_2771_p2)
+mul_31s_31s_62_1_1_U31(
+    .din0(im2_fu_12337_p3),
+    .din1(re1_fu_12313_p3),
+    .dout(mul_ln120_fu_2947_p2)
 );
 
 deepwaveaccel_mul_31s_31s_62_1_1 #(
@@ -2989,10 +2980,10 @@ deepwaveaccel_mul_31s_31s_62_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 62 ))
-mul_31s_31s_62_1_1_U28(
-    .din0(re2_fu_12159_p3),
-    .din1(im1_fu_12151_p3),
-    .dout(mul_ln107_1_fu_2775_p2)
+mul_31s_31s_62_1_1_U32(
+    .din0(re2_fu_12329_p3),
+    .din1(im1_fu_12321_p3),
+    .dout(mul_ln120_1_fu_2951_p2)
 );
 
 deepwaveaccel_mul_36s_24ns_54_1_1 #(
@@ -3001,10 +2992,10 @@ deepwaveaccel_mul_36s_24ns_54_1_1 #(
     .din0_WIDTH( 36 ),
     .din1_WIDTH( 24 ),
     .dout_WIDTH( 54 ))
-mul_36s_24ns_54_1_1_U29(
-    .din0(sext_ln132_fu_12308_p0),
-    .din1(mul_ln132_fu_2779_p1),
-    .dout(mul_ln132_fu_2779_p2)
+mul_36s_24ns_54_1_1_U33(
+    .din0(sext_ln145_fu_12478_p0),
+    .din1(mul_ln145_fu_2955_p1),
+    .dout(mul_ln145_fu_2955_p2)
 );
 
 deepwaveaccel_mul_36s_24ns_54_1_1 #(
@@ -3013,10 +3004,10 @@ deepwaveaccel_mul_36s_24ns_54_1_1 #(
     .din0_WIDTH( 36 ),
     .din1_WIDTH( 24 ),
     .dout_WIDTH( 54 ))
-mul_36s_24ns_54_1_1_U30(
-    .din0(sext_ln133_fu_12333_p0),
-    .din1(mul_ln133_fu_2783_p1),
-    .dout(mul_ln133_fu_2783_p2)
+mul_36s_24ns_54_1_1_U34(
+    .din0(sext_ln146_fu_12503_p0),
+    .din1(mul_ln146_fu_2959_p1),
+    .dout(mul_ln146_fu_2959_p2)
 );
 
 (* dissolve_hierarchy = "yes" *) deepwaveaccel_sparsemux_2257_11_6_1_1 #(
@@ -5281,7 +5272,7 @@ mul_36s_24ns_54_1_1_U30(
     .def_WIDTH( 6 ),
     .sel_WIDTH( 11 ),
     .dout_WIDTH( 6 ))
-sparsemux_2257_11_6_1_1_U31(
+sparsemux_2257_11_6_1_1_U35(
     .din0(6'd0),
     .din1(6'd0),
     .din2(6'd0),
@@ -6410,9 +6401,9 @@ sparsemux_2257_11_6_1_1_U31(
     .din1125(6'd45),
     .din1126(6'd45),
     .din1127(6'd46),
-    .def(j_s_fu_2860_p2257),
-    .sel(trunc_ln53_fu_2806_p1),
-    .dout(j_s_fu_2860_p2259)
+    .def(j_s_fu_3036_p2257),
+    .sel(trunc_ln59_fu_2982_p1),
+    .dout(j_s_fu_3036_p2259)
 );
 
 (* dissolve_hierarchy = "yes" *) deepwaveaccel_sparsemux_2257_11_6_1_1 #(
@@ -8677,7 +8668,7 @@ sparsemux_2257_11_6_1_1_U31(
     .def_WIDTH( 6 ),
     .sel_WIDTH( 11 ),
     .dout_WIDTH( 6 ))
-sparsemux_2257_11_6_1_1_U32(
+sparsemux_2257_11_6_1_1_U36(
     .din0(6'd1),
     .din1(6'd2),
     .din2(6'd3),
@@ -9806,9 +9797,9 @@ sparsemux_2257_11_6_1_1_U32(
     .din1125(6'd46),
     .din1126(6'd47),
     .din1127(6'd47),
-    .def(k_s_fu_7380_p2257),
-    .sel(trunc_ln53_fu_2806_p1),
-    .dout(k_s_fu_7380_p2259)
+    .def(k_s_fu_7556_p2257),
+    .sel(trunc_ln59_fu_2982_p1),
+    .dout(k_s_fu_7556_p2259)
 );
 
 deepwaveaccel_mul_25s_16ns_40_1_1 #(
@@ -9817,10 +9808,10 @@ deepwaveaccel_mul_25s_16ns_40_1_1 #(
     .din0_WIDTH( 25 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 40 ))
-mul_25s_16ns_40_1_1_U33(
-    .din0(trunc_ln1_reg_12460),
-    .din1(mul_ln87_fu_12054_p1),
-    .dout(mul_ln87_fu_12054_p2)
+mul_25s_16ns_40_1_1_U37(
+    .din0(trunc_ln1_reg_12690),
+    .din1(mul_ln95_fu_12208_p1),
+    .dout(mul_ln95_fu_12208_p2)
 );
 
 deepwaveaccel_udiv_39s_24ns_24_43_seq_1 #(
@@ -9829,15 +9820,15 @@ deepwaveaccel_udiv_39s_24ns_24_43_seq_1 #(
     .din0_WIDTH( 39 ),
     .din1_WIDTH( 24 ),
     .dout_WIDTH( 24 ))
-udiv_39s_24ns_24_43_seq_1_U34(
+udiv_39s_24ns_24_43_seq_1_U38(
     .clk(ap_clk),
     .reset(ap_rst),
-    .start(grp_fu_12109_ap_start),
-    .done(grp_fu_12109_ap_done),
+    .start(grp_fu_12268_ap_start),
+    .done(grp_fu_12268_ap_done),
     .din0(39'd274877906944),
-    .din1(grp_fu_12109_p1),
-    .ce(grp_fu_12109_ce),
-    .dout(grp_fu_12109_p2)
+    .din1(grp_fu_12268_p1),
+    .ce(grp_fu_12268_ce),
+    .dout(grp_fu_12268_p2)
 );
 
 always @ (posedge ap_clk) begin
@@ -9873,163 +9864,292 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((1'b1 == ap_condition_441)) begin
-            diag_i <= 32'd0;
-        end else if (((phase_load_load_fu_2818_p1 == 1'd0) & (st_1 == 2'd1))) begin
-            diag_i <= add_ln81_fu_2836_p2;
+    if (ap_rst == 1'b1) begin
+                status_cc_current_norm_preg[0] <= 1'b0;
+        status_cc_current_norm_preg[1] <= 1'b0;
+        status_cc_current_norm_preg[2] <= 1'b0;
+        status_cc_current_norm_preg[3] <= 1'b0;
+        status_cc_current_norm_preg[4] <= 1'b0;
+        status_cc_current_norm_preg[5] <= 1'b0;
+        status_cc_current_norm_preg[6] <= 1'b0;
+        status_cc_current_norm_preg[7] <= 1'b0;
+        status_cc_current_norm_preg[8] <= 1'b0;
+        status_cc_current_norm_preg[9] <= 1'b0;
+        status_cc_current_norm_preg[10] <= 1'b0;
+        status_cc_current_norm_preg[11] <= 1'b0;
+        status_cc_current_norm_preg[12] <= 1'b0;
+        status_cc_current_norm_preg[13] <= 1'b0;
+        status_cc_current_norm_preg[14] <= 1'b0;
+        status_cc_current_norm_preg[15] <= 1'b0;
+        status_cc_current_norm_preg[16] <= 1'b0;
+        status_cc_current_norm_preg[17] <= 1'b0;
+        status_cc_current_norm_preg[18] <= 1'b0;
+        status_cc_current_norm_preg[19] <= 1'b0;
+        status_cc_current_norm_preg[20] <= 1'b0;
+        status_cc_current_norm_preg[21] <= 1'b0;
+        status_cc_current_norm_preg[22] <= 1'b0;
+        status_cc_current_norm_preg[23] <= 1'b0;
+        status_cc_current_norm_preg[24] <= 1'b0;
+    end else begin
+        if (((1'b1 == ap_CS_fsm_state3) & (s_norm_full_n == 1'b1))) begin
+                        status_cc_current_norm_preg[24 : 0] <= zext_ln98_fu_12235_p1[24 : 0];
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_condition_511)) begin
-        if ((icmp_ln60_fu_11950_p2 == 1'd0)) begin
-            pair_idx_flag_0_reg_2748 <= 1'd0;
-        end else if ((icmp_ln60_fu_11950_p2 == 1'd1)) begin
-            pair_idx_flag_0_reg_2748 <= 1'd1;
+    if (ap_rst == 1'b1) begin
+        status_cc_norms_fifo_preg <= 32'd0;
+    end else begin
+        if (((icmp_ln93_reg_12686 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+            status_cc_norms_fifo_preg <= s_norm_num_data_valid;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        pair_idx_flag_2_reg_2664 <= 1'd1;
-    end else if (((icmp_ln82_reg_12395 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
-        pair_idx_flag_2_reg_2664 <= 1'd0;
+    if (ap_rst == 1'b1) begin
+        status_cc_norms_written_preg <= 32'd0;
+    end else begin
+        if (((icmp_ln93_fu_12173_p2 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+            status_cc_norms_written_preg <= add_ln100_fu_12192_p2;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        pair_idx_flag_7_reg_2686 <= ap_phi_mux_pair_idx_flag_2_phi_fu_2668_p4;
-    end else if ((1'b1 == ap_CS_fsm_state174)) begin
-        pair_idx_flag_7_reg_2686 <= pair_idx_flag_0_reg_2748;
-    end else if ((((grp_fu_2792_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2792_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state88)) | ((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88)))) begin
-        pair_idx_flag_7_reg_2686 <= 1'd1;
-    end else if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        pair_idx_flag_7_reg_2686 <= 1'd0;
+    if (ap_rst == 1'b1) begin
+        status_cc_out_fifo_preg <= 32'd0;
+    end else begin
+        if ((1'b1 == ap_CS_fsm_state131)) begin
+            status_cc_out_fifo_preg <= s_xcor_num_data_valid;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((grp_fu_2792_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2792_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state88)))) begin
-        pair_idx_new_7_reg_2713 <= grp_fu_2787_p2;
-    end else if (((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
-        pair_idx_new_7_reg_2713 <= pair_idx_new_3_cast_cast_cast_fu_12288_p3;
-    end else if (((1'b1 == ap_CS_fsm_state174) | ((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131)) | ((phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45)) | (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
-        pair_idx_new_7_reg_2713 <= 32'd0;
+    if (ap_rst == 1'b1) begin
+        status_cc_sample_idx_preg <= 32'd0;
+    end else begin
+        if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+            status_cc_sample_idx_preg <= v_count;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (icmp_ln60_fu_11950_p2 == 1'd1) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        phase <= 1'd0;
-    end else if (((icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+    if (ap_rst == 1'b1) begin
+        status_cc_samples_in_preg <= 32'd0;
+    end else begin
+        if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+            status_cc_samples_in_preg <= add_ln63_fu_12537_p2;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (ap_rst == 1'b1) begin
+        status_cc_samples_out_preg <= 32'd0;
+    end else begin
+        if (((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+            status_cc_samples_out_preg <= add_ln150_fu_12098_p2;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (ap_rst == 1'b1) begin
+                status_cc_state_preg[0] <= 1'b0;
+        status_cc_state_preg[1] <= 1'b0;
+    end else begin
+        if ((1'b1 == ap_CS_fsm_state45)) begin
+                        status_cc_state_preg[1 : 0] <= zext_ln163_fu_12296_p1[1 : 0];
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((phase_load_load_fu_2994_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        diag_i <= add_ln89_fu_3012_p2;
+    end else if (((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        diag_i <= 32'd0;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state131))) begin
+        empty_reg_2908 <= 2'd2;
+    end else if (((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
+        empty_reg_2908 <= select_ln127_1_fu_12450_p3;
+    end else if ((((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131)) | (~(st_1_load_load_fu_2974_p1 == 2'd1) & ~(st_1_load_load_fu_2974_p1 == 2'd2) & (tmp_nbreadreq_fu_2531_p3 == 1'd0) & (1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((icmp_ln68_fu_12583_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)))) begin
+        empty_reg_2908 <= 2'd0;
+    end else if ((((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state88)) | ((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)) | ((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45)))) begin
+        empty_reg_2908 <= 2'd1;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        pair_idx_flag_0_reg_2766 <= 1'd1;
+    end else if (((icmp_ln90_reg_12633 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
+        pair_idx_flag_0_reg_2766 <= 1'd0;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        pair_idx_flag_2_reg_2849 <= ap_phi_mux_pair_idx_flag_0_phi_fu_2770_p4;
+    end else if (((~(st_1_load_load_fu_2974_p1 == 2'd1) & ~(st_1_load_load_fu_2974_p1 == 2'd2) & (tmp_nbreadreq_fu_2531_p3 == 1'd0) & (1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((icmp_ln68_fu_12583_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)))) begin
+        pair_idx_flag_2_reg_2849 <= 1'd0;
+    end else if ((((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state88)) | ((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88)) | ((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)))) begin
+        pair_idx_flag_2_reg_2849 <= 1'd1;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state88)))) begin
+        pair_idx_new_2_reg_2880 <= grp_fu_2963_p2;
+    end else if (((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
+        pair_idx_new_2_reg_2880 <= pair_idx_new_1_cast_cast_cast_fu_12458_p3;
+    end else if ((((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131)) | ((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)) | ((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45)))) begin
+        pair_idx_new_2_reg_2880 <= 32'd0;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
         phase <= 1'd1;
+    end else if (((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        phase <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((icmp_ln82_reg_12395 == 1'd1)) begin
-        if (((icmp_ln85_fu_12036_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
-            power_acc_new_0_reg_2654 <= {{add_ln79_1_fu_12020_p2[61:26]}};
-        end else if ((1'b1 == ap_condition_7752)) begin
-            power_acc_new_0_reg_2654 <= 36'd0;
+    if ((icmp_ln90_reg_12633 == 1'd1)) begin
+        if (((icmp_ln93_fu_12173_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
+            power_acc_new_0_reg_2756 <= {{add_ln87_1_fu_12157_p2[61:26]}};
+        end else if ((1'b1 == ap_condition_7470)) begin
+            power_acc_new_0_reg_2756 <= 36'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        power_acc_new_1_reg_2676 <= ap_phi_mux_power_acc_new_0_phi_fu_2657_p4;
-    end else if (((icmp_ln82_reg_12395 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
-        power_acc_new_1_reg_2676 <= {{add_ln79_1_fu_12020_p2[61:26]}};
+    if (((icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        power_acc_new_1_reg_2778 <= ap_phi_mux_power_acc_new_0_phi_fu_2759_p4;
+    end else if (((icmp_ln90_reg_12633 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
+        power_acc_new_1_reg_2778 <= {{add_ln87_1_fu_12157_p2[61:26]}};
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (icmp_ln60_fu_11950_p2 == 1'd1) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        st_1 <= 2'd1;
-    end else if (((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
-        st_1 <= select_ln114_1_fu_12280_p3;
-    end else if (((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131))) begin
+    if (((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
+        st_1 <= select_ln127_1_fu_12450_p3;
+    end else if (((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131))) begin
         st_1 <= 2'd0;
+    end else if (((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        st_1 <= 2'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_condition_511)) begin
-        if ((icmp_ln60_fu_11950_p2 == 1'd0)) begin
-            v_count_new_0_reg_2737 <= add_ln59_fu_11944_p2;
-        end else if ((icmp_ln60_fu_11950_p2 == 1'd1)) begin
-            v_count_new_0_reg_2737 <= 32'd0;
+    if ((((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2968_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state88)) | ((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state131)) | ((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88)) | (~(st_1_load_load_fu_2974_p1 == 2'd1) & ~(st_1_load_load_fu_2974_p1 == 2'd2) & (tmp_nbreadreq_fu_2531_p3 == 1'd0) & (1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45)))) begin
+        v_count_flag_0_reg_2788 <= 1'd0;
+    end else if ((((icmp_ln68_fu_12583_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)) | ((icmp_ln68_fu_12583_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)))) begin
+        v_count_flag_0_reg_2788 <= 1'd1;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        if ((icmp_ln68_fu_12583_p2 == 1'd0)) begin
+            v_count_new_0_reg_2819 <= add_ln67_fu_12577_p2;
+        end else if ((icmp_ln68_fu_12583_p2 == 1'd1)) begin
+            v_count_new_0_reg_2819 <= 32'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1))) begin
-        R_flat_M_imag_addr_1_reg_12424 <= zext_ln100_fu_2854_p1;
-        R_flat_M_real_addr_1_reg_12419 <= zext_ln100_fu_2854_p1;
-        icmp_ln82_reg_12395 <= icmp_ln82_fu_2848_p2;
-        pair_idx_load_reg_12373 <= pair_idx;
-        phase_load_reg_12378 <= phase;
-        st_1_load_reg_12369 <= st_1;
+        R_flat_M_imag_addr_1_reg_12662 <= zext_ln113_fu_3030_p1;
+        R_flat_M_real_addr_1_reg_12657 <= zext_ln113_fu_3030_p1;
+        icmp_ln90_reg_12633 <= icmp_ln90_fu_3024_p2;
+        pair_idx_load_reg_12611 <= pair_idx;
+        phase_load_reg_12616 <= phase;
+        st_1_load_reg_12607 <= st_1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_fu_2792_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
-        frames_acc <= select_ln114_fu_12272_p3;
+    if (((grp_fu_2968_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state88))) begin
+        frames_acc <= select_ln127_fu_12442_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        icmp_ln85_reg_12456 <= icmp_ln85_fu_12036_p2;
-        trunc_ln1_reg_12460 <= {{add_ln79_1_fu_12020_p2[61:37]}};
+        icmp_ln93_reg_12686 <= icmp_ln93_fu_12173_p2;
+        trunc_ln1_reg_12690 <= {{add_ln87_1_fu_12157_p2[61:37]}};
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_phi_mux_pair_idx_flag_7_phi_fu_2691_p14 == 1'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        pair_idx <= ap_phi_mux_pair_idx_new_7_phi_fu_2717_p14;
+    if (((icmp_ln93_fu_12173_p2 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+        norms_written <= add_ln100_fu_12192_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        power_acc <= ap_phi_mux_power_acc_new_1_phi_fu_2679_p4;
+    if (((ap_phi_mux_pair_idx_flag_2_phi_fu_2854_p16 == 1'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        pair_idx <= ap_phi_mux_pair_idx_new_2_phi_fu_2885_p16;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln85_reg_12456 == 1'd1) & (icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        scale <= trunc_ln90_fu_12115_p1;
+    if (((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        power_acc <= ap_phi_mux_power_acc_new_1_phi_fu_2781_p4;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state132)) begin
-        v_count <= v_count_new_0_reg_2737;
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        samples_in_1 <= add_ln63_fu_12537_p2;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        samples_out_1 <= add_ln150_fu_12098_p2;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((icmp_ln93_reg_12686 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        scale <= trunc_ln103_fu_12274_p1;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((ap_phi_mux_v_count_flag_0_phi_fu_2793_p16 == 1'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        v_count <= v_count_new_0_reg_2819;
     end
 end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        R_flat_M_imag_address1_local = R_flat_M_imag_addr_1_reg_12424;
-    end else if (((st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
-        R_flat_M_imag_address1_local = zext_ln129_fu_11912_p1;
-    end else if (((phase_load_load_fu_2818_p1 == 1'd1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        R_flat_M_imag_address1_local = zext_ln100_fu_2854_p1;
+        R_flat_M_imag_address1_local = R_flat_M_imag_addr_1_reg_12662;
+    end else if (((st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        R_flat_M_imag_address1_local = zext_ln142_fu_12088_p1;
+    end else if (((phase_load_load_fu_2994_p1 == 1'd1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        R_flat_M_imag_address1_local = zext_ln113_fu_3030_p1;
     end else begin
         R_flat_M_imag_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state46) | ((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state1) & (st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((1'b1 == ap_CS_fsm_state46) | ((phase_load_load_fu_2994_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
         R_flat_M_imag_ce1_local = 1'b1;
     end else begin
         R_flat_M_imag_ce1_local = 1'b0;
@@ -10038,8 +10158,8 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        R_flat_M_imag_d1_local = {{add_ln107_fu_12244_p2[61:26]}};
-    end else if (((st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        R_flat_M_imag_d1_local = {{add_ln120_fu_12414_p2[61:26]}};
+    end else if (((st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
         R_flat_M_imag_d1_local = 36'd0;
     end else begin
         R_flat_M_imag_d1_local = 'bx;
@@ -10047,7 +10167,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state46) | ((1'b0 == ap_block_state1) & (st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((1'b1 == ap_CS_fsm_state46) | ((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
         R_flat_M_imag_we1_local = 1'b1;
     end else begin
         R_flat_M_imag_we1_local = 1'b0;
@@ -10056,18 +10176,18 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        R_flat_M_real_address1_local = R_flat_M_real_addr_1_reg_12419;
-    end else if (((st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
-        R_flat_M_real_address1_local = zext_ln129_fu_11912_p1;
-    end else if (((phase_load_load_fu_2818_p1 == 1'd1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        R_flat_M_real_address1_local = zext_ln100_fu_2854_p1;
+        R_flat_M_real_address1_local = R_flat_M_real_addr_1_reg_12657;
+    end else if (((st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        R_flat_M_real_address1_local = zext_ln142_fu_12088_p1;
+    end else if (((phase_load_load_fu_2994_p1 == 1'd1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        R_flat_M_real_address1_local = zext_ln113_fu_3030_p1;
     end else begin
         R_flat_M_real_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state46) | ((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state1) & (st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((1'b1 == ap_CS_fsm_state46) | ((phase_load_load_fu_2994_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
         R_flat_M_real_ce1_local = 1'b1;
     end else begin
         R_flat_M_real_ce1_local = 1'b0;
@@ -10076,8 +10196,8 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        R_flat_M_real_d1_local = {{add_ln106_1_fu_12213_p2[61:26]}};
-    end else if (((st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        R_flat_M_real_d1_local = {{add_ln119_1_fu_12383_p2[61:26]}};
+    end else if (((st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
         R_flat_M_real_d1_local = 36'd0;
     end else begin
         R_flat_M_real_d1_local = 'bx;
@@ -10085,7 +10205,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state46) | ((1'b0 == ap_block_state1) & (st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((1'b1 == ap_CS_fsm_state46) | ((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1)))) begin
         R_flat_M_real_we1_local = 1'b1;
     end else begin
         R_flat_M_real_we1_local = 1'b0;
@@ -10162,99 +10282,21 @@ assign ap_ST_fsm_state130_blk = 1'b0;
 
 assign ap_ST_fsm_state131_blk = 1'b0;
 
-assign ap_ST_fsm_state132_blk = 1'b0;
-
-assign ap_ST_fsm_state133_blk = 1'b0;
-
-assign ap_ST_fsm_state134_blk = 1'b0;
-
-assign ap_ST_fsm_state135_blk = 1'b0;
-
-assign ap_ST_fsm_state136_blk = 1'b0;
-
-assign ap_ST_fsm_state137_blk = 1'b0;
-
-assign ap_ST_fsm_state138_blk = 1'b0;
-
-assign ap_ST_fsm_state139_blk = 1'b0;
+always @ (*) begin
+    if ((s_goertzel_empty_n == 1'b0)) begin
+        ap_ST_fsm_state132_blk = 1'b1;
+    end else begin
+        ap_ST_fsm_state132_blk = 1'b0;
+    end
+end
 
 assign ap_ST_fsm_state13_blk = 1'b0;
 
-assign ap_ST_fsm_state140_blk = 1'b0;
-
-assign ap_ST_fsm_state141_blk = 1'b0;
-
-assign ap_ST_fsm_state142_blk = 1'b0;
-
-assign ap_ST_fsm_state143_blk = 1'b0;
-
-assign ap_ST_fsm_state144_blk = 1'b0;
-
-assign ap_ST_fsm_state145_blk = 1'b0;
-
-assign ap_ST_fsm_state146_blk = 1'b0;
-
-assign ap_ST_fsm_state147_blk = 1'b0;
-
-assign ap_ST_fsm_state148_blk = 1'b0;
-
-assign ap_ST_fsm_state149_blk = 1'b0;
-
 assign ap_ST_fsm_state14_blk = 1'b0;
-
-assign ap_ST_fsm_state150_blk = 1'b0;
-
-assign ap_ST_fsm_state151_blk = 1'b0;
-
-assign ap_ST_fsm_state152_blk = 1'b0;
-
-assign ap_ST_fsm_state153_blk = 1'b0;
-
-assign ap_ST_fsm_state154_blk = 1'b0;
-
-assign ap_ST_fsm_state155_blk = 1'b0;
-
-assign ap_ST_fsm_state156_blk = 1'b0;
-
-assign ap_ST_fsm_state157_blk = 1'b0;
-
-assign ap_ST_fsm_state158_blk = 1'b0;
-
-assign ap_ST_fsm_state159_blk = 1'b0;
 
 assign ap_ST_fsm_state15_blk = 1'b0;
 
-assign ap_ST_fsm_state160_blk = 1'b0;
-
-assign ap_ST_fsm_state161_blk = 1'b0;
-
-assign ap_ST_fsm_state162_blk = 1'b0;
-
-assign ap_ST_fsm_state163_blk = 1'b0;
-
-assign ap_ST_fsm_state164_blk = 1'b0;
-
-assign ap_ST_fsm_state165_blk = 1'b0;
-
-assign ap_ST_fsm_state166_blk = 1'b0;
-
-assign ap_ST_fsm_state167_blk = 1'b0;
-
-assign ap_ST_fsm_state168_blk = 1'b0;
-
-assign ap_ST_fsm_state169_blk = 1'b0;
-
 assign ap_ST_fsm_state16_blk = 1'b0;
-
-assign ap_ST_fsm_state170_blk = 1'b0;
-
-assign ap_ST_fsm_state171_blk = 1'b0;
-
-assign ap_ST_fsm_state172_blk = 1'b0;
-
-assign ap_ST_fsm_state173_blk = 1'b0;
-
-assign ap_ST_fsm_state174_blk = 1'b0;
 
 assign ap_ST_fsm_state17_blk = 1'b0;
 
@@ -10475,99 +10517,115 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        ap_phi_mux_pair_idx_flag_2_phi_fu_2668_p4 = 1'd1;
+    if (((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_empty_phi_fu_2914_p16 = 2'd1;
     end else begin
-        ap_phi_mux_pair_idx_flag_2_phi_fu_2668_p4 = pair_idx_flag_2_reg_2664;
+        ap_phi_mux_empty_phi_fu_2914_p16 = empty_reg_2908;
     end
 end
 
 always @ (*) begin
-    if (((phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        ap_phi_mux_pair_idx_flag_7_phi_fu_2691_p14 = ap_phi_mux_pair_idx_flag_2_phi_fu_2668_p4;
+    if (((icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_pair_idx_flag_0_phi_fu_2770_p4 = 1'd1;
     end else begin
-        ap_phi_mux_pair_idx_flag_7_phi_fu_2691_p14 = pair_idx_flag_7_reg_2686;
+        ap_phi_mux_pair_idx_flag_0_phi_fu_2770_p4 = pair_idx_flag_0_reg_2766;
     end
 end
 
 always @ (*) begin
-    if (((phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        ap_phi_mux_pair_idx_new_7_phi_fu_2717_p14 = 32'd0;
+    if (((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_pair_idx_flag_2_phi_fu_2854_p16 = ap_phi_mux_pair_idx_flag_0_phi_fu_2770_p4;
     end else begin
-        ap_phi_mux_pair_idx_new_7_phi_fu_2717_p14 = pair_idx_new_7_reg_2713;
+        ap_phi_mux_pair_idx_flag_2_phi_fu_2854_p16 = pair_idx_flag_2_reg_2849;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln85_reg_12456 == 1'd1) & (icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        ap_phi_mux_power_acc_new_0_phi_fu_2657_p4 = 36'd0;
+    if (((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_pair_idx_new_2_phi_fu_2885_p16 = 32'd0;
     end else begin
-        ap_phi_mux_power_acc_new_0_phi_fu_2657_p4 = power_acc_new_0_reg_2654;
+        ap_phi_mux_pair_idx_new_2_phi_fu_2885_p16 = pair_idx_new_2_reg_2880;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln82_reg_12395 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
-        ap_phi_mux_power_acc_new_1_phi_fu_2679_p4 = ap_phi_mux_power_acc_new_0_phi_fu_2657_p4;
+    if (((icmp_ln93_reg_12686 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_power_acc_new_0_phi_fu_2759_p4 = 36'd0;
     end else begin
-        ap_phi_mux_power_acc_new_1_phi_fu_2679_p4 = power_acc_new_1_reg_2676;
+        ap_phi_mux_power_acc_new_0_phi_fu_2759_p4 = power_acc_new_0_reg_2756;
     end
 end
 
 always @ (*) begin
-    if (((s_norm_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        grp_fu_12109_ap_start = 1'b1;
+    if (((icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_power_acc_new_1_phi_fu_2781_p4 = ap_phi_mux_power_acc_new_0_phi_fu_2759_p4;
     end else begin
-        grp_fu_12109_ap_start = 1'b0;
+        ap_phi_mux_power_acc_new_1_phi_fu_2781_p4 = power_acc_new_1_reg_2778;
+    end
+end
+
+always @ (*) begin
+    if (((phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        ap_phi_mux_v_count_flag_0_phi_fu_2793_p16 = 1'd0;
+    end else begin
+        ap_phi_mux_v_count_flag_0_phi_fu_2793_p16 = v_count_flag_0_reg_2788;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state3) & (s_norm_full_n == 1'b1))) begin
+        grp_fu_12268_ap_start = 1'b1;
+    end else begin
+        grp_fu_12268_ap_start = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state44) | (1'b1 == ap_CS_fsm_state43) | (1'b1 == ap_CS_fsm_state42) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state39) | (1'b1 == ap_CS_fsm_state38) | (1'b1 == ap_CS_fsm_state37) | (1'b1 == ap_CS_fsm_state36) | (1'b1 == ap_CS_fsm_state35) | (1'b1 == ap_CS_fsm_state34) | (1'b1 == ap_CS_fsm_state33) | (1'b1 == ap_CS_fsm_state32) | (1'b1 == ap_CS_fsm_state31) | (1'b1 == ap_CS_fsm_state30) | (1'b1 == ap_CS_fsm_state29) | (1'b1 == ap_CS_fsm_state28) | (1'b1 == ap_CS_fsm_state27) | (1'b1 == ap_CS_fsm_state26) | (1'b1 == ap_CS_fsm_state25) | (1'b1 == ap_CS_fsm_state24) | (1'b1 == ap_CS_fsm_state23) | (1'b1 == ap_CS_fsm_state22) | (1'b1 == ap_CS_fsm_state21) | (1'b1 == ap_CS_fsm_state20) | (1'b1 == ap_CS_fsm_state19) | (1'b1 == ap_CS_fsm_state18) | (1'b1 == ap_CS_fsm_state17) | (1'b1 == ap_CS_fsm_state16) | (1'b1 == ap_CS_fsm_state15) | (1'b1 == ap_CS_fsm_state14) | (1'b1 == ap_CS_fsm_state13) | (1'b1 == ap_CS_fsm_state12) | (1'b1 == ap_CS_fsm_state11) | (1'b1 
     == ap_CS_fsm_state10) | (1'b1 == ap_CS_fsm_state9) | (1'b1 == ap_CS_fsm_state8) | (1'b1 == ap_CS_fsm_state7) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state5) | (1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state45) | (1'b1 == ap_CS_fsm_state3))) begin
-        grp_fu_12109_ce = 1'b1;
+        grp_fu_12268_ce = 1'b1;
     end else begin
-        grp_fu_12109_ce = 1'b0;
+        grp_fu_12268_ce = 1'b0;
     end
 end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        grp_fu_2763_p0 = sext_ln106_1_fu_12181_p1;
+        grp_fu_2939_p0 = sext_ln119_1_fu_12351_p1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        grp_fu_2763_p0 = sext_ln79_fu_11990_p1;
+        grp_fu_2939_p0 = sext_ln87_fu_12127_p1;
     end else begin
-        grp_fu_2763_p0 = 'bx;
+        grp_fu_2939_p0 = 'bx;
     end
 end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        grp_fu_2763_p1 = sext_ln106_fu_12175_p1;
+        grp_fu_2939_p1 = sext_ln119_fu_12345_p1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        grp_fu_2763_p1 = sext_ln79_fu_11990_p1;
+        grp_fu_2939_p1 = sext_ln87_fu_12127_p1;
     end else begin
-        grp_fu_2763_p1 = 'bx;
+        grp_fu_2939_p1 = 'bx;
     end
 end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        grp_fu_2767_p0 = sext_ln106_3_fu_12193_p1;
+        grp_fu_2943_p0 = sext_ln119_3_fu_12363_p1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        grp_fu_2767_p0 = sext_ln79_1_fu_11996_p1;
+        grp_fu_2943_p0 = sext_ln87_1_fu_12133_p1;
     end else begin
-        grp_fu_2767_p0 = 'bx;
+        grp_fu_2943_p0 = 'bx;
     end
 end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state46)) begin
-        grp_fu_2767_p1 = sext_ln106_2_fu_12187_p1;
+        grp_fu_2943_p1 = sext_ln119_2_fu_12357_p1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        grp_fu_2767_p1 = sext_ln79_1_fu_11996_p1;
+        grp_fu_2943_p1 = sext_ln87_1_fu_12133_p1;
     end else begin
-        grp_fu_2767_p1 = 'bx;
+        grp_fu_2943_p1 = 'bx;
     end
 end
 
@@ -10588,7 +10646,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & ~((ap_done_reg == 1'b1) | (real_start == 1'b0)) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+    if ((1'b1 == ap_CS_fsm_state132)) begin
         s_goertzel_blk_n = s_goertzel_empty_n;
     end else begin
         s_goertzel_blk_n = 1'b1;
@@ -10596,7 +10654,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state1) & (ap_predicate_op225_read_state1 == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
         s_goertzel_read = 1'b1;
     end else begin
         s_goertzel_read = 1'b0;
@@ -10612,7 +10670,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((s_norm_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((1'b1 == ap_CS_fsm_state3) & (s_norm_full_n == 1'b1))) begin
         s_norm_write = 1'b1;
     end else begin
         s_norm_write = 1'b0;
@@ -10628,7 +10686,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((s_xcor_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state89))) begin
+    if (((1'b1 == ap_CS_fsm_state89) & (s_xcor_full_n == 1'b1))) begin
         s_xcor_write = 1'b1;
     end else begin
         s_xcor_write = 1'b0;
@@ -10644,11 +10702,139 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((phase_load_load_fu_2818_p1 == 1'd1)) begin
-            u_M_imag_address0_local = zext_ln102_fu_11900_p1;
-        end else if ((phase_load_load_fu_2818_p1 == 1'd0)) begin
-            u_M_imag_address0_local = zext_ln77_fu_2830_p1;
+    if (((1'b1 == ap_CS_fsm_state3) & (s_norm_full_n == 1'b1))) begin
+        status_cc_current_norm = zext_ln98_fu_12235_p1;
+    end else begin
+        status_cc_current_norm = status_cc_current_norm_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state3) & (s_norm_full_n == 1'b1))) begin
+        status_cc_current_norm_ap_vld = 1'b1;
+    end else begin
+        status_cc_current_norm_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((icmp_ln93_reg_12686 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        status_cc_norms_fifo = s_norm_num_data_valid;
+    end else begin
+        status_cc_norms_fifo = status_cc_norms_fifo_preg;
+    end
+end
+
+always @ (*) begin
+    if (((icmp_ln93_reg_12686 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45))) begin
+        status_cc_norms_fifo_ap_vld = 1'b1;
+    end else begin
+        status_cc_norms_fifo_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((icmp_ln93_fu_12173_p2 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+        status_cc_norms_written = add_ln100_fu_12192_p2;
+    end else begin
+        status_cc_norms_written = status_cc_norms_written_preg;
+    end
+end
+
+always @ (*) begin
+    if (((icmp_ln93_fu_12173_p2 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+        status_cc_norms_written_ap_vld = 1'b1;
+    end else begin
+        status_cc_norms_written_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state131)) begin
+        status_cc_out_fifo = s_xcor_num_data_valid;
+    end else begin
+        status_cc_out_fifo = status_cc_out_fifo_preg;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state131)) begin
+        status_cc_out_fifo_ap_vld = 1'b1;
+    end else begin
+        status_cc_out_fifo_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        status_cc_sample_idx = v_count;
+    end else begin
+        status_cc_sample_idx = status_cc_sample_idx_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        status_cc_sample_idx_ap_vld = 1'b1;
+    end else begin
+        status_cc_sample_idx_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        status_cc_samples_in = add_ln63_fu_12537_p2;
+    end else begin
+        status_cc_samples_in = status_cc_samples_in_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+        status_cc_samples_in_ap_vld = 1'b1;
+    end else begin
+        status_cc_samples_in_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        status_cc_samples_out = add_ln150_fu_12098_p2;
+    end else begin
+        status_cc_samples_out = status_cc_samples_out_preg;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+        status_cc_samples_out_ap_vld = 1'b1;
+    end else begin
+        status_cc_samples_out_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state45)) begin
+        status_cc_state = zext_ln163_fu_12296_p1;
+    end else begin
+        status_cc_state = status_cc_state_preg;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state45)) begin
+        status_cc_state_ap_vld = 1'b1;
+    end else begin
+        status_cc_state_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        if ((phase_load_load_fu_2994_p1 == 1'd1)) begin
+            u_M_imag_address0_local = zext_ln117_fu_12082_p1;
+        end else if ((phase_load_load_fu_2994_p1 == 1'd0)) begin
+            u_M_imag_address0_local = zext_ln85_fu_3006_p1;
         end else begin
             u_M_imag_address0_local = 'bx;
         end
@@ -10658,21 +10844,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state1)) begin
-        if ((1'b1 == ap_condition_299)) begin
-            u_M_imag_address1_local = zext_ln58_fu_11938_p1;
-        end else if (((phase_load_load_fu_2818_p1 == 1'd1) & (st_1 == 2'd1))) begin
-            u_M_imag_address1_local = zext_ln104_fu_11906_p1;
-        end else begin
-            u_M_imag_address1_local = 'bx;
-        end
+    if ((1'b1 == ap_CS_fsm_state132)) begin
+        u_M_imag_address1_local = zext_ln66_fu_12571_p1;
+    end else if ((1'b1 == ap_CS_fsm_state1)) begin
+        u_M_imag_address1_local = zext_ln115_fu_12076_p1;
     end else begin
         u_M_imag_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((phase_load_load_fu_2818_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if ((((phase_load_load_fu_2994_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((phase_load_load_fu_2994_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
         u_M_imag_ce0_local = 1'b1;
     end else begin
         u_M_imag_ce0_local = 1'b0;
@@ -10680,7 +10862,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if ((((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)))) begin
         u_M_imag_ce1_local = 1'b1;
     end else begin
         u_M_imag_ce1_local = 1'b0;
@@ -10688,7 +10870,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
         u_M_imag_we1_local = 1'b1;
     end else begin
         u_M_imag_we1_local = 1'b0;
@@ -10696,11 +10878,11 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((phase_load_load_fu_2818_p1 == 1'd1)) begin
-            u_M_real_address0_local = zext_ln102_fu_11900_p1;
-        end else if ((phase_load_load_fu_2818_p1 == 1'd0)) begin
-            u_M_real_address0_local = zext_ln77_fu_2830_p1;
+    if (((st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        if ((phase_load_load_fu_2994_p1 == 1'd1)) begin
+            u_M_real_address0_local = zext_ln117_fu_12082_p1;
+        end else if ((phase_load_load_fu_2994_p1 == 1'd0)) begin
+            u_M_real_address0_local = zext_ln85_fu_3006_p1;
         end else begin
             u_M_real_address0_local = 'bx;
         end
@@ -10710,21 +10892,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state1)) begin
-        if ((1'b1 == ap_condition_299)) begin
-            u_M_real_address1_local = zext_ln58_fu_11938_p1;
-        end else if (((phase_load_load_fu_2818_p1 == 1'd1) & (st_1 == 2'd1))) begin
-            u_M_real_address1_local = zext_ln104_fu_11906_p1;
-        end else begin
-            u_M_real_address1_local = 'bx;
-        end
+    if ((1'b1 == ap_CS_fsm_state132)) begin
+        u_M_real_address1_local = zext_ln66_fu_12571_p1;
+    end else if ((1'b1 == ap_CS_fsm_state1)) begin
+        u_M_real_address1_local = zext_ln115_fu_12076_p1;
     end else begin
         u_M_real_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((phase_load_load_fu_2818_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if ((((phase_load_load_fu_2994_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | ((phase_load_load_fu_2994_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
         u_M_real_ce0_local = 1'b1;
     end else begin
         u_M_real_ce0_local = 1'b0;
@@ -10732,7 +10910,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1)) | (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if ((((1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1)) | ((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1)))) begin
         u_M_real_ce1_local = 1'b1;
     end else begin
         u_M_real_ce1_local = 1'b0;
@@ -10740,7 +10918,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
         u_M_real_we1_local = 1'b1;
     end else begin
         u_M_real_we1_local = 1'b0;
@@ -10750,29 +10928,29 @@ end
 always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
-            if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+            if ((~(st_1_load_load_fu_2974_p1 == 2'd1) & ~(st_1_load_load_fu_2974_p1 == 2'd2) & (tmp_nbreadreq_fu_2531_p3 == 1'd1) & (1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state132;
-            end else if ((~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+            end else if ((~(st_1_load_load_fu_2974_p1 == 2'd1) & ~(st_1_load_load_fu_2974_p1 == 2'd2) & (tmp_nbreadreq_fu_2531_p3 == 1'd0) & (1'b0 == ap_block_state1) & (1'b1 == ap_CS_fsm_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state45;
-            end else if (((phase_load_load_fu_2818_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+            end else if (((phase_load_load_fu_2994_p1 == 1'd1) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state46;
-            end else if (((phase_load_load_fu_2818_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+            end else if (((phase_load_load_fu_2994_p1 == 1'd0) & (1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd1) & (1'b1 == ap_CS_fsm_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state2;
-            end else if (((1'b0 == ap_block_state1) & (st_1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+            end else if (((1'b0 == ap_block_state1) & (st_1_load_load_fu_2974_p1 == 2'd2) & (1'b1 == ap_CS_fsm_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state89;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state1;
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((icmp_ln85_fu_12036_p2 == 1'd1) & (icmp_ln82_reg_12395 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+            if (((icmp_ln93_fu_12173_p2 == 1'd1) & (icmp_ln90_reg_12633 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state45;
             end
         end
         ap_ST_fsm_state3 : begin
-            if (((s_norm_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+            if (((1'b1 == ap_CS_fsm_state3) & (s_norm_full_n == 1'b1))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state3;
@@ -11034,7 +11212,7 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state45;
         end
         ap_ST_fsm_state89 : begin
-            if (((s_xcor_full_n == 1'b1) & (1'b1 == ap_CS_fsm_state89))) begin
+            if (((1'b1 == ap_CS_fsm_state89) & (s_xcor_full_n == 1'b1))) begin
                 ap_NS_fsm = ap_ST_fsm_state90;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state89;
@@ -11167,133 +11345,11 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state45;
         end
         ap_ST_fsm_state132 : begin
-            ap_NS_fsm = ap_ST_fsm_state133;
-        end
-        ap_ST_fsm_state133 : begin
-            ap_NS_fsm = ap_ST_fsm_state134;
-        end
-        ap_ST_fsm_state134 : begin
-            ap_NS_fsm = ap_ST_fsm_state135;
-        end
-        ap_ST_fsm_state135 : begin
-            ap_NS_fsm = ap_ST_fsm_state136;
-        end
-        ap_ST_fsm_state136 : begin
-            ap_NS_fsm = ap_ST_fsm_state137;
-        end
-        ap_ST_fsm_state137 : begin
-            ap_NS_fsm = ap_ST_fsm_state138;
-        end
-        ap_ST_fsm_state138 : begin
-            ap_NS_fsm = ap_ST_fsm_state139;
-        end
-        ap_ST_fsm_state139 : begin
-            ap_NS_fsm = ap_ST_fsm_state140;
-        end
-        ap_ST_fsm_state140 : begin
-            ap_NS_fsm = ap_ST_fsm_state141;
-        end
-        ap_ST_fsm_state141 : begin
-            ap_NS_fsm = ap_ST_fsm_state142;
-        end
-        ap_ST_fsm_state142 : begin
-            ap_NS_fsm = ap_ST_fsm_state143;
-        end
-        ap_ST_fsm_state143 : begin
-            ap_NS_fsm = ap_ST_fsm_state144;
-        end
-        ap_ST_fsm_state144 : begin
-            ap_NS_fsm = ap_ST_fsm_state145;
-        end
-        ap_ST_fsm_state145 : begin
-            ap_NS_fsm = ap_ST_fsm_state146;
-        end
-        ap_ST_fsm_state146 : begin
-            ap_NS_fsm = ap_ST_fsm_state147;
-        end
-        ap_ST_fsm_state147 : begin
-            ap_NS_fsm = ap_ST_fsm_state148;
-        end
-        ap_ST_fsm_state148 : begin
-            ap_NS_fsm = ap_ST_fsm_state149;
-        end
-        ap_ST_fsm_state149 : begin
-            ap_NS_fsm = ap_ST_fsm_state150;
-        end
-        ap_ST_fsm_state150 : begin
-            ap_NS_fsm = ap_ST_fsm_state151;
-        end
-        ap_ST_fsm_state151 : begin
-            ap_NS_fsm = ap_ST_fsm_state152;
-        end
-        ap_ST_fsm_state152 : begin
-            ap_NS_fsm = ap_ST_fsm_state153;
-        end
-        ap_ST_fsm_state153 : begin
-            ap_NS_fsm = ap_ST_fsm_state154;
-        end
-        ap_ST_fsm_state154 : begin
-            ap_NS_fsm = ap_ST_fsm_state155;
-        end
-        ap_ST_fsm_state155 : begin
-            ap_NS_fsm = ap_ST_fsm_state156;
-        end
-        ap_ST_fsm_state156 : begin
-            ap_NS_fsm = ap_ST_fsm_state157;
-        end
-        ap_ST_fsm_state157 : begin
-            ap_NS_fsm = ap_ST_fsm_state158;
-        end
-        ap_ST_fsm_state158 : begin
-            ap_NS_fsm = ap_ST_fsm_state159;
-        end
-        ap_ST_fsm_state159 : begin
-            ap_NS_fsm = ap_ST_fsm_state160;
-        end
-        ap_ST_fsm_state160 : begin
-            ap_NS_fsm = ap_ST_fsm_state161;
-        end
-        ap_ST_fsm_state161 : begin
-            ap_NS_fsm = ap_ST_fsm_state162;
-        end
-        ap_ST_fsm_state162 : begin
-            ap_NS_fsm = ap_ST_fsm_state163;
-        end
-        ap_ST_fsm_state163 : begin
-            ap_NS_fsm = ap_ST_fsm_state164;
-        end
-        ap_ST_fsm_state164 : begin
-            ap_NS_fsm = ap_ST_fsm_state165;
-        end
-        ap_ST_fsm_state165 : begin
-            ap_NS_fsm = ap_ST_fsm_state166;
-        end
-        ap_ST_fsm_state166 : begin
-            ap_NS_fsm = ap_ST_fsm_state167;
-        end
-        ap_ST_fsm_state167 : begin
-            ap_NS_fsm = ap_ST_fsm_state168;
-        end
-        ap_ST_fsm_state168 : begin
-            ap_NS_fsm = ap_ST_fsm_state169;
-        end
-        ap_ST_fsm_state169 : begin
-            ap_NS_fsm = ap_ST_fsm_state170;
-        end
-        ap_ST_fsm_state170 : begin
-            ap_NS_fsm = ap_ST_fsm_state171;
-        end
-        ap_ST_fsm_state171 : begin
-            ap_NS_fsm = ap_ST_fsm_state172;
-        end
-        ap_ST_fsm_state172 : begin
-            ap_NS_fsm = ap_ST_fsm_state173;
-        end
-        ap_ST_fsm_state173 : begin
-            ap_NS_fsm = ap_ST_fsm_state174;
-        end
-        ap_ST_fsm_state174 : begin
-            ap_NS_fsm = ap_ST_fsm_state45;
+            if (((1'b1 == ap_CS_fsm_state132) & (s_goertzel_empty_n == 1'b1))) begin
+                ap_NS_fsm = ap_ST_fsm_state45;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state132;
+            end
         end
         default : begin
             ap_NS_fsm = 'bx;
@@ -11301,21 +11357,27 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln106_1_fu_12213_p2 = (add_ln106_fu_12207_p2 + grp_fu_2767_p2);
+assign add_ln100_fu_12192_p2 = (norms_written + 32'd1);
 
-assign add_ln106_fu_12207_p2 = (grp_fu_2763_p2 + shl_ln_fu_12199_p3);
+assign add_ln119_1_fu_12383_p2 = (add_ln119_fu_12377_p2 + grp_fu_2943_p2);
 
-assign add_ln107_fu_12244_p2 = (sub_ln107_fu_12230_p2 + shl_ln8_fu_12236_p3);
+assign add_ln119_fu_12377_p2 = (grp_fu_2939_p2 + shl_ln_fu_12369_p3);
 
-assign add_ln113_fu_12261_p2 = (frames_acc + 32'd1);
+assign add_ln120_fu_12414_p2 = (sub_ln120_fu_12400_p2 + shl_ln9_fu_12406_p3);
 
-assign add_ln59_fu_11944_p2 = (v_count + 32'd1);
+assign add_ln126_fu_12431_p2 = (frames_acc + 32'd1);
 
-assign add_ln79_1_fu_12020_p2 = (add_ln79_fu_12014_p2 + grp_fu_2767_p2);
+assign add_ln150_fu_12098_p2 = (samples_out_1 + 32'd1);
 
-assign add_ln79_fu_12014_p2 = (grp_fu_2763_p2 + shl_ln9_fu_12006_p3);
+assign add_ln63_fu_12537_p2 = (samples_in_1 + 32'd1);
 
-assign add_ln81_fu_2836_p2 = (diag_i + 32'd1);
+assign add_ln67_fu_12577_p2 = (v_count + 32'd1);
+
+assign add_ln87_1_fu_12157_p2 = (add_ln87_fu_12151_p2 + grp_fu_2943_p2);
+
+assign add_ln87_fu_12151_p2 = (grp_fu_2939_p2 + shl_ln1_fu_12143_p3);
+
+assign add_ln89_fu_3012_p2 = (diag_i + 32'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -11338,8 +11400,6 @@ assign ap_CS_fsm_state15 = ap_CS_fsm[32'd14];
 assign ap_CS_fsm_state16 = ap_CS_fsm[32'd15];
 
 assign ap_CS_fsm_state17 = ap_CS_fsm[32'd16];
-
-assign ap_CS_fsm_state174 = ap_CS_fsm[32'd173];
 
 assign ap_CS_fsm_state18 = ap_CS_fsm[32'd17];
 
@@ -11420,141 +11480,138 @@ assign ap_CS_fsm_state89 = ap_CS_fsm[32'd88];
 assign ap_CS_fsm_state9 = ap_CS_fsm[32'd8];
 
 always @ (*) begin
-    ap_block_state1 = ((ap_done_reg == 1'b1) | (real_start == 1'b0) | ((ap_predicate_op225_read_state1 == 1'b1) & (s_goertzel_empty_n == 1'b0)));
+    ap_block_state1 = ((ap_done_reg == 1'b1) | (real_start == 1'b0));
 end
 
 always @ (*) begin
-    ap_condition_299 = (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (tmp_nbreadreq_fu_2492_p3 == 1'd1));
-end
-
-always @ (*) begin
-    ap_condition_441 = (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (icmp_ln60_fu_11950_p2 == 1'd1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1));
-end
-
-always @ (*) begin
-    ap_condition_511 = (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (1'b0 == ap_block_state1) & (tmp_nbreadreq_fu_2492_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state1));
-end
-
-always @ (*) begin
-    ap_condition_7752 = ((icmp_ln85_reg_12456 == 1'd1) & (phase_load_reg_12378 == 1'd0) & (st_1_load_reg_12369 == 2'd1) & (1'b1 == ap_CS_fsm_state45));
-end
-
-always @ (*) begin
-    ap_predicate_op225_read_state1 = (~(st_1 == 2'd1) & ~(st_1 == 2'd2) & (tmp_nbreadreq_fu_2492_p3 == 1'd1));
+    ap_condition_7470 = ((icmp_ln93_reg_12686 == 1'd1) & (phase_load_reg_12616 == 1'd0) & (st_1_load_reg_12607 == 2'd1) & (1'b1 == ap_CS_fsm_state45));
 end
 
 assign ap_ready = internal_ap_ready;
 
-assign corrected_1_fu_12097_p3 = ((icmp_ln89_fu_12091_p2[0:0] == 1'b1) ? 24'd32768 : trunc_ln87_2_fu_12071_p4);
+assign corrected_2_fu_12214_p4 = {{mul_ln95_fu_12208_p2[39:15]}};
 
-assign grp_fu_12109_p1 = grp_fu_12109_p10;
+assign corrected_fu_12256_p3 = ((icmp_ln102_fu_12250_p2[0:0] == 1'b1) ? 24'd32768 : trunc_ln95_2_fu_12225_p4);
 
-assign grp_fu_12109_p10 = corrected_1_fu_12097_p3;
+assign grp_fu_12268_p1 = grp_fu_12268_p10;
 
-assign grp_fu_2787_p2 = (pair_idx_load_reg_12373 + 32'd1);
+assign grp_fu_12268_p10 = corrected_fu_12256_p3;
 
-assign grp_fu_2792_p2 = ((grp_fu_2787_p2 == 32'd1128) ? 1'b1 : 1'b0);
+assign grp_fu_2963_p2 = (pair_idx_load_reg_12611 + 32'd1);
 
-assign icmp_ln114_fu_12266_p2 = (($signed(add_ln113_fu_12261_p2) < $signed(32'd9)) ? 1'b1 : 1'b0);
+assign grp_fu_2968_p2 = ((grp_fu_2963_p2 == 32'd1128) ? 1'b1 : 1'b0);
 
-assign icmp_ln60_fu_11950_p2 = ((add_ln59_fu_11944_p2 == 32'd48) ? 1'b1 : 1'b0);
+assign icmp_ln102_fu_12250_p2 = (($signed(tmp_8_fu_12240_p4) < $signed(10'd1)) ? 1'b1 : 1'b0);
 
-assign icmp_ln82_fu_2848_p2 = ((add_ln81_fu_2836_p2 == 32'd48) ? 1'b1 : 1'b0);
+assign icmp_ln127_fu_12436_p2 = (($signed(add_ln126_fu_12431_p2) < $signed(32'd9)) ? 1'b1 : 1'b0);
 
-assign icmp_ln85_fu_12036_p2 = ((frames_acc == 32'd8) ? 1'b1 : 1'b0);
+assign icmp_ln68_fu_12583_p2 = ((add_ln67_fu_12577_p2 == 32'd48) ? 1'b1 : 1'b0);
 
-assign icmp_ln89_fu_12091_p2 = (($signed(tmp_4_fu_12081_p4) < $signed(10'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln90_fu_3024_p2 = ((add_ln89_fu_3012_p2 == 32'd48) ? 1'b1 : 1'b0);
 
-assign im1_fu_12151_p3 = {{u_M_imag_q0}, {13'd0}};
+assign icmp_ln93_fu_12173_p2 = ((frames_acc == 32'd8) ? 1'b1 : 1'b0);
 
-assign im2_fu_12167_p3 = {{u_M_imag_q1}, {13'd0}};
+assign im1_fu_12321_p3 = {{u_M_imag_q1}, {13'd0}};
 
-assign j_s_fu_2860_p2257 = 'bx;
+assign im2_fu_12337_p3 = {{u_M_imag_q0}, {13'd0}};
 
-assign k_s_fu_7380_p2257 = 'bx;
+assign j_s_fu_3036_p2257 = 'bx;
 
-assign mul_ln132_fu_2779_p1 = zext_ln132_fu_12317_p1;
+assign k_s_fu_7556_p2257 = 'bx;
 
-assign mul_ln133_fu_2783_p1 = zext_ln132_fu_12317_p1;
+assign mul_ln145_fu_2955_p1 = zext_ln145_fu_12487_p1;
 
-assign mul_ln87_fu_12054_p1 = 40'd23170;
+assign mul_ln146_fu_2959_p1 = zext_ln145_fu_12487_p1;
 
-assign out_im_fu_12338_p4 = {{mul_ln133_fu_2783_p2[53:36]}};
+assign mul_ln95_fu_12208_p1 = 40'd23170;
 
-assign out_re_fu_12323_p4 = {{mul_ln132_fu_2779_p2[53:36]}};
+assign out_im_fu_12508_p4 = {{mul_ln146_fu_2959_p2[53:36]}};
 
-assign pair_idx_new_3_cast_cast_cast_fu_12288_p3 = ((icmp_ln114_fu_12266_p2[0:0] == 1'b1) ? 32'd1128 : 32'd0);
+assign out_re_fu_12493_p4 = {{mul_ln145_fu_2955_p2[53:36]}};
 
-assign phase_load_load_fu_2818_p1 = phase;
+assign pair_idx_new_1_cast_cast_cast_fu_12458_p3 = ((icmp_ln127_fu_12436_p2[0:0] == 1'b1) ? 32'd1128 : 32'd0);
 
-assign re1_fu_12143_p3 = {{u_M_real_q0}, {13'd0}};
+assign phase_load_load_fu_2994_p1 = phase;
 
-assign re2_fu_12159_p3 = {{u_M_real_q1}, {13'd0}};
+assign re1_fu_12313_p3 = {{u_M_real_q1}, {13'd0}};
 
-assign s_norm_din = {{mul_ln87_fu_12054_p2[39:15]}};
+assign re2_fu_12329_p3 = {{u_M_real_q0}, {13'd0}};
 
-assign s_xcor_din = {{out_im_fu_12338_p4}, {out_re_fu_12323_p4}};
+assign s_norm_din = {{mul_ln95_fu_12208_p2[39:15]}};
 
-assign select_ln114_1_fu_12280_p3 = ((icmp_ln114_fu_12266_p2[0:0] == 1'b1) ? 2'd0 : 2'd2);
+assign s_xcor_din = {{out_im_fu_12508_p4}, {out_re_fu_12493_p4}};
 
-assign select_ln114_fu_12272_p3 = ((icmp_ln114_fu_12266_p2[0:0] == 1'b1) ? add_ln113_fu_12261_p2 : 32'd0);
+assign select_ln127_1_fu_12450_p3 = ((icmp_ln127_fu_12436_p2[0:0] == 1'b1) ? 2'd0 : 2'd2);
 
-assign sext_ln106_1_fu_12181_p1 = re2_fu_12159_p3;
+assign select_ln127_fu_12442_p3 = ((icmp_ln127_fu_12436_p2[0:0] == 1'b1) ? add_ln126_fu_12431_p2 : 32'd0);
 
-assign sext_ln106_2_fu_12187_p1 = im1_fu_12151_p3;
+assign sext_ln119_1_fu_12351_p1 = re2_fu_12329_p3;
 
-assign sext_ln106_3_fu_12193_p1 = im2_fu_12167_p3;
+assign sext_ln119_2_fu_12357_p1 = im1_fu_12321_p3;
 
-assign sext_ln106_fu_12175_p1 = re1_fu_12143_p3;
+assign sext_ln119_3_fu_12363_p1 = im2_fu_12337_p3;
 
-assign sext_ln132_fu_12308_p0 = R_flat_M_real_q1;
+assign sext_ln119_fu_12345_p1 = re1_fu_12313_p3;
 
-assign sext_ln133_fu_12333_p0 = R_flat_M_imag_q1;
+assign sext_ln145_fu_12478_p0 = R_flat_M_real_q1;
 
-assign sext_ln79_1_fu_11996_p1 = $signed(ui_fu_11982_p3);
+assign sext_ln146_fu_12503_p0 = R_flat_M_imag_q1;
 
-assign sext_ln79_fu_11990_p1 = $signed(ur_fu_11974_p3);
+assign sext_ln87_1_fu_12133_p1 = $signed(ui_fu_12119_p3);
 
-assign shl_ln8_fu_12236_p3 = {{R_flat_M_imag_q1}, {26'd0}};
+assign sext_ln87_fu_12127_p1 = $signed(ur_fu_12111_p3);
 
-assign shl_ln9_fu_12006_p3 = {{power_acc}, {26'd0}};
+assign shl_ln1_fu_12143_p3 = {{power_acc}, {26'd0}};
 
-assign shl_ln_fu_12199_p3 = {{R_flat_M_real_q1}, {26'd0}};
+assign shl_ln9_fu_12406_p3 = {{R_flat_M_imag_q1}, {26'd0}};
+
+assign shl_ln_fu_12369_p3 = {{R_flat_M_real_q1}, {26'd0}};
+
+assign st_1_load_load_fu_2974_p1 = st_1;
 
 assign start_out = real_start;
 
-assign sub_ln107_fu_12230_p2 = (mul_ln107_fu_2771_p2 - mul_ln107_1_fu_2775_p2);
+assign sub_ln120_fu_12400_p2 = (mul_ln120_fu_2947_p2 - mul_ln120_1_fu_2951_p2);
 
-assign tmp_4_fu_12081_p4 = {{mul_ln87_fu_12054_p2[39:30]}};
+assign tmp_8_fu_12240_p4 = {{mul_ln95_fu_12208_p2[39:30]}};
 
-assign tmp_nbreadreq_fu_2492_p3 = s_goertzel_empty_n;
+assign tmp_nbreadreq_fu_2531_p3 = s_goertzel_empty_n;
 
-assign trunc_ln53_fu_2806_p1 = pair_idx[10:0];
+assign trunc_ln103_fu_12274_p1 = grp_fu_12268_p2[23:0];
 
-assign trunc_ln87_2_fu_12071_p4 = {{mul_ln87_fu_12054_p2[38:15]}};
+assign trunc_ln59_fu_2982_p1 = pair_idx[10:0];
 
-assign trunc_ln90_fu_12115_p1 = grp_fu_12109_p2[23:0];
+assign trunc_ln95_2_fu_12225_p4 = {{mul_ln95_fu_12208_p2[38:15]}};
 
 assign u_M_imag_d1 = {{s_goertzel_dout[35:18]}};
 
-assign ui_fu_11982_p3 = {{u_M_imag_q0}, {13'd0}};
+assign ui_fu_12119_p3 = {{u_M_imag_q0}, {13'd0}};
 
-assign ur_fu_11974_p3 = {{u_M_real_q0}, {13'd0}};
+assign ur_fu_12111_p3 = {{u_M_real_q0}, {13'd0}};
 
-assign w_re_fu_11918_p1 = s_goertzel_dout[17:0];
+assign w_re_fu_12555_p1 = s_goertzel_dout[17:0];
 
-assign zext_ln100_fu_2854_p1 = pair_idx;
+assign zext_ln113_fu_3030_p1 = pair_idx;
 
-assign zext_ln102_fu_11900_p1 = k_s_fu_7380_p2259;
+assign zext_ln115_fu_12076_p1 = k_s_fu_7556_p2259;
 
-assign zext_ln104_fu_11906_p1 = j_s_fu_2860_p2259;
+assign zext_ln117_fu_12082_p1 = j_s_fu_3036_p2259;
 
-assign zext_ln129_fu_11912_p1 = pair_idx;
+assign zext_ln142_fu_12088_p1 = pair_idx;
 
-assign zext_ln132_fu_12317_p1 = scale;
+assign zext_ln145_fu_12487_p1 = scale;
 
-assign zext_ln58_fu_11938_p1 = v_count;
+assign zext_ln163_fu_12296_p1 = ap_phi_mux_empty_phi_fu_2914_p16;
 
-assign zext_ln77_fu_2830_p1 = diag_i;
+assign zext_ln66_fu_12571_p1 = v_count;
+
+assign zext_ln85_fu_3006_p1 = diag_i;
+
+assign zext_ln98_fu_12235_p1 = corrected_2_fu_12214_p4;
+
+always @ (posedge ap_clk) begin
+    status_cc_current_norm_preg[31:25] <= 7'b0000000;
+    status_cc_state_preg[7:2] <= 6'b000000;
+end
 
 endmodule //deepwaveaccel_crosscor

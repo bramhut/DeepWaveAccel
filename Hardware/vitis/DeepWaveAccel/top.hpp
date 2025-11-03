@@ -19,4 +19,8 @@ void deepwaveaccel(
     hls::stream<word_t> &param_db,
     hls::stream<out_axis_t> &out,   // unified 32-bit output stream
     goertzel_config         &goer_cfg,
-    deblur_config           &debl_cfg);
+    deblur_config           &debl_cf,
+    status_gz_t               &status_gz,
+    status_cc_t               &status_cc,
+    status_bp_t               &status_bp,
+    status_db_t               &status_db);

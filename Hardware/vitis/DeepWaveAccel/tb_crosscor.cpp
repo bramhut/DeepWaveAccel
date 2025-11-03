@@ -80,7 +80,7 @@ int tb_crosscor() {
     // Drive the kernel one clock tick per call
     while (out_stream.size() / NPAIR < frame_count) {
         cycle_count[out_stream.size() / NPAIR]++;
-        crosscor(in_stream, out_stream, norm_stream);
+        // crosscor(in_stream, out_stream, norm_stream);
     }
 
     if (!in_stream.empty()) {

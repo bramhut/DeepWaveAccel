@@ -13,4 +13,5 @@ using corr_accum_t = complex<power_accum_t>;
 // Top-level synthesizable kernel (AXI-Lite + AXI-Stream)
 void crosscor(hls::stream<AxisWordDFTc> &in_stream,
               hls::stream<AxisWordDFTc> &out_stream,
-              hls::stream<norm_sum_t> &norm_stream);
+              hls::stream<norm_sum_t> &norm_stream,
+              status_cc_t               &status);

@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=8.047667,HLS_SYN_LAT=40,HLS_SYN_TPT=34,HLS_SYN_MEM=72,HLS_SYN_DSP=0,HLS_SYN_FF=5207,HLS_SYN_LUT=16188,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=8.047667,HLS_SYN_LAT=67,HLS_SYN_TPT=25,HLS_SYN_MEM=72,HLS_SYN_DSP=0,HLS_SYN_FF=7434,HLS_SYN_LUT=18511,HLS_VERSION=2025_1}" *)
 
 module deepwaveaccel (
         s_axi_CTRL_BUS_AWVALID,
@@ -32,8 +32,6 @@ module deepwaveaccel (
         param_bp_TDATA,
         param_db_TDATA,
         out_r_TDATA,
-        out_r_TKEEP,
-        out_r_TSTRB,
         out_r_TLAST,
         in_r_TVALID,
         in_r_TREADY,
@@ -46,7 +44,7 @@ module deepwaveaccel (
 );
 
 parameter    C_S_AXI_CTRL_BUS_DATA_WIDTH = 32;
-parameter    C_S_AXI_CTRL_BUS_ADDR_WIDTH = 7;
+parameter    C_S_AXI_CTRL_BUS_ADDR_WIDTH = 9;
 parameter    C_S_AXI_DATA_WIDTH = 32;
 
 parameter C_S_AXI_CTRL_BUS_WSTRB_WIDTH = (32 / 8);
@@ -75,8 +73,6 @@ input  [31:0] in_r_TDATA;
 input  [31:0] param_bp_TDATA;
 input  [31:0] param_db_TDATA;
 output  [31:0] out_r_TDATA;
-output  [3:0] out_r_TKEEP;
-output  [3:0] out_r_TSTRB;
 output  [0:0] out_r_TLAST;
 input   in_r_TVALID;
 output   in_r_TREADY;
@@ -114,6 +110,14 @@ wire    goertzel_U0_start_write;
 wire    goertzel_U0_in_r_TREADY;
 wire   [35:0] goertzel_U0_s_goertzel_din;
 wire    goertzel_U0_s_goertzel_write;
+wire   [31:0] goertzel_U0_status_gz_samples_in;
+wire    goertzel_U0_status_gz_samples_in_ap_vld;
+wire   [31:0] goertzel_U0_status_gz_sample_win;
+wire    goertzel_U0_status_gz_sample_win_ap_vld;
+wire   [31:0] goertzel_U0_status_gz_samples_out;
+wire    goertzel_U0_status_gz_samples_out_ap_vld;
+wire   [31:0] goertzel_U0_status_gz_samples_out_fifo;
+wire    goertzel_U0_status_gz_samples_out_fifo_ap_vld;
 wire    crosscor_U0_ap_start;
 wire    crosscor_U0_ap_done;
 wire    crosscor_U0_ap_continue;
@@ -126,6 +130,22 @@ wire   [35:0] crosscor_U0_s_xcor_din;
 wire    crosscor_U0_s_xcor_write;
 wire   [24:0] crosscor_U0_s_norm_din;
 wire    crosscor_U0_s_norm_write;
+wire   [7:0] crosscor_U0_status_cc_state;
+wire    crosscor_U0_status_cc_state_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_samples_in;
+wire    crosscor_U0_status_cc_samples_in_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_samples_out;
+wire    crosscor_U0_status_cc_samples_out_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_sample_idx;
+wire    crosscor_U0_status_cc_sample_idx_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_current_norm;
+wire    crosscor_U0_status_cc_current_norm_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_norms_written;
+wire    crosscor_U0_status_cc_norms_written_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_out_fifo;
+wire    crosscor_U0_status_cc_out_fifo_ap_vld;
+wire   [31:0] crosscor_U0_status_cc_norms_fifo;
+wire    crosscor_U0_status_cc_norms_fifo_ap_vld;
 wire    backprojection_U0_ap_start;
 wire    backprojection_U0_ap_done;
 wire    backprojection_U0_ap_continue;
@@ -135,6 +155,20 @@ wire    backprojection_U0_s_xcor_read;
 wire    backprojection_U0_param_bp_TREADY;
 wire   [17:0] backprojection_U0_s_bp_din;
 wire    backprojection_U0_s_bp_write;
+wire   [0:0] backprojection_U0_status_bp_config_loaded;
+wire    backprojection_U0_status_bp_config_loaded_ap_vld;
+wire   [7:0] backprojection_U0_status_bp_fsm_state;
+wire    backprojection_U0_status_bp_fsm_state_ap_vld;
+wire   [7:0] backprojection_U0_status_bp_param_state;
+wire    backprojection_U0_status_bp_param_state_ap_vld;
+wire   [15:0] backprojection_U0_status_bp_idx;
+wire    backprojection_U0_status_bp_idx_ap_vld;
+wire   [31:0] backprojection_U0_status_bp_sigmas_in;
+wire    backprojection_U0_status_bp_sigmas_in_ap_vld;
+wire   [31:0] backprojection_U0_status_bp_pixels_out;
+wire    backprojection_U0_status_bp_pixels_out_ap_vld;
+wire   [15:0] backprojection_U0_status_bp_out_fifo_level;
+wire    backprojection_U0_status_bp_out_fifo_level_ap_vld;
 wire    deblur_U0_ap_start;
 wire    deblur_U0_ap_done;
 wire    deblur_U0_ap_continue;
@@ -145,10 +179,20 @@ wire    deblur_U0_s_bp_read;
 wire    deblur_U0_param_db_TREADY;
 wire   [31:0] deblur_U0_out_r_TDATA;
 wire    deblur_U0_out_r_TVALID;
-wire   [3:0] deblur_U0_out_r_TKEEP;
-wire   [3:0] deblur_U0_out_r_TSTRB;
 wire   [0:0] deblur_U0_out_r_TLAST;
 wire    deblur_U0_s_norm_read;
+wire   [0:0] deblur_U0_status_db_config_loaded;
+wire    deblur_U0_status_db_config_loaded_ap_vld;
+wire   [7:0] deblur_U0_status_db_fsm_state;
+wire    deblur_U0_status_db_fsm_state_ap_vld;
+wire   [7:0] deblur_U0_status_db_param_state;
+wire    deblur_U0_status_db_param_state_ap_vld;
+wire   [15:0] deblur_U0_status_db_idx;
+wire    deblur_U0_status_db_idx_ap_vld;
+wire   [31:0] deblur_U0_status_db_pixels_in;
+wire    deblur_U0_status_db_pixels_in_ap_vld;
+wire   [31:0] deblur_U0_status_db_pixels_out;
+wire    deblur_U0_status_db_pixels_out_ap_vld;
 wire    debl_cfg_c_full_n;
 wire   [7:0] debl_cfg_c_dout;
 wire    debl_cfg_c_empty_n;
@@ -217,7 +261,57 @@ CTRL_BUS_s_axi_U(
     .goer_cfg_COS_OMEGA2_1(goer_cfg_COS_OMEGA2_1),
     .goer_cfg_SIN_OMEGA_0(goer_cfg_SIN_OMEGA_0),
     .goer_cfg_SIN_OMEGA_1(goer_cfg_SIN_OMEGA_1),
-    .debl_cfg(debl_cfg)
+    .debl_cfg(debl_cfg),
+    .status_gz_samples_in(goertzel_U0_status_gz_samples_in),
+    .status_gz_samples_in_ap_vld(goertzel_U0_status_gz_samples_in_ap_vld),
+    .status_gz_sample_win(goertzel_U0_status_gz_sample_win),
+    .status_gz_sample_win_ap_vld(goertzel_U0_status_gz_sample_win_ap_vld),
+    .status_gz_samples_out(goertzel_U0_status_gz_samples_out),
+    .status_gz_samples_out_ap_vld(goertzel_U0_status_gz_samples_out_ap_vld),
+    .status_gz_samples_out_fifo(goertzel_U0_status_gz_samples_out_fifo),
+    .status_gz_samples_out_fifo_ap_vld(goertzel_U0_status_gz_samples_out_fifo_ap_vld),
+    .status_cc_state(crosscor_U0_status_cc_state),
+    .status_cc_state_ap_vld(crosscor_U0_status_cc_state_ap_vld),
+    .status_cc_samples_in(crosscor_U0_status_cc_samples_in),
+    .status_cc_samples_in_ap_vld(crosscor_U0_status_cc_samples_in_ap_vld),
+    .status_cc_samples_out(crosscor_U0_status_cc_samples_out),
+    .status_cc_samples_out_ap_vld(crosscor_U0_status_cc_samples_out_ap_vld),
+    .status_cc_sample_idx(crosscor_U0_status_cc_sample_idx),
+    .status_cc_sample_idx_ap_vld(crosscor_U0_status_cc_sample_idx_ap_vld),
+    .status_cc_current_norm(crosscor_U0_status_cc_current_norm),
+    .status_cc_current_norm_ap_vld(crosscor_U0_status_cc_current_norm_ap_vld),
+    .status_cc_norms_written(crosscor_U0_status_cc_norms_written),
+    .status_cc_norms_written_ap_vld(crosscor_U0_status_cc_norms_written_ap_vld),
+    .status_cc_out_fifo(crosscor_U0_status_cc_out_fifo),
+    .status_cc_out_fifo_ap_vld(crosscor_U0_status_cc_out_fifo_ap_vld),
+    .status_cc_norms_fifo(crosscor_U0_status_cc_norms_fifo),
+    .status_cc_norms_fifo_ap_vld(crosscor_U0_status_cc_norms_fifo_ap_vld),
+    .status_bp_config_loaded(backprojection_U0_status_bp_config_loaded),
+    .status_bp_config_loaded_ap_vld(backprojection_U0_status_bp_config_loaded_ap_vld),
+    .status_bp_fsm_state(backprojection_U0_status_bp_fsm_state),
+    .status_bp_fsm_state_ap_vld(backprojection_U0_status_bp_fsm_state_ap_vld),
+    .status_bp_param_state(backprojection_U0_status_bp_param_state),
+    .status_bp_param_state_ap_vld(backprojection_U0_status_bp_param_state_ap_vld),
+    .status_bp_idx(backprojection_U0_status_bp_idx),
+    .status_bp_idx_ap_vld(backprojection_U0_status_bp_idx_ap_vld),
+    .status_bp_sigmas_in(backprojection_U0_status_bp_sigmas_in),
+    .status_bp_sigmas_in_ap_vld(backprojection_U0_status_bp_sigmas_in_ap_vld),
+    .status_bp_pixels_out(backprojection_U0_status_bp_pixels_out),
+    .status_bp_pixels_out_ap_vld(backprojection_U0_status_bp_pixels_out_ap_vld),
+    .status_bp_out_fifo_level(backprojection_U0_status_bp_out_fifo_level),
+    .status_bp_out_fifo_level_ap_vld(backprojection_U0_status_bp_out_fifo_level_ap_vld),
+    .status_db_config_loaded(deblur_U0_status_db_config_loaded),
+    .status_db_config_loaded_ap_vld(deblur_U0_status_db_config_loaded_ap_vld),
+    .status_db_fsm_state(deblur_U0_status_db_fsm_state),
+    .status_db_fsm_state_ap_vld(deblur_U0_status_db_fsm_state_ap_vld),
+    .status_db_param_state(deblur_U0_status_db_param_state),
+    .status_db_param_state_ap_vld(deblur_U0_status_db_param_state_ap_vld),
+    .status_db_idx(deblur_U0_status_db_idx),
+    .status_db_idx_ap_vld(deblur_U0_status_db_idx_ap_vld),
+    .status_db_pixels_in(deblur_U0_status_db_pixels_in),
+    .status_db_pixels_in_ap_vld(deblur_U0_status_db_pixels_in_ap_vld),
+    .status_db_pixels_out(deblur_U0_status_db_pixels_out),
+    .status_db_pixels_out_ap_vld(deblur_U0_status_db_pixels_out_ap_vld)
 );
 
 deepwaveaccel_entry_proc entry_proc_U0(
@@ -263,7 +357,15 @@ deepwaveaccel_goertzel goertzel_U0(
     .s_goertzel_full_n(s_goertzel_full_n),
     .s_goertzel_write(goertzel_U0_s_goertzel_write),
     .s_goertzel_num_data_valid(s_goertzel_num_data_valid),
-    .s_goertzel_fifo_cap(s_goertzel_fifo_cap)
+    .s_goertzel_fifo_cap(s_goertzel_fifo_cap),
+    .status_gz_samples_in(goertzel_U0_status_gz_samples_in),
+    .status_gz_samples_in_ap_vld(goertzel_U0_status_gz_samples_in_ap_vld),
+    .status_gz_sample_win(goertzel_U0_status_gz_sample_win),
+    .status_gz_sample_win_ap_vld(goertzel_U0_status_gz_sample_win_ap_vld),
+    .status_gz_samples_out(goertzel_U0_status_gz_samples_out),
+    .status_gz_samples_out_ap_vld(goertzel_U0_status_gz_samples_out_ap_vld),
+    .status_gz_samples_out_fifo(goertzel_U0_status_gz_samples_out_fifo),
+    .status_gz_samples_out_fifo_ap_vld(goertzel_U0_status_gz_samples_out_fifo_ap_vld)
 );
 
 deepwaveaccel_crosscor crosscor_U0(
@@ -291,7 +393,23 @@ deepwaveaccel_crosscor crosscor_U0(
     .s_norm_full_n(s_norm_full_n),
     .s_norm_write(crosscor_U0_s_norm_write),
     .s_norm_num_data_valid(s_norm_num_data_valid),
-    .s_norm_fifo_cap(s_norm_fifo_cap)
+    .s_norm_fifo_cap(s_norm_fifo_cap),
+    .status_cc_state(crosscor_U0_status_cc_state),
+    .status_cc_state_ap_vld(crosscor_U0_status_cc_state_ap_vld),
+    .status_cc_samples_in(crosscor_U0_status_cc_samples_in),
+    .status_cc_samples_in_ap_vld(crosscor_U0_status_cc_samples_in_ap_vld),
+    .status_cc_samples_out(crosscor_U0_status_cc_samples_out),
+    .status_cc_samples_out_ap_vld(crosscor_U0_status_cc_samples_out_ap_vld),
+    .status_cc_sample_idx(crosscor_U0_status_cc_sample_idx),
+    .status_cc_sample_idx_ap_vld(crosscor_U0_status_cc_sample_idx_ap_vld),
+    .status_cc_current_norm(crosscor_U0_status_cc_current_norm),
+    .status_cc_current_norm_ap_vld(crosscor_U0_status_cc_current_norm_ap_vld),
+    .status_cc_norms_written(crosscor_U0_status_cc_norms_written),
+    .status_cc_norms_written_ap_vld(crosscor_U0_status_cc_norms_written_ap_vld),
+    .status_cc_out_fifo(crosscor_U0_status_cc_out_fifo),
+    .status_cc_out_fifo_ap_vld(crosscor_U0_status_cc_out_fifo_ap_vld),
+    .status_cc_norms_fifo(crosscor_U0_status_cc_norms_fifo),
+    .status_cc_norms_fifo_ap_vld(crosscor_U0_status_cc_norms_fifo_ap_vld)
 );
 
 deepwaveaccel_backprojection backprojection_U0(
@@ -314,7 +432,21 @@ deepwaveaccel_backprojection backprojection_U0(
     .s_bp_full_n(s_bp_full_n),
     .s_bp_write(backprojection_U0_s_bp_write),
     .s_bp_num_data_valid(s_bp_num_data_valid),
-    .s_bp_fifo_cap(s_bp_fifo_cap)
+    .s_bp_fifo_cap(s_bp_fifo_cap),
+    .status_bp_config_loaded(backprojection_U0_status_bp_config_loaded),
+    .status_bp_config_loaded_ap_vld(backprojection_U0_status_bp_config_loaded_ap_vld),
+    .status_bp_fsm_state(backprojection_U0_status_bp_fsm_state),
+    .status_bp_fsm_state_ap_vld(backprojection_U0_status_bp_fsm_state_ap_vld),
+    .status_bp_param_state(backprojection_U0_status_bp_param_state),
+    .status_bp_param_state_ap_vld(backprojection_U0_status_bp_param_state_ap_vld),
+    .status_bp_idx(backprojection_U0_status_bp_idx),
+    .status_bp_idx_ap_vld(backprojection_U0_status_bp_idx_ap_vld),
+    .status_bp_sigmas_in(backprojection_U0_status_bp_sigmas_in),
+    .status_bp_sigmas_in_ap_vld(backprojection_U0_status_bp_sigmas_in_ap_vld),
+    .status_bp_pixels_out(backprojection_U0_status_bp_pixels_out),
+    .status_bp_pixels_out_ap_vld(backprojection_U0_status_bp_pixels_out_ap_vld),
+    .status_bp_out_fifo_level(backprojection_U0_status_bp_out_fifo_level),
+    .status_bp_out_fifo_level_ap_vld(backprojection_U0_status_bp_out_fifo_level_ap_vld)
 );
 
 deepwaveaccel_deblur deblur_U0(
@@ -341,14 +473,24 @@ deepwaveaccel_deblur deblur_U0(
     .out_r_TDATA(deblur_U0_out_r_TDATA),
     .out_r_TVALID(deblur_U0_out_r_TVALID),
     .out_r_TREADY(out_r_TREADY),
-    .out_r_TKEEP(deblur_U0_out_r_TKEEP),
-    .out_r_TSTRB(deblur_U0_out_r_TSTRB),
     .out_r_TLAST(deblur_U0_out_r_TLAST),
     .s_norm_dout(s_norm_dout),
     .s_norm_empty_n(s_norm_empty_n),
     .s_norm_read(deblur_U0_s_norm_read),
     .s_norm_num_data_valid(s_norm_num_data_valid),
-    .s_norm_fifo_cap(s_norm_fifo_cap)
+    .s_norm_fifo_cap(s_norm_fifo_cap),
+    .status_db_config_loaded(deblur_U0_status_db_config_loaded),
+    .status_db_config_loaded_ap_vld(deblur_U0_status_db_config_loaded_ap_vld),
+    .status_db_fsm_state(deblur_U0_status_db_fsm_state),
+    .status_db_fsm_state_ap_vld(deblur_U0_status_db_fsm_state_ap_vld),
+    .status_db_param_state(deblur_U0_status_db_param_state),
+    .status_db_param_state_ap_vld(deblur_U0_status_db_param_state_ap_vld),
+    .status_db_idx(deblur_U0_status_db_idx),
+    .status_db_idx_ap_vld(deblur_U0_status_db_idx_ap_vld),
+    .status_db_pixels_in(deblur_U0_status_db_pixels_in),
+    .status_db_pixels_in_ap_vld(deblur_U0_status_db_pixels_in_ap_vld),
+    .status_db_pixels_out(deblur_U0_status_db_pixels_out),
+    .status_db_pixels_out_ap_vld(deblur_U0_status_db_pixels_out_ap_vld)
 );
 
 deepwaveaccel_fifo_w8_d5_S debl_cfg_c_U(
@@ -493,11 +635,7 @@ assign in_r_TREADY = goertzel_U0_in_r_TREADY;
 
 assign out_r_TDATA = deblur_U0_out_r_TDATA;
 
-assign out_r_TKEEP = deblur_U0_out_r_TKEEP;
-
 assign out_r_TLAST = deblur_U0_out_r_TLAST;
-
-assign out_r_TSTRB = deblur_U0_out_r_TSTRB;
 
 assign out_r_TVALID = deblur_U0_out_r_TVALID;
 

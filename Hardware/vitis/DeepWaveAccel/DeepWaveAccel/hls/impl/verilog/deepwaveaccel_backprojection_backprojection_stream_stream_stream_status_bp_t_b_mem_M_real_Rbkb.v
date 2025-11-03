@@ -4,7 +4,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // ==============================================================
 `timescale 1 ns / 1 ps
-module deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb (
+module deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb (
      
     address0, ce0,
     
@@ -37,7 +37,7 @@ input clk;
 (* ram_style = "hls_ultra" , cascade_height = 1 *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.dat", ram);
+    $readmemh("./deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb.dat", ram);
 end 
 
  

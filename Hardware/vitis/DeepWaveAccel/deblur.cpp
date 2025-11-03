@@ -1,4 +1,5 @@
 #include "deblur.hpp"
+#include "hls_fence.h"
 #include <iostream>
 
 // -----------------------------------------------------------------------------
@@ -19,8 +20,9 @@
 template <typename T>
 static inline word_t pack_word(T x) {
 #pragma HLS INLINE
-    auto r = x.range();
-    return (word_t)x.range();
+    word_t out;
+    out.range() = x.range();
+    return out;
 }
 
 // -----------------------------------------------------------------------------
@@ -63,13 +65,15 @@ void deblur(
     hls::stream<word_t> &param_in,
     hls::stream<out_axis_t> &out_stream,
     hls::stream<norm_sum_t> &norm_stream,
-    deblur_config           &cfg)
+    deblur_config           &cfg,
+    status_db_t             &status)
 {
     AP_CTRL_NONE;
     AXIS_IN_OUT(bp_stream);
     AXIS_IN_OUT(param_in);
     AXIS_IN_OUT(out_stream);
     AXIL_CFG(cfg);
+    AXIL_CFG(status);
     // No loop-level PIPELINE on whole function; intra-stage pipelining is used.
 
     // ---------------- Persistent memories ----------------
@@ -81,7 +85,6 @@ void deblur(
 
 #pragma HLS BIND_STORAGE variable=theta type=ram_1p impl=auto
 #pragma HLS ARRAY_PARTITION variable=lap_offsets complete
-#pragma HLS BIND_STORAGE variable=lap_offsets type=ram_2p impl=bram
 #pragma HLS BIND_STORAGE variable=lap_rest type=ram_2p impl=bram
 #pragma HLS ARRAY_PARTITION variable=lap_rest dim=1 complete
 
@@ -121,14 +124,13 @@ void deblur(
 
     // static bool frame_sent = false;
 
-    static idx_t i = 0;
-    static int   d = 0;
-    static int   k = 0;
-    static int   layer = 0;
+    static int   k = 1;
     static acc_t acc_tmp = 0;
-    static bool  centre  = true;
     static acc_t y_tmp   = 0;
     static bool  config_loaded = false;
+
+    static word_t pixels_in = 0;
+    static word_t pixels_out = 0;
 
     switch (st)
     {
@@ -141,12 +143,12 @@ void deblur(
                 case READ_K: {
                     K = w;
                     config_loaded = false; // Reset, we are reloading everything
-                    i = 0;
-                    d = 0;
+                    status.config_loaded = false;
                     stl = READ_THETA;
                     break;
                 }
                 case READ_THETA: {
+                    static int i = 0;
                     theta[i].range() = w.range();
                     i++;
                     if (i > K) {
@@ -156,6 +158,7 @@ void deblur(
                     break;
                 }
                 case READ_OFFSETS: {
+                    static int i = 0;
                     lap_offsets[i] = w;
                     i++;
                     if (i == ND) {
@@ -165,11 +168,14 @@ void deblur(
                     break;
                 }
                 case READ_MAIN: {
+                    static int i = 0;
                     lap_main.range() = w.range();
                     stl = READ_REST;
                     break;
                 }
                 case READ_REST: {
+                    static int i = 0;
+                    static int d = 0;
                     lap_rest[d][i].range() = w.range();
                     i++;
                     if (i == IMG_LEN) {
@@ -178,45 +184,34 @@ void deblur(
                         if (d == ND) {
                             d = 0;
                             config_loaded = true;
+                            status.config_loaded = true;
                             stl = READ_K;
-                            st = LOAD_BP; // We have finished loading all params
+                            // Do not necessarily go straight to LOAD_BP, maybe we'd like to reload params. Just stay in LOAD_PARAMS and go to LOAD_BP when bp_stream is no longer empty
                         }
                         break;
                     }
                 }
 
             }
-        } else if (config_loaded) { // We can go straight to LOAD_BP if we have already loaded all params
+            status.param_state = stl;
+        } else if (config_loaded && !bp_stream.empty()) { // We can go straight to LOAD_BP if we have already loaded all params and there is data available
             st = LOAD_BP;
         }
         break;
     }
 
     case LOAD_BP: {
-        // -----------------------------------------------------------------------------
-        // DEBUG: Emit one frame of constant '1.0' pixels to out_stream
-        // -----------------------------------------------------------------------------
-        
-        // if (!frame_sent) {
-        //     out_axis_t w;
-        //     w.data = 0xDEADBEEF;
-        //     w.last = (i == IMG_LEN - 1); // Assert TLAST on final pixel
-        //     out_stream.write(w);
-        //     ++i;
-        //     if (i == IMG_LEN) {
-        //         i = 0;
-        //         frame_sent = true;
-        //     } 
-        // }
-        // else 
+        static int i = 0;
         if (!bp_stream.empty()) {
             bp_buf[i] = bp_stream.read();
+            status.idx = i;
+            status.pixels_in = ++pixels_in;
+            
             Z0[i] = (img_t)0;
             y_acc[i] = (acc_t)0;
             ++i;
             if (i == IMG_LEN) {
-                i = 0; layer = 0; k = 1;
-                centre = true; d = 0;
+                i = 0;
                 st = CHEB_COMPUTE; // skip CHEB_Y0 (θ0 applied in loop)
             }
         }
@@ -224,11 +219,12 @@ void deblur(
     }
 
     case CHEB_Y0: {
+        static int i = 0;
         // Optional: initial y = θ0 * Z0 (if you prefer explicit first-step)
         y_acc[i] = (acc_t)theta[0] * (acc_t)Z0[i];
         ++i;
         if (i == IMG_LEN) {
-            i = 0; k = 1; d = 0; centre = true;
+            i = 0;
             st = CHEB_COMPUTE;
         }
         break;
@@ -236,19 +232,22 @@ void deblur(
 
     // ---------------- Chebyshev compute ----------------
     case CHEB_COMPUTE: {
+        static int i = 0;
+        static bool centre = true;
         int k_mod = k % 3;
 
         if (centre) {
             img_t center_val = SELECT_Z(k_mod, i, 1);
             acc_tmp = (acc_t)lap_main * (acc_t)center_val;
             y_tmp   = y_acc[i];
-            d = 0;
             centre = false;
         }
         else {
+            static int d = 0;
             acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, lap_offsets, lap_rest, acc_tmp, d);
 
             if (d == ND-1) {
+                d = 0;
                 centre = true;
                 img_t t = (img_t)acc_tmp;
 
@@ -269,7 +268,10 @@ void deblur(
                 if (i == IMG_LEN) {
                     i = 0; ++k;
                     if (k <= K) st = CHEB_COMPUTE;
-                    else            st = LAYER_ADD_BP;
+                    else {           
+                        st = LAYER_ADD_BP;
+                        k = 1;
+                    }
                 }
             } else {
                 ++d;
@@ -279,6 +281,8 @@ void deblur(
     }
 
     case LAYER_ADD_BP: {
+        static int i = 0;
+        static int layer = 0;
         img_t t = (img_t)(y_acc[i] + (acc_t)bp_buf[i]);
         if (t < 0) t = 0;
         Z0[i] = t;
@@ -287,14 +291,8 @@ void deblur(
             i = 0; ++layer;
             if (layer < (int)cfg.n_layers) {
                 st = CHEB_Y0;
-                k  = 1; d = 0; centre = true;
             } else {
-                // before OUTPUT, fetch normalization and send it
-                norm_sum_t nv = norm_stream.read();
-                out_axis_t out;
-                out.data = pack_word(nv);
-                out.last = 0;
-                out_stream.write(out);
+                layer = 0;
                 st = OUTPUT;
             }
         }
@@ -302,18 +300,54 @@ void deblur(
     }
 
     case OUTPUT: {
+#ifdef __SYNTHESIS__           // We output one frame twice, only in the actual kernel. Stupid AXIS meuk
+#define N_REPEAT 2
+#else
+#define N_REPEAT 1
+#endif
+        static int i_out = 0;
+        static int frames_out = 0;
+        static int repeat = 0;
+        static word_t norm;
+        static bool norm_valid = false;
         out_axis_t out;
-        out.data = pack_word(Z0[i]);
-        out.last = (i==IMG_LEN-1) ? 1 : 0;
+
+        // First read norm, once a frame
+        if (!norm_valid){
+            norm = pack_word((norm_out_t)norm_stream.read()); // Pack norm in norm_out_t format
+            norm_valid = true;
+        }
+
+        hls::fence({norm},{out});
+        if (i_out==0) {
+            // First write norm
+            out.data = ((repeat & 0b1) <<18) | norm;
+        } else {
+            // Otherwise write pixels
+            out.data = (i_out<<19) | ((repeat & 0b1) <<18) | pack_word(Z0[i_out-1]);
+            status.pixels_out = ++pixels_out;
+        }
+        out.last = (i_out==IMG_LEN) && (repeat == N_REPEAT-1);
+        hls::fence({out},{out_stream});
         out_stream.write(out);
-        ++i;
-        if (i == IMG_LEN) {
-            i = 0;
-            st = LOAD_PARAMS;   // next frame
+        hls::fence({out_stream},{i_out});
+        status.idx = i_out;
+
+        ++i_out;
+        if (i_out == IMG_LEN + 1) {
+            i_out = 0;
+            repeat++;
+            if (repeat == N_REPEAT) { // 2 passes (issues with skipping first ~147 values couldn't be solved...)
+                repeat = 0;
+                norm_valid = false;
+                frames_out++;
+                st = LOAD_PARAMS;   // next frame
+            }
         }
         break;
     }
     } // switch
+    status.fsm_state = st;
 }
 
 #undef SELECT_Z

@@ -57,7 +57,7 @@
     "out": {
       "index": "3",
       "direction": "out",
-      "srcType": "stream<hls::axis<ap_uint<32>, 0, 0, 0, '8', false>, 0>&",
+      "srcType": "stream<hls::axis<ap_uint<32>, 0, 0, 0, '\\x11', false>, 0>&",
       "srcSize": "96",
       "hwRefs": [{
           "type": "interface",
@@ -129,6 +129,213 @@
           "usage": "data",
           "direction": "in"
         }]
+    },
+    "status_gz": {
+      "index": "6",
+      "direction": "out",
+      "srcType": "status_gz_t&",
+      "srcSize": "128",
+      "hwRefs": [
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        }
+      ]
+    },
+    "status_cc": {
+      "index": "7",
+      "direction": "out",
+      "srcType": "status_cc_t&",
+      "srcSize": "256",
+      "hwRefs": [
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        }
+      ]
+    },
+    "status_bp": {
+      "index": "8",
+      "direction": "out",
+      "srcType": "status_bp_t&",
+      "srcSize": "160",
+      "hwRefs": [
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        }
+      ]
+    },
+    "status_db": {
+      "index": "9",
+      "direction": "out",
+      "srcType": "status_db_t&",
+      "srcSize": "128",
+      "hwRefs": [
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "interface",
+          "interface": "s_axi_CTRL_BUS",
+          "name": "",
+          "usage": "data",
+          "direction": "out"
+        }
+      ]
     }
   },
   "HlsSolution": {
@@ -158,7 +365,7 @@
     "Uncertainty": "1.5",
     "IsCombinational": "0",
     "II": "2 ~ 45",
-    "Latency": "12"
+    "Latency": "56"
   },
   "Xdc": {"OocClocks": ["create_clock -name ap_clk -period 10.000 [get_ports ap_clk]"]},
   "Ipx": {
@@ -167,7 +374,7 @@
     "Name": "DeepWave",
     "Version": "1.0",
     "DisplayName": "DeepWave",
-    "Revision": "2114326868",
+    "Revision": "2114331862",
     "Description": "An IP generated by Vitis HLS",
     "Taxonomy": "\/VITIS_HLS_IP",
     "AutoFamilySupport": "",
@@ -191,7 +398,7 @@
     ],
     "Vhdl": [
       "impl\/vhdl\/deepwaveaccel_backprojection.vhd",
-      "impl\/vhdl\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.vhd",
+      "impl\/vhdl\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb.vhd",
       "impl\/vhdl\/deepwaveaccel_backprojection_j_rom_ROM_1P_BRAM_1R.vhd",
       "impl\/vhdl\/deepwaveaccel_backprojection_k_rom_ROM_1P_BRAM_1R.vhd",
       "impl\/vhdl\/deepwaveaccel_backprojection_Sigma_up_M_real_RAM_1P_BRAM_1R1W.vhd",
@@ -202,7 +409,7 @@
       "impl\/vhdl\/deepwaveaccel_CTRL_BUS_s_axi.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.vhd",
-      "impl\/vhdl\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5dEe.vhd",
+      "impl\/vhdl\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_theta_RAM_1P_AUTO_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.vhd",
       "impl\/vhdl\/deepwaveaccel_deblur_Z0_RAM_2P_BRAM_1R1W.vhd",
@@ -243,8 +450,8 @@
     ],
     "Verilog": [
       "impl\/verilog\/deepwaveaccel_backprojection.v",
-      "impl\/verilog\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.dat",
-      "impl\/verilog\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_RAbkb.v",
+      "impl\/verilog\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb.dat",
+      "impl\/verilog\/deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb.v",
       "impl\/verilog\/deepwaveaccel_backprojection_j_rom_ROM_1P_BRAM_1R.dat",
       "impl\/verilog\/deepwaveaccel_backprojection_j_rom_ROM_1P_BRAM_1R.v",
       "impl\/verilog\/deepwaveaccel_backprojection_k_rom_ROM_1P_BRAM_1R.dat",
@@ -262,8 +469,8 @@
       "impl\/verilog\/deepwaveaccel_deblur.v",
       "impl\/verilog\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_deblur_bp_buf_RAM_1P_BRAM_1R1W.v",
-      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5dEe.dat",
-      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5dEe.v",
+      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.dat",
+      "impl\/verilog\/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.v",
       "impl\/verilog\/deepwaveaccel_deblur_theta_RAM_1P_AUTO_1R1W.dat",
       "impl\/verilog\/deepwaveaccel_deblur_theta_RAM_1P_AUTO_1R1W.v",
       "impl\/verilog\/deepwaveaccel_deblur_y_acc_RAM_2P_BRAM_1R1W.dat",
@@ -339,7 +546,7 @@
       "busTypeName": "aximm",
       "mode": "slave",
       "dataWidth": "32",
-      "addrWidth": "7",
+      "addrWidth": "9",
       "portPrefix": "s_axi_CTRL_BUS_",
       "paramPrefix": "C_S_AXI_CTRL_BUS_",
       "ports": [
@@ -522,6 +729,1021 @@
               "description": "Reserved.  0s on read."
             }
           ]
+        },
+        {
+          "offset": "0x48",
+          "name": "status_gz_samples_in",
+          "access": "R",
+          "description": "Data signal of status_gz_samples_in",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_gz_samples_in",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_gz_samples_in"
+            }]
+        },
+        {
+          "offset": "0x4c",
+          "name": "status_gz_samples_in_ctrl",
+          "access": "R",
+          "description": "Control signal of status_gz_samples_in",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_gz_samples_in_ap_vld",
+              "access": "R",
+              "description": "Control signal status_gz_samples_in_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x58",
+          "name": "status_gz_sample_win",
+          "access": "R",
+          "description": "Data signal of status_gz_sample_win",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_gz_sample_win",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_gz_sample_win"
+            }]
+        },
+        {
+          "offset": "0x5c",
+          "name": "status_gz_sample_win_ctrl",
+          "access": "R",
+          "description": "Control signal of status_gz_sample_win",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_gz_sample_win_ap_vld",
+              "access": "R",
+              "description": "Control signal status_gz_sample_win_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x68",
+          "name": "status_gz_samples_out",
+          "access": "R",
+          "description": "Data signal of status_gz_samples_out",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_gz_samples_out",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_gz_samples_out"
+            }]
+        },
+        {
+          "offset": "0x6c",
+          "name": "status_gz_samples_out_ctrl",
+          "access": "R",
+          "description": "Control signal of status_gz_samples_out",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_gz_samples_out_ap_vld",
+              "access": "R",
+              "description": "Control signal status_gz_samples_out_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x78",
+          "name": "status_gz_samples_out_fifo",
+          "access": "R",
+          "description": "Data signal of status_gz_samples_out_fifo",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_gz_samples_out_fifo",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_gz_samples_out_fifo"
+            }]
+        },
+        {
+          "offset": "0x7c",
+          "name": "status_gz_samples_out_fifo_ctrl",
+          "access": "R",
+          "description": "Control signal of status_gz_samples_out_fifo",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_gz_samples_out_fifo_ap_vld",
+              "access": "R",
+              "description": "Control signal status_gz_samples_out_fifo_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x88",
+          "name": "status_cc_state",
+          "access": "R",
+          "description": "Data signal of status_cc_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "8",
+              "name": "status_cc_state",
+              "access": "R",
+              "description": "Bit 7 to 0 of status_cc_state"
+            },
+            {
+              "offset": "8",
+              "width": "24",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x8c",
+          "name": "status_cc_state_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_state_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_state_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x98",
+          "name": "status_cc_samples_in",
+          "access": "R",
+          "description": "Data signal of status_cc_samples_in",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_samples_in",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_samples_in"
+            }]
+        },
+        {
+          "offset": "0x9c",
+          "name": "status_cc_samples_in_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_samples_in",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_samples_in_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_samples_in_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xa8",
+          "name": "status_cc_samples_out",
+          "access": "R",
+          "description": "Data signal of status_cc_samples_out",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_samples_out",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_samples_out"
+            }]
+        },
+        {
+          "offset": "0xac",
+          "name": "status_cc_samples_out_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_samples_out",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_samples_out_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_samples_out_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xb8",
+          "name": "status_cc_sample_idx",
+          "access": "R",
+          "description": "Data signal of status_cc_sample_idx",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_sample_idx",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_sample_idx"
+            }]
+        },
+        {
+          "offset": "0xbc",
+          "name": "status_cc_sample_idx_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_sample_idx",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_sample_idx_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_sample_idx_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xc8",
+          "name": "status_cc_current_norm",
+          "access": "R",
+          "description": "Data signal of status_cc_current_norm",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_current_norm",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_current_norm"
+            }]
+        },
+        {
+          "offset": "0xcc",
+          "name": "status_cc_current_norm_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_current_norm",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_current_norm_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_current_norm_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xd8",
+          "name": "status_cc_norms_written",
+          "access": "R",
+          "description": "Data signal of status_cc_norms_written",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_norms_written",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_norms_written"
+            }]
+        },
+        {
+          "offset": "0xdc",
+          "name": "status_cc_norms_written_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_norms_written",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_norms_written_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_norms_written_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xe8",
+          "name": "status_cc_out_fifo",
+          "access": "R",
+          "description": "Data signal of status_cc_out_fifo",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_out_fifo",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_out_fifo"
+            }]
+        },
+        {
+          "offset": "0xec",
+          "name": "status_cc_out_fifo_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_out_fifo",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_out_fifo_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_out_fifo_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0xf8",
+          "name": "status_cc_norms_fifo",
+          "access": "R",
+          "description": "Data signal of status_cc_norms_fifo",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_cc_norms_fifo",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_cc_norms_fifo"
+            }]
+        },
+        {
+          "offset": "0xfc",
+          "name": "status_cc_norms_fifo_ctrl",
+          "access": "R",
+          "description": "Control signal of status_cc_norms_fifo",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_cc_norms_fifo_ap_vld",
+              "access": "R",
+              "description": "Control signal status_cc_norms_fifo_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x108",
+          "name": "status_bp_config_loaded",
+          "access": "R",
+          "description": "Data signal of status_bp_config_loaded",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_config_loaded",
+              "access": "R",
+              "description": "Bit 0 to 0 of status_bp_config_loaded"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x10c",
+          "name": "status_bp_config_loaded_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_config_loaded",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_config_loaded_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_config_loaded_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x118",
+          "name": "status_bp_fsm_state",
+          "access": "R",
+          "description": "Data signal of status_bp_fsm_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "8",
+              "name": "status_bp_fsm_state",
+              "access": "R",
+              "description": "Bit 7 to 0 of status_bp_fsm_state"
+            },
+            {
+              "offset": "8",
+              "width": "24",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x11c",
+          "name": "status_bp_fsm_state_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_fsm_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_fsm_state_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_fsm_state_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x128",
+          "name": "status_bp_param_state",
+          "access": "R",
+          "description": "Data signal of status_bp_param_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "8",
+              "name": "status_bp_param_state",
+              "access": "R",
+              "description": "Bit 7 to 0 of status_bp_param_state"
+            },
+            {
+              "offset": "8",
+              "width": "24",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x12c",
+          "name": "status_bp_param_state_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_param_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_param_state_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_param_state_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x138",
+          "name": "status_bp_idx",
+          "access": "R",
+          "description": "Data signal of status_bp_idx",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "16",
+              "name": "status_bp_idx",
+              "access": "R",
+              "description": "Bit 15 to 0 of status_bp_idx"
+            },
+            {
+              "offset": "16",
+              "width": "16",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x13c",
+          "name": "status_bp_idx_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_idx",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_idx_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_idx_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x148",
+          "name": "status_bp_sigmas_in",
+          "access": "R",
+          "description": "Data signal of status_bp_sigmas_in",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_bp_sigmas_in",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_bp_sigmas_in"
+            }]
+        },
+        {
+          "offset": "0x14c",
+          "name": "status_bp_sigmas_in_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_sigmas_in",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_sigmas_in_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_sigmas_in_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x158",
+          "name": "status_bp_pixels_out",
+          "access": "R",
+          "description": "Data signal of status_bp_pixels_out",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_bp_pixels_out",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_bp_pixels_out"
+            }]
+        },
+        {
+          "offset": "0x15c",
+          "name": "status_bp_pixels_out_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_pixels_out",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_pixels_out_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_pixels_out_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x168",
+          "name": "status_bp_out_fifo_level",
+          "access": "R",
+          "description": "Data signal of status_bp_out_fifo_level",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "16",
+              "name": "status_bp_out_fifo_level",
+              "access": "R",
+              "description": "Bit 15 to 0 of status_bp_out_fifo_level"
+            },
+            {
+              "offset": "16",
+              "width": "16",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x16c",
+          "name": "status_bp_out_fifo_level_ctrl",
+          "access": "R",
+          "description": "Control signal of status_bp_out_fifo_level",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_bp_out_fifo_level_ap_vld",
+              "access": "R",
+              "description": "Control signal status_bp_out_fifo_level_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x178",
+          "name": "status_db_config_loaded",
+          "access": "R",
+          "description": "Data signal of status_db_config_loaded",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_config_loaded",
+              "access": "R",
+              "description": "Bit 0 to 0 of status_db_config_loaded"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x17c",
+          "name": "status_db_config_loaded_ctrl",
+          "access": "R",
+          "description": "Control signal of status_db_config_loaded",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_config_loaded_ap_vld",
+              "access": "R",
+              "description": "Control signal status_db_config_loaded_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x188",
+          "name": "status_db_fsm_state",
+          "access": "R",
+          "description": "Data signal of status_db_fsm_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "8",
+              "name": "status_db_fsm_state",
+              "access": "R",
+              "description": "Bit 7 to 0 of status_db_fsm_state"
+            },
+            {
+              "offset": "8",
+              "width": "24",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x18c",
+          "name": "status_db_fsm_state_ctrl",
+          "access": "R",
+          "description": "Control signal of status_db_fsm_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_fsm_state_ap_vld",
+              "access": "R",
+              "description": "Control signal status_db_fsm_state_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x198",
+          "name": "status_db_param_state",
+          "access": "R",
+          "description": "Data signal of status_db_param_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "8",
+              "name": "status_db_param_state",
+              "access": "R",
+              "description": "Bit 7 to 0 of status_db_param_state"
+            },
+            {
+              "offset": "8",
+              "width": "24",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x19c",
+          "name": "status_db_param_state_ctrl",
+          "access": "R",
+          "description": "Control signal of status_db_param_state",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_param_state_ap_vld",
+              "access": "R",
+              "description": "Control signal status_db_param_state_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x1a8",
+          "name": "status_db_idx",
+          "access": "R",
+          "description": "Data signal of status_db_idx",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "16",
+              "name": "status_db_idx",
+              "access": "R",
+              "description": "Bit 15 to 0 of status_db_idx"
+            },
+            {
+              "offset": "16",
+              "width": "16",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x1ac",
+          "name": "status_db_idx_ctrl",
+          "access": "R",
+          "description": "Control signal of status_db_idx",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_idx_ap_vld",
+              "access": "R",
+              "description": "Control signal status_db_idx_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x1b8",
+          "name": "status_db_pixels_in",
+          "access": "R",
+          "description": "Data signal of status_db_pixels_in",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_db_pixels_in",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_db_pixels_in"
+            }]
+        },
+        {
+          "offset": "0x1bc",
+          "name": "status_db_pixels_in_ctrl",
+          "access": "R",
+          "description": "Control signal of status_db_pixels_in",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_pixels_in_ap_vld",
+              "access": "R",
+              "description": "Control signal status_db_pixels_in_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
+        },
+        {
+          "offset": "0x1c8",
+          "name": "status_db_pixels_out",
+          "access": "R",
+          "description": "Data signal of status_db_pixels_out",
+          "range": "32",
+          "fields": [{
+              "offset": "0",
+              "width": "32",
+              "name": "status_db_pixels_out",
+              "access": "R",
+              "description": "Bit 31 to 0 of status_db_pixels_out"
+            }]
+        },
+        {
+          "offset": "0x1cc",
+          "name": "status_db_pixels_out_ctrl",
+          "access": "R",
+          "description": "Control signal of status_db_pixels_out",
+          "range": "32",
+          "fields": [
+            {
+              "offset": "0",
+              "width": "1",
+              "name": "status_db_pixels_out_ap_vld",
+              "access": "R",
+              "description": "Control signal status_db_pixels_out_ap_vld"
+            },
+            {
+              "offset": "1",
+              "width": "31",
+              "name": "RESERVED",
+              "access": "R",
+              "description": "Reserved.  0s on read."
+            }
+          ]
         }
       ],
       "constraints": [
@@ -573,6 +1795,181 @@
           "register_option": "0",
           "offset": "64",
           "argName": "debl_cfg"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "72",
+          "argName": "status_gz"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "88",
+          "argName": "status_gz"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "104",
+          "argName": "status_gz"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "120",
+          "argName": "status_gz"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "136",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "152",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "168",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "184",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "200",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "216",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "232",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "248",
+          "argName": "status_cc"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "264",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "280",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "296",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "312",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "328",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "344",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "360",
+          "argName": "status_bp"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "376",
+          "argName": "status_db"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "392",
+          "argName": "status_db"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "408",
+          "argName": "status_db"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "424",
+          "argName": "status_db"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "440",
+          "argName": "status_db"
+        },
+        {
+          "constraint_type": "pragma interface",
+          "mode": "s_axilite",
+          "register_option": "0",
+          "offset": "456",
+          "argName": "status_db"
         }
       ]
     },
@@ -664,10 +2061,8 @@
       "portPrefix": "out_r_",
       "ports": [
         "out_r_TDATA",
-        "out_r_TKEEP",
         "out_r_TLAST",
         "out_r_TREADY",
-        "out_r_TSTRB",
         "out_r_TVALID"
       ],
       "constraints": [{
@@ -690,7 +2085,7 @@
     },
     "s_axi_CTRL_BUS_AWADDR": {
       "dir": "in",
-      "width": "7"
+      "width": "9"
     },
     "s_axi_CTRL_BUS_WVALID": {
       "dir": "in",
@@ -718,7 +2113,7 @@
     },
     "s_axi_CTRL_BUS_ARADDR": {
       "dir": "in",
-      "width": "7"
+      "width": "9"
     },
     "s_axi_CTRL_BUS_RVALID": {
       "dir": "out",
@@ -796,14 +2191,6 @@
       "dir": "out",
       "width": "32"
     },
-    "out_r_TKEEP": {
-      "dir": "out",
-      "width": "4"
-    },
-    "out_r_TSTRB": {
-      "dir": "out",
-      "width": "4"
-    },
     "out_r_TLAST": {
       "dir": "out",
       "width": "1",
@@ -826,17 +2213,17 @@
         {
           "ModuleName": "goertzel",
           "InstanceName": "goertzel_U0",
-          "BindInstances": "mul_14s_13ns_27_1_1_U3 mac_muladd_18s_18s_30s_34_4_1_U5 mac_muladd_18s_18s_30s_34_4_1_U5 sub_ln70_fu_321_p2 mac_muladd_18s_18s_30s_34_4_1_U6 mac_muladd_18s_18s_30s_34_4_1_U6 sub_ln70_1_fu_348_p2 add_ln75_fu_363_p2 icmp_ln78_fu_368_p2 mac_mulsub_18s_18s_34ns_34_4_1_U7 mac_mulsub_18s_18s_34ns_34_4_1_U7 mul_18s_18s_34_1_1_U4 mac_mulsub_18s_18s_34ns_34_4_1_U8 mac_mulsub_18s_18s_34ns_34_4_1_U8 add_ln83_fu_478_p2 mac_muladd_18s_18s_34ns_34_4_1_U9 mac_muladd_18s_18s_34ns_34_4_1_U9 add_ln91_fu_414_p2 icmp_ln92_fu_420_p2 select_ln92_fu_426_p3 hann_window_U"
+          "BindInstances": "add_ln56_fu_271_p2 mul_14s_13ns_27_1_1_U3 mac_muladd_18s_18s_30s_34_4_1_U5 mac_muladd_18s_18s_30s_34_4_1_U5 sub_ln75_fu_386_p2 mac_muladd_18s_18s_30s_34_4_1_U6 mac_muladd_18s_18s_30s_34_4_1_U6 sub_ln75_1_fu_413_p2 add_ln80_fu_428_p2 icmp_ln83_fu_433_p2 mac_mulsub_18s_18s_34ns_34_4_1_U7 mac_mulsub_18s_18s_34ns_34_4_1_U7 mul_18s_18s_34_1_1_U4 mac_mulsub_18s_18s_34ns_34_4_1_U8 mac_mulsub_18s_18s_34ns_34_4_1_U8 add_ln88_fu_530_p2 mac_muladd_18s_18s_34ns_34_4_1_U9 mac_muladd_18s_18s_34ns_34_4_1_U9 add_ln95_fu_479_p2 hann_window_U"
         },
         {
           "ModuleName": "crosscor",
           "InstanceName": "crosscor_U0",
-          "BindInstances": "mul_31s_31s_62_1_1_U25 mul_31s_31s_62_1_1_U26 add_ln81_fu_2836_p2 icmp_ln82_fu_2848_p2 icmp_ln85_fu_12036_p2 mul_25s_16ns_40_1_1_U33 icmp_ln89_fu_12091_p2 corrected_1_fu_12097_p3 udiv_39s_24ns_24_43_seq_1_U34 sparsemux_2257_11_6_1_1_U31 sparsemux_2257_11_6_1_1_U32 mul_31s_31s_62_1_1_U25 mul_31s_31s_62_1_1_U26 mul_31s_31s_62_1_1_U27 mul_31s_31s_62_1_1_U28 grp_fu_2787_p2 grp_fu_2792_p2 add_ln113_fu_12261_p2 icmp_ln114_fu_12266_p2 select_ln114_fu_12272_p3 select_ln114_1_fu_12280_p3 pair_idx_new_3_cast_cast_cast_fu_12288_p3 mul_36s_24ns_54_1_1_U29 mul_36s_24ns_54_1_1_U30 grp_fu_2787_p2 grp_fu_2792_p2 add_ln59_fu_11944_p2 icmp_ln60_fu_11950_p2 u_M_real_U u_M_imag_U R_flat_M_real_U R_flat_M_imag_U"
+          "BindInstances": "mul_31s_31s_62_1_1_U29 mul_31s_31s_62_1_1_U30 add_ln89_fu_3012_p2 icmp_ln90_fu_3024_p2 icmp_ln93_fu_12173_p2 mul_25s_16ns_40_1_1_U37 add_ln100_fu_12192_p2 icmp_ln102_fu_12250_p2 corrected_fu_12256_p3 udiv_39s_24ns_24_43_seq_1_U38 sparsemux_2257_11_6_1_1_U35 sparsemux_2257_11_6_1_1_U36 mul_31s_31s_62_1_1_U29 mul_31s_31s_62_1_1_U30 mul_31s_31s_62_1_1_U31 mul_31s_31s_62_1_1_U32 grp_fu_2963_p2 grp_fu_2968_p2 add_ln126_fu_12431_p2 icmp_ln127_fu_12436_p2 select_ln127_fu_12442_p3 select_ln127_1_fu_12450_p3 pair_idx_new_1_cast_cast_cast_fu_12458_p3 mul_36s_24ns_54_1_1_U33 mul_36s_24ns_54_1_1_U34 add_ln150_fu_12098_p2 grp_fu_2963_p2 grp_fu_2968_p2 add_ln63_fu_12537_p2 add_ln67_fu_12577_p2 icmp_ln68_fu_12583_p2 u_M_real_U u_M_imag_U R_flat_M_real_U R_flat_M_imag_U"
         },
         {
           "ModuleName": "backprojection",
           "InstanceName": "backprojection_U0",
-          "BindInstances": "sparsemux_95_6_14_1_1_U52 sparsemux_95_6_14_1_1_U53 sparsemux_95_6_14_1_1_U54 sparsemux_95_6_14_1_1_U55 mul_24s_22s_46_1_1_U48 mul_24s_22s_46_1_1_U49 sub_ln181_fu_2475_p2 mul_24s_22s_46_1_1_U50 mul_24s_22s_46_1_1_U51 add_ln182_fu_2499_p2 mul_22s_22s_44_1_1_U46 mul_23s_22s_45_1_1_U47 add_ln185_fu_2551_p2 add_ln187_fu_2579_p2 add_ln189_fu_2590_p2 icmp_ln190_fu_2596_p2 sub_ln153_fu_2906_p2 partselect_14ns_672ns_10ns_14_1_1_U56 partselect_14ns_672ns_10ns_14_1_1_U57 grp_fu_1034_p2 grp_fu_1034_p2 icmp_ln143_fu_3237_p2 y_sub_fu_3261_p2 grp_fu_1139_p2 grp_fu_1144_p2 select_ln206_fu_3287_p3 storemerge_cast_cast_cast_fu_3295_p3 sub_ln105_fu_3341_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U58 partset_672ns_672ns_14ns_10ns_672_1_1_U59 add_ln107_fu_3374_p2 icmp_ln108_fu_3380_p2 grp_fu_1139_p2 grp_fu_1144_p2 grp_fu_1139_p2 grp_fu_1144_p2 backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_real_U backprojection_stream_stream_stream_ap_fixed_0_b_mem_M_imag_U tau_mem_U Sigma_up_M_real_U Sigma_up_M_imag_U j_rom_U k_rom_U"
+          "BindInstances": "sparsemux_95_6_14_1_1_U64 sparsemux_95_6_14_1_1_U65 sparsemux_95_6_14_1_1_U66 sparsemux_95_6_14_1_1_U67 mul_24s_22s_46_1_1_U60 mul_24s_22s_46_1_1_U61 sub_ln193_fu_2715_p2 mul_24s_22s_46_1_1_U62 mul_24s_22s_46_1_1_U63 add_ln194_fu_2739_p2 mul_22s_22s_44_1_1_U58 mul_23s_22s_45_1_1_U59 add_ln197_fu_2791_p2 add_ln199_fu_2819_p2 add_ln201_fu_2830_p2 icmp_ln202_fu_2836_p2 sub_ln165_fu_3191_p2 partselect_14ns_672ns_10ns_14_1_1_U68 partselect_14ns_672ns_10ns_14_1_1_U69 grp_fu_1224_p2 add_ln151_fu_3505_p2 grp_fu_1224_p2 icmp_ln155_fu_3539_p2 y_sub_fu_3563_p2 add_ln216_fu_1400_p2 grp_fu_1329_p2 grp_fu_1334_p2 select_ln221_fu_3111_p3 storemerge_cast_cast_cast_fu_3120_p3 sub_ln113_fu_3609_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U70 partset_672ns_672ns_14ns_10ns_672_1_1_U71 add_ln115_fu_3642_p2 icmp_ln116_fu_3647_p2 grp_fu_1329_p2 grp_fu_1334_p2 grp_fu_1329_p2 grp_fu_1334_p2 backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_U backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_U tau_mem_U Sigma_up_M_real_U Sigma_up_M_imag_U j_rom_U k_rom_U"
         },
         {
           "ModuleName": "entry_proc",
@@ -845,7 +2232,7 @@
         {
           "ModuleName": "deblur",
           "InstanceName": "deblur_U0",
-          "BindInstances": "add_ln282_fu_1324_p2 t_fu_1348_p3 grp_fu_1074_p2 grp_fu_1080_p2 add_ln287_fu_1365_p2 icmp_ln288_fu_1380_p2 srem_32ns_3ns_3_36_seq_1_U79 sparsemux_13_3_12_1_1_U80 il_fu_1485_p2 iu_fu_1491_p2 sparsemux_13_3_15_1_1_U81 grp_fu_1086_p2 grp_fu_1091_p2 sparsemux_7_2_18_1_1_U82 mul_24s_21ns_45_1_1_U76 sub_ln50_fu_1652_p2 acc_2_fu_1668_p3 icmp_ln51_fu_1525_p2 sparsemux_13_3_15_1_1_U83 sparsemux_7_2_18_1_1_U84 mul_24s_21ns_45_1_1_U77 sub_ln52_fu_1764_p2 acc_4_fu_1780_p3 icmp_ln251_fu_1793_p2 grp_fu_1096_p2 sparsemux_7_2_18_1_1_U85 icmp_ln256_fu_1832_p2 z_next_val_fu_1854_p2 z_next_val_1_fu_1860_p3 mul_24s_24s_46_1_1_U78 add_ln267_fu_1919_p2 grp_fu_1074_p2 grp_fu_1080_p2 add_ln270_fu_1936_p2 icmp_ln271_fu_1950_p2 select_ln271_fu_1955_p3 grp_fu_1086_p2 grp_fu_1091_p2 sparsemux_7_2_18_1_1_U86 mul_24s_21ns_45_1_1_U76 mul_24s_24s_46_1_1_U78 grp_fu_1074_p2 grp_fu_1080_p2 grp_fu_1074_p2 grp_fu_1080_p2 out_last_fu_2169_p2 grp_fu_1074_p2 grp_fu_1080_p2 grp_fu_1074_p2 icmp_ln161_fu_2181_p2 grp_fu_1074_p2 icmp_ln152_fu_2200_p2 grp_fu_1074_p2 grp_fu_1080_p2 grp_fu_1096_p2 icmp_ln178_fu_2216_p2 theta_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_5_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_3_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_2_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_1_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_U deblur_stream_stream_stream_stream_ap_fixed_0_deblur_config_lap_rest_4_U bp_buf_U Z0_U y_acc_U Z1_U Z2_U"
+          "BindInstances": "add_ln286_fu_2501_p2 t_fu_2525_p3 add_ln289_fu_2487_p2 icmp_ln290_fu_2538_p2 add_ln291_fu_2547_p2 icmp_ln292_fu_2556_p2 select_ln292_fu_2562_p3 select_ln292_1_fu_2576_p3 srem_32ns_3ns_3_36_seq_1_U98 sparsemux_13_3_12_1_1_U99 il_fu_2678_p2 iu_fu_2684_p2 sparsemux_13_3_15_1_1_U100 grp_fu_2155_p2 grp_fu_2160_p2 sparsemux_7_2_18_1_1_U101 mul_24s_21ns_45_1_1_U95 sub_ln52_fu_2847_p2 acc_2_fu_2863_p3 icmp_ln53_fu_2719_p2 sparsemux_13_3_15_1_1_U102 sparsemux_7_2_18_1_1_U103 mul_24s_21ns_45_1_1_U96 sub_ln54_fu_2959_p2 acc_4_fu_2975_p3 icmp_ln249_fu_2988_p2 add_ln277_fu_2993_p2 sparsemux_7_2_18_1_1_U104 icmp_ln255_fu_3050_p2 z_next_val_fu_3072_p2 z_next_val_1_fu_3078_p3 mul_24s_24s_46_1_1_U97 add_ln266_fu_3137_p2 add_ln267_fu_3154_p2 icmp_ln268_fu_3160_p2 add_ln269_fu_3166_p2 icmp_ln270_fu_3175_p2 grp_fu_2155_p2 grp_fu_2160_p2 sparsemux_7_2_18_1_1_U105 mul_24s_21ns_45_1_1_U95 mul_24s_24s_46_1_1_U97 add_ln225_fu_3338_p2 icmp_ln226_fu_3381_p2 add_ln208_fu_3412_p2 add_ln212_fu_3425_p2 icmp_ln213_fu_3431_p2 icmp_ln317_fu_3464_p2 add_ln322_fu_3486_p2 add_ln323_fu_3501_p2 or_ln319_fu_3522_p2 icmp_ln325_fu_3568_p2 icmp_ln325_1_fu_3573_p2 out_last_1_fu_3578_p2 add_ln331_fu_3635_p2 icmp_ln332_fu_3647_p2 add_ln334_fu_3659_p2 icmp_ln336_fu_3664_p2 add_ln339_fu_3674_p2 add_ln163_fu_2275_p2 add_ln153_fu_2353_p2 icmp_ln154_fu_2363_p2 add_ln180_fu_2419_p2 icmp_ln181_fu_2425_p2 add_ln183_fu_2431_p2 icmp_ln184_fu_2437_p2 theta_U deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_5_U deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_3_U deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_2_U deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_1_U deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_U deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_4_U bp_buf_U Z0_U y_acc_U Z1_U Z2_U"
         }
       ]
     },
@@ -929,11 +2316,11 @@
       "goertzel": {
         "Latency": {
           "LatencyBest": "1",
-          "LatencyAvg": "3",
-          "LatencyWorst": "6",
+          "LatencyAvg": "4",
+          "LatencyWorst": "7",
           "PipelineIIMin": "1",
-          "PipelineIIMax": "6",
-          "PipelineII": "1 ~ 6",
+          "PipelineIIMax": "7",
+          "PipelineII": "1 ~ 7",
           "PipelineDepth": "",
           "PipelineType": "no"
         },
@@ -949,10 +2336,10 @@
           "DSP": "7",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "~0",
-          "FF": "341",
+          "FF": "502",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "498",
+          "LUT": "504",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "~0",
           "URAM": "0",
@@ -963,7 +2350,7 @@
       "crosscor": {
         "Latency": {
           "LatencyBest": "1",
-          "LatencyAvg": "33",
+          "LatencyAvg": "24",
           "LatencyWorst": "44",
           "PipelineIIMin": "1",
           "PipelineIIMax": "44",
@@ -983,10 +2370,10 @@
           "DSP": "21",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "1",
-          "FF": "1068",
+          "FF": "1343",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "7952",
+          "LUT": "7941",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "6",
           "URAM": "0",
@@ -1017,10 +2404,10 @@
           "DSP": "12",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "~0",
-          "FF": "1908",
+          "FF": "2108",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "4764",
+          "LUT": "5015",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "4",
           "URAM": "20",
@@ -1031,7 +2418,7 @@
       "deblur": {
         "Latency": {
           "LatencyBest": "1",
-          "LatencyAvg": "10",
+          "LatencyAvg": "12",
           "LatencyWorst": "38",
           "PipelineIIMin": "1",
           "PipelineIIMax": "38",
@@ -1051,10 +2438,10 @@
           "DSP": "6",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "~0",
-          "FF": "1036",
+          "FF": "1907",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "2393",
+          "LUT": "3330",
           "AVAIL_LUT": "117120",
           "UTIL_LUT": "2",
           "URAM": "0",
@@ -1064,9 +2451,9 @@
       },
       "deepwaveaccel": {
         "Latency": {
-          "LatencyBest": "12",
-          "LatencyAvg": "40",
-          "LatencyWorst": "51",
+          "LatencyBest": "56",
+          "LatencyAvg": "67",
+          "LatencyWorst": "93",
           "PipelineIIMin": "2",
           "PipelineIIMax": "45",
           "PipelineII": "2 ~ 45",
@@ -1085,12 +2472,12 @@
           "DSP": "46",
           "AVAIL_DSP": "1248",
           "UTIL_DSP": "3",
-          "FF": "5207",
+          "FF": "7434",
           "AVAIL_FF": "234240",
-          "UTIL_FF": "2",
-          "LUT": "16188",
+          "UTIL_FF": "3",
+          "LUT": "18511",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "13",
+          "UTIL_LUT": "15",
           "URAM": "20",
           "AVAIL_URAM": "64",
           "UTIL_URAM": "31"
@@ -1101,7 +2488,7 @@
   "GenerateBdFiles": "0",
   "GenData": {
     "DataVersion": "0.2",
-    "Time": "2025-10-30 23:08:46 +0100",
+    "Time": "2025-11-03 10:22:19 +0100",
     "ToolName": "vitis_hls",
     "ToolVersion": "2025.1"
   }

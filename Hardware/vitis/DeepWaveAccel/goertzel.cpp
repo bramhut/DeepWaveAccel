@@ -25,12 +25,14 @@ void goertzel_prepare_config(goertzel_config &cfg, double fs_in, double ff) {
 // ---------------------------------------------
 void goertzel(hls::stream<word_t> &in_stream,
               hls::stream<AxisWordDFTc>     &out_stream,
-              goertzel_config               &cfg)
+              goertzel_config               &cfg,
+              status_gz_t &status)
 {
     AP_CTRL_NONE;
     AXIS_IN_OUT(in_stream);
     AXIS_IN_OUT(out_stream);
     AXIL_CFG(cfg);
+    AXIL_CFG(status);
 
     // ---------------------------------------------------------------------
     // Constant ROM binding for Hann window (fixed-point, precomputed)
@@ -46,10 +48,13 @@ void goertzel(hls::stream<word_t> &in_stream,
 #pragma HLS ARRAY_PARTITION variable=s_prev complete
 #pragma HLS ARRAY_PARTITION variable=s_prev2 complete
 
-    static int elem   = 0;
-    static int sample = 0;
+    static word_t sample = 0;
+    static word_t samples_in = 0;
+    static word_t samples_out = 0;
 
     if (!in_stream.empty()) {
+        status.samples_in = ++samples_in;
+        status.sample_win = sample;
         auto s = in_stream.read();
         sample_t xin;
         xin.range() = s.range();
@@ -87,9 +92,9 @@ void goertzel(hls::stream<word_t> &in_stream,
             }
 
             out_stream.write(AxisWordDFTc(out_real, out_imag));
+            status.samples_out = ++samples_out;
+            status.samples_out_fifo = out_stream.size();
             sample = 0;
-            elem++;
-            if (elem == N_ELEM) elem = 0;
         }
     }
 }

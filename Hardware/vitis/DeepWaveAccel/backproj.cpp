@@ -7,13 +7,15 @@
 // τ is pre-biased with the diagonal term (done in preprocessing).
 // -----------------------------------------------------------------------------
 void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
-                    hls::stream<word_t> &param_in,
-                    hls::stream<img_t>        &img_stream)
+                    hls::stream<word_t>       &param_in,
+                    hls::stream<img_t>        &img_stream,
+                    status_bp_t               &status)
 {
     AP_CTRL_NONE;
     AXIS_IN_OUT(corr_stream);
     AXIS_IN_OUT(param_in);
     AXIS_IN_OUT(img_stream);
+    AXIL_CFG(status);
 
     // =========================================================================
     // Persistent parameter memories
@@ -73,6 +75,9 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
     static bool imag_word = false;
     static b_real_t real_in;
 
+    static word_t pixels_out = 0;
+    static word_t sigmas_in = 0;
+
     // =========================================================================
     // Main FSM
     // =========================================================================
@@ -93,7 +98,10 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
                 // - imag part word (user=0x2)
                 // We'll interpret bits directly into ap_fixed fields.
                 // user[0]=0 ⇒ real, user[0]=1 ⇒ imag
-                
+
+                config_loaded = false; // Reset, we are reloading everything
+                status.config_loaded = false;
+                status.idx = (pix<<16) | (elem<<1) | ((int)imag_word);
                 if (!imag_word) {
                     // real part
                     real_in.range() = w.range();
@@ -119,17 +127,20 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
             case READ_TAU: {
                 tau_mem[pix].range() = w.range();
+                status.idx = pix;
                 pix++;
                 if (pix == IMG_LEN) {
                     pix = 0;
                     config_loaded = true;
+                    status.config_loaded = true;
                     stl = READ_B;
-                    st  = LOAD_UP; // Ready to process frames
+                    // Do not necessarily go straight to LOAD_UP, maybe we'd like to reload params. Just stay in LOAD_PARAMS and go to LOAD_UP when corr_stream is no longer empty
                 }
                 break;
             }
             } // switch(stl)
-        } else if (config_loaded) {
+            status.param_state = stl;
+        } else if (config_loaded && !corr_stream.empty()) {
             st = LOAD_UP;
         }
         break;
@@ -137,6 +148,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
     // Load upper-triangular correlation matrix from stream
     case LOAD_UP:
         if (!corr_stream.empty()) {
+            status.sigmas_in = ++sigmas_in;
             AxisWordDFTc w = corr_stream.read();
             Sigma_up[idx] = DFTc_t(w.re, w.im);
             ++idx;
@@ -200,6 +212,9 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
         acc_fix_t y_sub = y_acc - (acc_fix_t)tau_mem[pix];
         img_stream.write((img_t)y_sub);
 
+        status.idx = pix;
+        status.pixels_out = ++pixels_out;
+        status.out_fifo_level = img_stream.size();
         ++pix;
         y_acc = 0;
 
@@ -212,4 +227,5 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
         break;
     }
     } // switch
+    status.fsm_state = st; // Write the current state to AXILITE
 }
