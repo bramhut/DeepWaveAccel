@@ -253,8 +253,8 @@ wire   [13:0] bj_b_M_imag_fu_2063_p97;
 reg   [13:0] bj_b_M_imag_reg_3780;
 reg  signed [21:0] trunc_ln2_reg_3785;
 reg  signed [22:0] trunc_ln3_reg_3790;
-wire   [13:0] tmp_3_fu_3205_p3;
-reg   [13:0] tmp_3_reg_3798;
+wire   [13:0] tmp_9_fu_3205_p3;
+reg   [13:0] tmp_9_reg_3798;
 wire    ap_CS_fsm_state4;
 wire   [31:0] grp_fu_1224_p2;
 wire   [31:0] add_ln115_fu_3642_p2;
@@ -301,7 +301,7 @@ wire   [63:0] zext_ln129_fu_1476_p1;
 wire   [63:0] zext_ln153_fu_3534_p1;
 wire   [23:0] add_ln199_fu_2819_p2;
 wire   [31:0] add_ln151_fu_3505_p2;
-wire   [13:0] tmp_2_fu_3197_p3;
+wire   [13:0] tmp_8_fu_3197_p3;
 wire   [31:0] add_ln216_fu_1400_p2;
 wire   [15:0] trunc_ln215_fu_1391_p1;
 reg   [15:0] status_bp_idx_preg;
@@ -328,12 +328,12 @@ reg    Sigma_up_M_imag_we0_local;
 reg    backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_ce0_local;
 reg   [11:0] backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_address0_local;
 reg    backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_we1_local;
-wire   [671:0] tmp_6_fu_3615_p4;
+wire   [671:0] tmp_4_fu_3615_p4;
 reg    backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_ce1_local;
 reg    backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_ce0_local;
 reg   [11:0] backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_address0_local;
 reg    backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_we1_local;
-wire   [671:0] tmp_7_fu_3626_p4;
+wire   [671:0] tmp_5_fu_3626_p4;
 reg    backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_ce1_local;
 reg    tau_mem_ce0_local;
 reg   [11:0] tau_mem_address0_local;
@@ -378,8 +378,8 @@ wire   [43:0] mul_ln197_fu_1200_p2;
 wire  signed [44:0] sext_ln197_4_fu_2787_p1;
 wire   [44:0] mul_ln197_1_fu_1204_p2;
 wire   [44:0] add_ln197_fu_2791_p2;
-wire   [20:0] tmp_9_fu_2797_p4;
-wire   [21:0] tmp_4_fu_2807_p3;
+wire   [20:0] tmp_3_fu_2797_p4;
+wire   [21:0] tmp_6_fu_2807_p3;
 wire  signed [23:0] sext_ln199_fu_2815_p1;
 wire   [31:0] trunc_ln217_fu_3100_p0;
 wire   [5:0] trunc_ln165_fu_3169_p1;
@@ -603,10 +603,10 @@ wire  signed [5:0] bk_b_M_imag_fu_2463_p87;
 wire  signed [5:0] bk_b_M_imag_fu_2463_p89;
 wire  signed [5:0] bk_b_M_imag_fu_2463_p91;
 wire  signed [5:0] bk_b_M_imag_fu_2463_p93;
-wire   [13:0] tmp_2_fu_3197_p0;
-wire   [13:0] tmp_3_fu_3205_p0;
-wire   [671:0] tmp_6_fu_3615_p0;
-wire   [671:0] tmp_7_fu_3626_p0;
+wire   [13:0] tmp_8_fu_3197_p0;
+wire   [13:0] tmp_9_fu_3205_p0;
+wire   [671:0] tmp_4_fu_3615_p0;
+wire   [671:0] tmp_5_fu_3626_p0;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -743,7 +743,7 @@ backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_U(
     .address1(backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_addr_1_reg_3763),
     .ce1(backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_ce1_local),
     .we1(backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_we1_local),
-    .d1(tmp_6_fu_3615_p4)
+    .d1(tmp_4_fu_3615_p4)
 );
 
 deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb #(
@@ -759,7 +759,7 @@ backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_U(
     .address1(backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_addr_1_reg_3769),
     .ce1(backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_ce1_local),
     .we1(backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_we1_local),
-    .d1(tmp_7_fu_3626_p4)
+    .d1(tmp_5_fu_3626_p4)
 );
 
 deepwaveaccel_backprojection_tau_mem_RAM_1P_BRAM_1R1W #(
@@ -1519,7 +1519,7 @@ deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1 #(
 partselect_14ns_672ns_10ns_14_1_1_U68(
     .din(backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_q0),
     .sel(sub_ln165_fu_3191_p2),
-    .dout(tmp_2_fu_3197_p3)
+    .dout(tmp_8_fu_3197_p3)
 );
 
 deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1 #(
@@ -1529,7 +1529,7 @@ deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1 #(
 partselect_14ns_672ns_10ns_14_1_1_U69(
     .din(backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_q0),
     .sel(sub_ln165_fu_3191_p2),
-    .dout(tmp_3_fu_3205_p3)
+    .dout(tmp_9_fu_3205_p3)
 );
 
 deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1 #(
@@ -1540,7 +1540,7 @@ partset_672ns_672ns_14ns_10ns_672_1_1_U70(
     .din(backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_q0),
     .value(real_in),
     .sel(sub_ln113_fu_3609_p2),
-    .dout(tmp_6_fu_3615_p4)
+    .dout(tmp_4_fu_3615_p4)
 );
 
 deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1 #(
@@ -1551,7 +1551,7 @@ partset_672ns_672ns_14ns_10ns_672_1_1_U71(
     .din(backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_q0),
     .value(imag_in_reg_3758),
     .sel(sub_ln113_fu_3609_p2),
-    .dout(tmp_7_fu_3626_p4)
+    .dout(tmp_5_fu_3626_p4)
 );
 
 deepwaveaccel_regslice_both #(
@@ -1844,577 +1844,577 @@ end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd0) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_0 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_0 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd1) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_1 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_1 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd10) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_10 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_10 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd11) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_11 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_11 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd12) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_12 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_12 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd13) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_13 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_13 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd14) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_14 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_14 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd15) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_15 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_15 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd16) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_16 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_16 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd17) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_17 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_17 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd18) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_18 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_18 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd19) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_19 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_19 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd2) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_2 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_2 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd20) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_20 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_20 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd21) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_21 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_21 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd22) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_22 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_22 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd23) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_23 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_23 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd24) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_24 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_24 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd25) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_25 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_25 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd26) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_26 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_26 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd27) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_27 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_27 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd28) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_28 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_28 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd29) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_29 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_29 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd3) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_3 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_3 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd30) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_30 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_30 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd31) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_31 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_31 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd32) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_32 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_32 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd33) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_33 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_33 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd34) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_34 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_34 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd35) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_35 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_35 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd36) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_36 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_36 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd37) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_37 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_37 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd38) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_38 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_38 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd39) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_39 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_39 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd4) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_4 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_4 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd40) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_40 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_40 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd41) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_41 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_41 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd42) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_42 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_42 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd43) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_43 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_43 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd44) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_44 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_44 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd45) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_45 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_45 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd46) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_46 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_46 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd47) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_47 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_47 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd5) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_5 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_5 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd6) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_6 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_6 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd7) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_7 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_7 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd8) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_8 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_8 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd9) & (st_2_load_reg_3671 == 3'd2) & (1'b1 == ap_CS_fsm_state3))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_9 <= tmp_3_reg_3798;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_9 <= tmp_9_reg_3798;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd0) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_0 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_0 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd1) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_1 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_1 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd10) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_10 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_10 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd11) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_11 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_11 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd12) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_12 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_12 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd13) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_13 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_13 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd14) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_14 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_14 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd15) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_15 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_15 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd16) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_16 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_16 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd17) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_17 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_17 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd18) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_18 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_18 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd19) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_19 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_19 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd2) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_2 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_2 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd20) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_20 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_20 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd21) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_21 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_21 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd22) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_22 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_22 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd23) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_23 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_23 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd24) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_24 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_24 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd25) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_25 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_25 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd26) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_26 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_26 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd27) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_27 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_27 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd28) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_28 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_28 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd29) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_29 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_29 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd3) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_3 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_3 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd30) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_30 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_30 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd31) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_31 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_31 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd32) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_32 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_32 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd33) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_33 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_33 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd34) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_34 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_34 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd35) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_35 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_35 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd36) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_36 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_36 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd37) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_37 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_37 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd38) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_38 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_38 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd39) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_39 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_39 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd4) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_4 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_4 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd40) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_40 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_40 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd41) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_41 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_41 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd42) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_42 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_42 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd43) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_43 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_43 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd44) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_44 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_44 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd45) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_45 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_45 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd46) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_46 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_46 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd47) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_47 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_47 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd5) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_5 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_5 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd6) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_6 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_6 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd7) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_7 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_7 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd8) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_8 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_8 <= tmp_8_fu_3197_p3;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((idx_load_reg_3680 == 32'd9) & (1'b1 == ap_CS_fsm_state4))) begin
-        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_9 <= tmp_2_fu_3197_p3;
+        backprojection_stream_stream_stream_status_bp_t_b_line_M_real_9 <= tmp_8_fu_3197_p3;
     end
 end
 
@@ -2485,7 +2485,7 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        tmp_3_reg_3798 <= tmp_3_fu_3205_p3;
+        tmp_9_reg_3798 <= tmp_9_fu_3205_p3;
     end
 end
 
@@ -3220,7 +3220,7 @@ assign sext_ln194_fu_2731_p1 = $signed(mul_ln194_fu_1216_p2);
 
 assign sext_ln197_4_fu_2787_p1 = $signed(mul_ln197_fu_1200_p2);
 
-assign sext_ln199_fu_2815_p1 = $signed(tmp_4_fu_2807_p3);
+assign sext_ln199_fu_2815_p1 = $signed(tmp_6_fu_2807_p3);
 
 assign sext_ln212_fu_3559_p1 = $signed(shl_ln_fu_3551_p3);
 
@@ -3236,9 +3236,9 @@ assign sub_ln165_fu_3191_p2 = (p_shl_fu_3172_p3 - p_shl1_fu_3183_p3);
 
 assign sub_ln193_fu_2715_p2 = (mul_ln193_fu_1208_p2 - mul_ln193_1_fu_1212_p2);
 
-assign tmp_4_fu_2807_p3 = {{tmp_9_fu_2797_p4}, {1'd0}};
+assign tmp_3_fu_2797_p4 = {{add_ln197_fu_2791_p2[44:24]}};
 
-assign tmp_9_fu_2797_p4 = {{add_ln197_fu_2791_p2[44:24]}};
+assign tmp_6_fu_2807_p3 = {{tmp_3_fu_2797_p4}, {1'd0}};
 
 assign tmp_nbreadreq_fu_574_p3 = param_bp_TVALID_int_regslice;
 

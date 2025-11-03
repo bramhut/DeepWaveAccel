@@ -387,7 +387,7 @@ wire   [61:0] grp_fu_2943_p2;
 wire   [61:0] add_ln87_1_fu_12157_p2;
 wire   [15:0] mul_ln95_fu_12208_p1;
 wire   [39:0] mul_ln95_fu_12208_p2;
-wire   [9:0] tmp_8_fu_12240_p4;
+wire   [9:0] tmp_5_fu_12240_p4;
 wire   [0:0] icmp_ln102_fu_12250_p2;
 wire   [23:0] trunc_ln95_2_fu_12225_p4;
 wire   [23:0] corrected_fu_12256_p3;
@@ -11501,7 +11501,7 @@ assign grp_fu_2963_p2 = (pair_idx_load_reg_12611 + 32'd1);
 
 assign grp_fu_2968_p2 = ((grp_fu_2963_p2 == 32'd1128) ? 1'b1 : 1'b0);
 
-assign icmp_ln102_fu_12250_p2 = (($signed(tmp_8_fu_12240_p4) < $signed(10'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln102_fu_12250_p2 = (($signed(tmp_5_fu_12240_p4) < $signed(10'd1)) ? 1'b1 : 1'b0);
 
 assign icmp_ln127_fu_12436_p2 = (($signed(add_ln126_fu_12431_p2) < $signed(32'd9)) ? 1'b1 : 1'b0);
 
@@ -11573,7 +11573,7 @@ assign start_out = real_start;
 
 assign sub_ln120_fu_12400_p2 = (mul_ln120_fu_2947_p2 - mul_ln120_1_fu_2951_p2);
 
-assign tmp_8_fu_12240_p4 = {{mul_ln95_fu_12208_p2[39:30]}};
+assign tmp_5_fu_12240_p4 = {{mul_ln95_fu_12208_p2[39:30]}};
 
 assign tmp_nbreadreq_fu_2531_p3 = s_goertzel_empty_n;
 

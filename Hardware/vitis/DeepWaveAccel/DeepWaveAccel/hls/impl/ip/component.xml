@@ -2338,7 +2338,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>7c4209e6</spirit:value>
+            <spirit:value>22498193</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2354,7 +2354,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>b9fb0e43</spirit:value>
+            <spirit:value>c25ab0ab</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2370,7 +2370,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>9861b7fe</spirit:value>
+            <spirit:value>6f44c427</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2386,7 +2386,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>efd566f5</spirit:value>
+            <spirit:value>1d1da6a3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3021,11 +3021,11 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.dat</spirit:name>
+        <spirit:name>hdl/verilog/deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.dat</spirit:name>
         <spirit:userFileType>mif</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.v</spirit:name>
+        <spirit:name>hdl/verilog/deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -3085,6 +3085,10 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>hdl/verilog/deepwaveaccel_mac_muladd_14s_12ns_14ns_14_4_1.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -3094,6 +3098,10 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/deepwaveaccel_mul_14s_13ns_14_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -3154,10 +3162,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_sparsemux_13_3_12_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_sparsemux_13_3_15_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -3288,11 +3292,11 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.dat</spirit:name>
+        <spirit:name>hdl/verilog/deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.dat</spirit:name>
         <spirit:userFileType>mif</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.v</spirit:name>
+        <spirit:name>hdl/verilog/deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -3363,6 +3367,11 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>hdl/verilog/deepwaveaccel_mac_muladd_14s_12ns_14ns_14_4_1.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
@@ -3374,6 +3383,11 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/deepwaveaccel_mul_14s_13ns_14_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -3449,11 +3463,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/deepwaveaccel_sparsemux_13_3_12_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/deepwaveaccel_sparsemux_13_3_15_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -3554,7 +3563,7 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -3598,6 +3607,10 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>hdl/vhdl/deepwaveaccel_mac_muladd_14s_12ns_14ns_14_4_1.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
@@ -3607,6 +3620,10 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/vhdl/deepwaveaccel_mul_14s_13ns_14_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -3670,10 +3687,6 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/deepwaveaccel_sparsemux_13_3_15_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_sparsemux_95_6_14_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
@@ -3704,7 +3717,7 @@
       <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_94c20783</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_56d4c06b</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -3770,7 +3783,7 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -3825,6 +3838,11 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>hdl/vhdl/deepwaveaccel_mac_muladd_14s_12ns_14ns_14_4_1.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_mac_muladd_18s_18s_30s_34_4_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
@@ -3836,6 +3854,11 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_mac_mulsub_18s_18s_34ns_34_4_1.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/vhdl/deepwaveaccel_mul_14s_13ns_14_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -3911,11 +3934,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/vhdl/deepwaveaccel_sparsemux_13_3_12_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/deepwaveaccel_sparsemux_13_3_15_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -4072,8 +4090,8 @@
       </xilinx:taxonomies>
       <xilinx:displayName>DeepWave</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2114331862</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2025-11-03T09:22:36Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2114332329</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2025-11-03T17:09:45Z</xilinx:coreCreationDateTime>
       <xilinx:sdxKernelAttributes>
         <xilinx:sdx_kernel>true</xilinx:sdx_kernel>
         <xilinx:sdx_kernel_type>hls</xilinx:sdx_kernel_type>
@@ -4083,7 +4101,7 @@
       <xilinx:xilinxVersion>2025.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="a16b3759"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="6637308d"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="af92d601"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="5311017f"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="878a3abb"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="64401ee1"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="41b9161c"/>

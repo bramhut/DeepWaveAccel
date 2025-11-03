@@ -86,7 +86,7 @@ void deblur(
 #pragma HLS BIND_STORAGE variable=theta type=ram_1p impl=auto
 #pragma HLS ARRAY_PARTITION variable=lap_offsets complete
 #pragma HLS BIND_STORAGE variable=lap_rest type=ram_2p impl=bram
-#pragma HLS ARRAY_PARTITION variable=lap_rest dim=1 complete
+// #pragma HLS ARRAY_PARTITION variable=lap_rest dim=1 complete
 
     static img_t bp_buf[IMG_LEN];
     static acc_t y_acc[IMG_LEN];

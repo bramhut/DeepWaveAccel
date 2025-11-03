@@ -253,8 +253,8 @@ int tb_deepwaveaccel() {
     }
 
     goertzel_prepare_config(goer_cfg, (double)samplerate, FF);
-    std::cout << "[Deepwave] Goertzel config bin0: COS_OMEGA[0]: " << goer_cfg.COS_OMEGA[0]  << " (" << goer_cfg.COS_OMEGA[0].range()  << "), COS_OMEGA2[0]: " << goer_cfg.COS_OMEGA2[0] << " (" << goer_cfg.COS_OMEGA2[0].range() << "), SIN_OMEGA[0]: " << goer_cfg.SIN_OMEGA[0] << " (" << goer_cfg.SIN_OMEGA[0].range() << ")" << std::endl;
-    std::cout << "[Deepwave] Goertzel config bin1: COS_OMEGA[1]: " << goer_cfg.COS_OMEGA[1]  << " (" << goer_cfg.COS_OMEGA[1].range()  << "), COS_OMEGA2[1]: " << goer_cfg.COS_OMEGA2[1] << " (" << goer_cfg.COS_OMEGA2[1].range() << "), SIN_OMEGA[1]: " << goer_cfg.SIN_OMEGA[1] << " (" << goer_cfg.SIN_OMEGA[1].range() << ")" << std::endl;
+    std::cout << "[Deepwave] Goertzel config bin0: COS_OMEGA[0]: " << goer_cfg.COS_OMEGA[0]  << " (" << goer_cfg.COS_OMEGA[0].to_  << "), COS_OMEGA2[0]: " << goer_cfg.COS_OMEGA2[0] << " (" << goer_cfg.COS_OMEGA2[0].to_ << "), SIN_OMEGA[0]: " << goer_cfg.SIN_OMEGA[0] << " (" << goer_cfg.SIN_OMEGA[0].to_ << ")" << std::endl;
+    std::cout << "[Deepwave] Goertzel config bin1: COS_OMEGA[1]: " << goer_cfg.COS_OMEGA[1]  << " (" << goer_cfg.COS_OMEGA[1].to_  << "), COS_OMEGA2[1]: " << goer_cfg.COS_OMEGA2[1] << " (" << goer_cfg.COS_OMEGA2[1].to_ << "), SIN_OMEGA[1]: " << goer_cfg.SIN_OMEGA[1] << " (" << goer_cfg.SIN_OMEGA[1].to_ << ")" << std::endl;
     int n_batches = n_sample / N_WIN;
     int n_batches_group_aligned = (n_batches / GROUP_FRAMES) * GROUP_FRAMES;
     int expected_frames = n_batches_group_aligned / GROUP_FRAMES;
@@ -327,7 +327,7 @@ int tb_deepwaveaccel() {
     // -------------------------------------------------------------------------
     // Collect outputs: parse frames (norm + pixels)
     // -------------------------------------------------------------------------
-    std::vector<norm_sum_t> norms;
+    std::vector<norm_out_t> norms;
     norms.reserve(expected_frames);
 
     std::vector<img_t> image_out;
@@ -337,8 +337,8 @@ int tb_deepwaveaccel() {
         // First word per frame = norm
         out_axis_t w_norm_axis = out_stream.read();
         word_t w_norm = w_norm_axis.data;
-        norm_sum_t nv;
-        nv.range() = w_norm.range(norm_sum_t::width - 1, 0);
+        norm_out_t nv;
+        nv.range() = w_norm.range(norm_out_t::width - 1, 0);
         norms.push_back(nv);
 
         // Then IMG_LEN pixel words

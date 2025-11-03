@@ -458,7 +458,7 @@ attribute shreg_extract : string;
     signal add_ln87_1_fu_12157_p2 : STD_LOGIC_VECTOR (61 downto 0);
     signal mul_ln95_fu_12208_p1 : STD_LOGIC_VECTOR (15 downto 0);
     signal mul_ln95_fu_12208_p2 : STD_LOGIC_VECTOR (39 downto 0);
-    signal tmp_8_fu_12240_p4 : STD_LOGIC_VECTOR (9 downto 0);
+    signal tmp_5_fu_12240_p4 : STD_LOGIC_VECTOR (9 downto 0);
     signal icmp_ln102_fu_12250_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal trunc_ln95_2_fu_12225_p4 : STD_LOGIC_VECTOR (23 downto 0);
     signal corrected_fu_12256_p3 : STD_LOGIC_VECTOR (23 downto 0);
@@ -14621,7 +14621,7 @@ begin
 
     grp_fu_2963_p2 <= std_logic_vector(unsigned(pair_idx_load_reg_12611) + unsigned(ap_const_lv32_1));
     grp_fu_2968_p2 <= "1" when (grp_fu_2963_p2 = ap_const_lv32_468) else "0";
-    icmp_ln102_fu_12250_p2 <= "1" when (signed(tmp_8_fu_12240_p4) < signed(ap_const_lv10_1)) else "0";
+    icmp_ln102_fu_12250_p2 <= "1" when (signed(tmp_5_fu_12240_p4) < signed(ap_const_lv10_1)) else "0";
     icmp_ln127_fu_12436_p2 <= "1" when (signed(add_ln126_fu_12431_p2) < signed(ap_const_lv32_9)) else "0";
     icmp_ln68_fu_12583_p2 <= "1" when (add_ln67_fu_12577_p2 = ap_const_lv32_30) else "0";
     icmp_ln90_fu_3024_p2 <= "1" when (add_ln89_fu_3012_p2 = ap_const_lv32_30) else "0";
@@ -14919,7 +14919,7 @@ begin
     end process;
 
     sub_ln120_fu_12400_p2 <= std_logic_vector(unsigned(mul_ln120_fu_2947_p2) - unsigned(mul_ln120_1_fu_2951_p2));
-    tmp_8_fu_12240_p4 <= mul_ln95_fu_12208_p2(39 downto 30);
+    tmp_5_fu_12240_p4 <= mul_ln95_fu_12208_p2(39 downto 30);
     tmp_nbreadreq_fu_2531_p3 <= (0=>(s_goertzel_empty_n), others=>'-');
     trunc_ln103_fu_12274_p1 <= grp_fu_12268_p2(24 - 1 downto 0);
     trunc_ln59_fu_2982_p1 <= pair_idx(11 - 1 downto 0);

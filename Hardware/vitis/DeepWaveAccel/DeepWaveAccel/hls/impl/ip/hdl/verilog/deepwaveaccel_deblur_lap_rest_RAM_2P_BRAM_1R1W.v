@@ -4,7 +4,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // ==============================================================
 `timescale 1 ns / 1 ps
-module deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe (
+module deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W (
      
     address0, ce0,
     
@@ -17,8 +17,8 @@ module deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_sta
     reset, clk);
 
 parameter DataWidth = 15;
-parameter AddressWidth = 12;
-parameter AddressRange = 2234;
+parameter AddressWidth = 14;
+parameter AddressRange = 13404;
  
 input[AddressWidth-1:0] address0;
 input ce0;
@@ -37,7 +37,7 @@ input clk;
 (* ram_style = "block"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe.dat", ram);
+    $readmemh("./deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W.dat", ram);
 end 
 
  

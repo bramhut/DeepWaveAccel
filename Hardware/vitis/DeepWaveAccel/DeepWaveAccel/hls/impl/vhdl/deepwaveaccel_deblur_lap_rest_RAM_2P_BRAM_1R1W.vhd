@@ -8,12 +8,12 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.std_logic_unsigned.all;
 
-entity deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe is 
+entity deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W is 
     generic(
         MEM_TYPE        : string    := "block"; 
         DataWidth       : integer   := 15; 
-        AddressWidth    : integer   := 12;
-        AddressRange    : integer   := 2234
+        AddressWidth    : integer   := 14;
+        AddressRange    : integer   := 13404
     ); 
     port (
         address0    : in std_logic_vector(AddressWidth-1 downto 0); 
@@ -29,7 +29,7 @@ entity deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_sta
     ); 
 end entity; 
 
-architecture rtl of deepwaveaccel_deblur_deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_rest_dEe is 
+architecture rtl of deepwaveaccel_deblur_lap_rest_RAM_2P_BRAM_1R1W is 
 
 signal address0_tmp : std_logic_vector(AddressWidth-1 downto 0);
 signal address1_tmp : std_logic_vector(AddressWidth-1 downto 0);

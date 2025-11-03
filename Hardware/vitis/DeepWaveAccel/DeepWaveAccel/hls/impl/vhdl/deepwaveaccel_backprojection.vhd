@@ -277,8 +277,8 @@ attribute shreg_extract : string;
     signal bj_b_M_imag_reg_3780 : STD_LOGIC_VECTOR (13 downto 0);
     signal trunc_ln2_reg_3785 : STD_LOGIC_VECTOR (21 downto 0);
     signal trunc_ln3_reg_3790 : STD_LOGIC_VECTOR (22 downto 0);
-    signal tmp_3_fu_3205_p3 : STD_LOGIC_VECTOR (13 downto 0);
-    signal tmp_3_reg_3798 : STD_LOGIC_VECTOR (13 downto 0);
+    signal tmp_9_fu_3205_p3 : STD_LOGIC_VECTOR (13 downto 0);
+    signal tmp_9_reg_3798 : STD_LOGIC_VECTOR (13 downto 0);
     signal ap_CS_fsm_state4 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state4 : signal is "none";
     signal grp_fu_1224_p2 : STD_LOGIC_VECTOR (31 downto 0);
@@ -329,7 +329,7 @@ attribute shreg_extract : string;
     signal zext_ln153_fu_3534_p1 : STD_LOGIC_VECTOR (63 downto 0);
     signal add_ln199_fu_2819_p2 : STD_LOGIC_VECTOR (23 downto 0);
     signal add_ln151_fu_3505_p2 : STD_LOGIC_VECTOR (31 downto 0);
-    signal tmp_2_fu_3197_p3 : STD_LOGIC_VECTOR (13 downto 0);
+    signal tmp_8_fu_3197_p3 : STD_LOGIC_VECTOR (13 downto 0);
     signal add_ln216_fu_1400_p2 : STD_LOGIC_VECTOR (31 downto 0);
     signal trunc_ln215_fu_1391_p1 : STD_LOGIC_VECTOR (15 downto 0);
     signal status_bp_idx_preg : STD_LOGIC_VECTOR (15 downto 0) := "0000000000000000";
@@ -356,12 +356,12 @@ attribute shreg_extract : string;
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_ce0_local : STD_LOGIC;
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_address0_local : STD_LOGIC_VECTOR (11 downto 0);
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_we1_local : STD_LOGIC;
-    signal tmp_6_fu_3615_p4 : STD_LOGIC_VECTOR (671 downto 0);
+    signal tmp_4_fu_3615_p4 : STD_LOGIC_VECTOR (671 downto 0);
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_ce1_local : STD_LOGIC;
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_ce0_local : STD_LOGIC;
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_address0_local : STD_LOGIC_VECTOR (11 downto 0);
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_we1_local : STD_LOGIC;
-    signal tmp_7_fu_3626_p4 : STD_LOGIC_VECTOR (671 downto 0);
+    signal tmp_5_fu_3626_p4 : STD_LOGIC_VECTOR (671 downto 0);
     signal backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_ce1_local : STD_LOGIC;
     signal tau_mem_ce0_local : STD_LOGIC;
     signal tau_mem_address0_local : STD_LOGIC_VECTOR (11 downto 0);
@@ -406,8 +406,8 @@ attribute shreg_extract : string;
     signal sext_ln197_4_fu_2787_p1 : STD_LOGIC_VECTOR (44 downto 0);
     signal mul_ln197_1_fu_1204_p2 : STD_LOGIC_VECTOR (44 downto 0);
     signal add_ln197_fu_2791_p2 : STD_LOGIC_VECTOR (44 downto 0);
-    signal tmp_9_fu_2797_p4 : STD_LOGIC_VECTOR (20 downto 0);
-    signal tmp_4_fu_2807_p3 : STD_LOGIC_VECTOR (21 downto 0);
+    signal tmp_3_fu_2797_p4 : STD_LOGIC_VECTOR (20 downto 0);
+    signal tmp_6_fu_2807_p3 : STD_LOGIC_VECTOR (21 downto 0);
     signal sext_ln199_fu_2815_p1 : STD_LOGIC_VECTOR (23 downto 0);
     signal trunc_ln217_fu_3100_p0 : STD_LOGIC_VECTOR (31 downto 0);
     signal trunc_ln165_fu_3169_p1 : STD_LOGIC_VECTOR (5 downto 0);
@@ -631,10 +631,10 @@ attribute shreg_extract : string;
     signal bk_b_M_imag_fu_2463_p89 : STD_LOGIC_VECTOR (5 downto 0);
     signal bk_b_M_imag_fu_2463_p91 : STD_LOGIC_VECTOR (5 downto 0);
     signal bk_b_M_imag_fu_2463_p93 : STD_LOGIC_VECTOR (5 downto 0);
-    signal tmp_2_fu_3197_p0 : STD_LOGIC_VECTOR (13 downto 0);
-    signal tmp_3_fu_3205_p0 : STD_LOGIC_VECTOR (13 downto 0);
-    signal tmp_6_fu_3615_p0 : STD_LOGIC_VECTOR (671 downto 0);
-    signal tmp_7_fu_3626_p0 : STD_LOGIC_VECTOR (671 downto 0);
+    signal tmp_8_fu_3197_p0 : STD_LOGIC_VECTOR (13 downto 0);
+    signal tmp_9_fu_3205_p0 : STD_LOGIC_VECTOR (13 downto 0);
+    signal tmp_4_fu_3615_p0 : STD_LOGIC_VECTOR (671 downto 0);
+    signal tmp_5_fu_3626_p0 : STD_LOGIC_VECTOR (671 downto 0);
     signal ap_ce_reg : STD_LOGIC;
 
     component deepwaveaccel_mul_22s_22s_44_1_1 IS
@@ -969,7 +969,7 @@ begin
         address1 => backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_addr_1_reg_3763,
         ce1 => backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_ce1_local,
         we1 => backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_we1_local,
-        d1 => tmp_6_fu_3615_p4);
+        d1 => tmp_4_fu_3615_p4);
 
     backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_U : component deepwaveaccel_backprojection_backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_Rbkb
     generic map (
@@ -985,7 +985,7 @@ begin
         address1 => backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_addr_1_reg_3769,
         ce1 => backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_ce1_local,
         we1 => backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_we1_local,
-        d1 => tmp_7_fu_3626_p4);
+        d1 => tmp_5_fu_3626_p4);
 
     tau_mem_U : component deepwaveaccel_backprojection_tau_mem_RAM_1P_BRAM_1R1W
     generic map (
@@ -1745,7 +1745,7 @@ begin
     port map (
         din => backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_q0,
         sel => sub_ln165_fu_3191_p2,
-        dout => tmp_2_fu_3197_p3);
+        dout => tmp_8_fu_3197_p3);
 
     partselect_14ns_672ns_10ns_14_1_1_U69 : component deepwaveaccel_partselect_14ns_672ns_10ns_14_1_1
     generic map (
@@ -1755,7 +1755,7 @@ begin
     port map (
         din => backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_q0,
         sel => sub_ln165_fu_3191_p2,
-        dout => tmp_3_fu_3205_p3);
+        dout => tmp_9_fu_3205_p3);
 
     partset_672ns_672ns_14ns_10ns_672_1_1_U70 : component deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1
     generic map (
@@ -1766,7 +1766,7 @@ begin
         din => backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_q0,
         value => real_in,
         sel => sub_ln113_fu_3609_p2,
-        dout => tmp_6_fu_3615_p4);
+        dout => tmp_4_fu_3615_p4);
 
     partset_672ns_672ns_14ns_10ns_672_1_1_U71 : component deepwaveaccel_partset_672ns_672ns_14ns_10ns_672_1_1
     generic map (
@@ -1777,7 +1777,7 @@ begin
         din => backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_q0,
         value => imag_in_reg_3758,
         sel => sub_ln113_fu_3609_p2,
-        dout => tmp_7_fu_3626_p4);
+        dout => tmp_5_fu_3626_p4);
 
     regslice_both_param_bp_U : component deepwaveaccel_regslice_both
     generic map (
@@ -2166,7 +2166,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_0) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_0 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_0 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2174,7 +2174,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_1 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_1 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2182,7 +2182,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_A) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_10 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_10 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2190,7 +2190,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_B) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_11 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_11 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2198,7 +2198,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_C) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_12 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_12 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2206,7 +2206,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_D) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_13 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_13 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2214,7 +2214,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_E) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_14 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_14 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2222,7 +2222,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_F) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_15 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_15 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2230,7 +2230,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_10) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_16 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_16 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2238,7 +2238,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_11) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_17 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_17 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2246,7 +2246,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_12) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_18 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_18 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2254,7 +2254,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_13) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_19 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_19 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2262,7 +2262,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_2 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_2 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2270,7 +2270,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_14) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_20 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_20 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2278,7 +2278,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_15) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_21 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_21 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2286,7 +2286,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_16) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_22 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_22 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2294,7 +2294,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_17) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_23 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_23 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2302,7 +2302,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_18) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_24 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_24 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2310,7 +2310,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_19) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_25 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_25 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2318,7 +2318,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1A) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_26 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_26 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2326,7 +2326,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1B) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_27 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_27 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2334,7 +2334,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1C) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_28 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_28 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2342,7 +2342,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1D) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_29 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_29 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2350,7 +2350,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_3) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_3 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_3 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2358,7 +2358,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1E) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_30 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_30 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2366,7 +2366,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1F) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_31 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_31 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2374,7 +2374,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_20) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_32 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_32 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2382,7 +2382,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_21) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_33 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_33 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2390,7 +2390,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_22) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_34 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_34 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2398,7 +2398,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_23) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_35 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_35 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2406,7 +2406,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_24) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_36 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_36 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2414,7 +2414,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_25) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_37 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_37 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2422,7 +2422,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_26) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_38 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_38 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2430,7 +2430,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_27) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_39 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_39 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2438,7 +2438,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_4) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_4 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_4 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2446,7 +2446,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_28) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_40 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_40 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2454,7 +2454,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_29) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_41 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_41 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2462,7 +2462,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2A) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_42 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_42 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2470,7 +2470,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2B) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_43 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_43 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2478,7 +2478,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2C) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_44 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_44 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2486,7 +2486,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2D) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_45 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_45 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2494,7 +2494,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2E) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_46 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_46 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2502,7 +2502,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2F) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_47 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_47 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2510,7 +2510,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_5) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_5 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_5 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2518,7 +2518,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_6) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_6 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_6 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2526,7 +2526,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_7) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_7 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_7 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2534,7 +2534,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_8) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_8 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_8 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2542,7 +2542,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_9) and (st_2_load_reg_3671 = ap_const_lv3_2) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_9 <= tmp_3_reg_3798;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_imag_9 <= tmp_9_reg_3798;
             end if;
         end if;
     end process;
@@ -2550,7 +2550,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_0) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_0 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_0 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2558,7 +2558,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_1 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_1 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2566,7 +2566,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_A) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_10 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_10 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2574,7 +2574,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_B) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_11 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_11 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2582,7 +2582,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_C) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_12 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_12 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2590,7 +2590,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_D) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_13 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_13 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2598,7 +2598,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_E) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_14 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_14 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2606,7 +2606,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_F) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_15 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_15 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2614,7 +2614,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_10) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_16 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_16 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2622,7 +2622,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_11) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_17 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_17 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2630,7 +2630,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_12) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_18 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_18 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2638,7 +2638,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_13) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_19 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_19 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2646,7 +2646,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_2 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_2 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2654,7 +2654,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_14) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_20 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_20 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2662,7 +2662,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_15) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_21 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_21 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2670,7 +2670,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_16) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_22 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_22 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2678,7 +2678,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_17) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_23 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_23 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2686,7 +2686,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_18) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_24 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_24 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2694,7 +2694,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_19) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_25 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_25 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2702,7 +2702,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1A) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_26 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_26 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2710,7 +2710,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1B) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_27 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_27 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2718,7 +2718,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1C) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_28 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_28 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2726,7 +2726,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1D) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_29 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_29 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2734,7 +2734,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_3) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_3 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_3 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2742,7 +2742,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1E) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_30 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_30 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2750,7 +2750,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_1F) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_31 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_31 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2758,7 +2758,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_20) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_32 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_32 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2766,7 +2766,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_21) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_33 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_33 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2774,7 +2774,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_22) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_34 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_34 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2782,7 +2782,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_23) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_35 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_35 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2790,7 +2790,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_24) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_36 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_36 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2798,7 +2798,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_25) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_37 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_37 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2806,7 +2806,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_26) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_38 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_38 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2814,7 +2814,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_27) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_39 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_39 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2822,7 +2822,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_4) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_4 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_4 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2830,7 +2830,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_28) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_40 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_40 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2838,7 +2838,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_29) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_41 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_41 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2846,7 +2846,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2A) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_42 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_42 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2854,7 +2854,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2B) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_43 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_43 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2862,7 +2862,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2C) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_44 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_44 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2870,7 +2870,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2D) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_45 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_45 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2878,7 +2878,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2E) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_46 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_46 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2886,7 +2886,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_2F) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_47 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_47 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2894,7 +2894,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_5) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_5 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_5 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2902,7 +2902,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_6) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_6 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_6 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2910,7 +2910,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_7) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_7 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_7 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2918,7 +2918,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_8) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_8 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_8 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -2926,7 +2926,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((idx_load_reg_3680 = ap_const_lv32_9) and (ap_const_logic_1 = ap_CS_fsm_state4))) then
-                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_9 <= tmp_2_fu_3197_p3;
+                backprojection_stream_stream_stream_status_bp_t_b_line_M_real_9 <= tmp_8_fu_3197_p3;
             end if;
         end if;
     end process;
@@ -3017,7 +3017,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if ((ap_const_logic_1 = ap_CS_fsm_state4)) then
-                tmp_3_reg_3798 <= tmp_3_fu_3205_p3;
+                tmp_9_reg_3798 <= tmp_9_fu_3205_p3;
             end if;
         end if;
     end process;
@@ -3630,7 +3630,7 @@ begin
 
         sext_ln197_4_fu_2787_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(mul_ln197_fu_1200_p2),45));
 
-        sext_ln199_fu_2815_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_4_fu_2807_p3),24));
+        sext_ln199_fu_2815_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_6_fu_2807_p3),24));
 
         sext_ln212_fu_3559_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(shl_ln_fu_3551_p3),24));
 
@@ -3828,8 +3828,8 @@ begin
         end if; 
     end process;
 
-    tmp_4_fu_2807_p3 <= (tmp_9_fu_2797_p4 & ap_const_lv1_0);
-    tmp_9_fu_2797_p4 <= add_ln197_fu_2791_p2(44 downto 24);
+    tmp_3_fu_2797_p4 <= add_ln197_fu_2791_p2(44 downto 24);
+    tmp_6_fu_2807_p3 <= (tmp_3_fu_2797_p4 & ap_const_lv1_0);
     tmp_nbreadreq_fu_574_p3 <= (0=>(param_bp_TVALID_int_regslice), others=>'-');
     trunc_ln104_fu_1441_p1 <= elem(15 - 1 downto 0);
     trunc_ln113_1_fu_3598_p1 <= elem_load_reg_3748(9 - 1 downto 0);

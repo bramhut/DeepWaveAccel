@@ -141,10 +141,10 @@ reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_pre
 reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_reg_227;
 reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4;
 reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_reg_237;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4;
-reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247;
-reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4;
-reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247;
+reg   [17:0] ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4;
+reg   [17:0] goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257;
 wire   [63:0] zext_ln63_fu_313_p1;
 wire   [31:0] add_ln56_fu_271_p2;
 wire   [31:0] add_ln95_fu_479_p2;
@@ -441,9 +441,9 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
-        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
     end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
-        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 <= 18'd0;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247 <= 18'd0;
     end
 end
 
@@ -457,9 +457,9 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_state4) & (icmp_ln83_fu_433_p2 == 1'd0))) begin
-        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 <= {{sub_ln75_1_fu_413_p2[33:16]}};
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257 <= {{sub_ln75_1_fu_413_p2[33:16]}};
     end else if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
-        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 <= 18'd0;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257 <= 18'd0;
     end
 end
 
@@ -491,8 +491,8 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_state8) & (tmp_reg_658 == 1'd1))) begin
-        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4;
-        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4;
+        goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4;
         goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_1 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4;
         goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_phi_fu_230_p4;
         sample <= ap_phi_mux_sample_new_0_phi_fu_220_p4;
@@ -570,9 +570,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
-        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 = 18'd0;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247;
     end
 end
 
@@ -586,9 +586,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state8) & (icmp_ln83_reg_717 == 1'd1) & (tmp_reg_658 == 1'd1))) begin
-        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 = 18'd0;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4 = 18'd0;
     end else begin
-        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257;
+        ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4 = goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257;
     end
 end
 

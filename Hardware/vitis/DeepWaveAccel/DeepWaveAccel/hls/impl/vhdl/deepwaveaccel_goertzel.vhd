@@ -132,10 +132,10 @@ attribute shreg_extract : string;
     signal goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_reg_227 : STD_LOGIC_VECTOR (17 downto 0);
     signal ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4 : STD_LOGIC_VECTOR (17 downto 0);
     signal goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_reg_237 : STD_LOGIC_VECTOR (17 downto 0);
-    signal ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 : STD_LOGIC_VECTOR (17 downto 0);
-    signal goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 : STD_LOGIC_VECTOR (17 downto 0);
-    signal ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 : STD_LOGIC_VECTOR (17 downto 0);
-    signal goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 : STD_LOGIC_VECTOR (17 downto 0);
+    signal ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247 : STD_LOGIC_VECTOR (17 downto 0);
+    signal ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4 : STD_LOGIC_VECTOR (17 downto 0);
+    signal goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257 : STD_LOGIC_VECTOR (17 downto 0);
     signal zext_ln63_fu_313_p1 : STD_LOGIC_VECTOR (63 downto 0);
     signal add_ln56_fu_271_p2 : STD_LOGIC_VECTOR (31 downto 0);
     signal add_ln95_fu_479_p2 : STD_LOGIC_VECTOR (31 downto 0);
@@ -566,13 +566,13 @@ begin
     end process;
 
 
-    goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247_assign_proc : process (ap_clk)
+    goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247_assign_proc : process (ap_clk)
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((ap_const_logic_1 = ap_CS_fsm_state4) and (icmp_ln83_fu_433_p2 = ap_const_lv1_0))) then 
-                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
+                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev;
             elsif (((ap_const_logic_1 = ap_CS_fsm_state8) and (icmp_ln83_reg_717 = ap_const_lv1_1) and (tmp_reg_658 = ap_const_lv1_1))) then 
-                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247 <= ap_const_lv18_0;
+                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247 <= ap_const_lv18_0;
             end if; 
         end if;
     end process;
@@ -588,13 +588,13 @@ begin
         end if;
     end process;
 
-    goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257_assign_proc : process (ap_clk)
+    goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257_assign_proc : process (ap_clk)
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((ap_const_logic_1 = ap_CS_fsm_state4) and (icmp_ln83_fu_433_p2 = ap_const_lv1_0))) then 
-                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 <= sub_ln75_1_fu_413_p2(33 downto 16);
+                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257 <= sub_ln75_1_fu_413_p2(33 downto 16);
             elsif (((ap_const_logic_1 = ap_CS_fsm_state8) and (icmp_ln83_reg_717 = ap_const_lv1_1) and (tmp_reg_658 = ap_const_lv1_1))) then 
-                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257 <= ap_const_lv18_0;
+                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257 <= ap_const_lv18_0;
             end if; 
         end if;
     end process;
@@ -636,8 +636,8 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((ap_const_logic_1 = ap_CS_fsm_state8) and (tmp_reg_658 = ap_const_lv1_1))) then
-                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4;
-                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4;
+                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4;
+                goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4;
                 goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_1 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_new_0_phi_fu_240_p4;
                 goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_1 <= ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_new_0_phi_fu_230_p4;
                 sample <= ap_phi_mux_sample_new_0_phi_fu_220_p4;
@@ -787,12 +787,12 @@ begin
     end process;
 
 
-    ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4_assign_proc : process(tmp_reg_658, icmp_ln83_reg_717, ap_CS_fsm_state8, goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247)
+    ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4_assign_proc : process(tmp_reg_658, icmp_ln83_reg_717, ap_CS_fsm_state8, goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247)
     begin
         if (((ap_const_logic_1 = ap_CS_fsm_state8) and (icmp_ln83_reg_717 = ap_const_lv1_1) and (tmp_reg_658 = ap_const_lv1_1))) then 
-            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 <= ap_const_lv18_0;
+            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4 <= ap_const_lv18_0;
         else 
-            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_phi_fu_250_p4 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_19_new_0_reg_247;
+            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_phi_fu_250_p4 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev2_14_new_0_reg_247;
         end if; 
     end process;
 
@@ -807,12 +807,12 @@ begin
     end process;
 
 
-    ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4_assign_proc : process(tmp_reg_658, icmp_ln83_reg_717, ap_CS_fsm_state8, goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257)
+    ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4_assign_proc : process(tmp_reg_658, icmp_ln83_reg_717, ap_CS_fsm_state8, goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257)
     begin
         if (((ap_const_logic_1 = ap_CS_fsm_state8) and (icmp_ln83_reg_717 = ap_const_lv1_1) and (tmp_reg_658 = ap_const_lv1_1))) then 
-            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 <= ap_const_lv18_0;
+            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4 <= ap_const_lv18_0;
         else 
-            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_phi_fu_260_p4 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_18_new_0_reg_257;
+            ap_phi_mux_goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_phi_fu_260_p4 <= goertzel_stream_stream_goertzel_config_status_gz_t_s_prev_13_new_0_reg_257;
         end if; 
     end process;
 
