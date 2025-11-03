@@ -5,10 +5,10 @@
 // -----------------------------------------------------------------------------
 // Helper macro for clean buffer selection (compile-time resolvable)
 // -----------------------------------------------------------------------------
-#define SELECT_Z(k_mod, idx, role) \
-    ((role) == 0 ? ((k_mod) == 0 ? Z1[idx] : ((k_mod) == 1 ? Z2[idx] : Z0[idx])) : \
-     (role) == 1 ? ((k_mod) == 0 ? Z2[idx] : ((k_mod) == 1 ? Z0[idx] : Z1[idx])) : \
-                   ((k_mod) == 0 ? Z0[idx] : ((k_mod) == 1 ? Z1[idx] : Z2[idx])))
+#define SELECT_Z(buf_i, idx, role) \
+    ((role) == 0 ? ((buf_i) == 0 ? Z1[idx] : ((buf_i) == 1 ? Z2[idx] : Z0[idx])) : \
+     (role) == 1 ? ((buf_i) == 0 ? Z2[idx] : ((buf_i) == 1 ? Z0[idx] : Z1[idx])) : \
+                   ((buf_i) == 0 ? Z0[idx] : ((buf_i) == 1 ? Z1[idx] : Z2[idx])))
 
 // role = 0 → v_prev
 // role = 1 → v_cur
@@ -32,7 +32,7 @@ static inline acc_t lap_pixel_seq(
     const img_t  Z0[IMG_LEN],
     const img_t  Z1[IMG_LEN],
     const img_t  Z2[IMG_LEN],
-    int           k_mod,    // k % 3
+    int           buf_i,    // k % 3
     idx_t         i,
     const idx_t   offs[ND],
     const lap_t   lap_rest[ND][IMG_LEN],
@@ -49,9 +49,9 @@ static inline acc_t lap_pixel_seq(
     int iu = (int)i + o;
 
     if (il >= 0)
-        acc -= (acc_t)lap_rest[d][i] * (acc_t)SELECT_Z(k_mod, il, 1);
+        acc -= (acc_t)lap_rest[d][i] * (acc_t)SELECT_Z(buf_i, il, 1);
     if (iu < IMG_LEN)
-        acc -= (acc_t)lap_rest[d][iu] * (acc_t)SELECT_Z(k_mod, iu, 1);
+        acc -= (acc_t)lap_rest[d][iu] * (acc_t)SELECT_Z(buf_i, iu, 1);
 
     return acc;
 }
@@ -234,29 +234,29 @@ void deblur(
     case CHEB_COMPUTE: {
         static int i = 0;
         static bool centre = true;
-        int k_mod = k % 3;
+        static int buf_i = 1;
 
         if (centre) {
-            img_t center_val = SELECT_Z(k_mod, i, 1);
+            img_t center_val = SELECT_Z(buf_i, i, 1);
             acc_tmp = (acc_t)lap_main * (acc_t)center_val;
             y_tmp   = y_acc[i];
             centre = false;
         }
         else {
             static int d = 0;
-            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, k_mod, i, lap_offsets, lap_rest, acc_tmp, d);
+            acc_tmp = lap_pixel_seq(Z0, Z1, Z2, buf_i, i, lap_offsets, lap_rest, acc_tmp, d);
 
             if (d == ND-1) {
                 d = 0;
                 centre = true;
                 img_t t = (img_t)acc_tmp;
 
-                img_t z_prev_val = SELECT_Z(k_mod, i, 0);
+                img_t z_prev_val = SELECT_Z(buf_i, i, 0);
                 img_t z_next_val = (k == 1) ? t
                                             : (img_t)((t<<1) - z_prev_val);
 
                 // Rotate triple buffer
-                switch (k_mod) {
+                switch (buf_i) {
                 case 0: Z0[i] = z_next_val; break;
                 case 1: Z1[i] = z_next_val; break;
                 default:Z2[i] = z_next_val; break;
@@ -266,11 +266,16 @@ void deblur(
                 y_acc[i] = y_tmp + (acc_t)theta[k] * (acc_t)z_next_val;
                 ++i;
                 if (i == IMG_LEN) {
-                    i = 0; ++k;
+                    i = 0; 
+                    ++k;
+                    ++buf_i;
+                    if (buf_i == 3) buf_i = 0;  // wrap every 3 iterations
+
                     if (k <= K) st = CHEB_COMPUTE;
                     else {           
                         st = LAYER_ADD_BP;
                         k = 1;
+                        buf_i = 1;  // reset for next frame/layer (optional)
                     }
                 }
             } else {

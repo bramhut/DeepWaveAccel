@@ -253,8 +253,8 @@ int tb_deepwaveaccel() {
     }
 
     goertzel_prepare_config(goer_cfg, (double)samplerate, FF);
-    std::cout << "[Deepwave] Goertzel config bin0: COS_OMEGA[0]: " << goer_cfg.COS_OMEGA[0]  << " (" << goer_cfg.COS_OMEGA[0].to_  << "), COS_OMEGA2[0]: " << goer_cfg.COS_OMEGA2[0] << " (" << goer_cfg.COS_OMEGA2[0].to_ << "), SIN_OMEGA[0]: " << goer_cfg.SIN_OMEGA[0] << " (" << goer_cfg.SIN_OMEGA[0].to_ << ")" << std::endl;
-    std::cout << "[Deepwave] Goertzel config bin1: COS_OMEGA[1]: " << goer_cfg.COS_OMEGA[1]  << " (" << goer_cfg.COS_OMEGA[1].to_  << "), COS_OMEGA2[1]: " << goer_cfg.COS_OMEGA2[1] << " (" << goer_cfg.COS_OMEGA2[1].to_ << "), SIN_OMEGA[1]: " << goer_cfg.SIN_OMEGA[1] << " (" << goer_cfg.SIN_OMEGA[1].to_ << ")" << std::endl;
+    std::cout << "[Deepwave] Goertzel config bin0: COS_OMEGA[0]: " << goer_cfg.COS_OMEGA[0]  << " (" << goer_cfg.COS_OMEGA[0].range()  << "), COS_OMEGA2[0]: " << goer_cfg.COS_OMEGA2[0] << " (" << goer_cfg.COS_OMEGA2[0].range() << "), SIN_OMEGA[0]: " << goer_cfg.SIN_OMEGA[0] << " (" << goer_cfg.SIN_OMEGA[0].range() << ")" << std::endl;
+    std::cout << "[Deepwave] Goertzel config bin1: COS_OMEGA[1]: " << goer_cfg.COS_OMEGA[1]  << " (" << goer_cfg.COS_OMEGA[1].range()  << "), COS_OMEGA2[1]: " << goer_cfg.COS_OMEGA2[1] << " (" << goer_cfg.COS_OMEGA2[1].range() << "), SIN_OMEGA[1]: " << goer_cfg.SIN_OMEGA[1] << " (" << goer_cfg.SIN_OMEGA[1].range() << ")" << std::endl;
     int n_batches = n_sample / N_WIN;
     int n_batches_group_aligned = (n_batches / GROUP_FRAMES) * GROUP_FRAMES;
     int expected_frames = n_batches_group_aligned / GROUP_FRAMES;
