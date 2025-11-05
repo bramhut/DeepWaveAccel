@@ -1,5 +1,4 @@
 #include "crosscor.hpp"
-#include "pair_rom_data.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -50,10 +49,6 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
     static power_accum_t power_acc = 0;          // sum of |u[i]|^2 over i
     static norm_inv_t scale = 0;              // 1 / corrected_reg
 
-    // ---- Predefined ROM lookup tables (compile-time) ----
-#pragma HLS ARRAY_PARTITION variable=j_rom complete
-#pragma HLS ARRAY_PARTITION variable=k_rom complete
-
 
     // ---------------- FSM ----------------
     switch (st)
@@ -70,7 +65,6 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
                 // Start a new per-frame correlate pass: diagonal first
                 phase     = PHASE_DIAG;
                 diag_i    = 0;
-                pair_idx  = 0;
                 st        = CORRELATE;
             }
         }
@@ -106,32 +100,39 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
 
                 // Move to Phase 2: accumulate upper triangle for this frame
                 phase    = PHASE_UPPER;
-                pair_idx = 0;
             }
         } else { // PHASE_UPPER
-            // ---- Phase 2: accumulate upper triangle using pair_rom mapping
-            int j_ = j_rom[pair_idx];
-            int k_ = k_rom[pair_idx];
-            power_accum_t re1 = u[k_].real();
-            power_accum_t im1 = u[k_].imag();
-            power_accum_t re2 = u[j_].real();
-            power_accum_t im2 = u[j_].imag();
+            // ---- Phase 2: accumulate upper triangle
+            static int j = 0;
+            static int k = 1;
+
+            power_accum_t re1 = u[k].real();
+            power_accum_t im1 = u[k].imag();
+            power_accum_t re2 = u[j].real();
+            power_accum_t im2 = u[j].imag();
             power_accum_t reo = re1 * re2 + im1 * im2 + R_flat[pair_idx].real();
             power_accum_t imo = re1 * im2 - re2 * im1 + R_flat[pair_idx].imag();
             R_flat[pair_idx] = corr_accum_t(reo, imo);
 
+            k++;
             pair_idx++;
-            if (pair_idx == NPAIR) {
-                // Completed this frame's upper triangle
-                frames_acc++;
-                if (frames_acc < GROUP_FRAMES) {
-                    // Collect next frame
-                    st = COLLECT;
-                } else {
-                    // Completed GROUP_FRAMES frames; proceed to NORM_SUM
+            if (k==N_ELEM) {
+                ++j;
+                if (j<N_ELEM-1){ // Next row
+                    k = j + 1;
+                } else { // Done with this frame's upper triangle
+                    k = 1;
+                    j = 0;
                     pair_idx = 0;
-                    frames_acc = 0;
-                    st = OUTPUT;
+                    frames_acc++;
+                    if (frames_acc < GROUP_FRAMES) {
+                        // Collect next frame
+                        st = COLLECT;
+                    } else {
+                        // Completed GROUP_FRAMES frames; proceed to NORM_SUM
+                        frames_acc = 0;
+                        st = OUTPUT;
+                    }
                 }
             }
         }

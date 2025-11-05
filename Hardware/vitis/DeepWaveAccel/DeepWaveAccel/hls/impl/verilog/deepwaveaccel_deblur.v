@@ -699,7 +699,7 @@ deepwaveaccel_mul_24s_21ns_45_1_1 #(
     .din0_WIDTH( 24 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_24s_21ns_45_1_1_U95(
+mul_24s_21ns_45_1_1_U88(
     .din0(grp_fu_2029_p0),
     .din1(grp_fu_2029_p1),
     .dout(grp_fu_2029_p2)
@@ -711,7 +711,7 @@ deepwaveaccel_mul_24s_21ns_45_1_1 #(
     .din0_WIDTH( 24 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_24s_21ns_45_1_1_U96(
+mul_24s_21ns_45_1_1_U89(
     .din0(shl_ln54_1_fu_2587_p3),
     .din1(mul_ln54_fu_2033_p1),
     .dout(mul_ln54_fu_2033_p2)
@@ -723,7 +723,7 @@ deepwaveaccel_mul_24s_24s_46_1_1 #(
     .din0_WIDTH( 24 ),
     .din1_WIDTH( 24 ),
     .dout_WIDTH( 46 ))
-mul_24s_24s_46_1_1_U97(
+mul_24s_24s_46_1_1_U90(
     .din0(grp_fu_2037_p0),
     .din1(grp_fu_2037_p1),
     .dout(grp_fu_2037_p2)
@@ -735,7 +735,7 @@ deepwaveaccel_mul_14s_13ns_14_1_1 #(
     .din0_WIDTH( 14 ),
     .din1_WIDTH( 13 ),
     .dout_WIDTH( 14 ))
-mul_14s_13ns_14_1_1_U98(
+mul_14s_13ns_14_1_1_U91(
     .din0(mul_ln52_1_fu_2105_p0),
     .din1(mul_ln52_1_fu_2105_p1),
     .dout(mul_ln52_1_fu_2105_p2)
@@ -759,7 +759,7 @@ mul_14s_13ns_14_1_1_U98(
     .def_WIDTH( 12 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 12 ))
-sparsemux_13_3_12_1_1_U99(
+sparsemux_13_3_12_1_1_U92(
     .din0(deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_offsets_5),
     .din1(deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_offsets_4),
     .din2(deblur_stream_stream_stream_stream_deblur_config_status_db_t_lap_offsets_3),
@@ -783,7 +783,7 @@ sparsemux_13_3_12_1_1_U99(
     .def_WIDTH( 18 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 18 ))
-sparsemux_7_2_18_1_1_U100(
+sparsemux_7_2_18_1_1_U93(
     .din0(Z2_q1),
     .din1(Z0_q1),
     .din2(Z1_q1),
@@ -804,7 +804,7 @@ sparsemux_7_2_18_1_1_U100(
     .def_WIDTH( 18 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 18 ))
-sparsemux_7_2_18_1_1_U101(
+sparsemux_7_2_18_1_1_U94(
     .din0(Z2_q0),
     .din1(Z0_q0),
     .din2(Z1_q0),
@@ -825,7 +825,7 @@ sparsemux_7_2_18_1_1_U101(
     .def_WIDTH( 18 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 18 ))
-sparsemux_7_2_18_1_1_U102(
+sparsemux_7_2_18_1_1_U95(
     .din0(Z1_q0),
     .din1(Z2_q0),
     .din2(Z0_q0),
@@ -846,7 +846,7 @@ sparsemux_7_2_18_1_1_U102(
     .def_WIDTH( 18 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 18 ))
-sparsemux_7_2_18_1_1_U103(
+sparsemux_7_2_18_1_1_U96(
     .din0(Z2_q0),
     .din1(Z0_q0),
     .din2(Z1_q0),
@@ -862,7 +862,7 @@ deepwaveaccel_mac_muladd_14s_12ns_14ns_14_4_1 #(
     .din1_WIDTH( 12 ),
     .din2_WIDTH( 14 ),
     .dout_WIDTH( 14 ))
-mac_muladd_14s_12ns_14ns_14_4_1_U104(
+mac_muladd_14s_12ns_14ns_14_4_1_U97(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_3564_p0),

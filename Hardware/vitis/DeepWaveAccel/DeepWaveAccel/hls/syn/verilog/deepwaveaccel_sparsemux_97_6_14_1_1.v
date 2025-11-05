@@ -5,7 +5,7 @@
 // ==============================================================
 `timescale 1ns / 1ps
 
-module deepwaveaccel_sparsemux_95_6_14_1_1 (din0,din1,din2,din3,din4,din5,din6,din7,din8,din9,din10,din11,din12,din13,din14,din15,din16,din17,din18,din19,din20,din21,din22,din23,din24,din25,din26,din27,din28,din29,din30,din31,din32,din33,din34,din35,din36,din37,din38,din39,din40,din41,din42,din43,din44,din45,din46,def,sel,dout);
+module deepwaveaccel_sparsemux_97_6_14_1_1 (din0,din1,din2,din3,din4,din5,din6,din7,din8,din9,din10,din11,din12,din13,din14,din15,din16,din17,din18,din19,din20,din21,din22,din23,din24,din25,din26,din27,din28,din29,din30,din31,din32,din33,din34,din35,din36,din37,din38,din39,din40,din41,din42,din43,din44,din45,din46,din47,def,sel,dout);
 
 parameter din0_WIDTH = 1;
 
@@ -100,6 +100,8 @@ parameter din44_WIDTH = 1;
 parameter din45_WIDTH = 1;
 
 parameter din46_WIDTH = 1;
+
+parameter din47_WIDTH = 1;
 
 parameter def_WIDTH = 1;
 parameter sel_WIDTH = 1;
@@ -199,6 +201,8 @@ parameter [sel_WIDTH-1:0] CASE45 = 1;
 
 parameter [sel_WIDTH-1:0] CASE46 = 1;
 
+parameter [sel_WIDTH-1:0] CASE47 = 1;
+
 parameter ID = 1;
 parameter NUM_STAGE = 1;
 
@@ -297,6 +301,8 @@ input [din44_WIDTH-1:0] din44;
 input [din45_WIDTH-1:0] din45;
 
 input [din46_WIDTH-1:0] din46;
+
+input [din47_WIDTH-1:0] din47;
 
 input [def_WIDTH-1:0] def;
 input [sel_WIDTH-1:0] sel;
@@ -404,6 +410,8 @@ always @ (*) begin
     CASE45 : dout_tmp = din45;
     
     CASE46 : dout_tmp = din46;
+    
+    CASE47 : dout_tmp = din47;
     
     default : dout_tmp = def;
 endcase

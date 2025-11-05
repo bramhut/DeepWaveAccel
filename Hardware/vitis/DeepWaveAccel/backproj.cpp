@@ -1,5 +1,4 @@
 #include "backproj.hpp"
-#include "pair_rom_data.hpp"
 #include <iostream>
 
 // -----------------------------------------------------------------------------
@@ -39,10 +38,6 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
     static b_t b_line[N_ELEM];
 #pragma HLS ARRAY_PARTITION variable=b_line complete dim=1
 
-    // ROM lookup tables (compile-time constants)
-#pragma HLS BIND_STORAGE variable=j_rom type=rom_1p impl=bram
-#pragma HLS BIND_STORAGE variable=k_rom type=rom_1p impl=bram
-
     // Dependency relaxation
 #pragma HLS DEPENDENCE variable=Sigma_up inter false
 #pragma HLS DEPENDENCE variable=b_line   inter false
@@ -54,7 +49,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
         LOAD_PARAMS,  // receive b_mem + tau_mem
         LOAD_UP,      // receive Σ frame
         LOAD_BLINE,   // preload steering line
-        COMPUTE_UP,   // compute upper-triangular sum
+        COMPUTE,      // compute upper-triangular sum
         OUTPUT        // write pixel result
     };
     static St st = LOAD_PARAMS;
@@ -154,7 +149,6 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
             ++idx;
             if (idx == NPAIR) {
                 idx = 0;
-                pix = 0;
                 st  = LOAD_BLINE;  // start processing first pixel
             }
         }
@@ -166,17 +160,15 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
         ++idx;
         if (idx == N_ELEM) {
             idx = 0;
-            pdx = 0;
-            y_acc = 0;
-            st = COMPUTE_UP;
+            st = COMPUTE;
         }
         break;
 
     // Compute off-diagonal contributions for current pixel
-    case COMPUTE_UP:
+    case COMPUTE:
     {
-        const int j = j_rom[pdx];
-        const int k = k_rom[pdx];
+        static int j = 0;
+        static int k = 1;
 
         b_t bj_b = b_line[j];
         b_t bk_b = b_line[k];
@@ -198,10 +190,18 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
    
         y_acc += (contrib << 1);  // symmetric pair factor
 
-        ++pdx;
-        if (pdx == NPAIR) {
-            pdx = 0;
-            st  = OUTPUT;
+        k++;
+        pdx++;
+        if (k==N_ELEM) {
+            ++j;
+            if (j<N_ELEM-1){ // Next row
+                k = j + 1;
+            } else { // Done with this frame's upper triangle
+                k = 1;
+                j = 0;
+                pdx = 0;
+                st  = OUTPUT;
+            }
         }
         break;
     }

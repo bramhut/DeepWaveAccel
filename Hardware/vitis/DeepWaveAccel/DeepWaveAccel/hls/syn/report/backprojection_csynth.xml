@@ -18,7 +18,7 @@
 <PipelineType>no</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>6.327</EstimatedClockPeriod>
+<EstimatedClockPeriod>5.280</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
@@ -35,16 +35,16 @@
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>backproj.cpp:10</SourceLocation>
+<SourceLocation>backproj.cpp:9</SourceLocation>
 </SummaryOfViolations>
 </PerformanceEstimates>
 
 <AreaEstimates>
 <Resources>
-<BRAM_18K>10</BRAM_18K>
+<BRAM_18K>8</BRAM_18K>
 <DSP>12</DSP>
-<FF>2108</FF>
-<LUT>5015</LUT>
+<FF>2237</FF>
+<LUT>5255</LUT>
 <URAM>20</URAM>
 </Resources>
 <AvailableResources>

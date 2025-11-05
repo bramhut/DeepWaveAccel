@@ -239,7 +239,8 @@ int tb_deepwaveaccel() {
     // -------------------------------------------------------------------------
     // 3. Load WAV data (same as before)
     // -------------------------------------------------------------------------
-    std::string wave_file = std::string(WAVE_DIR) + "/two_speakers/1-5.wav";
+    // std::string wave_file = std::string(WAVE_DIR) + "/two_speakers/1-5.wav";
+    std::string wave_file = std::string(WAVE_DIR_LAPTOP) + "/two_speakers/1-5.wav";
     std::vector<int16_t> wav_samples;
     int channels, samplerate, n_sample;
     if (!read_wav_16bit(wave_file, wav_samples, channels, samplerate, n_sample)) {

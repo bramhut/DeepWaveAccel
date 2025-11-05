@@ -8,7 +8,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity deepwaveaccel_sparsemux_95_6_14_1_1 is
+entity deepwaveaccel_sparsemux_97_6_14_1_1 is
 generic (
 
     din0_WIDTH : INTEGER := 1;
@@ -104,6 +104,8 @@ generic (
     din45_WIDTH : INTEGER := 1;
 
     din46_WIDTH : INTEGER := 1;
+
+    din47_WIDTH : INTEGER := 1;
 
     def_WIDTH : INTEGER := 1;
     sel_WIDTH : INTEGER := 1;
@@ -202,6 +204,8 @@ generic (
     CASE45 : std_logic_vector(5 downto 0);
     
     CASE46 : std_logic_vector(5 downto 0);
+    
+    CASE47 : std_logic_vector(5 downto 0);
     
     ID : INTEGER := 1;
     NUM_STAGE : INTEGER := 1
@@ -303,19 +307,21 @@ port (
 
     din46 : in std_logic_vector (din46_WIDTH-1 downto 0);
 
+    din47 : in std_logic_vector (din47_WIDTH-1 downto 0);
+
     def   : in std_logic_vector (def_WIDTH-1 downto 0);
     sel   : in std_logic_vector (5 downto 0);
     dout  : out std_logic_vector (dout_WIDTH-1 downto 0)
 );
 end entity;
 
-architecture behav of deepwaveaccel_sparsemux_95_6_14_1_1 is
+architecture behav of deepwaveaccel_sparsemux_97_6_14_1_1 is
     signal dout_tmp : std_logic_vector (dout_WIDTH-1 downto 0);
 
 
 begin
 
-    process(din0, din1, din2, din3, din4, din5, din6, din7, din8, din9, din10, din11, din12, din13, din14, din15, din16, din17, din18, din19, din20, din21, din22, din23, din24, din25, din26, din27, din28, din29, din30, din31, din32, din33, din34, din35, din36, din37, din38, din39, din40, din41, din42, din43, din44, din45, din46, sel) is
+    process(din0, din1, din2, din3, din4, din5, din6, din7, din8, din9, din10, din11, din12, din13, din14, din15, din16, din17, din18, din19, din20, din21, din22, din23, din24, din25, din26, din27, din28, din29, din30, din31, din32, din33, din34, din35, din36, din37, din38, din39, din40, din41, din42, din43, din44, din45, din46, din47, sel) is
     begin
         case sel is
             
@@ -459,6 +465,9 @@ begin
             
             when CASE46 =>
                 dout_tmp <= din46;
+            
+            when CASE47 =>
+                dout_tmp <= din47;
             
             when others =>
                 dout_tmp <= def;

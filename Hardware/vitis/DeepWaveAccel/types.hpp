@@ -12,6 +12,8 @@
 constexpr int N_ELEM  = 48;     // number of array elements
 constexpr int IMG_LEN = 2234;   // pixels per frame
 
+constexpr int NPAIR = N_ELEM * (N_ELEM - 1) / 2; // number of upper triangle elements
+
 // ---------------- Shared Fixed-Point Types ----------------
 using std::complex;
 
@@ -99,6 +101,7 @@ struct status_db_t {
 #define OUTPUT_DIR "../../../../output"
 #define PARAM_DIR  "../../../../parameters"
 #define WAVE_DIR   "../../../../../../../Simulation/FRIDA"
+#define WAVE_DIR_LAPTOP "../../../../../../../Simulation/FRIDA/FRIDA/recordings/20160908/data_pyramic/segmented"
 
 // ---------------- Interface Macros ----------------
 #define AXIS_IN_OUT(NAME) \
