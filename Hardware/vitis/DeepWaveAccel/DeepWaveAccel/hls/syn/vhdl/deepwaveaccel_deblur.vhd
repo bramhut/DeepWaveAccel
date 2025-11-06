@@ -25,8 +25,8 @@ port (
     s_bp_dout : IN STD_LOGIC_VECTOR (17 downto 0);
     s_bp_empty_n : IN STD_LOGIC;
     s_bp_read : OUT STD_LOGIC;
-    s_bp_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-    s_bp_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+    s_bp_num_data_valid : IN STD_LOGIC_VECTOR (12 downto 0);
+    s_bp_fifo_cap : IN STD_LOGIC_VECTOR (12 downto 0);
     param_db_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
     param_db_TVALID : IN STD_LOGIC;
     param_db_TREADY : OUT STD_LOGIC;

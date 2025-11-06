@@ -31,7 +31,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
 
     // ---------------- Persistent storage ----------------
     // Σ upper triangle (pair ROM order)
-    static DFTc_t Sigma_up[NPAIR];
+    static DFTc_t Sigma_up[N_PAIR];
 #pragma HLS BIND_STORAGE variable=Sigma_up type=ram_1p impl=bram
 
     // Temporary per-pixel cache of steering line
@@ -147,7 +147,7 @@ void backprojection(hls::stream<AxisWordDFTc> &corr_stream,
             AxisWordDFTc w = corr_stream.read();
             Sigma_up[idx] = DFTc_t(w.re, w.im);
             ++idx;
-            if (idx == NPAIR) {
+            if (idx == N_PAIR) {
                 idx = 0;
                 st  = LOAD_BLINE;  // start processing first pixel
             }

@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.851667,HLS_SYN_LAT=58,HLS_SYN_TPT=14,HLS_SYN_MEM=60,HLS_SYN_DSP=0,HLS_SYN_FF=7320,HLS_SYN_LUT=13044,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.851667,HLS_SYN_LAT=58,HLS_SYN_TPT=14,HLS_SYN_MEM=65,HLS_SYN_DSP=0,HLS_SYN_FF=7335,HLS_SYN_LUT=13068,HLS_VERSION=2025_1}" *)
 
 module deepwaveaccel (
         s_axi_CTRL_BUS_AWVALID,
@@ -206,8 +206,8 @@ wire   [6:0] s_goertzel_fifo_cap;
 wire    s_xcor_full_n;
 wire   [35:0] s_xcor_dout;
 wire    s_xcor_empty_n;
-wire   [6:0] s_xcor_num_data_valid;
-wire   [6:0] s_xcor_fifo_cap;
+wire   [11:0] s_xcor_num_data_valid;
+wire   [11:0] s_xcor_fifo_cap;
 wire    s_norm_full_n;
 wire   [24:0] s_norm_dout;
 wire    s_norm_empty_n;
@@ -216,8 +216,8 @@ wire   [2:0] s_norm_fifo_cap;
 wire    s_bp_full_n;
 wire   [17:0] s_bp_dout;
 wire    s_bp_empty_n;
-wire   [6:0] s_bp_num_data_valid;
-wire   [6:0] s_bp_fifo_cap;
+wire   [12:0] s_bp_num_data_valid;
+wire   [12:0] s_bp_fifo_cap;
 wire   [0:0] start_for_deblur_U0_din;
 wire    start_for_deblur_U0_full_n;
 wire   [0:0] start_for_deblur_U0_dout;
@@ -508,7 +508,7 @@ deepwaveaccel_fifo_w8_d5_S debl_cfg_c_U(
     .if_fifo_cap(debl_cfg_c_fifo_cap)
 );
 
-deepwaveaccel_fifo_w36_d64_A s_goertzel_U(
+deepwaveaccel_fifo_w36_d48_A s_goertzel_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
     .if_read_ce(1'b1),
@@ -523,7 +523,7 @@ deepwaveaccel_fifo_w36_d64_A s_goertzel_U(
     .if_fifo_cap(s_goertzel_fifo_cap)
 );
 
-deepwaveaccel_fifo_w36_d64_A s_xcor_U(
+deepwaveaccel_fifo_w36_d1128_A s_xcor_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
     .if_read_ce(1'b1),
@@ -553,7 +553,7 @@ deepwaveaccel_fifo_w25_d4_S s_norm_U(
     .if_fifo_cap(s_norm_fifo_cap)
 );
 
-deepwaveaccel_fifo_w18_d64_A s_bp_U(
+deepwaveaccel_fifo_w18_d2234_A s_bp_U(
     .clk(ap_clk),
     .reset(ap_rst_n_inv),
     .if_read_ce(1'b1),

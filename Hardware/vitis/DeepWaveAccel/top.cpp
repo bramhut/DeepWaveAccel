@@ -41,15 +41,10 @@ void deepwaveaccel(
 #pragma HLS DATAFLOW
 
     // Internal streams
-    hls_thread_local hls::stream<AxisWordDFTc> s_goertzel("s_goertzel");
-    hls_thread_local hls::stream<AxisWordDFTc> s_xcor    ("s_xcor");
-    hls_thread_local hls::stream<img_t>        s_bp      ("s_bp");
-    hls_thread_local hls::stream<norm_sum_t>   s_norm    ("s_norm");
-
-#pragma HLS STREAM variable=s_goertzel depth=64
-#pragma HLS STREAM variable=s_xcor     depth=64
-#pragma HLS STREAM variable=s_bp       depth=64
-#pragma HLS STREAM variable=s_norm     depth=4
+    hls_thread_local hls::stream<AxisWordDFTc, N_ELEM> s_goertzel("s_goertzel");
+    hls_thread_local hls::stream<AxisWordDFTc, N_PAIR> s_xcor    ("s_xcor");
+    hls_thread_local hls::stream<img_t, IMG_LEN> s_bp      ("s_bp");
+    hls_thread_local hls::stream<norm_sum_t, 4> s_norm    ("s_norm");
 
     hls_thread_local hls::task goertzel_task (goertzel, in,         s_goertzel, goer_cfg, status_gz);
     hls_thread_local hls::task crosscor_task(crosscor, s_goertzel, s_xcor,     s_norm, status_cc);
