@@ -43,10 +43,10 @@
     </PerformanceEstimates>
     <AreaEstimates>
         <Resources>
-            <BRAM_18K>60</BRAM_18K>
+            <BRAM_18K>65</BRAM_18K>
             <DSP>48</DSP>
-            <FF>7320</FF>
-            <LUT>13044</LUT>
+            <FF>7335</FF>
+            <LUT>13068</LUT>
             <URAM>20</URAM>
         </Resources>
         <AvailableResources>
@@ -432,34 +432,34 @@
                     <InstName>goertzel_U0</InstName>
                     <ModuleName>goertzel</ModuleName>
                     <IsCompInst>true</IsCompInst>
-                    <ID>594</ID>
+                    <ID>598</ID>
                     <BindInstances>add_ln56_fu_271_p2 mul_14s_13ns_27_1_1_U3 mac_muladd_18s_18s_30s_34_4_1_U5 mac_muladd_18s_18s_30s_34_4_1_U5 sub_ln75_fu_386_p2 mac_muladd_18s_18s_30s_34_4_1_U6 mac_muladd_18s_18s_30s_34_4_1_U6 sub_ln75_1_fu_413_p2 add_ln80_fu_428_p2 icmp_ln83_fu_433_p2 mac_mulsub_18s_18s_34ns_34_4_1_U7 mac_mulsub_18s_18s_34ns_34_4_1_U7 mul_18s_18s_34_1_1_U4 mac_mulsub_18s_18s_34ns_34_4_1_U8 mac_mulsub_18s_18s_34ns_34_4_1_U8 add_ln88_fu_530_p2 mac_muladd_18s_18s_34ns_34_4_1_U9 mac_muladd_18s_18s_34ns_34_4_1_U9 add_ln95_fu_479_p2 hann_window_U</BindInstances>
                 </Instance>
                 <Instance>
                     <InstName>crosscor_U0</InstName>
                     <ModuleName>crosscor</ModuleName>
                     <IsCompInst>true</IsCompInst>
-                    <ID>637</ID>
-                    <BindInstances>mul_31s_31s_62_1_1_U29 mul_31s_31s_62_1_1_U30 add_ln83_fu_790_p2 icmp_ln84_fu_802_p2 icmp_ln87_fu_893_p2 mul_25s_16ns_40_1_1_U35 add_ln94_fu_912_p2 icmp_ln96_fu_970_p2 corrected_fu_976_p3 udiv_39s_24ns_24_43_seq_1_U36 mul_31s_31s_62_1_1_U29 mul_31s_31s_62_1_1_U30 mul_31s_31s_62_1_1_U31 mul_31s_31s_62_1_1_U32 add_ln118_fu_1188_p2 grp_fu_751_p2 icmp_ln120_fu_1193_p2 add_ln121_fu_1199_p2 icmp_ln122_fu_1204_p2 add_ln128_fu_1210_p2 icmp_ln129_fu_1215_p2 select_ln129_fu_1221_p3 select_ln129_1_fu_1235_p3 add_ln123_fu_1249_p2 mul_36s_24ns_54_1_1_U33 mul_36s_24ns_54_1_1_U34 add_ln152_fu_818_p2 grp_fu_751_p2 icmp_ln156_fu_1303_p2 add_ln58_fu_1319_p2 add_ln62_fu_1359_p2 icmp_ln63_fu_1365_p2 u_M_real_U u_M_imag_U R_flat_M_real_U R_flat_M_imag_U</BindInstances>
+                    <ID>641</ID>
+                    <BindInstances>mul_31s_31s_62_1_1_U29 mul_31s_31s_62_1_1_U30 add_ln83_fu_790_p2 icmp_ln84_fu_802_p2 icmp_ln87_fu_893_p2 mul_25s_16ns_40_1_1_U35 add_ln94_fu_912_p2 icmp_ln96_fu_970_p2 corrected_fu_976_p3 udiv_39s_24ns_24_43_seq_1_U36 mul_31s_31s_62_1_1_U29 mul_31s_31s_62_1_1_U30 mul_31s_31s_62_1_1_U31 mul_31s_31s_62_1_1_U32 add_ln117_fu_1188_p2 grp_fu_751_p2 icmp_ln119_fu_1193_p2 add_ln120_fu_1199_p2 icmp_ln121_fu_1204_p2 add_ln127_fu_1210_p2 icmp_ln128_fu_1215_p2 select_ln128_fu_1221_p3 select_ln128_1_fu_1235_p3 add_ln122_fu_1249_p2 mul_36s_24ns_54_1_1_U33 mul_36s_24ns_54_1_1_U34 add_ln151_fu_818_p2 grp_fu_751_p2 icmp_ln155_fu_1303_p2 add_ln58_fu_1319_p2 add_ln62_fu_1359_p2 icmp_ln63_fu_1365_p2 u_M_real_U u_M_imag_U R_flat_M_real_U R_flat_M_imag_U</BindInstances>
                 </Instance>
                 <Instance>
                     <InstName>backprojection_U0</InstName>
                     <ModuleName>backprojection</ModuleName>
                     <IsCompInst>true</IsCompInst>
-                    <ID>694</ID>
+                    <ID>698</ID>
                     <BindInstances>sparsemux_97_6_14_1_1_U60 sparsemux_97_6_14_1_1_U61 sparsemux_97_6_14_1_1_U62 sparsemux_97_6_14_1_1_U63 mul_24s_22s_46_1_1_U56 mul_24s_22s_46_1_1_U57 sub_ln185_fu_2867_p2 mul_24s_22s_46_1_1_U58 mul_24s_22s_46_1_1_U59 add_ln186_fu_2891_p2 mul_22s_22s_44_1_1_U54 mul_23s_22s_45_1_1_U55 add_ln189_fu_2943_p2 add_ln191_fu_2971_p2 add_ln193_fu_2982_p2 add_ln194_fu_2988_p2 icmp_ln195_fu_2995_p2 add_ln196_fu_3001_p2 icmp_ln197_fu_3007_p2 add_ln198_fu_3019_p2 sub_ln159_fu_3374_p2 partselect_14ns_672ns_10ns_14_1_1_U64 partselect_14ns_672ns_10ns_14_1_1_U65 grp_fu_1346_p2 add_ln146_fu_3688_p2 grp_fu_1346_p2 icmp_ln150_fu_3722_p2 y_sub_fu_3746_p2 add_ln216_fu_1520_p2 grp_fu_1451_p2 grp_fu_1456_p2 select_ln221_fu_3282_p3 storemerge_cast_cast_cast_fu_3291_p3 sub_ln108_fu_3792_p2 partset_672ns_672ns_14ns_10ns_672_1_1_U66 partset_672ns_672ns_14ns_10ns_672_1_1_U67 add_ln110_fu_3825_p2 icmp_ln111_fu_3830_p2 grp_fu_1451_p2 grp_fu_1456_p2 grp_fu_1451_p2 grp_fu_1456_p2 backprojection_stream_stream_stream_status_bp_t_b_mem_M_real_U backprojection_stream_stream_stream_status_bp_t_b_mem_M_imag_U tau_mem_U Sigma_up_M_real_U Sigma_up_M_imag_U</BindInstances>
                 </Instance>
                 <Instance>
                     <InstName>entry_proc_U0</InstName>
                     <ModuleName>entry_proc</ModuleName>
                     <IsCompInst>true</IsCompInst>
-                    <ID>946</ID>
+                    <ID>950</ID>
                 </Instance>
                 <Instance>
                     <InstName>deblur_U0</InstName>
                     <ModuleName>deblur</ModuleName>
                     <IsCompInst>true</IsCompInst>
-                    <ID>953</ID>
+                    <ID>957</ID>
                     <BindInstances>add_ln291_fu_2371_p2 t_fu_2395_p3 add_ln294_fu_2408_p2 icmp_ln295_fu_2413_p2 add_ln296_fu_2423_p2 icmp_ln297_fu_2432_p2 select_ln297_fu_2438_p3 select_ln297_1_fu_2452_p3 mul_14s_13ns_14_1_1_U91 sparsemux_13_3_12_1_1_U92 il_fu_2175_p2 iu_fu_2181_p2 add_ln52_fu_2199_p2 grp_fu_2041_p2 grp_fu_2046_p2 sparsemux_7_2_18_1_1_U93 mul_24s_21ns_45_1_1_U88 sub_ln52_fu_2536_p2 acc_2_fu_2552_p3 icmp_ln53_fu_2221_p2 add_ln54_fu_2238_p2 sparsemux_7_2_18_1_1_U94 mul_24s_21ns_45_1_1_U89 sub_ln54_fu_2617_p2 acc_4_fu_2633_p3 icmp_ln249_fu_2646_p2 add_ln282_fu_2651_p2 sparsemux_7_2_18_1_1_U95 icmp_ln255_fu_2712_p2 z_next_val_fu_2735_p2 z_next_val_1_fu_2741_p3 mul_24s_24s_46_1_1_U90 add_ln266_fu_2801_p2 add_ln267_fu_2818_p2 icmp_ln268_fu_2823_p2 add_ln270_fu_2829_p2 add_ln271_fu_2834_p2 icmp_ln272_fu_2839_p2 select_ln272_fu_2845_p3 icmp_ln274_fu_2856_p2 grp_fu_2041_p2 grp_fu_2046_p2 sparsemux_7_2_18_1_1_U96 mul_24s_21ns_45_1_1_U88 mul_24s_24s_46_1_1_U90 add_ln225_fu_3009_p2 icmp_ln226_fu_3014_p2 add_ln208_fu_3046_p2 add_ln212_fu_3059_p2 icmp_ln213_fu_3065_p2 icmp_ln327_fu_3098_p2 add_ln332_fu_3120_p2 add_ln333_fu_3135_p2 or_ln329_fu_3156_p2 icmp_ln335_fu_3202_p2 icmp_ln335_1_fu_3207_p2 out_last_1_fu_3212_p2 add_ln341_fu_3269_p2 icmp_ln342_fu_3281_p2 add_ln344_fu_3293_p2 icmp_ln345_fu_3299_p2 add_ln348_fu_3309_p2 add_ln163_fu_3416_p2 add_ln153_fu_3493_p2 icmp_ln154_fu_3502_p2 mac_muladd_14s_12ns_14ns_14_4_1_U97 mac_muladd_14s_12ns_14ns_14_4_1_U97 add_ln180_fu_3530_p2 icmp_ln181_fu_3535_p2 add_ln183_fu_3541_p2 icmp_ln184_fu_3546_p2 theta_U lap_rest_U bp_buf_U Z0_U y_acc_U Z1_U Z2_U</BindInstances>
                 </Instance>
             </InstancesList>
@@ -634,25 +634,25 @@
                 <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op setlt" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="setlt" PRAGMA="" RTLNAME="icmp_ln96_fu_970_p2" SOURCE="crosscor.cpp:96" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln96" VISIBLE="false"/>
                 <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="corrected_fu_976_p3" SOURCE="crosscor.cpp:96" STORAGESUBTYPE="" URAM="0" VARIABLE="corrected" VISIBLE="false"/>
                 <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op udiv" DSP="0" ID="" IMPL="auto_seq" LATENCY="42" LOOP="" OPTYPE="udiv" PRAGMA="" RTLNAME="udiv_39s_24ns_24_43_seq_1_U36" SOURCE="crosscor.cpp:97" STORAGESUBTYPE="" URAM="0" VARIABLE="udiv_ln97" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U29" SOURCE="crosscor.cpp:114" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln114" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U30" SOURCE="crosscor.cpp:114" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln114_1" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U31" SOURCE="crosscor.cpp:115" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln115" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U32" SOURCE="crosscor.cpp:115" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln115_1" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln118_fu_1188_p2" SOURCE="crosscor.cpp:118" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln118" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="grp_fu_751_p2" SOURCE="crosscor.cpp:119" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln119" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln120_fu_1193_p2" SOURCE="crosscor.cpp:120" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln120" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln121_fu_1199_p2" SOURCE="crosscor.cpp:121" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln121" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op setlt" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="setlt" PRAGMA="" RTLNAME="icmp_ln122_fu_1204_p2" SOURCE="crosscor.cpp:122" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln122" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln128_fu_1210_p2" SOURCE="crosscor.cpp:128" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln128" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op setlt" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="setlt" PRAGMA="" RTLNAME="icmp_ln129_fu_1215_p2" SOURCE="crosscor.cpp:129" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln129" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln129_fu_1221_p3" SOURCE="crosscor.cpp:129" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln129" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln129_1_fu_1235_p3" SOURCE="crosscor.cpp:129" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln129_1" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln123_fu_1249_p2" SOURCE="crosscor.cpp:123" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln123" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="2" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_36s_24ns_54_1_1_U33" SOURCE="crosscor.cpp:147" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln147" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="2" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_36s_24ns_54_1_1_U34" SOURCE="crosscor.cpp:148" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln148" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln152_fu_818_p2" SOURCE="crosscor.cpp:152" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln152" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="grp_fu_751_p2" SOURCE="crosscor.cpp:155" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln155" VISIBLE="true"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln156_fu_1303_p2" SOURCE="crosscor.cpp:156" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln156" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U29" SOURCE="crosscor.cpp:113" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln113" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U30" SOURCE="crosscor.cpp:113" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln113_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U31" SOURCE="crosscor.cpp:114" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln114" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="4" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_31s_31s_62_1_1_U32" SOURCE="crosscor.cpp:114" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln114_1" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln117_fu_1188_p2" SOURCE="crosscor.cpp:117" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln117" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="grp_fu_751_p2" SOURCE="crosscor.cpp:118" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln118" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln119_fu_1193_p2" SOURCE="crosscor.cpp:119" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln119" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln120_fu_1199_p2" SOURCE="crosscor.cpp:120" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln120" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op setlt" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="setlt" PRAGMA="" RTLNAME="icmp_ln121_fu_1204_p2" SOURCE="crosscor.cpp:121" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln121" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln127_fu_1210_p2" SOURCE="crosscor.cpp:127" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln127" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op setlt" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="setlt" PRAGMA="" RTLNAME="icmp_ln128_fu_1215_p2" SOURCE="crosscor.cpp:128" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln128" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln128_fu_1221_p3" SOURCE="crosscor.cpp:128" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln128" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln128_1_fu_1235_p3" SOURCE="crosscor.cpp:128" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln128_1" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln122_fu_1249_p2" SOURCE="crosscor.cpp:122" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln122" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="2" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_36s_24ns_54_1_1_U33" SOURCE="crosscor.cpp:146" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln146" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op mul" DSP="2" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="mul" PRAGMA="" RTLNAME="mul_36s_24ns_54_1_1_U34" SOURCE="crosscor.cpp:147" STORAGESUBTYPE="" URAM="0" VARIABLE="mul_ln147" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln151_fu_818_p2" SOURCE="crosscor.cpp:151" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln151" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="grp_fu_751_p2" SOURCE="crosscor.cpp:154" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln154" VISIBLE="true"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln155_fu_1303_p2" SOURCE="crosscor.cpp:155" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln155" VISIBLE="false"/>
                 <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln58_fu_1319_p2" SOURCE="crosscor.cpp:58" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln58" VISIBLE="true"/>
                 <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op add" DSP="0" ID="" IMPL="fabric" LATENCY="0" LOOP="" OPTYPE="add" PRAGMA="" RTLNAME="add_ln62_fu_1359_p2" SOURCE="crosscor.cpp:62" STORAGESUBTYPE="" URAM="0" VARIABLE="add_ln62" VISIBLE="true"/>
                 <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln63_fu_1365_p2" SOURCE="crosscor.cpp:63" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln63" VISIBLE="false"/>
@@ -914,16 +914,16 @@
             </PerformanceEstimates>
             <AreaEstimates>
                 <Resources>
-                    <BRAM_18K>60</BRAM_18K>
+                    <BRAM_18K>65</BRAM_18K>
                     <AVAIL_BRAM>288</AVAIL_BRAM>
-                    <UTIL_BRAM>20</UTIL_BRAM>
+                    <UTIL_BRAM>22</UTIL_BRAM>
                     <DSP>48</DSP>
                     <AVAIL_DSP>1248</AVAIL_DSP>
                     <UTIL_DSP>3</UTIL_DSP>
-                    <FF>7320</FF>
+                    <FF>7335</FF>
                     <AVAIL_FF>234240</AVAIL_FF>
                     <UTIL_FF>3</UTIL_FF>
-                    <LUT>13044</LUT>
+                    <LUT>13068</LUT>
                     <AVAIL_LUT>117120</AVAIL_LUT>
                     <UTIL_LUT>11</UTIL_LUT>
                     <URAM>20</URAM>
@@ -933,10 +933,10 @@
             </AreaEstimates>
             <BindNodes>
                 <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="debl_cfg_c_U" SOURCE="top.cpp:41" STORAGESIZE="8 5 1" STORAGESUBTYPE="scalar prop" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="debl_cfg_c" VISIBLE="true"/>
-                <BindNode BINDTYPE="storage" BRAM="2" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="memory" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_goertzel_U" SOURCE=":0" STORAGESIZE="36 64 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_goertzel" VISIBLE="true"/>
-                <BindNode BINDTYPE="storage" BRAM="2" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="memory" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_xcor_U" SOURCE=":0" STORAGESIZE="36 64 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_xcor" VISIBLE="true"/>
+                <BindNode BINDTYPE="storage" BRAM="2" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="memory" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_goertzel_U" SOURCE=":0" STORAGESIZE="36 48 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_goertzel" VISIBLE="true"/>
+                <BindNode BINDTYPE="storage" BRAM="4" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="memory" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_xcor_U" SOURCE=":0" STORAGESIZE="36 1128 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_xcor" VISIBLE="true"/>
                 <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_norm_U" SOURCE="top.cpp:47" STORAGESIZE="25 4 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_norm" VISIBLE="true"/>
-                <BindNode BINDTYPE="storage" BRAM="1" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="memory" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_bp_U" SOURCE="top.cpp:46" STORAGESIZE="18 64 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_bp" VISIBLE="true"/>
+                <BindNode BINDTYPE="storage" BRAM="4" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="memory" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="s_bp_U" SOURCE="top.cpp:46" STORAGESIZE="18 2234 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="s_bp" VISIBLE="true"/>
                 <BindNode BINDTYPE="adapter" BRAM="0" BUNDLEDNAME="CTRL_BUS" DISPNAME="bind_adapter " DSP="0" ID="" IMPL="" LATENCY="" LOOP="" OPTYPE="" PRAGMA="" RTLNAME="CTRL_BUS_s_axi_U" SOURCE="" STORAGESIZE="" STORAGESUBTYPE="s_axilite" STORAGEUSAGE="interface" URAM="0" VARIABLE=""/>
             </BindNodes>
         </Module>
@@ -945,7 +945,7 @@
         <FIFOInst>
             <Name>s_goertzel_U</Name>
             <ParentInst/>
-            <StaticDepth>64</StaticDepth>
+            <StaticDepth>48</StaticDepth>
             <RuntimeDepth>mOutPtr</RuntimeDepth>
             <InterfaceList>
                 <Interface>clk</Interface>
@@ -960,7 +960,7 @@
         <FIFOInst>
             <Name>s_xcor_U</Name>
             <ParentInst/>
-            <StaticDepth>64</StaticDepth>
+            <StaticDepth>1128</StaticDepth>
             <RuntimeDepth>mOutPtr</RuntimeDepth>
             <InterfaceList>
                 <Interface>clk</Interface>
@@ -990,7 +990,7 @@
         <FIFOInst>
             <Name>s_bp_U</Name>
             <ParentInst/>
-            <StaticDepth>64</StaticDepth>
+            <StaticDepth>2234</StaticDepth>
             <RuntimeDepth>mOutPtr</RuntimeDepth>
             <InterfaceList>
                 <Interface>clk</Interface>
@@ -1761,10 +1761,6 @@
         <Pragma type="disaggregate" location="top.cpp:39" status="valid" parentFunction="deepwaveaccel" variable="status_bp" isDirective="0" options="variable=status_bp"/>
         <Pragma type="disaggregate" location="top.cpp:40" status="valid" parentFunction="deepwaveaccel" variable="status_db" isDirective="0" options="variable=status_db"/>
         <Pragma type="dataflow" location="top.cpp:41" status="valid" parentFunction="deepwaveaccel" variable="" isDirective="0" options=""/>
-        <Pragma type="stream" location="top.cpp:49" status="valid" parentFunction="deepwaveaccel" variable="s_goertzel" isDirective="0" options="variable=s_goertzel depth=64"/>
-        <Pragma type="stream" location="top.cpp:50" status="valid" parentFunction="deepwaveaccel" variable="s_xcor" isDirective="0" options="variable=s_xcor depth=64"/>
-        <Pragma type="stream" location="top.cpp:51" status="valid" parentFunction="deepwaveaccel" variable="s_bp" isDirective="0" options="variable=s_bp depth=64"/>
-        <Pragma type="stream" location="top.cpp:52" status="valid" parentFunction="deepwaveaccel" variable="s_norm" isDirective="0" options="variable=s_norm depth=4"/>
     </PragmaReport>
 </profile>
 

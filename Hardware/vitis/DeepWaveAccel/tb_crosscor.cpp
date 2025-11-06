@@ -78,8 +78,8 @@ int tb_crosscor() {
     auto start = high_resolution_clock::now();
 
     // Drive the kernel one clock tick per call
-    while (out_stream.size() / NPAIR < frame_count) {
-        cycle_count[out_stream.size() / NPAIR]++;
+    while (out_stream.size() / N_PAIR < frame_count) {
+        cycle_count[out_stream.size() / N_PAIR]++;
         // crosscor(in_stream, out_stream, norm_stream);
     }
 
@@ -104,12 +104,12 @@ int tb_crosscor() {
     // Collect outputs
     // Each GROUP_FRAMES input frames → one correlation matrix
     // -------------------------------------------------------------------------
-    std::vector<std::vector<DFTc_t>> upper_out(frame_count, std::vector<DFTc_t>(NPAIR));
+    std::vector<std::vector<DFTc_t>> upper_out(frame_count, std::vector<DFTc_t>(N_PAIR));
     std::vector<norm_sum_t> norms(frame_count);
 
     for (int m = 0; m < frame_count; ++m) {
         // Only upper-triangle outputs
-        for (int p = 0; p < NPAIR; ++p) {
+        for (int p = 0; p < N_PAIR; ++p) {
             if (!out_stream.empty()) {
                 AxisWordDFTc w = out_stream.read();
                 upper_out[m][p] = DFTc_t(w.re, w.im);
@@ -137,7 +137,7 @@ int tb_crosscor() {
     csv_out << "matrix,index,real,imag\n";
 
     for (int m = 0; m < frame_count; ++m) {
-        for (int p = 0; p < NPAIR; ++p) {
+        for (int p = 0; p < N_PAIR; ++p) {
             auto &v = upper_out[m][p];
             csv_out << m << "," << p << ","
                     << v.real().to_double() << ","

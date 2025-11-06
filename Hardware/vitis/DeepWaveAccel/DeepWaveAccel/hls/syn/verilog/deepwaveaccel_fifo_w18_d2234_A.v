@@ -7,12 +7,12 @@
 `timescale 1ns/1ps
 //RAW latency 2 
 
-module deepwaveaccel_fifo_w36_d64_A
+module deepwaveaccel_fifo_w18_d2234_A
 #(parameter
     MEM_STYLE    = "auto",
-    DATA_WIDTH   = 36,
-    ADDR_WIDTH   = 6,
-    DEPTH        = 64)
+    DATA_WIDTH   = 18,
+    ADDR_WIDTH   = 12,
+    DEPTH        = 2234)
 (
     // system signal
     input  wire                  clk,
@@ -56,12 +56,12 @@ localparam
     reg                   dout_vld = 1'b0;
 
 //------------------------Instantiation------------------
-    deepwaveaccel_fifo_w36_d64_A_ram 
+    deepwaveaccel_fifo_w18_d2234_A_ram 
     #(  .MEM_STYLE  (MEM_STYLE),
         .DATA_WIDTH (DATA_WIDTH),
         .ADDR_WIDTH (MEM_AWIDTH),
         .DEPTH      (MEM_DEPTH)
-    ) U_deepwaveaccel_fifo_w36_d64_A_ram (
+    ) U_deepwaveaccel_fifo_w18_d2234_A_ram (
         .clk        (clk),
         .reset      (reset),
         .we         (push),
@@ -198,12 +198,12 @@ localparam
 endmodule
 
 
-module deepwaveaccel_fifo_w36_d64_A_ram
+module deepwaveaccel_fifo_w18_d2234_A_ram
 #(parameter
     MEM_STYLE   = "auto",
-    DATA_WIDTH  = 36,
-    ADDR_WIDTH  = 6,
-    DEPTH       = 64)
+    DATA_WIDTH  = 18,
+    ADDR_WIDTH  = 12,
+    DEPTH       = 2234)
 (
     input  wire                  clk,
     input  wire                  reset,

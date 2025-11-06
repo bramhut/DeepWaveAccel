@@ -51,7 +51,7 @@ end;
 architecture behav of deepwaveaccel is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.851667,HLS_SYN_LAT=58,HLS_SYN_TPT=14,HLS_SYN_MEM=60,HLS_SYN_DSP=0,HLS_SYN_FF=7320,HLS_SYN_LUT=13044,HLS_VERSION=2025_1}";
+    "deepwaveaccel_deepwaveaccel,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=dataflow,HLS_SYN_CLOCK=7.851667,HLS_SYN_LAT=58,HLS_SYN_TPT=14,HLS_SYN_MEM=65,HLS_SYN_DSP=0,HLS_SYN_FF=7335,HLS_SYN_LUT=13068,HLS_VERSION=2025_1}";
     constant C_S_AXI_DATA_WIDTH : INTEGER := 32;
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
@@ -179,8 +179,8 @@ architecture behav of deepwaveaccel is
     signal s_xcor_full_n : STD_LOGIC;
     signal s_xcor_dout : STD_LOGIC_VECTOR (35 downto 0);
     signal s_xcor_empty_n : STD_LOGIC;
-    signal s_xcor_num_data_valid : STD_LOGIC_VECTOR (6 downto 0);
-    signal s_xcor_fifo_cap : STD_LOGIC_VECTOR (6 downto 0);
+    signal s_xcor_num_data_valid : STD_LOGIC_VECTOR (11 downto 0);
+    signal s_xcor_fifo_cap : STD_LOGIC_VECTOR (11 downto 0);
     signal s_norm_full_n : STD_LOGIC;
     signal s_norm_dout : STD_LOGIC_VECTOR (24 downto 0);
     signal s_norm_empty_n : STD_LOGIC;
@@ -189,8 +189,8 @@ architecture behav of deepwaveaccel is
     signal s_bp_full_n : STD_LOGIC;
     signal s_bp_dout : STD_LOGIC_VECTOR (17 downto 0);
     signal s_bp_empty_n : STD_LOGIC;
-    signal s_bp_num_data_valid : STD_LOGIC_VECTOR (6 downto 0);
-    signal s_bp_fifo_cap : STD_LOGIC_VECTOR (6 downto 0);
+    signal s_bp_num_data_valid : STD_LOGIC_VECTOR (12 downto 0);
+    signal s_bp_fifo_cap : STD_LOGIC_VECTOR (12 downto 0);
     signal start_for_deblur_U0_din : STD_LOGIC_VECTOR (0 downto 0);
     signal start_for_deblur_U0_full_n : STD_LOGIC;
     signal start_for_deblur_U0_dout : STD_LOGIC_VECTOR (0 downto 0);
@@ -282,8 +282,8 @@ architecture behav of deepwaveaccel is
         s_xcor_din : OUT STD_LOGIC_VECTOR (35 downto 0);
         s_xcor_full_n : IN STD_LOGIC;
         s_xcor_write : OUT STD_LOGIC;
-        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (11 downto 0);
+        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (11 downto 0);
         s_norm_din : OUT STD_LOGIC_VECTOR (24 downto 0);
         s_norm_full_n : IN STD_LOGIC;
         s_norm_write : OUT STD_LOGIC;
@@ -320,16 +320,16 @@ architecture behav of deepwaveaccel is
         s_xcor_dout : IN STD_LOGIC_VECTOR (35 downto 0);
         s_xcor_empty_n : IN STD_LOGIC;
         s_xcor_read : OUT STD_LOGIC;
-        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+        s_xcor_num_data_valid : IN STD_LOGIC_VECTOR (11 downto 0);
+        s_xcor_fifo_cap : IN STD_LOGIC_VECTOR (11 downto 0);
         param_bp_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
         param_bp_TVALID : IN STD_LOGIC;
         param_bp_TREADY : OUT STD_LOGIC;
         s_bp_din : OUT STD_LOGIC_VECTOR (17 downto 0);
         s_bp_full_n : IN STD_LOGIC;
         s_bp_write : OUT STD_LOGIC;
-        s_bp_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+        s_bp_num_data_valid : IN STD_LOGIC_VECTOR (12 downto 0);
+        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (12 downto 0);
         status_bp_config_loaded : OUT STD_LOGIC_VECTOR (0 downto 0);
         status_bp_config_loaded_ap_vld : OUT STD_LOGIC;
         status_bp_fsm_state : OUT STD_LOGIC_VECTOR (7 downto 0);
@@ -364,8 +364,8 @@ architecture behav of deepwaveaccel is
         s_bp_dout : IN STD_LOGIC_VECTOR (17 downto 0);
         s_bp_empty_n : IN STD_LOGIC;
         s_bp_read : OUT STD_LOGIC;
-        s_bp_num_data_valid : IN STD_LOGIC_VECTOR (6 downto 0);
-        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (6 downto 0);
+        s_bp_num_data_valid : IN STD_LOGIC_VECTOR (12 downto 0);
+        s_bp_fifo_cap : IN STD_LOGIC_VECTOR (12 downto 0);
         param_db_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
         param_db_TVALID : IN STD_LOGIC;
         param_db_TREADY : OUT STD_LOGIC;
@@ -410,7 +410,7 @@ architecture behav of deepwaveaccel is
     end component;
 
 
-    component deepwaveaccel_fifo_w36_d64_A IS
+    component deepwaveaccel_fifo_w36_d48_A IS
     port (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
@@ -424,6 +424,23 @@ architecture behav of deepwaveaccel is
         if_read : IN STD_LOGIC;
         if_num_data_valid : OUT STD_LOGIC_VECTOR (6 downto 0);
         if_fifo_cap : OUT STD_LOGIC_VECTOR (6 downto 0) );
+    end component;
+
+
+    component deepwaveaccel_fifo_w36_d1128_A IS
+    port (
+        clk : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        if_read_ce : IN STD_LOGIC;
+        if_write_ce : IN STD_LOGIC;
+        if_din : IN STD_LOGIC_VECTOR (35 downto 0);
+        if_full_n : OUT STD_LOGIC;
+        if_write : IN STD_LOGIC;
+        if_dout : OUT STD_LOGIC_VECTOR (35 downto 0);
+        if_empty_n : OUT STD_LOGIC;
+        if_read : IN STD_LOGIC;
+        if_num_data_valid : OUT STD_LOGIC_VECTOR (11 downto 0);
+        if_fifo_cap : OUT STD_LOGIC_VECTOR (11 downto 0) );
     end component;
 
 
@@ -444,7 +461,7 @@ architecture behav of deepwaveaccel is
     end component;
 
 
-    component deepwaveaccel_fifo_w18_d64_A IS
+    component deepwaveaccel_fifo_w18_d2234_A IS
     port (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
@@ -456,8 +473,8 @@ architecture behav of deepwaveaccel is
         if_dout : OUT STD_LOGIC_VECTOR (17 downto 0);
         if_empty_n : OUT STD_LOGIC;
         if_read : IN STD_LOGIC;
-        if_num_data_valid : OUT STD_LOGIC_VECTOR (6 downto 0);
-        if_fifo_cap : OUT STD_LOGIC_VECTOR (6 downto 0) );
+        if_num_data_valid : OUT STD_LOGIC_VECTOR (12 downto 0);
+        if_fifo_cap : OUT STD_LOGIC_VECTOR (12 downto 0) );
     end component;
 
 
@@ -870,7 +887,7 @@ begin
         if_num_data_valid => debl_cfg_c_num_data_valid,
         if_fifo_cap => debl_cfg_c_fifo_cap);
 
-    s_goertzel_U : component deepwaveaccel_fifo_w36_d64_A
+    s_goertzel_U : component deepwaveaccel_fifo_w36_d48_A
     port map (
         clk => ap_clk,
         reset => ap_rst_n_inv,
@@ -885,7 +902,7 @@ begin
         if_num_data_valid => s_goertzel_num_data_valid,
         if_fifo_cap => s_goertzel_fifo_cap);
 
-    s_xcor_U : component deepwaveaccel_fifo_w36_d64_A
+    s_xcor_U : component deepwaveaccel_fifo_w36_d1128_A
     port map (
         clk => ap_clk,
         reset => ap_rst_n_inv,
@@ -915,7 +932,7 @@ begin
         if_num_data_valid => s_norm_num_data_valid,
         if_fifo_cap => s_norm_fifo_cap);
 
-    s_bp_U : component deepwaveaccel_fifo_w18_d64_A
+    s_bp_U : component deepwaveaccel_fifo_w18_d2234_A
     port map (
         clk => ap_clk,
         reset => ap_rst_n_inv,

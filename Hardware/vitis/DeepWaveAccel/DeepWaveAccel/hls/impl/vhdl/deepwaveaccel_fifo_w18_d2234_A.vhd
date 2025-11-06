@@ -9,12 +9,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 --RAW latency 2 
  
-entity deepwaveaccel_fifo_w36_d64_A is
+entity deepwaveaccel_fifo_w18_d2234_A is
     generic (
         MEM_STYLE         : string  := "auto";
-        DATA_WIDTH        : integer := 36;
-        ADDR_WIDTH        : integer := 6;
-        DEPTH             : integer := 64);
+        DATA_WIDTH        : integer := 18;
+        ADDR_WIDTH        : integer := 12;
+        DEPTH             : integer := 2234);
     port (
         clk               : in  std_logic;
         reset             : in  std_logic;
@@ -36,7 +36,7 @@ entity deepwaveaccel_fifo_w36_d64_A is
     );
 end entity;
 
-architecture arch of deepwaveaccel_fifo_w36_d64_A is
+architecture arch of deepwaveaccel_fifo_w18_d2234_A is
 ------------------------Task and function--------------
     function clog2 (x : INTEGER) return INTEGER is
         variable n, m : INTEGER;
@@ -53,12 +53,12 @@ architecture arch of deepwaveaccel_fifo_w36_d64_A is
     constant MEM_DEPTH  : INTEGER := DEPTH - 1;
     constant MEM_AWIDTH : INTEGER := clog2(MEM_DEPTH);
     ------------------------Component----------------------
-    component deepwaveaccel_fifo_w36_d64_A_ram is
+    component deepwaveaccel_fifo_w18_d2234_A_ram is
     generic (
         MEM_STYLE  : string  := "auto";
-        DATA_WIDTH : integer := 36;
-        ADDR_WIDTH : integer := 6;
-        DEPTH      : integer := 64);
+        DATA_WIDTH : integer := 18;
+        ADDR_WIDTH : integer := 12;
+        DEPTH      : integer := 2234);
     port (
         clk        : in std_logic;
         reset      : in std_logic;
@@ -88,7 +88,7 @@ architecture arch of deepwaveaccel_fifo_w36_d64_A is
     signal dout_vld : std_logic := '0';
 begin
 ----------------------- Instantiation -----------------------
-    U_deepwaveaccel_fifo_w36_d64_A_ram : deepwaveaccel_fifo_w36_d64_A_ram
+    U_deepwaveaccel_fifo_w18_d2234_A_ram : deepwaveaccel_fifo_w18_d2234_A_ram
     generic map (
         MEM_STYLE  => MEM_STYLE,
         DATA_WIDTH => DATA_WIDTH,
@@ -254,12 +254,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-entity deepwaveaccel_fifo_w36_d64_A_ram is
+entity deepwaveaccel_fifo_w18_d2234_A_ram is
     generic (
         MEM_STYLE   : string  := "auto";
-        DATA_WIDTH  : integer := 36;
-        ADDR_WIDTH  : integer := 6;
-        DEPTH       : integer := 64);
+        DATA_WIDTH  : integer := 18;
+        ADDR_WIDTH  : integer := 12;
+        DEPTH       : integer := 2234);
     port (
         clk         : in std_logic;
         reset       : in std_logic;
@@ -272,7 +272,7 @@ entity deepwaveaccel_fifo_w36_d64_A_ram is
     );
 end entity;
 
-architecture arch of deepwaveaccel_fifo_w36_d64_A_ram is
+architecture arch of deepwaveaccel_fifo_w18_d2234_A_ram is
     type memtype is array (0 to DEPTH - 1) of std_logic_vector(DATA_WIDTH - 1 downto 0);
     signal mem : memtype;
     attribute ram_style: string;

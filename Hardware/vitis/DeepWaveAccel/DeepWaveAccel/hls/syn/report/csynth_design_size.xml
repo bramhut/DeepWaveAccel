@@ -2,7 +2,7 @@
     <item name="Total Instructions per Compilation Phase">
         <table>
             <keys size="4">Phase, Step, Instructions, Description</keys>
-            <column name="Compile/Link">,    98, After all functions are compiled and linked into a single design</column>
+            <column name="Compile/Link">,   118, After all functions are compiled and linked into a single design</column>
             <column name="">, , </column>
             <column name="Unroll/Inline">, , After user unroll and inline pragmas are applied</column>
             <column name="">(1) unroll, 2678, user unroll pragmas are applied</column>
@@ -32,11 +32,11 @@
         <hiertable>
             <header size="7" col0="Function" col1="Location" col2="Compile/Link" col3="Unroll/Inline" col4="Array/Struct" col5="Performance" col6="HW Transforms"/>
             <rows>
-                <row id="0" col0="deepwaveaccel" col1="top.cpp:8" col2="98" col3="1181" col4="1641" col5="1623" col6="1660">
-                    <row id="1" col0="goertzel" col1="goertzel.cpp:26" col2="" col3="141" col4="143" col5="131" col6=""/>
-                    <row id="9" col0="crosscor" col1="crosscor.cpp:11" col2="" col3="219" col4="246" col5="246" col6="242"/>
-                    <row id="7" col0="backprojection" col1="backproj.cpp:8" col2="" col3="280" col4="671" col5="671" col6="669"/>
-                    <row id="4" col0="deblur" col1="deblur.cpp:63" col2="" col3="490" col4="525" col5="512" col6=""/>
+                <row id="0" col0="deepwaveaccel" col1="top.cpp:8" col2="118" col3="1181" col4="1641" col5="1623" col6="1660">
+                    <row id="5" col0="goertzel" col1="goertzel.cpp:26" col2="" col3="141" col4="143" col5="131" col6=""/>
+                    <row id="10" col0="crosscor" col1="crosscor.cpp:11" col2="" col3="219" col4="246" col5="246" col6="242"/>
+                    <row id="2" col0="backprojection" col1="backproj.cpp:8" col2="" col3="280" col4="671" col5="671" col6="669"/>
+                    <row id="3" col0="deblur" col1="deblur.cpp:63" col2="" col3="490" col4="525" col5="512" col6=""/>
                 </row>
             </rows>
             <notes/>

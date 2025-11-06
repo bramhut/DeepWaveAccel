@@ -4,7 +4,7 @@
 
 // ---------------------------------------------------------
 // Cross-correlation kernel (upper-triangle output order)
-// - Accumulates only the upper triangle in a flat array R_flat[NPAIR]
+// - Accumulates only the upper triangle in a flat array R_flat[N_PAIR]
 // - Per frame: first sum diagonal power, then accumulate upper-triangle pairs
 // - On the last frame of a group, launch reciprocal in parallel (outside FSM)
 // ---------------------------------------------------------
@@ -32,14 +32,14 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
 #pragma HLS BIND_STORAGE variable=u type=ram_2p impl=bram
 
     // Accumulator for upper triangle only (flattened by pair_rom order)
-    static corr_accum_t R_flat[NPAIR];
+    static corr_accum_t R_flat[N_PAIR];
 #pragma HLS BIND_STORAGE variable=R_flat type=ram_2p impl=bram
 
     // Counters
     static int v_count = 0;     // samples collected for u[]
     static int frames_acc = 0;  // number of frames accumulated into R_flat
     static int diag_i = 0;      // index over diagonal during PHASE_DIAG
-    static int pair_idx = 0;    // index [0..NPAIR) during PHASE_UPPER/OUTPUT/CLEAR
+    static int pair_idx = 0;    // index [0..N_PAIR) during PHASE_UPPER/OUTPUT/CLEAR
 
     static word_t samples_in = 0;
     static word_t norms_written = 0;
@@ -152,7 +152,7 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
             status.out_fifo = out_stream.size();
 
             pair_idx++;
-            if (pair_idx == NPAIR) {
+            if (pair_idx == N_PAIR) {
                 // Done streaming frame
                 pair_idx = 0;
                 st = COLLECT;
