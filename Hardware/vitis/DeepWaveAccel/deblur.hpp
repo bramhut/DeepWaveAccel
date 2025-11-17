@@ -13,7 +13,7 @@ constexpr int MAX_ORDER = 22;    // Chebyshev order (θ_0..θ_K)
 // ---------------------------------------------------------
 // Deblur-local types
 // ---------------------------------------------------------
-using acc_t   = ap_fixed<img_t::width + 6, 2>; // accumulator
+using acc_t   = ap_fixed<img_t::width + 6, img_t::iwidth>; // accumulator
 
 // ---------------------------------------------------------
 // AXI-Lite configuration

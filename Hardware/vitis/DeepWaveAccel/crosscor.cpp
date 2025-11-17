@@ -85,7 +85,7 @@ void crosscor(hls::stream<AxisWordDFTc> &in_stream,
                 // We finished diagonal for this frame
                 // If this is the last frame in the group, launch reciprocal now.
                 if (frames_acc == (GROUP_FRAMES - 1)) {
-                    const norm_sum_t gain = (norm_sum_t)0.70710678118; // 1/sqrt(2)
+                    const ap_ufixed<15,0> gain = 0.70710678118; // 1/sqrt(2)
                     norm_sum_t corrected = (norm_sum_t)power_acc * gain;
                     norm_stream.write(corrected);
                     word_t norm_word;
