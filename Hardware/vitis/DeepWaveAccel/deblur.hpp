@@ -34,6 +34,6 @@ void deblur(
     hls::stream<word_t>     &param_in,
     hls::stream<out_axis_t> &out_stream,
     hls::stream<norm_sum_t> &norm_stream,
-    deblur_config           &cfg,
+    const deblur_config           &cfg,
     status_db_t             &status
 );

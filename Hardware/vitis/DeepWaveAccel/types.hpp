@@ -100,8 +100,7 @@ struct status_db_t {
 // ---------------- Default Directories ----------------
 #define OUTPUT_DIR "../../../../output"
 #define PARAM_DIR  "../../../../parameters"
-#define WAVE_DIR   "../../../../../../../Simulation/FRIDA"
-#define WAVE_DIR_LAPTOP "../../../../../../../Simulation/FRIDA/FRIDA/recordings/20160908/data_pyramic/segmented"
+#define WAVE_DIR "../../../../../../../Simulation/FRIDA/FRIDA/recordings/20160908/data_pyramic/segmented"
 
 // ---------------- Interface Macros ----------------
 #define AXIS_IN_OUT(NAME) \

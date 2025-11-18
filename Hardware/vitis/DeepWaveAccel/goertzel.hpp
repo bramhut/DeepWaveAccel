@@ -19,5 +19,5 @@ void goertzel_prepare_config(goertzel_config &cfg, double fs_in, double ff);
 // Top-level synthesizable kernel (AXI-Lite + AXI-Stream)
 void goertzel(hls::stream<word_t> &in_stream,
               hls::stream<AxisWordDFTc> &out_stream,
-              goertzel_config &cfg,
+              const goertzel_config &cfg,
               status_gz_t &status);
