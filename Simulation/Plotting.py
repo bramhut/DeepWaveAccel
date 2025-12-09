@@ -184,7 +184,7 @@ def draw_spherical_mesh(I, R, source_lons=None, source_lats=None, source_labels=
 
     # Final layout
     fig.update_layout(
-        title='3D Spherical Sky Map (Capped)',
+        # title='3D Spherical Sky Map (Capped)',
         scene=dict(
             xaxis=dict(showbackground=False, visible=False),
             yaxis=dict(showbackground=False, visible=False),
@@ -216,20 +216,20 @@ def plot_PSNR(psnr, title, save_path=None):
         plt.savefig(save_path, dpi=300)
     plt.show()
     
-def plot_PSNR_with_eigs(psnr, eig_floor_hit, title, save_path=None):
+def plot_PSNR_with_norm(psnr, norm_floor_hit, title, save_path=None):
     N_frames = len(psnr)
     x = np.arange(N_frames)
-    test = np.invert(eig_floor_hit)
+    test = np.invert(norm_floor_hit)
     
-    plt.figure(figsize=(6, 3))
-    plt.plot(x[np.invert(eig_floor_hit)], psnr[np.invert(eig_floor_hit)], 'o-', label="Valid eig ≥ 1")
-    plt.plot(x[eig_floor_hit], psnr[eig_floor_hit], 'rx', label="eig < 1 (too quiet)")
+    plt.figure(figsize=(6, 3), dpi=300)
+    plt.plot(x[np.invert(norm_floor_hit)], psnr[np.invert(norm_floor_hit)], 'o-', label="Valid norm ≥ 1")
+    plt.plot(x[norm_floor_hit], psnr[norm_floor_hit], 'rx', label="norm < 1 (too quiet)")
     
     plt.title(title)
     plt.xlabel('Frame number')
     plt.ylabel('PSNR (dB)')
     plt.xlim(0, N_frames - 1)
-    plt.grid()
+    plt.grid(True)
     plt.legend()
     plt.tight_layout()
     

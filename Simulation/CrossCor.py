@@ -1,36 +1,81 @@
 import numpy as np
 
 
-# Normalization functions
-# Function to estimate the maximum eigenvalue of a matrix using power iteration
-def estimate_max_eigenvalue(S, num_iter):
-    n = S.shape[0]
-    # Fixed deterministic initial vector (normalized ones)
-    v = np.ones(n, dtype=np.complex128) / np.sqrt(n)
+import numpy as np
+
+def estimate_max_eigenvalues(S, num_iter):
+    """
+    Pure NumPy, optimized with batched @ and np.linalg.norm.
+
+    S: (n, n) or (k, n, n)
+    num_iter: int
+
+    Returns:
+        float if input was (n, n)
+        array of shape (k,) if input was (k, n, n)
+    """
+
+    # Promote single matrix to batch of size 1
+    single_matrix = (S.ndim == 2)
+    if single_matrix:
+        S = S[None, ...]
+
+    k, n, _ = S.shape
+
+    # Initial vectors for all matrices
+    v = np.ones((k, n), dtype=np.complex128) / np.sqrt(n)
+
     for _ in range(num_iter):
-        v = S @ v
-        norm = np.sum(np.square(np.abs(v)))
-        if norm == 0:
-            norm = 1
-        v /= norm
-    return np.real(v.conj().T @ S @ v * norm)
+        # Batched mat-vec multiply → (k, n)
+        v = (S @ v[..., None])[..., 0]
+
+        # Compute ||v||^2 for each batch member
+        norm = np.linalg.norm(v, axis=1)**2
+        norm = np.where(norm == 0, 1, norm)
+
+        # Normalize each vector
+        v = v / norm[:, None]
+
+    # Final Rayleigh quotient
+    Sv = (S @ v[..., None])[..., 0]
+    rq = np.sum(np.conj(v) * Sv, axis=1) * norm
+    rq = np.real(rq)
+
+    return rq[0] if single_matrix else rq
 
 
-# Normalize the correlation matrix S by its maximum eigenvalue
-def normalize_correlation_matrix(S, eig_value_floor, num_iter=10):
-    max_eigenvalue = estimate_max_eigenvalue(S, num_iter)
-    if max_eigenvalue == 0:
-        return S  # Avoid division by zero
-    norm_factor = np.max([max_eigenvalue, eig_value_floor])
-    return S / norm_factor
+
+def normalize_correlation_matrix(S, floor_val, num_iter=10, energy_norm=False):
+    """
+    Normalize one matrix (n,n) or a batch of matrices (k,n,n)
+    by dividing by max(max_eigenvalue, eig_value_floor).
+
+    Returns:
+        normalized_S : same shape as S
+        norm_factors : float or array (k,)
+    """
+
+    if energy_norm:
+        # Energy normalization: trace(S) / n
+        trace_S = np.trace(S, axis1=1, axis2=2).real
+        norm_factors = trace_S / np.sqrt(2)
+        norm_factors = np.maximum(norm_factors, floor_val)
+        
+    else:
+        # Compute eigenvalues (scalar or vector)
+        max_eigenvalues = estimate_max_eigenvalues(S, num_iter)
+
+        # Normalization factors: max(max_eigenvalue, floor)
+        norm_factors = np.maximum(max_eigenvalues, floor_val)
+
+    # Normalize
+    normalized_S = S / norm_factors[:, None, None]
+    return normalized_S, norm_factors
 
 
-# Cross-correlation identical to the deepwave reference implementation
-def cross_correlation_deepwave_ref(dft, eig_value_floor=1, num_iter_power=10):
-    return cross_correlation(dft, eig_value_floor=eig_value_floor, alpha=0, group_size=9, num_iter_power=num_iter_power)
 
 # Cross-correlation with optional exponential moving average (EMA) smoothing and grouping
-def cross_correlation(dft, alpha=0.95, group_size=1, eig_value_floor=1, num_iter_power=10):
+def cross_correlation(dft, group_size=1, floor_value=1, num_iter_power=10, energy_norm=False):
     """
     Compute and store cross-correlation matrices (optionally using exponential moving average) for each frame of DFT data.
     This function calculates the cross-correlation matrices for each frame in the input DFT data. Optionally, it applies exponential moving average (EMA) smoothing to the correlation matrices. When EMA is not used (alpha=0), the resulting matrices can be grouped and summed over a specified group size. Each resulting correlation matrix is normalized before being returned.
@@ -51,14 +96,13 @@ def cross_correlation(dft, alpha=0.95, group_size=1, eig_value_floor=1, num_iter
     # Calculate and store all correlation matrices using EMA for each frame
     for frame in dft:
         outer = np.outer(np.conj(frame), frame)
-        R = (1 - alpha) * outer + alpha * R
+        R = outer
         R_all.append(R.copy())
     R_all = np.stack(R_all)
 
-    # Group and sum every 'group_size' resulting correlation matrices (only when not using EMA)
-    if alpha == 0:
-        R_all = R_all[:(R_all.shape[0] // group_size) * group_size].reshape(-1, group_size, N_ch, N_ch).sum(axis=1)
+    # Group and sum every 'group_size' resulting correlation matrices 
+    R_all = R_all[:(R_all.shape[0] // group_size) * group_size].reshape(-1, group_size, N_ch, N_ch).sum(axis=1)
 
     # Normalize each correlation matrix in R_all
-    R_all = np.array([normalize_correlation_matrix(S, eig_value_floor=eig_value_floor, num_iter=num_iter_power) for S in R_all])
-    return R_all
+    R_all, norms = normalize_correlation_matrix(R_all, floor_val=floor_value, num_iter=num_iter_power, energy_norm=energy_norm)
+    return R_all, norms

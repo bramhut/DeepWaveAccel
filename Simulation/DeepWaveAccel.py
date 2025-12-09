@@ -1,5 +1,4 @@
 import numpy as np
-from fxpmath import Fxp
 import Preprocess as pp
 from Goertzel import goertzel, goertzel_multi_bin_with_logging
 import CrossCor as cc
@@ -16,7 +15,6 @@ from Logger import SignalLogger
 # Pf_file: path to the parameter file
 
 # Functions:
-# One function to change quantization parameters per signal (keep empty for now, but design the framework such that I can easily extend it later) (options: 'float', 'Fxp')
 # One function to run inference (argument: Wav_file: path to the wav file)
 # One function to run inference and compare to the reference implementation (argument: DeepWave reference images, saved in npz file). This function should return the PSNR
 
@@ -54,7 +52,7 @@ class DeepWaveAccel:
         self.laplacian = self.laplacian.todia()
         self.laplacian_banded = lap.sparsify_band_symmetric(self.laplacian, threshold=1e-4)
 
-    def run_inference(self, wav_file, num_iter_power=10, eig_value_floor=1, logger=None):
+    def run_inference(self, wav_file, num_iter_power=10, norm_floor=1, energy_norm=False, logger=None):
         """
         Run inference on a wave file.
 
@@ -84,9 +82,11 @@ class DeepWaveAccel:
         dft = np.sum(dft_per_bin, axis=2)
         # dft, step = goertzel(Draw, bin, nf, 0.0, True, False)
         # dft += goertzel(Draw, bin-1, nf, 0.0, True, False)[0]
+        
+        dft_abs = np.abs(dft)
 
         # Cross-correlation
-        R_all = cc.cross_correlation_deepwave_ref(dft, eig_value_floor, num_iter_power)
+        R_all, norms = cc.cross_correlation(dft, group_size=9, floor_value=norm_floor, num_iter_power=num_iter_power, energy_norm=energy_norm)
         
         N_frames = R_all.shape[0]
 
@@ -111,27 +111,20 @@ class DeepWaveAccel:
             logger.log('bpp', bpp)
             logger.log('deblurred_images', deblurred_images)
 
-        return deblurred_images, bpp
+        return deblurred_images, bpp, norms
 
-    def compare_to_reference_global_norm(self, deblurred_images, reference_images, normalize=True):
+    def compare_to_reference_global_norm(self, deblurred_images, reference_images):
         """
         Compare deblurred images to DeepWave reference and compute PSNR.
 
         Args:
             deblurred_images (np.ndarray): Output from run_inference
             reference_images (np.ndarray): Reference images from DeepWave (shape: [frames, pixels])
-            normalize (bool): Whether to normalize images before comparison
 
         Returns:
             psnr (np.ndarray): PSNR values per frame
         """
-        if normalize:
-            global_max = np.max(reference_images)
-            deblurred_images = deblurred_images / global_max
-            reference_images = reference_images / global_max
-            peak = 1.0
-        else:
-            peak = np.max(reference_images)        
+        peak = np.max(reference_images)
         mse = np.mean((deblurred_images - reference_images) ** 2, axis=1)
         psnr = 10 * np.log10((peak ** 2) / mse)
         return psnr
